@@ -1,0 +1,43 @@
+<?php
+$banHover = isset($this->bhov) ? $this->bhov : 0;
+$banSpeed = isset($this->bspd) ? $this->bspd : 500;
+$banDuration = isset($this->bdur) ? $this->bdur : 5000;
+$banActiveIndex = isset($this->bidx) ? $this->bidx : 0;
+// Out of bound
+if ($banActiveIndex < 0 || $banActiveIndex >= count($this->data)) {
+    $banActiveIndex = 0;
+}
+?>
+<div class="banner-rotator" data-speed="<?php echo $banSpeed ?>" data-duration="<?php echo $banDuration ?>" data-hover="<?php echo $banHover ?>">
+    <?php if (empty($this->data) == false) { ?>
+        <?php
+        foreach ($this->data as $key => $banner) {
+            $banCss = ($key == $banActiveIndex) ? 'active' : '';
+            if(isset($banner['photo'])) {
+                $banOutside = (isset($banner['outside']) && $banner['outside']) ? 'target="_blank" rel="noopener noreferrer nofollow"' : '';
+            ?>
+            <a class="banner-photo <?php echo $banCss ?>" href="<?php echo $banner['url'] ?>" <?php echo $banOutside ?>>
+                <?php echo $this->partial('/shared/_lazy_image.phtml', array(
+                    'url' => $banner['photo'],
+                    'width' => $banner['width'],
+                    'height' => $banner['height']
+                )) ?>
+            </a>
+            <?php } else {
+                $videoid = str_replace('https://www.youtube.com/embed/', '', $banner['video']);
+                $videoid = str_replace('https://www.youtube.com/watch?v=', '', $videoid);
+                $ytvideo = 'https://www.youtube.com/watch?v=' . $videoid;
+                $ytthumb = 'https://img.youtube.com/vi/' . $videoid . '/maxresdefault.jpg';
+            ?>
+            <a class="banner-video <?php echo $banCss ?>" href="<?php echo $ytvideo ?>">
+                <i class="fa fa-youtube-play"></i>
+                <?php echo $this->partial('/shared/_lazy_image.phtml', array(
+                    'url' => $ytthumb,
+                    'width' => $banner['width'],
+                    'height' => $banner['height']
+                )) ?>
+            </a>
+            <?php } ?>
+        <?php } ?>
+    <?php } ?>
+</div>

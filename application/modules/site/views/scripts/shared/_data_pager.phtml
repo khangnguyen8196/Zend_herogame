@@ -1,0 +1,55 @@
+<div class="data-pager">
+    <ul class="pagination">
+        <li class="page-item">
+            <!-- First page link -->
+            <?php if (isset($this->previous)): ?>
+                <a class="page-link" page="<?php echo $this->first ?>" href="#" tabindex="-1">
+                    <i class="fa fa-angle-double-left"></i>
+                </a>
+            <?php endif; ?>
+        </li>
+        <li class="page-item">
+            <!-- Previous page link -->   
+            <?php if (isset($this->previous)): ?>
+                <a class="page-link" page="<?php echo $this->previous ?>" href="#" tabindex="-1">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            <?php endif; ?>
+        </li>
+        <!-- Numbered page links -->
+        <?php foreach ($this->pagesInRange as $page): ?>
+            <?php
+            if ($page != $this->current) {
+                $active = '';
+                $href = $this->url(array('page' => $page));
+            } else {
+                $href = '#';
+                $active = 'active';
+            }
+            ?>
+            <li class="page-item <?php echo $active ?>">
+                <a class="page-link" page="<?php echo $page ?>" href="#"><?php echo $page ?></a>
+            </li>
+        <?php endforeach; ?>
+
+        <li class="page-item">
+            <!-- Next page link -->
+            <?php if (isset($this->next)): ?>
+                <a class="page-link" page="<?php echo $this->next ?>" href="#">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            <?php endif; ?>
+        </li>
+        <li class="page-item">
+            <!-- Last page link -->
+            <?php if (isset($this->next)): ?>
+                <a class="page-link" page="<?php echo $this->last ?>" href="#">
+                    <i class="fa fa-angle-double-right"></i>
+                </a>
+            <?php endif; ?>
+        </li>
+    </ul>
+    <div class="results hidden-md-down">
+        <strong>Hiển thị Từ <?php echo $this->firstItemNumber; ?> Đến <?php echo $this->lastItemNumber; ?> của <?php echo $this->totalItemCount; ?> (<?php echo $this->pageCount; ?> Trang)</strong>
+    </div>
+</div>

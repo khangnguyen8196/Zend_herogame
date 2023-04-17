@@ -1,0 +1,10 @@
+<?php
+    $css = isset($this->css) ? $this->css : 'search';
+?>
+<div class="<?php echo $css ?>">
+    <i class="fa fa-search"></i>
+    <i class="fa fa-times"></i>
+    <input id="searchV" type="search" class="searchV" placeholder="Nhập từ khóa cần tìm..." />
+    <div class="results searchResult" id="searchResult">
+    </div>
+</div>

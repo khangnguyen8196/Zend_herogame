@@ -1,0 +1,52 @@
+<div class="product-item product_<?php echo $this->id ?>" attr-id="<?php echo $this->id ?>" attr-count-down="<?php echo $this->count_down?>" attr-enable-promo="<?php echo $this->enable_promo?>">
+   <a class="avatar" href="<?php echo $this->url?>">
+      <?php
+         echo $this->partial ( '/shared/_lazy_image.phtml', array (
+         										'ratio' => '1x1',
+         										'css' => 'photo',
+         										'url' => $this->photo 
+         								) )?>
+      <div class="label-a" style="color:<?php echo $this->labelA ['tcolor']?>;background:<?php echo $this->labelA ['bcolor']?>">
+         <span><?php echo $this->labelA ['text']?></span>
+      </div>
+      <?php
+         if (empty ( $this->labelB ['text'] [0] ) == false) {
+      ?>
+      <div class="label-b label-text" style="color:<?php echo $this->labelB ['tcolor']?>;background:<?php echo $this->labelB ['bcolor']?>">
+         <div class="rotator">
+            <?php for($x = 0; $x < count ( $this->labelB ['text'] ); $x ++) { ?>
+            <span><?php echo $this->labelB ['text'] [$x]?></span>
+            <?php } ?>
+         </div>
+      </div>
+      <?php } ?>
+   </a>
+   <div class="detail">
+      <div class="name">
+         <a href="<?php echo $this->url?>"><?php echo $this->name?></a>
+      </div>
+      <div class="price">
+         <span class="price-a">
+         <?php
+            if ($this->priceA > 0) {
+            	echo $this->priceA;
+            } else {
+            	echo 'Liên Hệ';
+            } 
+         ?>
+         </span>
+         <?php if (isset ( $this->priceB ) && $this->priceB != $this->priceA) { ?>
+         <span class="price-b"> <?php echo $this->priceB?></span>
+         <?php } ?>
+      </div>
+   </div>
+   <?php if ($this->priceA > 0 && $this->status != STATUS_IN_OUT_STOCK) { ?>
+   <a class="btn cart cart_btn my_btn" href="<?php echo $this->cart?>" pid="<?php echo $this->id?>" qty="1">
+  	   <i class="fa fa-cart-plus"></i> Thêm vào giỏ
+   </a>
+   <?php }else{ ?>
+   <a class="btn btn-danger my_btn" href="tel:+84906221218">
+    Tạm hết hàng
+   </a>
+   <?php } ?>
+</div>

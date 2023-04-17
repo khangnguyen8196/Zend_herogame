@@ -1,0 +1,61 @@
+<div class="side-box post-menu">
+    <header><?php echo $this->title ?></header>
+    <?php if (empty($this->top) == false ) { ?>
+    	<?php
+    		$short = $this->top['title'];
+    		$len = strlen($this->top['title']);
+    		if( $len > 50 ) {
+    		 	$pos =  strrpos($this->top['title'], ' ', 50 - $len);
+    		 	$short = substr($this->top['title'],0,$pos).'...';
+    		}
+    	?>
+	    <div class="top">
+	        <a href="<?php echo $this->top['url'] ?>">
+	            <?php echo $this->partial('/shared/_lazy_image.phtml', array(
+	                'ratio' => '1x1',
+	                'css' => 'photo',
+	                'url' => $this->top['photo'],
+	            )) ?>
+	            <div class="overlay">
+                        <span class="title" title="<?php echo $this->top['title'] ?>">
+                            <?php echo $short; ?>
+                        </span>
+	            </div>
+	        </a>
+	    </div>
+    <?php } ?>
+    <ul>
+    	<?php if( empty($this->data) == false ){ ?>
+	        <?php foreach ($this->data as $key => $post) { ?>
+		        <?php if( empty($post['photo']) == false ){ ?>
+			        <li>
+			            <a href="<?php echo $post['url'] ?>">
+			                <?php echo $this->partial('/shared/_lazy_image.phtml', array(
+			                    'ratio' => '1x1',
+			                    'css' => 'photo',
+			                    'url' => $post['photo'],
+			                )) ?>
+			                <div class="detail">
+				                <?php
+						    		$shorts = $post['title'];
+						    		$lens = strlen($post['title']);
+						    		if(  $lens > 50 ) {
+						    		 	$pos =  strrpos($post['title'], ' ', 50 - $lens );
+						    		 	$shorts = substr($post['title'],0,$pos).'...';
+						    		}
+						    	?>
+	                           	<span class="title" title="<?php echo $post['title'] ?>">
+	                            	<?php echo $shorts; ?>
+	                            </span>
+			                </div>
+			            </a>
+			        </li>
+		        <?php } ?>
+	        <?php } ?>
+        <?php } ?>
+        <li>
+            <a href="/danh-sach-bai-viet/">Xem tất cả</a>
+        </li>
+        
+    </ul>
+</div>

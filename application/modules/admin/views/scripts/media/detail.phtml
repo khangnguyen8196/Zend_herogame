@@ -1,0 +1,85 @@
+<div class="page-header">
+	<div class="page-header-content">
+		<div class="page-title">
+			<h4><i class="icon-images2 position-left"></i>Thư Viện Ảnh - Thông Tin Thư Viện Ảnh</span></h4>
+		</div>
+	</div>
+	<div class="breadcrumb-line">
+		<ul class="breadcrumb">
+			<li><a href="/admin/index/"><i class="icon-home2 position-left"></i> <?php echo $this->translate('home')?></a></li>
+			<li><a href="/admin/media">Thư Viện Ảnh</a></li>
+			<li class="active">Thông Tin Thư Viện Ảnh</li>
+		</ul>
+		<!-- tree -->
+	</div>
+</div>
+<div class="content">
+	<div class="panel panel-flat">
+		<div class="panel-heading">
+			<h5 class="panel-title">Thông Tin Thư Viện Ảnh</h5>
+		</div>
+		<div class="panel-body">
+			<div class="alert alert-danger alert-styled-left <?php if( empty($this->error) == true) { echo 'hidden';}?>">
+				<button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
+				<?php
+					if( empty($this->error) == false ){
+						foreach ($this->error as $key => $value ){
+							echo $value.'<br/>';
+						}
+					}
+				?>
+			</div>
+			<form class="form-horizontal" id="mediaDetailForm" method="post" enctype="multipart/form-data">
+				<fieldset class="content-group">
+					<legend class="text-bold"></legend>
+					<div class="form-group">
+						<label class="control-label col-lg-2"><?php echo $this->translate('type')?></label>
+						<div class="col-lg-10">
+						<select class="select-search form-control" name="type" id="type" >
+							<option value="1">Hình Ảnh</option>
+							<option value="2">Video</option>
+						</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-lg-2"><?php echo $this->translate('title')?></label>
+						<div class="col-lg-10">
+							<input class="form-control" type="text" name="title" id="title" value="<?php echo @$this->info['title']?>" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-lg-2"><?php echo $this->translate('url')?></label>
+						<div class="col-lg-9">
+							<input type="file" name="url" id="url" class="form-control" accept="image/*">
+						</div>
+						<div class="col-lg-1 clear_image hidden" >
+							<button type="button" id="clearPath" class="btn btn-danger btn-icon btn-rounded"><i class="icon-cross2"></i></button>
+						</div>
+					</div>
+					
+					<?php if( empty( $this->info['url'] ) == false ){ ?>
+					<div class="form-group">
+						<label class="control-label col-lg-2"></label>
+						<div class="col-lg-3 col-sm-10">
+							<div class="thumbnail">
+								<div class="thumb">
+									<img src="<?php echo '/upload/images'.@$this->info['url']?>" alt="">
+									<div class="caption-overflow">
+										<span>
+											<a href="<?php echo '/upload/images'.@$this->info['url']?>" data-popup="lightbox" class="btn border-white text-white btn-flat btn-icon btn-rounded"><i class="icon-plus3"></i></a>
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<?php } ?>
+				</fieldset>
+				<div class="text-right">
+					<a href="/admin/media"><button type="button" class="btn btn-default cancel-btn"><?php echo $this->translate('cancel')?><i class="icon-arrow-right14 position-right"></i></button></a>
+					<button type="submit" class="btn btn-primary submit-btn"><?php echo $this->translate('submit')?> <i class="fa fa-plus" aria-hidden="true"></i></button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

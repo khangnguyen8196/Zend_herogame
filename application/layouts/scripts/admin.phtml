@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <?php echo $this->headMeta(); ?>
+        <?php echo $this->headTitle(); ?>
+        <?php echo $this->headLink(); ?>
+        <script type="text/javascript" >
+            var language = '<?php echo (!empty($this->lang_code)) ? $this->lang_code : 'vi'; ?>';
+            var currController = '<?php echo $this->controller; ?>';
+            var currAction = '<?php echo $this->action; ?>';
+            var frontLink = '<?php echo $this->front_link;?>';
+        </script>
+    </head>
+    <body class="<?php echo ( $this->controller == 'auth' && ( $this->action == 'login' || $this->action == 'forgot-password' || $this->action == 'reset-password') ) ? "bg-slate-800" : "" ?>">
+        <!-- Modal section -->
+        <!-- Basic modal -->
+        <div id="modal_password" class="modal fade" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h5 class="modal-title"><?php echo $this->translate('change-password') ?></h5>
+                    </div>
+                    <div class="modal-body">
+                        <div id="change-pass-mgs" class="alert alert-success alert-arrow-left alert-styled-left alert-bordered" style="display: none">
+                            <button type="button" class="close"><span>&times;</span><span class="sr-only">Close</span></button>
+                            <span class="message-change-pass"></span>
+                        </div>
+                        <?php echo $this->render('auth/_change-password.phtml'); ?>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-link" data-dismiss="modal" id="close-change-pass-btn"><?php echo $this->translate('close') ?></button>
+                        <button type="button" class="btn btn-primary" id="save-change-pass-btn"><?php echo $this->translate('save-changes') ?></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php if (empty($this->login_info) == false) { ?>
+            <?php echo $this->render('/partials/_head-menu.phtml') ?>
+            <!-- Page container -->
+            <div class="page-container">
+                <!-- Page content -->
+                <div class="page-content">
+                    <?php echo $this->render('/partials/_left-menu.phtml') ?>
+                    <!-- Main content -->
+                    <div class="content-wrapper">
+                            <?php echo $this->layout()->content; ?>
+                            <!-- footer -->
+                            <?php echo $this->render('/partials/_footer.phtml') ?>
+                            <!-- /footer -->
+                        <!-- /content area -->
+                    </div>
+                    <!-- /main content -->
+                </div>
+                <!-- /page content -->
+            </div>
+            <!-- /page container -->
+        <?php } else { ?>
+            	<?php echo $this->layout()->content; ?>
+        <?php } ?>
+        <?php echo $this->headScript(); ?>
+    </body>
+</html>

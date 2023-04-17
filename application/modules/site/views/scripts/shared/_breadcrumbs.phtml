@@ -1,0 +1,11 @@
+<div class="breadcrumbs">
+    <a href="/">Trang Chủ</a>
+    <i class="fa fa-angle-double-right"></i>
+    <?php if( empty($this->data['parent']) == false ){?>
+	    <a href="<?php echo @$this->data['parent']['url']?>"><?php echo @$this->data['parent']['name']?></a>
+	    <i class="fa fa-angle-double-right"></i>
+    <?php } ?>
+     <?php if( empty($this->data['child']) == false ){?>
+     	<strong><?php echo @$this->data['child']['name']?></strong>
+    <?php } ?>
+</div>

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<root>
+	<form name="promoCodeDetailForm" >
+		<checkrules>
+			<name>
+				<validate>
+					<NotEmpty message="Vui lòng nhập tên khuyến mãi" />
+				</validate>
+			</name>
+			<code>
+				<validate>
+					<NotEmpty message="Vui lòng nhập mã khuyến mãi" />
+				</validate>
+			</code>
+		</checkrules>
+	</form>	
+</root>	

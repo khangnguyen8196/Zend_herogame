@@ -1,0 +1,16 @@
+<div class="side-box side-filter">
+    <header>
+        <?php echo $this->title ?>
+        <a class="clear" title="Xóa bộ lọc">
+            <i class="fa fa-trash"></i>
+        </a>
+    </header>
+    <div class="range-slider">
+        <input name="<?php echo $this->name ?>"
+            class="range-input" type="text"
+            data-slider-min="<?php echo $this->min ?>"
+            data-slider-max="<?php echo $this->max ?>"
+            data-slider-step="<?php echo $this->step ?>"
+            data-formatter-unit="<?php echo $this->unit ?>" />
+    </div>
+</div>

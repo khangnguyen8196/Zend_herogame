@@ -1,0 +1,166 @@
+<div class="page-header">
+    <div class="page-header-content">
+        <div class="page-title">
+            <h4>
+                <i class="icon-barcode2 position-left"></i> <span
+                    class="text-semibold">Mã Khuyến Mãi - Thông Tin Mã Khuyến Mãi</span>
+            </h4>
+        </div>
+    </div>
+    <div class="breadcrumb-line">
+        <ul class="breadcrumb">
+            <li><a href="/"><i class="icon-home2 position-left"></i> Trang chủ</a></li>
+            <li><a href="/admin/promotion-code">Danh Sách Mã Khuyến Mãi</a></li>
+            <li class="active">Thông Tin Mã Khuyến Mãi</li>
+        </ul>
+        <!-- tree -->
+    </div>
+</div>
+<div class="content">
+    <div class="panel panel-flat">
+        <div class="panel-heading">
+            <h5 class="panel-title">Thông Tin Mã Khuyến Mãi</h5>
+        </div>
+        <div class="panel-body">
+            <div
+                class="alert alert-danger alert-styled-left <?php
+                if (empty($this->error) == true) {
+                    echo 'hidden';
+                }
+                ?>">
+                <button type="button" class="close" data-dismiss="alert">
+                    <span>×</span><span class="sr-only">Đóng</span>
+                </button>
+                <?php
+                if (empty($this->error) == false) {
+                    foreach ($this->error as $key => $value) {
+                        echo $value . '<br/>';
+                    }
+                }
+                ?>
+            </div>
+            <form class="form-horizontal" id="menuDetailForm" method="post"
+                  enctype="multipart/form-data">
+                <fieldset class="content-group">
+                    <legend class="text-bold"></legend>
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Tên khuyến mãi</label>
+                        <div class="col-lg-10">
+                            <input type="text" name="name" id="name"
+                                   placeholder="Tên khuyến mãi" class="form-control"
+                                   value="<?php echo @$this->info['name'] ?>"
+                                   data-msg="Vui lòng nhập tên mã khuyến mãi">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Mã khuyến mãi</label>
+                        <div class="col-lg-10">
+                            <input type="text" name="code" id="code"
+                                   placeholder="Mã khuyến mãi" class="form-control"
+                                   value="<?php echo @$this->info['code'] ?>"
+                                   data-msg="Vui lòng nhập mã khuyến mãi">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Thời gian bắt đầu:</label>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" name="startdate"
+                                           id="startdate" format="yyyy-mm-dd"
+                                           class="form-control datepicker"
+                                           placeholder="Thời gian bắt đầu" value="<?php echo @$this->info['startdate'] ?>"> <span
+                                           class="input-group-addon"><i class="icon-calendar"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Thời gian kết thúc:</label>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" name="enddate"
+                                           id="enddate" format="yyyy-mm-dd"
+                                           class="form-control datepicker"
+                                           placeholder="Thời gian kết thúc" value="<?php echo @$this->info['enddate'] ?>"> <span
+                                           class="input-group-addon"><i class="icon-calendar"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Phần trăm giảm (%):</label>
+                        <div class="col-lg-10">
+                            <input type="text" name="percent" id="percent"
+                                   placeholder="Phần trăm giảm" class="form-control"
+                                   value="<?php echo @$this->info['percent'] ?>"
+                                   data-msg="Vui lòng nhập mã khuyến mãi">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Giảm tối đa (VNĐ):</label>
+                        <div class="col-lg-10">
+                            <input type="text" name="max_price" id="max_price"
+                                   placeholder="Giảm tối đa" class="form-control"
+                                   value="<?php echo @$this->info['max_price'] ?>"
+                                   data-msg="Vui lòng nhập mã khuyến mãi">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Danh Mục</label>
+                        <div class="col-lg-4">
+                            <select name="id_category" id="id_category" class="form-control">
+                                <option value="0">Tất Cả</option>
+                                <?php
+                                if (empty($this->listCategory) == false) {
+                                    foreach ($this->listCategory as $key => $value) { ?>
+                                        <option <?php
+                                        if ($value['id'] == @$this->info['category']) {
+                                            echo 'selected';
+                                        }
+                                        ?> value="<?php echo $value['id'] ?>"><?php echo $value['name'] ?></option>
+                                            <?php
+                                        }
+                                    } else {
+                                        ?>
+                                    
+                                    <?php
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Trạng Thái</label>
+                        <div class="col-lg-4">
+                            <select name="status" id="status" class="form-control">
+                                <option value="1" <?php
+                                        if ( @$this->info['status'] == 1) {
+                                            echo 'selected';
+                                        }
+                                        ?>>Mở</option>
+                                <option value="0" <?php
+                                        if ( @$this->info['status'] == 0) {
+                                            echo 'selected';
+                                        }
+                                        ?>>Đóng</option>
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="text-right">
+                    <a href="/admin/promotion-code"><button type="button"
+                                                            class="btn btn-default cancel-btn">
+                            Hủy bỏ<i class="icon-arrow-right14 position-right"></i>
+                        </button></a>
+                    <button type="submit" class="btn btn-primary submit-btn">
+                        Đồng ý <i class="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="modal_media" class="modal fade" data-keyboard="false"
+     data-backdrop="static"></div>

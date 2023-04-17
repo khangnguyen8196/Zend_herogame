@@ -1,0 +1,26 @@
+<div class="video-view <?php echo $this->vcss ?>">
+    <div class="imgh r0x0" data-lazy="<?php echo $this->burl ?>">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 no-gutter">
+                    <div class="frame">
+                        <div class="video">
+                            <div class="yt-wrapper">
+                                <?php
+                                    $videoid = str_replace('https://www.youtube.com/embed/', '', $this->vurl);
+                                    $videoid = str_replace('https://www.youtube.com/watch?v=', '', $videoid);
+                                    $ytvideo = 'https://www.youtube.com/embed/' . $videoid;
+                                ?>
+                                <iframe width="853" height="480" src="<?php echo $ytvideo ?>?rel=0" frameborder="0" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                        <div class="banners">
+                            <?php echo $this->partial('/shared/_banner_rotator.phtml', $this->bcf1) ?>
+                            <?php echo $this->partial('/shared/_banner_rotator.phtml', $this->bcf2) ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<root>
+	<form name="mediaDetailForm" >
+		<checkrules>
+			<title>
+				<validate>
+					<NotEmpty message="please-input-title" />
+				</validate>
+			</title>
+		</checkrules>
+	</form>	
+</root>	

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<root>
+	<form name="postDetailForm" >
+		<checkrules>
+			<title>
+				<validate>
+					<NotEmpty message="please-input-title" />
+				</validate>
+			</title>
+			<url_name>
+				<validate>
+					<NotEmpty message="please-input-url-name" />
+				</validate>
+			</url_name>
+		</checkrules>
+	</form>	
+</root>	

@@ -1,0 +1,38 @@
+#login-frm .login-form .form-group .validation-error-label:before {
+    content: none!important;
+}
+#login-frm .login-form .form-group.has-feedback div.form-control-feedback {
+    top:0px!important;
+}
+
+#forgot_password_frm .form-group .validation-error-label:before {
+    content: none!important;
+}
+#forgot_password_frm .form-group.has-feedback div.form-control-feedback {
+    top:0px!important;
+}
+#reset_password_frm .form-group .validation-error-label:before {
+    content: none!important;
+}
+#reset_password_frm .form-group.has-feedback div.form-control-feedback {
+    top:0px!important;
+}
+/* Change password */
+#modal_password .modal-dialog .modal-content .modal-title {
+    text-transform: uppercase;
+}
+#modal_password .form-group .validation-error-label:before {
+    content: none!important;
+}
+#modal_password .form-group.has-feedback div.form-control-feedback {
+    top:0px!important;
+}
+.media-title{
+	padding: 5px !important;
+	background-color: rgba(221, 221, 221, 0.82) !important;
+}
+.media-title .text-default{
+	overflow: hidden;
+    display: block;
+    text-overflow: ellipsis;
+}

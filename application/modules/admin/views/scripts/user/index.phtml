@@ -1,0 +1,44 @@
+<!-- Page header -->
+<div class="page-header">
+    <div class="page-header-content">
+        <div class="page-title">
+            <h3><i class="icon-people position-left"></i> <span class="text-semibold">Người Dùng - Danh Sách Người Dùng</h3>
+        </div>
+    </div>
+    <div class="breadcrumb-line">
+        <ul class="breadcrumb">
+            <li><a href="/admin/index/"><i class="icon-home2 position-left"></i> <?php echo $this->translate('home') ?></a></li>
+            <li><a href="/admin/user/">Người Dùng</a></li>
+            <li class="active">Danh Sách Người Dùng</li>
+        </ul>
+    </div>
+</div>
+<!-- /page header -->
+<div class="content">
+    <!-- Default ordering -->
+    <div class="panel panel-flat">
+        <div class="panel-heading">
+            <h4 class="panel-title">Danh Sách Người Dùng</h4>
+        </div>
+        <table id="user_list_dbt" class="table datatable-sorting">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th><?php echo $this->translate('username') ?></th>
+                    <th><?php echo $this->translate('first_name') ?></th>
+                    <th><?php echo $this->translate('last_name') ?></th>
+                    <th><?php echo $this->translate('email') ?></th>
+                    <th><?php echo $this->translate('role') ?></th>
+                    <th><?php echo $this->translate('status') ?></th>
+                    <th class="text-center"><?php echo $this->translate('action') ?></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <!-- /default ordering -->
+</div>
+<script type="text/javascript">
+    var roleList = '<?php echo json_encode($this->roleList)?>';
+</script>

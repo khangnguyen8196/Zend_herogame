@@ -1,0 +1,58 @@
+<?php
+	$data = $this->data;
+?>
+<li class="mega-wrap mega-3ds">
+                <a href="/<?php echo $data['url']?>"><?php echo $data['name']?></a>
+                <div class="mega-drop">
+                    <div class="wrapper">
+                        <img src="/site/img/menu/menu_1_1_peach.svg" class="line-art line-art-sway peach">
+                        <img src="/site/img/menu/menu_1_2_pipe.svg" class="line-art pipe">
+                        <img src="/site/img/menu/menu_1_3_luigi.svg" class="line-art line-art-hover luigi">
+                        <div class="main-tiles">
+                        	<?php if( empty($data['child']) == false ) { ?>
+                            <a class="tile" href="<?php echo @$data['child'][0]['url']?>">
+                            	<?php
+                            		$url = '';
+                            		if( empty($data['child'][0]['image']) == false ){
+                            			$url = PHOTO_PATH.$data['child'][0]['image'];
+                            		}
+                            	?>
+                                <?php echo $this->partial('/shared/_lazy_image.phtml', array(
+                                    'css' => 'photo',
+                                    'url' => $url,
+                                )) ?>
+                                <div class="title"><?php echo  @$data['child'][0]['name']?></div>
+                                <div class="title-sub"><?php echo  @$data['child'][0]['description']?></div>
+                            </a>
+                            <?php 
+                            	unset($data['child'][0]);
+							} ?>
+                        </div>
+                        <div class="small-tiles">
+                        	<?php if( empty($data['child']) == false ){ 
+                        		$i = 0;
+                        	?>
+                        		<?php foreach ( $data['child'] as $key => $value) { 
+                        			$i++;
+                        		?>
+		                            <a class="tile" href="<?php echo $value['url']?>">
+		                            	<?php
+		                            		$url = '';
+		                            		if( empty($value['image']) == false ){
+		                            			$url = PHOTO_PATH.$value['image'];
+		                            		}
+		                            	?>
+		                                <?php echo $this->partial('/shared/_lazy_image.phtml', array(
+		                                    'css' => 'photo',
+		                                    'url' => $url,
+		                                )) ?>
+		                                <div class="title"><?php echo  $value['name']?></div>
+		                            </a>
+                            	<?php 
+                            	if( $i == 6) break;
+                        		}
+							}?>
+                        </div>
+                    </div>
+                </div>
+            </li>

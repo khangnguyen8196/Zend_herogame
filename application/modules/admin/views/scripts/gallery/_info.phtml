@@ -1,0 +1,113 @@
+<fieldset class="content-group">
+			<legend class="text-bold"></legend>
+			<div class="form-group">
+				<label class="control-label col-lg-2"><?php echo $this->translate('title')?></label>
+				<div class="col-lg-10">
+					<input type="text" name="title_<?php echo $this->lang?>" id="title_<?php echo $this->lang?>" placeholder="<?php echo $this->translate('title')?>" class="form-control" value="<?php echo @$this->info['title']?>" data-msg="<?php echo $this->translate('please-input-title'); ?>">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-lg-2"><?php echo $this->translate('url-name')?></label>
+				<div class="col-lg-10">
+					<input type="text" name="url_name_<?php echo $this->lang?>" id="url_name_<?php echo $this->lang?>" placeholder="<?php echo $this->translate('url-name')?>" class="form-control" value="<?php echo @$this->info['url_name']?>" data-msg="<?php echo $this->translate('please-input-url-name'); ?>">
+				</div>
+			</div>
+			<?php if( $this->lang == 'en'){?>
+				<div class="form-group">
+					<label class="control-label col-lg-2"><?php echo $this->translate('category')?></label>
+					<div class="col-lg-10">
+						<select class="select-search" name="category_id_<?php echo $this->lang?>">
+							<?php if( empty($this->category) == false ){ ?>
+								<?php foreach ($this->category as $key => $value ){?>
+									<option <?php if(@$this->info['category_id'] == $value['category_id'] ) { echo 'selected'; }?> value="<?php echo $value['category_id']?>"><?php echo $value['category_name']?></option>
+								<?php 
+								}?>
+							<?php }?>
+						</select>
+					</div>
+				</div>
+			<?php } ?>
+			<div class="form-group">
+				<label class="control-label col-lg-2"><?php echo $this->translate('image-post')?></label>
+				<div class="col-lg-5">
+					<input type="file" class="file-styled form-control" name='main_img_id_<?php echo $this->lang?>' id="main_img_id_<?php echo $this->lang?>"/>
+				</div>
+				<label class="control-label col-lg-2">( 360x230 )</label>
+				<?php if( empty($this->info) == false && empty($this->info['url_thumnail']) == false){ ?>
+					<div class="col-lg-5">
+						<div class="col-lg-2 col-sm-4 parent">
+	                      	<div class="thumbnail">
+	                            <div class="thumb">
+		                            <img class="img-media img-thumbnail-item" src="<?php echo 'http://'.$_SERVER['HTTP_HOST'].'/upload/images'.$this->info['url_thumnail'];?>" alt="">
+		                           	<div class="caption-overflow">
+			                            <span>
+				                            <a class="btn border-white text-white btn-flat btn-icon btn-rounded 
+				                            	ml-5 container-image" href="<?php echo 'http://'.$_SERVER['HTTP_HOST'].'/upload/images'.$this->info['url'];?>" data-popup="lightbox">
+					                        	<i class="icon-plus3"></i>
+					                        </a>
+				                    	</span>
+			                        </div>
+	                            </div>
+	                    	</div>
+	                     </div>
+					</div>
+				<?php } ?>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-lg-2"><?php echo $this->translate('content-post')?></label>
+				<div class="col-lg-10">
+					<textarea name="content_<?php echo $this->lang?>" class="" id="content_<?php echo $this->lang?>"  rows="5" cols="204"><?php echo @$this->info['content']?></textarea>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-lg-2"><?php echo $this->translate('status')?></label>
+				<div class="col-lg-2">
+					<select name="status_<?php echo $this->lang?>" id="status_<?php echo $this->lang?>" class="form-control">
+                            	<option value="<?php echo STATUS_ACTIVE?>"><?php echo $this->translate('active')?></option>
+                           		<option value="<?php echo STATUS_IN_ACTIVE?>"><?php echo $this->translate('in-active')?></option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-lg-2"><?php echo $this->translate('location')?></label>
+				<div class="col-lg-10">
+					<input type="text" name="location_<?php echo $this->lang?>" id="location_<?php echo $this->lang?>" placeholder="<?php echo $this->translate('location')?>" class="form-control" value="<?php echo @$this->info['location']?>">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-lg-2"><?php echo $this->translate('priority')?></label>
+				<div class="col-lg-2">
+					<input type="number" name="priority_<?php echo $this->lang?>" id="priority_<?php echo $this->lang?>" placeholder="<?php echo $this->translate('priority')?>" class="form-control" value="<?php echo @$this->info['priority']?>">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-lg-2"><?php echo $this->translate('meta-og-url')?></label>
+				<div class="col-lg-10">
+					<input type="text" name="og_url_<?php echo $this->lang?>" id="og_url_<?php echo $this->lang?>" placeholder="<?php echo $this->translate('meta-og-url')?>" class="form-control" value="<?php echo @$this->info['og_url']?>">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-lg-2"><?php echo $this->translate('meta-og-title')?></label>
+				<div class="col-lg-10">
+					<input type="text" name="og_title_<?php echo $this->lang?>" id="og_title_<?php echo $this->lang?>" placeholder="<?php echo $this->translate('meta-og-title')?>" class="form-control" value="<?php echo @$this->info['og_title']?>">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-lg-2"><?php echo $this->translate('meta-og-description')?></label>
+				<div class="col-lg-10">
+					<input type="text" name="og_description_<?php echo $this->lang?>" id="og_description_<?php echo $this->lang?>" placeholder="<?php echo $this->translate('meta-og-description')?>" class="form-control" value="<?php echo @$this->info['og_description']?>">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-lg-2"><?php echo $this->translate('meta-og-site-name')?></label>
+				<div class="col-lg-10">
+					<input type="text" name="og_site_name_<?php echo $this->lang?>" id="og_site_name_<?php echo $this->lang?>" placeholder="<?php echo $this->translate('meta-og-site-name')?>" class="form-control" value="<?php echo @$this->info['og_site_name']?>">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-lg-2"><?php echo $this->translate('meta-og-image')?></label>
+				<div class="col-lg-10">
+					<input type="text" name="og_image_<?php echo $this->lang?>" id="og_image_<?php echo $this->lang?>" placeholder="<?php echo $this->translate('meta-og-image')?>" class="form-control" value="<?php echo @$this->info['og_image']?>">
+				</div>
+			</div>
+</fieldset>

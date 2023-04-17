@@ -1,0 +1,30 @@
+<?php $this->viewCssClass = 'order checkout' ?>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 hidden-md-down no-gutter">
+            <?php echo $this->partial('/shared/_breadcrumbs.phtml',array('data'=> array('child' => array('name' => 'Thanh Toán')))) ?>
+        </div>
+    </div>
+    <form id="checkoutForm" class="row" novalidate method="post" action="/don-hang/ket-qua">
+        <div class="col-md-4 col-12 right-gutter">
+            <?php echo $this->partial('/shared/_data_header.phtml', array(
+                'title' => 'Đơn hàng ('.count($this->cart_list).' sản phẩm)'
+            )) ?>
+            <?php echo $this->partial('/don-hang/_ctmcart.phtml', array('cart_list'=> $this->cart_list, 
+                'total' => $this->total_money, 'customer' => $this->user)) ?>
+        </div>
+        <div class="col-md-4 col-12 both-gutter">
+            <?php echo $this->partial('/shared/_data_header.phtml', array(
+                'title' => 'Thanh toán'
+            )) ?>
+            <?php echo $this->partial('/don-hang/_payment.phtml') ?>
+        </div>
+        <div class="col-md-4 col-12 left-gutter">
+            <?php echo $this->partial('/shared/_data_header.phtml', array(
+                'title' => 'Thông tin mua hàng'
+            )) ?>
+            <?php echo $this->partial('/don-hang/_ctmform.phtml') ?>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,16 @@
+<div class="side-box category-menu">
+	<header><?php echo $this->title ?></header>
+	<ul>
+		<?php if( empty( $this->data ) == false ){ ?>
+		<?php foreach ( $this->data as $cate ){ ?>
+		<li class="item-4">
+			<a href="/danh-muc-bai-viet/<?php echo $cate['url_slug']?>"> 
+				<span class="icon"> </span> 
+				<span> <?php echo $cate['name']?></span> 
+				<i class="fa fa-caret-right"></i>
+			</a>
+		</li>
+		<?php } ?>
+		<?php } ?>
+	</ul>
+</div>

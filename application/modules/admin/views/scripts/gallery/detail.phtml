@@ -1,0 +1,105 @@
+<div id="modal_media" class="modal fade" data-keyboard="false" data-backdrop="static">
+</div>
+<div class="page-header">
+	<div class="page-header-content">
+		<div class="page-title">
+			<h4><i class="icon-folder-open2 position-left"></i> <span class="text-semibold"><?php echo $this->translate('create-gallery')?> - <?php echo $this->translate('create-detail-gallery')?></span></h4>
+		</div>
+	</div>
+	<div class="breadcrumb-line">
+		<ul class="breadcrumb">
+			<li><a href="/admin/index/"><i class="icon-home2 position-left"></i> <?php echo $this->translate('home')?></a></li>
+			<li><a href="/admin/gallery"><?php echo $this->translate('gallery')?></a></li>
+			<li class="active"><?php echo $this->translate('create-detail-gallery')?></li>
+		</ul>
+		<!-- tree -->
+	</div>
+</div>
+<div class="content">
+	<div class="panel panel-flat">
+		<div class="panel-body">
+			<div class="alert alert-danger alert-styled-left <?php if( empty($this->error['vi']) == true && empty($this->error['en']) == true) { echo 'hidden';}?>">
+				<button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
+				<?php
+					if( empty($this->error['vi']) == false ){
+						foreach ($this->error['vi'] as $key => $value ){
+							echo $value.'('.$this->translate('vietnameses').')<br/>';
+						}
+					}
+					if( empty($this->error['en']) == false ){
+						foreach ($this->error['en'] as $key => $value ){
+							echo $value.'('.$this->translate('english').')<br/>';
+						}
+					}
+				?>
+			</div>
+			<form class="form-horizontal" id="galleryDetailForm" method="post" enctype="multipart/form-data">
+				<div class="col-md-12">
+					<div class="panel panel-flat">
+						<div class="panel-heading">
+							<h6 class="panel-title"><?php echo $this->translate('gallery-language')?></h6>
+							<a class="heading-elements-toggle"><i class="icon-menu"></i></a>
+						</div>
+						<div class="panel-body">
+							<div class="tabbable">
+								<ul class="nav nav-tabs">
+									<li class="active"><a href="#tab-en" data-toggle="tab" aria-expanded="false"><?php echo $this->translate('english')?></a></li>
+									<li class=""><a href="#tab-vi" data-toggle="tab" aria-expanded="true"><?php echo $this->translate('vietnameses')?></a></li>
+									<li class=""><a href="#tab-img" data-toggle="tab" aria-expanded="false"><?php echo $this->translate('image')?></a></li>
+								</ul>
+								<div class="tab-content">
+									<div class="tab-pane active" id="tab-en">
+										<?php echo $this->partial( "/gallery/_info.phtml", array('category' => $this->category, 'menu' => $this->menu,'lang' =>'en', 'info' => @$this->info['en']));?>
+									</div>
+									<div class="tab-pane" id="tab-vi">
+										<?php echo $this->partial( "/gallery/_info.phtml", array('category' => $this->category, 'menu' => $this->menu,'lang' =>'vi', 'info' => @$this->info['vi']));?>
+									</div>
+									<div class="tab-pane" id="tab-img">
+										<div class="form-group">
+											<div class="col-lg-2">
+												<button type="button" id="select-media" class="btn bg-teal-400 btn-labeled btn-rounded"><b><i class="icon-select2"></i></b> Chọn hình ảnh từ thư viện</button>
+											</div>
+										</div>
+										<div class="list-image">
+											<?php
+												if( empty($this->listImg) == false ){
+														foreach ($this->listImg as $key => $item ){
+															?>
+															  <div class="col-lg-2 col-sm-4 parent img-item-<?php echo $item['media_id']?>">
+									                          		<div class="thumbnail">
+											                            <div class="thumb">
+												                            <img class="img-media img-thumbnail-item" src="<?php echo '/upload/images'.@$item['url_thumnail'];?>" alt="">
+												                           	<div class="caption-overflow">
+													                            <span>
+														                            <a class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5 container-image" href="<?php echo '/upload/images'.@$item['url'];?>" data-popup="lightbox">
+														                            <i class="icon-plus3"></i>
+														                            </a>
+														                            <a href="#" class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5">
+														                            <i class="icon-cross2 remove-item" data-remove="img-item-<?php echo $item['media_id']?>"></i></a>
+														                           <a href="#" class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5">
+														                            <i class="icon-pencil7 edit-item" data-update="<?php echo $item['media_id']?>"></i></a>
+													                            </span>
+												                            </div>
+											                            </div>
+									                           		</div>
+									                            	<input type="hidden" class="hiden-item" name="media_id[]" value="<?php echo $item['media_id']?>">
+									                            </div>
+															<?php
+														}
+												}
+											?>
+										</div>
+									</div>
+								</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				<div class="text-right">
+					<a href="/admin/gallery"><button type="button" class="btn btn-default cancel-btn"><?php echo $this->translate('cancel')?><i class="icon-arrow-right14 position-right"></i></button></a>
+					<button type="submit" class="btn btn-primary submit-btn"><?php echo $this->translate('submit')?> <i class="fa fa-plus" aria-hidden="true"></i></button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

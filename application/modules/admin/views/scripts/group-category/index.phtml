@@ -1,0 +1,40 @@
+<div class="page-header">
+	<div class="page-header-content">
+		<div class="page-title">
+			<h4><i class="icon-clipboard6 position-left"></i> <span class="text-semibold"><?php echo $this->translate('post')?> - <?php echo $this->translate('category')?></span></h4>
+		</div>
+		<div class="heading-elements">
+			<a href="/admin/<?php echo $this->controller?>/detail" class="btn btn-labeled btn-labeled-right bg-blue heading-btn"><?php echo $this->translate('create-category')?> <b><i class="fa fa-plus" aria-hidden="true"></i></b></a>
+		</div>
+	</div>
+	<div class="breadcrumb-line">
+		<ul class="breadcrumb">
+			<li><a href="/admin/index/"><i class="icon-home2 position-left"></i> <?php echo $this->translate('home')?></a></li>
+			<li><a href="/admin/category"><?php echo $this->translate('category')?></a></li>
+			<li class="active"><?php echo $this->translate('category-list')?></li>
+		</ul>
+		<!-- tree -->
+	</div>
+</div>
+<div class="content">
+	<div class="panel panel-flat">
+		<div class="panel-heading">
+			<h5 class="panel-title"><?php echo $this->translate('category-list')?></h5>
+		</div>
+		<div class="panel-body">
+			<form id="searchCategory">
+			</form>
+		</div>
+		<table id="groupCategoryTable" class="table datatable-pagination">
+			<thead>
+				<tr>
+					<th width="5%">Id</th>
+					<th width="20%">Tên Nhóm Danh Mục</th>
+					<th>Url</th>
+					<th>Hình Ảnh</th>
+					<th class="text-center"><?php echo $this->translate('action')?></th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>

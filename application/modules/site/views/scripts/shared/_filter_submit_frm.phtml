@@ -1,0 +1,13 @@
+<form name="filter_frm" id="filter_frm" method="POST">
+    <input type="hidden" name="page_size" id="page_size" value="<?php echo @$this->selected_page_size ?>"/>
+    <input type="hidden" name="sorted" id="sorted" value="<?php echo @$this->sorted ?>"/>
+    <?php 
+    $page = $this->current_page;
+    if( count($this->paginator) <= 1 ){
+        $page = 1;
+    }
+    ?>
+    <input type="hidden" name="page" id="page" value="<?php echo $page ?>"/>
+    <input type="hidden" name="minRange" id="minRange" value="<?php echo @$this->minRange ?>"/>
+    <input type="hidden" name="maxRange" id="maxRange" value="<?php echo @$this->maxRange ?>"/>
+</form>

@@ -1,0 +1,1592 @@
+<?xml version='1.0' ?><!DOCTYPE tmx SYSTEM 'tmx14.dtd'>
+<tmx version='1.4'>
+	<header creationtool='CTmx' creationtoolversion='1.0' datatype='winres' segtype='sentence' adminlang='en-us' srclang='en-us' o-tmf='txt'>
+	</header>
+	<body>
+		<tu tuid='vibrant-admin'>
+			<tuv xml:lang='vi'>
+				<seg>Vibrant Admin</seg>
+			</tuv>
+		</tu>
+		<tu tuid='username'>
+			<tuv xml:lang='vi'>
+				<seg>Tên Đăng Nhập</seg>
+			</tuv>
+		</tu>
+		<tu tuid='password'>
+			<tuv xml:lang='vi'>
+				<seg>Mật Khẩu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='forgot-password'>
+			<tuv xml:lang='vi'>
+				<seg>Quên Mật Khẩu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='login'>
+			<tuv xml:lang='vi'>
+				<seg>Đăng Nhập</seg>
+			</tuv>
+		</tu>
+		<tu tuid='enter-your-credentials'>
+			<tuv xml:lang='vi'>
+				<seg>Nhập thông tin của bạn</seg>
+			</tuv>
+		</tu>
+		<tu tuid='login-to-your-account'>
+			<tuv xml:lang='vi'>
+				<seg>Đăng nhập vào tài khoản của bạn</seg>
+			</tuv>
+		</tu>
+		<tu tuid='please-enter-username'>
+			<tuv xml:lang='vi'>
+				<seg>Vui lòng nhập tên đăng nhập</seg>
+			</tuv>
+		</tu>
+		<tu tuid='please-enter-password'>
+			<tuv xml:lang='vi'>
+				<seg>Vui lòng nhập mật khẩu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='username-or-password-not-correct'>
+			<tuv xml:lang='vi'>
+				<seg>Tên đăng nhập / Mật khẩu bạn đã nhập không chính xác! Vui lòng thử lại.</seg>
+			</tuv>
+		</tu>
+		<tu tuid='my-profile'>
+			<tuv xml:lang='vi'>
+				<seg>Thông tin cá nhân</seg>
+			</tuv>
+		</tu>
+		<tu tuid='change-password'>
+			<tuv xml:lang='vi'>
+				<seg>Đổi mật khẩu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='logout'>
+			<tuv xml:lang='vi'>
+				<seg>Đăng xuất</seg>
+			</tuv>
+		</tu>
+		<tu tuid='welcome'>
+			<tuv xml:lang='vi'>
+				<seg>Xin chào</seg>
+			</tuv>
+		</tu>
+		<tu tuid='save-changes'>
+			<tuv xml:lang='vi'>
+				<seg>Cập nhật</seg>
+			</tuv>
+		</tu>
+		<tu tuid='cancel'>
+			<tuv xml:lang='vi'>
+				<seg>Bỏ qua</seg>
+			</tuv>
+		</tu>
+		<tu tuid='close'>
+			<tuv xml:lang='vi'>
+				<seg>Thoát</seg>
+			</tuv>
+		</tu>
+		<tu tuid='current-password'>
+			<tuv xml:lang='vi'>
+				<seg>Mật khẩu hiện tại</seg>
+			</tuv>
+		</tu>
+		<tu tuid='new-password'>
+			<tuv xml:lang='vi'>
+				<seg>Mật khẩu mới</seg>
+			</tuv>
+		</tu>
+		<tu tuid='confirm-new-password'>
+			<tuv xml:lang='vi'>
+				<seg>Xác nhận lại mật khẩu mới</seg>
+			</tuv>
+		</tu>
+		<tu tuid='your-credentials'>
+			<tuv xml:lang='vi'>
+				<seg>Thông tin của bạn</seg>
+			</tuv>
+		</tu>
+		<tu tuid='please-enter-new-password'>
+			<tuv xml:lang='vi'>
+				<seg>Vui lòng nhập mật khẩu mới</seg>
+			</tuv>
+		</tu>
+		<tu tuid='please-enter-confirm-password'>
+			<tuv xml:lang='vi'>
+				<seg>Vui lòng nhập lại mật khẩu mới</seg>
+			</tuv>
+		</tu>
+		<tu tuid='please-enter-current-password'>
+			<tuv xml:lang='vi'>
+				<seg>Vui lòng nhập mật khẩu hiện tại</seg>
+			</tuv>
+		</tu>
+		<tu tuid='confirm-new-password-not-correct'>
+			<tuv xml:lang='vi'>
+				<seg>Xác nhận lại mật khẩu không chính xác</seg>
+			</tuv>
+		</tu>
+		<tu tuid='parameters-error'>
+			<tuv xml:lang='vi'>
+				<seg>Một vài thông tin cần thiết không chính xác. Vui lòng kiểm tra lại!</seg>
+			</tuv>
+		</tu>
+		<tu tuid='account-not-found'>
+			<tuv xml:lang='vi'>
+				<seg>Không tìm thấy thông tin tài khoản</seg>
+			</tuv>
+		</tu>
+		<tu tuid='current-pass-not-match'>
+			<tuv xml:lang='vi'>
+				<seg>Mật khẩu hiện tại không chính xác. Vui lòng kiểm tra lại!</seg>
+			</tuv>
+		</tu>
+		<tu tuid='change-password-success'>
+			<tuv xml:lang='vi'>
+				<seg>Thay đổi mật khẩu thành công.</seg>
+			</tuv>
+		</tu>
+		<tu tuid='change-password-failed'>
+			<tuv xml:lang='vi'>
+				<seg>Thay đổi mật khẩu không thành công.</seg>
+			</tuv>
+		</tu>
+		<tu tuid='password-recovery'>
+			<tuv xml:lang='vi'>
+				<seg>Khôi phục mật khẩu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='we-will-send-you-instructions-in-email'>
+			<tuv xml:lang='vi'>
+				<seg>Chúng tôi sẽ gửi cho bạn các hướng dẫn trong email</seg>
+			</tuv>
+		</tu>
+		<tu tuid='your-email'>
+			<tuv xml:lang='vi'>
+				<seg>Email của bạn</seg>
+			</tuv>
+		</tu>
+		<tu tuid='reset-password'>
+			<tuv xml:lang='vi'>
+				<seg>Đặt lại mật khẩu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='please-enter-email'>
+			<tuv xml:lang='vi'>
+				<seg>Vui lòng nhập email</seg>
+			</tuv>
+		</tu>
+		<tu tuid='please-enter-correct-email'>
+			<tuv xml:lang='vi'>
+				<seg>Email không chính xác! Vui lòng kiểm tra lại</seg>
+			</tuv>
+		</tu>
+		<tu tuid='request-reset-password'>
+			<tuv xml:lang='vi'>
+				<seg>Yêu cầu Đặt Lại Mật Khẩu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='confirm-email-has-been-sent-please-check-email'>
+			<tuv xml:lang='vi'>
+				<seg>Email xác nhận đã được gửi vào hòm thử của bạn. Vui lòng kiểm tra email.&lt;/br&gt;Vui lòng nhấp &lt;a href=&quot;/auth/login&quot; class=&quot;alert-link&quot;&gt;&lt;u&gt;vào đây&lt;/u&gt;&lt;/a&gt; để quay lại trang Đăng Nhập.</seg>
+			</tuv>
+		</tu>
+		<tu tuid='click-here-to-return-login'>
+			<tuv xml:lang='vi'>
+				<seg>Vui lòng nhấp &lt;a href=&quot;/auth/login&quot; class=&quot;alert-link&quot;&gt;&lt;u&gt;vào đây&lt;/u&gt;&lt;/a&gt; để quay lại trang Đăng Nhập.</seg>
+			</tuv>
+		</tu>
+		<tu tuid='user-management'>
+			<tuv xml:lang='vi'>
+				<seg>Quản lý Người dùng</seg>
+			</tuv>
+		</tu>
+		<tu tuid='user-list'>
+			<tuv xml:lang='vi'>
+				<seg>Danh sách tài khoản</seg>
+			</tuv>
+		</tu>
+		<tu tuid='create-new-user'>
+			<tuv xml:lang='vi'>
+				<seg>Thêm tài khoản mới</seg>
+			</tuv>
+		</tu>
+		<tu tuid='home'>
+			<tuv xml:lang='vi'>
+				<seg>Trang chủ</seg>
+			</tuv>
+		</tu>
+		<tu tuid='main'>
+			<tuv xml:lang='vi'>
+				<seg>Main</seg>
+			</tuv>
+		</tu>
+		<tu tuid='first_name'>
+			<tuv xml:lang='vi'>
+				<seg>Họ</seg>
+			</tuv>
+		</tu>
+		<tu tuid='last_name'>
+			<tuv xml:lang='vi'>
+				<seg>Tên</seg>
+			</tuv>
+		</tu>
+		<tu tuid='email'>
+			<tuv xml:lang='vi'>
+				<seg>Email</seg>
+			</tuv>
+		</tu>
+		<tu tuid='role'>
+			<tuv xml:lang='vi'>
+				<seg>Quyền</seg>
+			</tuv>
+		</tu>
+		<tu tuid='status'>
+			<tuv xml:lang='vi'>
+				<seg>Trạng thái</seg>
+			</tuv>
+		</tu>
+		<tu tuid='action'>
+			<tuv xml:lang='vi'>
+				<seg>Hành động</seg>
+			</tuv>
+		</tu>
+		<tu tuid='account-is-inactive'>
+			<tuv xml:lang='vi'>
+				<seg>Tài khoản đang bị vô hiệu. Vui lòng liên hệ bộ phận hổ trợ</seg>
+			</tuv>
+		</tu>
+		<tu tuid='delete-user-successful'>
+			<tuv xml:lang='vi'>
+				<seg>Xóa tài khoản người dùng thành công</seg>
+			</tuv>
+		</tu>
+		<tu tuid='delete-user-failed'>
+			<tuv xml:lang='vi'>
+				<seg>Không thể xóa tài khoản người dùng! Vui lòng thử lại sau</seg>
+			</tuv>
+		</tu>
+		<tu tuid='update-user-information-successful'>
+			<tuv xml:lang='vi'>
+				<seg>Thông tin người dùng đã được cập nhật thành công</seg>
+			</tuv>
+		</tu>
+		<tu tuid='update-user-information-failed'>
+			<tuv xml:lang='vi'>
+				<seg>Cập nhật thông tin người dùng thất bại</seg>
+			</tuv>
+		</tu>
+		<tu tuid='create-account'>
+			<tuv xml:lang='vi'>
+				<seg>Tạo tài khoản người dùng</seg>
+			</tuv>
+		</tu>
+		<tu tuid='all-fields-are-required'>
+			<tuv xml:lang='vi'>
+				<seg>Tất cả các trường dữ liệu đều bắt buộc </seg>
+			</tuv>
+		</tu>
+		<tu tuid='create-password'>
+			<tuv xml:lang='vi'>
+				<seg>Tạo mật khẩu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='repeat-password'>
+			<tuv xml:lang='vi'>
+				<seg>Nhập lại mật khẩu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='repeat-your-email'>
+			<tuv xml:lang='vi'>
+				<seg>Nhập lại email</seg>
+			</tuv>
+		</tu>
+		<tu tuid='create-account'>
+			<tuv xml:lang='vi'>
+				<seg>Thêm mới tài khoản</seg>
+			</tuv>
+		</tu>
+		<tu tuid='please-enter-first-name'>
+			<tuv xml:lang='vi'>
+				<seg>Vui lòng nhập Họ</seg>
+			</tuv>
+		</tu>
+		<tu tuid='please-enter-last-name'>
+			<tuv xml:lang='vi'>
+				<seg>Vui lòng nhập Tên</seg>
+			</tuv>
+		</tu>
+		<tu tuid='please-enter-repeat-password'>
+			<tuv xml:lang='vi'>
+				<seg>Vui lòng nhập lại mật khẩu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='repeat-pass-not-match'>
+			<tuv xml:lang='vi'>
+				<seg>Nhập lại mật khẩu không trùng khớp. Vui lòng kiểm tra lại</seg>
+			</tuv>
+		</tu>
+		<tu tuid='repeat-email-not-match'>
+			<tuv xml:lang='vi'>
+				<seg>Nhập lại email không trùng khớp. Vui lòng kiểm tra lại</seg>
+			</tuv>
+		</tu>
+		<tu tuid='information-has-been-updated'>
+			<tuv xml:lang='vi'>
+				<seg>Thông tin đã được cập nhật thành công</seg>
+			</tuv>
+		</tu>
+		<tu tuid='update-information-failed'>
+			<tuv xml:lang='vi'>
+				<seg>Cập nhật thông tin thất bại</seg>
+			</tuv>
+		</tu>
+		<tu tuid='create-account-information-successful'>
+			<tuv xml:lang='vi'>
+				<seg>Tạo tài khoản người dùng thành công</seg>
+			</tuv>
+		</tu>
+		<tu tuid='create-account-information-failed'>
+			<tuv xml:lang='vi'>
+				<seg>Tạo tại khoản người dùng thất bại</seg>
+			</tuv>
+		</tu>
+		<tu tuid='update-account'>
+			<tuv xml:lang='vi'>
+				<seg>Cập nhật tài khoản</seg>
+			</tuv>
+		</tu>
+		<tu tuid='please-enter-repeat-email'>
+			<tuv xml:lang='vi'>
+				<seg>Vui lòng nhập lại email</seg>
+			</tuv>
+		</tu>
+		<tu tuid='username-existed'>
+			<tuv xml:lang='vi'>
+				<seg>Tên tài khoản đã tồn tại. Vui lòng chọn tên tài khoản khác</seg>
+			</tuv>
+		</tu>
+		<tu tuid='permission-management'>
+			<tuv xml:lang='vi'>
+				<seg>Quản lý Phân Quyền</seg>
+			</tuv>
+		</tu>
+		<tu tuid='permission-list'>
+			<tuv xml:lang='vi'>
+				<seg>Danh sách các quyền</seg>
+			</tuv>
+		</tu>
+		<tu tuid='add-permission'>
+			<tuv xml:lang='vi'>
+				<seg>Thêm mới quyền</seg>
+			</tuv>
+		</tu>
+		<tu tuid='permission_name'>
+			<tuv xml:lang='vi'>
+				<seg>Tên phân quyền</seg>
+			</tuv>
+		</tu>
+		<tu tuid='permission'>
+			<tuv xml:lang='vi'>
+				<seg>Phân Quyền</seg>
+			</tuv>
+		</tu>
+		<tu tuid='add'>
+			<tuv xml:lang='vi'>
+				<seg>Thêm</seg>
+			</tuv>
+		</tu>
+		<tu tuid='update'>
+			<tuv xml:lang='vi'>
+				<seg>Cập nhật</seg>
+			</tuv>
+		</tu>
+		<tu tuid='delete'>
+			<tuv xml:lang='vi'>
+				<seg>Xóa</seg>
+			</tuv>
+		</tu>
+		<tu tuid='view'>
+			<tuv xml:lang='vi'>
+				<seg>Xem</seg>
+			</tuv>
+		</tu>
+		<tu tuid='all'>
+			<tuv xml:lang='vi'>
+				<seg>Tất cả</seg>
+			</tuv>
+		</tu>
+		<tu tuid='module-name'>
+			<tuv xml:lang='vi'>
+				<seg>Tên chức năng</seg>
+			</tuv>
+		</tu>
+		<tu tuid='banner'>
+			<tuv xml:lang='vi'>
+				<seg>Quản lý Bảng Hiệu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='not-allow-delete-default-account'>
+			<tuv xml:lang='vi'>
+				<seg>Không cho phép xóa tài khoản mặc định</seg>
+			</tuv>
+		</tu>
+		<tu tuid='banner-type-name'>
+			<tuv xml:lang='vi'>
+				<seg>Loại bảng hiệu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='title'>
+			<tuv xml:lang='vi'>
+				<seg>Tiêu đề</seg>
+			</tuv>
+		</tu>
+		<tu tuid='content'>
+			<tuv xml:lang='vi'>
+				<seg>Nội dung</seg>
+			</tuv>
+		</tu>
+		<tu tuid='position'>
+			<tuv xml:lang='vi'>
+				<seg>Vị trí</seg>
+			</tuv>
+		</tu>
+		<tu tuid='priority'>
+			<tuv xml:lang='vi'>
+				<seg>Độ ưu tiên</seg>
+			</tuv>
+		</tu>
+		<tu tuid='created-at'>
+			<tuv xml:lang='vi'>
+				<seg>Tạo lúc</seg>
+			</tuv>
+		</tu>
+		<tu tuid='updated-at'>
+			<tuv xml:lang='vi'>
+				<seg>Cập nhật lúc</seg>
+			</tuv>
+		</tu>
+		<tu tuid='created-by'>
+			<tuv xml:lang='vi'>
+				<seg>Người tạo</seg>
+			</tuv>
+		</tu>
+		<tu tuid='updated-by'>
+			<tuv xml:lang='vi'>
+				<seg>Người cập nhật</seg>
+			</tuv>
+		</tu>
+		<tu tuid='banner-management'>
+			<tuv xml:lang='vi'>
+				<seg>Quản lý bảng hiệu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='banner-list'>
+			<tuv xml:lang='vi'>
+				<seg>Danh sách bảng hiệu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='submit'>
+			<tuv xml:lang='vi'>
+				<seg>Đồng ý</seg>
+			</tuv>
+		</tu>
+		<tu tuid='cancel'>
+			<tuv xml:lang='vi'>
+				<seg>Hủy</seg>
+			</tuv>
+		</tu>
+		<tu tuid='create-banner'>
+			<tuv xml:lang='vi'>
+				<seg>Tạo mới bảng hiệu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='search'>
+			<tuv xml:lang='vi'>
+				<seg>Tìm Kiếm</seg>
+			</tuv>
+		</tu>
+		<tu tuid='post'>
+			<tuv xml:lang='vi'>
+				<seg>Quản lý Bài Viết</seg>
+			</tuv>
+		</tu>
+		<tu tuid='category'>
+			<tuv xml:lang='vi'>
+				<seg>Danh mục</seg>
+			</tuv>
+		</tu>
+		<tu tuid='advertising-management'>
+			<tuv xml:lang='vi'>
+				<seg>Quản lý Bảng Quảng Cáo</seg>
+			</tuv>
+		</tu>
+		<tu tuid='advertising-list'>
+			<tuv xml:lang='vi'>
+				<seg>Danh sách bảng quảng cáo</seg>
+			</tuv>
+		</tu>
+		<tu tuid='create-new'>
+			<tuv xml:lang='vi'>
+				<seg>Tạo mới</seg>
+			</tuv>
+		</tu>
+		<tu tuid='advertising'>
+			<tuv xml:lang='vi'>
+				<seg>Quảng cáo</seg>
+			</tuv>
+		</tu>
+		<tu tuid='missing-permission-name'>
+			<tuv xml:lang='vi'>
+				<seg>Vui lòng nhập tên quyền</seg>
+			</tuv>
+		</tu>
+		<tu tuid='permission-existed'>
+			<tuv xml:lang='vi'>
+				<seg>Quyền đã tồn tại trong hệ thống</seg>
+			</tuv>
+		</tu>
+		<tu tuid='create-permission-information-successful'>
+			<tuv xml:lang='vi'>
+				<seg>Tạo quyền mới thành công</seg>
+			</tuv>
+		</tu>
+		<tu tuid='create-permission-information-failed'>
+			<tuv xml:lang='vi'>
+				<seg>Tạo quyền thất bại</seg>
+			</tuv>
+		</tu>
+		<tu tuid='permission-not-found'>
+			<tuv xml:lang='vi'>
+				<seg>Không tìm thấy thông tin về quyền trong hệ thống</seg>
+			</tuv>
+		</tu>
+		<tu tuid='delete-permission-successful'>
+			<tuv xml:lang='vi'>
+				<seg>Xóa quyền thành công</seg>
+			</tuv>
+		</tu>
+		<tu tuid='delete-permission-failed'>
+			<tuv xml:lang='vi'>
+				<seg>Xóa quyền không thành công</seg>
+			</tuv>
+		</tu>
+		<tu tuid='username-has-been-locked'>
+			<tuv xml:lang='vi'>
+				<seg>Tài khoản đang đã bị khóa. Vui lòng liên hệ bộ phận hổ trợ</seg>
+			</tuv>
+		</tu>
+		<tu tuid='name'>
+			<tuv xml:lang='vi'>
+				<seg>Tên loại bảng hiệu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='banner-type-management'>
+			<tuv xml:lang='vi'>
+				<seg>Quản lý Loại Bảng Hiệu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='banner-type-list'>
+			<tuv xml:lang='vi'>
+				<seg>Danh sách loại bảng hiệu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='create-banner-type'>
+			<tuv xml:lang='vi'>
+				<seg>Tạo loại bảng hiệu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='please-input-name'>
+			<tuv xml:lang='vi'>
+				<seg>Vui lòng nhập tên loại bảng hiệu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='existed-banner-type'>
+			<tuv xml:lang='vi'>
+				<seg>Loại bảng hiệu đã tồn tại</seg>
+			</tuv>
+		</tu>
+		<tu tuid='banner-type'>
+			<tuv xml:lang='vi'>
+				<seg>Loại bảng hiệu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='user'>
+			<tuv xml:lang='vi'>
+				<seg>Quản lý Người dùng</seg>
+			</tuv>
+		</tu>
+		<tu tuid='permission'>
+			<tuv xml:lang='vi'>
+				<seg>Quản lý Phân Quyền</seg>
+			</tuv>
+		</tu>
+		<tu tuid='post'>
+			<tuv xml:lang='vi'>
+				<seg>Quản lý Bài Viết</seg>
+			</tuv>
+		</tu>
+		<tu tuid='category'>
+			<tuv xml:lang='vi'>
+				<seg>Danh Mục</seg>
+			</tuv>
+		</tu>
+		<tu tuid='banner-type'>
+			<tuv xml:lang='vi'>
+				<seg>Quản lý Loại Bảng Hiệu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='advertising'>
+			<tuv xml:lang='vi'>
+				<seg>Quản lý Bảng Quảng Cáo</seg>
+			</tuv>
+		</tu>
+		<tu tuid='media-management'>
+			<tuv xml:lang='vi'>
+				<seg>Quản lý Thư Viện Ảnh</seg>
+			</tuv>
+		</tu>
+		<tu tuid='media-list'>
+			<tuv xml:lang='vi'>
+				<seg>Danh sách thư viện ảnh</seg>
+			</tuv>
+		</tu>
+		<tu tuid='create-media'>
+			<tuv xml:lang='vi'>
+				<seg>Tạo mới ảnh</seg>
+			</tuv>
+		</tu>
+		<tu tuid='thumbnail'>
+			<tuv xml:lang='vi'>
+				<seg>Thumbnail</seg>
+			</tuv>
+		</tu>
+		<tu tuid='type'>
+			<tuv xml:lang='vi'>
+				<seg>Loại</seg>
+			</tuv>
+		</tu>
+		<tu tuid='no-select-file'>
+			<tuv xml:lang='vi'>
+				<seg>Không có tệp nào được chọn</seg>
+			</tuv>
+		</tu>
+		<tu tuid='media'>
+			<tuv xml:lang='vi'>
+				<seg>Quản lý Thư Viện Ảnh</seg>
+			</tuv>
+		</tu>
+		<tu tuid='url'>
+			<tuv xml:lang='vi'>
+				<seg>Đường dẫn</seg>
+			</tuv>
+		</tu>
+		<tu tuid='caption'>
+			<tuv xml:lang='vi'>
+				<seg>Chú thích</seg>
+			</tuv>
+		</tu>
+		<tu tuid='menu-type-management'>
+			<tuv xml:lang='vi'>
+				<seg>Quản lý Loại Menu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='menu-type-list'>
+			<tuv xml:lang='vi'>
+				<seg>Danh sách loại Menu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='create-menu-type'>
+			<tuv xml:lang='vi'>
+				<seg>Tạo loại menu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='menu-type'>
+			<tuv xml:lang='vi'>
+				<seg>Loại Menu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='post-list'>
+			<tuv xml:lang='vi'>
+				<seg>Danh sách Bài Viết</seg>
+			</tuv>
+		</tu>
+		<tu tuid='event-time'>
+			<tuv xml:lang='vi'>
+				<seg>Thời gian Event</seg>
+			</tuv>
+		</tu>
+		<tu tuid='id'>
+			<tuv xml:lang='vi'>
+				<seg>ID</seg>
+			</tuv>
+		</tu>
+		<tu tuid='url-name'>
+			<tuv xml:lang='vi'>
+				<seg>Tên đường dẫn</seg>
+			</tuv>
+		</tu>
+		<tu tuid='datetime-event'>
+			<tuv xml:lang='vi'>
+				<seg>Thời gian bắt đầu Event</seg>
+			</tuv>
+		</tu>
+		<tu tuid='create-post'>
+			<tuv xml:lang='vi'>
+				<seg>Tạo Bài Viết</seg>
+			</tuv>
+		</tu>
+		<tu tuid='festivals-events'>
+			<tuv xml:lang='vi'>
+				<seg>Festivals &amp; Events</seg>
+			</tuv>
+		</tu>
+		<tu tuid='must-do'>
+			<tuv xml:lang='vi'>
+				<seg>Must Do</seg>
+			</tuv>
+		</tu>
+		<tu tuid='eat-drink'>
+			<tuv xml:lang='vi'>
+				<seg>Eat &amp; Drink</seg>
+			</tuv>
+		</tu>
+		<tu tuid='stay'>
+			<tuv xml:lang='vi'>
+				<seg>Stay</seg>
+			</tuv>
+		</tu>
+		<tu tuid='transportation'>
+			<tuv xml:lang='vi'>
+				<seg>Transportation</seg>
+			</tuv>
+		</tu>
+		<tu tuid='visitors-guide'>
+			<tuv xml:lang='vi'>
+				<seg>Visitor's Guide</seg>
+			</tuv>
+		</tu>
+		<tu tuid='management-festivals-events'>
+			<tuv xml:lang='vi'>
+				<seg>Quản lý nội dung Event &amp; Festival</seg>
+			</tuv>
+		</tu>
+		<tu tuid='management-must-do'>
+			<tuv xml:lang='vi'>
+				<seg>Quản lý nội dung Must Do</seg>
+			</tuv>
+		</tu>
+		<tu tuid='management-eat-drink'>
+			<tuv xml:lang='vi'>
+				<seg>Quản lý nội dung Eat &amp; Drink</seg>
+			</tuv>
+		</tu>
+		<tu tuid='management-stay'>
+			<tuv xml:lang='vi'>
+				<seg>Quản lý nội dung Stay</seg>
+			</tuv>
+		</tu>
+		<tu tuid='management-visitors-guide'>
+			<tuv xml:lang='vi'>
+				<seg>Quản lý nội dung Visitor Guide</seg>
+			</tuv>
+		</tu>
+		<tu tuid='management-transportation'>
+			<tuv xml:lang='vi'>
+				<seg>Quản lý nội dung Transportation</seg>
+			</tuv>
+		</tu>
+		<tu tuid='create-detail-post'>
+			<tuv xml:lang='vi'>
+				<seg>Tạo Bài Viết</seg>
+			</tuv>
+		</tu>
+		<tu tuid='vietnameses'>
+			<tuv xml:lang='vi'>
+				<seg>Tiếng Việt</seg>
+			</tuv>
+		</tu>
+		<tu tuid='english'>
+			<tuv xml:lang='vi'>
+				<seg>Tiếng Anh</seg>
+			</tuv>
+		</tu>
+		<tu tuid='post-language'>
+			<tuv xml:lang='vi'>
+				<seg>Tùy chọn ngôn ngữ Bài Viết</seg>
+			</tuv>
+		</tu>
+		<tu tuid='summary'>
+			<tuv xml:lang='vi'>
+				<seg>Tóm tắt</seg>
+			</tuv>
+		</tu>
+		<tu tuid='image-post'>
+			<tuv xml:lang='vi'>
+				<seg>Hình ảnh</seg>
+			</tuv>
+		</tu>
+		<tu tuid='content-post'>
+			<tuv xml:lang='vi'>
+				<seg>Nội dung</seg>
+			</tuv>
+		</tu>
+		<tu tuid='location'>
+			<tuv xml:lang='vi'>
+				<seg>Địa điểm</seg>
+			</tuv>
+		</tu>
+		<tu tuid='event-date-end'>
+			<tuv xml:lang='vi'>
+				<seg>Thời gian kết thúc Event</seg>
+			</tuv>
+		</tu>
+		<tu tuid='tag'>
+			<tuv xml:lang='vi'>
+				<seg>Tag</seg>
+			</tuv>
+		</tu>
+		<tu tuid='rating'>
+			<tuv xml:lang='vi'>
+				<seg>Xếp hạng</seg>
+			</tuv>
+		</tu>
+		<tu tuid='active'>
+			<tuv xml:lang='vi'>
+				<seg>Kích hoạt</seg>
+			</tuv>
+		</tu>
+		<tu tuid='in-active'>
+			<tuv xml:lang='vi'>
+				<seg>Vô hiệu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='meta-og-url'>
+			<tuv xml:lang='vi'>
+				<seg>Thẻ meta Facebook og:url</seg>
+			</tuv>
+		</tu>
+		<tu tuid='meta-og-title'>
+			<tuv xml:lang='vi'>
+				<seg>Thẻ meta Facebook og:title</seg>
+			</tuv>
+		</tu>
+		<tu tuid='meta-og-description'>
+			<tuv xml:lang='vi'>
+				<seg>Thẻ meta Facebook og:description</seg>
+			</tuv>
+		</tu>
+		<tu tuid='meta-og-site-name'>
+			<tuv xml:lang='vi'>
+				<seg>Thẻ meta Facebook og:site_name</seg>
+			</tuv>
+		</tu>
+		<tu tuid='meta-og-image'>
+			<tuv xml:lang='vi'>
+				<seg>Thẻ meta Facebook og:image</seg>
+			</tuv>
+		</tu>
+		<tu tuid='destination'>
+			<tuv xml:lang='vi'>
+				<seg>Nguồn</seg>
+			</tuv>
+		</tu>
+		<tu tuid='contact-management'>
+			<tuv xml:lang='vi'>
+				<seg>Quản lý nội dung Liên Hệ</seg>
+			</tuv>
+		</tu>
+		<tu tuid='contact-list'>
+			<tuv xml:lang='vi'>
+				<seg>Danh sách Liên hệ</seg>
+			</tuv>
+		</tu>
+		<tu tuid='contact-name'>
+			<tuv xml:lang='vi'>
+				<seg>Tên Liên hệ</seg>
+			</tuv>
+		</tu>
+		<tu tuid='reply-all'>
+			<tuv xml:lang='vi'>
+				<seg>Trả lời tất cả</seg>
+			</tuv>
+		</tu>
+		<tu tuid='setting'>
+			<tuv xml:lang='vi'>
+				<seg>Quản lý Cài đặt</seg>
+			</tuv>
+		</tu>
+		<tu tuid='setting-management'>
+			<tuv xml:lang='vi'>
+				<seg>Quản lý Cài đặt</seg>
+			</tuv>
+		</tu>
+		<tu tuid='setting-list'>
+			<tuv xml:lang='vi'>
+				<seg>Danh sách cài đặt</seg>
+			</tuv>
+		</tu>
+		<tu tuid='key'>
+			<tuv xml:lang='vi'>
+				<seg>Từ khóa</seg>
+			</tuv>
+		</tu>
+		<tu tuid='value'>
+			<tuv xml:lang='vi'>
+				<seg>Giá trị</seg>
+			</tuv>
+		</tu>
+		<tu tuid='description'>
+			<tuv xml:lang='vi'>
+				<seg>Mô tả</seg>
+			</tuv>
+		</tu>
+		<tu tuid='create-setting'>
+			<tuv xml:lang='vi'>
+				<seg>Thêm mới Cài Đặt</seg>
+			</tuv>
+		</tu>
+		<tu tuid='show-hide'>
+			<tuv xml:lang='vi'>
+				<seg>Ẩn/Hiện</seg>
+			</tuv>
+		</tu>
+		<tu tuid='input-value'>
+			<tuv xml:lang='vi'>
+				<seg>Nhập Giá Trị</seg>
+			</tuv>
+		</tu>
+		<tu tuid='show'>
+			<tuv xml:lang='vi'>
+				<seg>Hiện</seg>
+			</tuv>
+		</tu>
+		<tu tuid='hide'>
+			<tuv xml:lang='vi'>
+				<seg>Ẩn</seg>
+			</tuv>
+		</tu>
+		<tu tuid='please-input-key'>
+			<tuv xml:lang='vi'>
+				<seg>Bạn chưa nhập từ khóa</seg>
+			</tuv>
+		</tu>
+		<tu tuid='please-input-value'>
+			<tuv xml:lang='vi'>
+				<seg>Bạn chưa nhập giá trị</seg>
+			</tuv>
+		</tu>
+		<tu tuid='existed-key'>
+			<tuv xml:lang='vi'>
+				<seg>Từ khóa đã tồn tại.!</seg>
+			</tuv>
+		</tu>
+		<tu tuid='please-enter-permission-name'>
+			<tuv xml:lang='vi'>
+				<seg>Vui lòng nhập tên phân quyền</seg>
+			</tuv>
+		</tu>
+		<tu tuid='contact'>
+			<tuv xml:lang='vi'>
+				<seg>Quản lý nội dung Liên Hệ</seg>
+			</tuv>
+		</tu>
+		<tu tuid='please-input-title'>
+			<tuv xml:lang='vi'>
+				<seg>Vui lòng nhập tiêu đề</seg>
+			</tuv>
+		</tu>
+		<tu tuid='please-input-content'>
+			<tuv xml:lang='vi'>
+				<seg>Vui lòng nhập nội dung</seg>
+			</tuv>
+		</tu>
+		<tu tuid='cc'>
+			<tuv xml:lang='vi'>
+				<seg>Cc</seg>
+			</tuv>
+		</tu>
+		<tu tuid='comment-management'>
+			<tuv xml:lang='vi'>
+				<seg>Quản lý Bình luận</seg>
+			</tuv>
+		</tu>
+		<tu tuid='comment-list'>
+			<tuv xml:lang='vi'>
+				<seg>Danh sách bình luận</seg>
+			</tuv>
+		</tu>
+		<tu tuid='ex-user-name'>
+			<tuv xml:lang='vi'>
+				<seg>Tên người gửi</seg>
+			</tuv>
+		</tu>
+		<tu tuid='title-post'>
+			<tuv xml:lang='vi'>
+				<seg>Tên bài viết</seg>
+			</tuv>
+		</tu>
+		<tu tuid='consership-by'>
+			<tuv xml:lang='vi'>
+				<seg>Người kiểm duyệt</seg>
+			</tuv>
+		</tu>
+		<tu tuid='consership-date'>
+			<tuv xml:lang='vi'>
+				<seg>Kiểm duyệt lúc</seg>
+			</tuv>
+		</tu>
+		<tu tuid='pending'>
+			<tuv xml:lang='vi'>
+				<seg>Chờ duyệt</seg>
+			</tuv>
+		</tu>
+		<tu tuid='approved'>
+			<tuv xml:lang='vi'>
+				<seg>Đã duyệt</seg>
+			</tuv>
+		</tu>
+		<tu tuid='content-comment'>
+			<tuv xml:lang='vi'>
+				<seg>Nội dung bình luận</seg>
+			</tuv>
+		</tu>
+		<tu tuid='comment-not-exist'>
+			<tuv xml:lang='vi'>
+				<seg>Bình luận không tồn tại</seg>
+			</tuv>
+		</tu>
+		<tu tuid='create-category'>
+			<tuv xml:lang='vi'>
+				<seg>Tạo Danh Mục</seg>
+			</tuv>
+		</tu>
+		<tu tuid='list'>
+			<tuv xml:lang='vi'>
+				<seg>Danh sách</seg>
+			</tuv>
+		</tu>
+		<tu tuid='category-list'>
+			<tuv xml:lang='vi'>
+				<seg>Danh sách Danh mục</seg>
+			</tuv>
+		</tu>
+		<tu tuid='category-name'>
+			<tuv xml:lang='vi'>
+				<seg>Tên Danh Mục</seg>
+			</tuv>
+		</tu>
+		<tu tuid='category-url-name'>
+			<tuv xml:lang='vi'>
+				<seg>Đường dẫn</seg>
+			</tuv>
+		</tu>
+		<tu tuid='menu'>
+			<tuv xml:lang='vi'>
+				<seg>Menu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='festivals-events'>
+			<tuv xml:lang='vi'>
+				<seg>Festivals &amp; Events</seg>
+			</tuv>
+		</tu>
+		<tu tuid='must-do'>
+			<tuv xml:lang='vi'>
+				<seg>Must Do</seg>
+			</tuv>
+		</tu>
+		<tu tuid='visitor-guide'>
+			<tuv xml:lang='vi'>
+				<seg>Visitor's Guide</seg>
+			</tuv>
+		</tu>
+		<tu tuid='news'>
+			<tuv xml:lang='vi'>
+				<seg>News</seg>
+			</tuv>
+		</tu>
+		<tu tuid='plan-your-trip'>
+			<tuv xml:lang='vi'>
+				<seg>Plan Your Trip</seg>
+			</tuv>
+		</tu>
+		<tu tuid='gallery'>
+			<tuv xml:lang='vi'>
+				<seg>Quản lý Bộ Sưu Tập</seg>
+			</tuv>
+		</tu>
+		<tu tuid='update-at'>
+			<tuv xml:lang='vi'>
+				<seg>Cập nhật lúc</seg>
+			</tuv>
+		</tu>
+		<tu tuid='create-at'>
+			<tuv xml:lang='vi'>
+				<seg>Tạo lúc</seg>
+			</tuv>
+		</tu>
+		<tu tuid='detail'>
+			<tuv xml:lang='vi'>
+				<seg>Chi tiết</seg>
+			</tuv>
+		</tu>
+		<tu tuid='gallery-management'>
+			<tuv xml:lang='vi'>
+				<seg>Quản lý Bộ Sưu Tập</seg>
+			</tuv>
+		</tu>
+		<tu tuid='gallery-list'>
+			<tuv xml:lang='vi'>
+				<seg>Danh sách bộ sưu tập</seg>
+			</tuv>
+		</tu>
+		<tu tuid='list-gallery'>
+			<tuv xml:lang='vi'>
+				<seg>Danh sách bộ sưu tập</seg>
+			</tuv>
+		</tu>
+		<tu tuid='create-gallery'>
+			<tuv xml:lang='vi'>
+				<seg>Tạo bộ sưu tập</seg>
+			</tuv>
+		</tu>
+		<tu tuid='create-detail-gallery'>
+			<tuv xml:lang='vi'>
+				<seg>Tạo bộ sưu tập</seg>
+			</tuv>
+		</tu>
+		<tu tuid='management-news'>
+			<tuv xml:lang='vi'>
+				<seg>Quản lý nội dung Tin Tức</seg>
+			</tuv>
+		</tu>
+		<tu tuid='comment'>
+			<tuv xml:lang='vi'>
+				<seg>Quản lý Bình luận</seg>
+			</tuv>
+		</tu>
+		<tu tuid='create-advertising'>
+			<tuv xml:lang='vi'>
+				<seg>Tạo Quảng Cáo</seg>
+			</tuv>
+		</tu>
+		<tu tuid='gallery-language'>
+			<tuv xml:lang='vi'>
+				<seg>Tùy chọn ngôn ngữ Bộ sưu tập</seg>
+			</tuv>
+		</tu>
+		<tu tuid='activity-type'>
+			<tuv xml:lang='vi'>
+				<seg>Hình thức hoạt động</seg>
+			</tuv>
+		</tu>
+		<tu tuid='region'>
+			<tuv xml:lang='vi'>
+				<seg>Khu vực</seg>
+			</tuv>
+		</tu>
+		<tu tuid='age'>
+			<tuv xml:lang='vi'>
+				<seg>Độ tuổi</seg>
+			</tuv>
+		</tu>
+		<tu tuid='adults'>
+			<tuv xml:lang='vi'>
+				<seg>Người lớn</seg>
+			</tuv>
+		</tu>
+		<tu tuid='teens'>
+			<tuv xml:lang='vi'>
+				<seg>Thanh thiếu niên</seg>
+			</tuv>
+		</tu>
+		<tu tuid='kids'>
+			<tuv xml:lang='vi'>
+				<seg>Trẻ nhỏ</seg>
+			</tuv>
+		</tu>
+		<tu tuid='popular'>
+			<tuv xml:lang='vi'>
+				<seg>Phổ biến</seg>
+			</tuv>
+		</tu>
+		<tu tuid='balanced'>
+			<tuv xml:lang='vi'>
+				<seg>Cân bằng</seg>
+			</tuv>
+		</tu>
+		<tu tuid='hidden-gems'>
+			<tuv xml:lang='vi'>
+				<seg>Hidden-gems </seg>
+			</tuv>
+		</tu>
+		<tu tuid='activity-level'>
+			<tuv xml:lang='vi'>
+				<seg>Cấp độ hoạt động</seg>
+			</tuv>
+		</tu>
+		<tu tuid='show-in-home'>
+			<tuv xml:lang='vi'>
+				<seg>Hiển thị trên Trang chủ</seg>
+			</tuv>
+		</tu>
+		<tu tuid='top-promotion'>
+			<tuv xml:lang='vi'>
+				<seg>Top promotion</seg>
+			</tuv>
+		</tu>
+		<tu tuid='top-recommended'>
+			<tuv xml:lang='vi'>
+				<seg>Top Recommened</seg>
+			</tuv>
+		</tu>
+		<tu tuid='show-in-map'>
+			<tuv xml:lang='vi'>
+				<seg>Hiển thị trên Bản đồ</seg>
+			</tuv>
+		</tu>
+		<tu tuid='sharing-post'>
+			<tuv xml:lang='vi'>
+				<seg>Bài viết được chia sẻ</seg>
+			</tuv>
+		</tu>
+		<tu tuid='fast-paced'>
+			<tuv xml:lang='vi'>
+				<seg>Nhịp độ nhanh</seg>
+			</tuv>
+		</tu>
+		<tu tuid='medium'>
+			<tuv xml:lang='vi'>
+				<seg>Trung bình</seg>
+			</tuv>
+		</tu>
+		<tu tuid='slow-easy'>
+			<tuv xml:lang='vi'>
+				<seg>Nhịp độ chậm - Dễ dàng</seg>
+			</tuv>
+		</tu>
+		<tu tuid='place-type'>
+			<tuv xml:lang='vi'>
+				<seg>Loại địa điểm</seg>
+			</tuv>
+		</tu>
+		<tu tuid='none'>
+			<tuv xml:lang='vi'>
+				<seg>Không chọn</seg>
+			</tuv>
+		</tu>
+		<tu tuid='district'>
+			<tuv xml:lang='vi'>
+				<seg>Quận</seg>
+			</tuv>
+		</tu>
+		<tu tuid='shopping'>
+			<tuv xml:lang='vi'>
+				<seg>Shopping</seg>
+			</tuv>
+		</tu>
+		<tu tuid='meseums'>
+			<tuv xml:lang='vi'>
+				<seg>Viện bảo tàng</seg>
+			</tuv>
+		</tu>
+		<tu tuid='history-sites'>
+			<tuv xml:lang='vi'>
+				<seg>Địa điểm lịch sử</seg>
+			</tuv>
+		</tu>
+		<tu tuid='markets'>
+			<tuv xml:lang='vi'>
+				<seg>Chợ</seg>
+			</tuv>
+		</tu>
+		<tu tuid='romantic'>
+			<tuv xml:lang='vi'>
+				<seg>Địa điểm lãng mạn</seg>
+			</tuv>
+		</tu>
+		<tu tuid='relaxing'>
+			<tuv xml:lang='vi'>
+				<seg>Địa điểm thư giản</seg>
+			</tuv>
+		</tu>
+		<tu tuid='outdoors'>
+			<tuv xml:lang='vi'>
+				<seg>Địa điểm hoạt động ngoài trời</seg>
+			</tuv>
+		</tu>
+		<tu tuid='culture'>
+			<tuv xml:lang='vi'>
+				<seg>Địa điểm văn hóa</seg>
+			</tuv>
+		</tu>
+		<tu tuid='please-select-image-from-library'>
+			<tuv xml:lang='vi'>
+				<seg>Chọn ảnh từ thư viện</seg>
+			</tuv>
+		</tu>
+		<tu tuid='language'>
+			<tuv xml:lang='vi'>
+				<seg>Ngôn ngữ</seg>
+			</tuv>
+		</tu>
+		<tu tuid='top-activity'>
+			<tuv xml:lang='vi'>
+				<seg>Top Activity</seg>
+			</tuv>
+		</tu>
+		<tu tuid='please-input-category-post'>
+			<tuv xml:lang='vi'>
+				<seg>Vui lòng chọn Danh Mục cho Bài Viết</seg>
+			</tuv>
+		</tu>
+		<tu tuid='please-input-url-name'>
+			<tuv xml:lang='vi'>
+				<seg>Vui lòng đường dẫn cho cho Bài Viết</seg>
+			</tuv>
+		</tu>
+		<tu tuid='please-input-category-name'>
+			<tuv xml:lang='vi'>
+				<seg>Vui lòng tên Danh mục</seg>
+			</tuv>
+		</tu>
+		<tu tuid='please-input-category-url-name'>
+			<tuv xml:lang='vi'>
+				<seg>Vui lòng nhập đường dẫn cho Danh mục</seg>
+			</tuv>
+		</tu>
+		<tu tuid='attraction'>
+			<tuv xml:lang='vi'>
+				<seg>Attraction</seg>
+			</tuv>
+		</tu>
+		<tu tuid='activities'>
+			<tuv xml:lang='vi'>
+				<seg>Activities</seg>
+			</tuv>
+		</tu>
+		<tu tuid='comming-up-event'>
+			<tuv xml:lang='vi'>
+				<seg>Comming Up Event</seg>
+			</tuv>
+		</tu>
+		<tu tuid='also-checkout'>
+			<tuv xml:lang='vi'>
+				<seg>Also Checkout</seg>
+			</tuv>
+		</tu>
+		<tu tuid='exists-post-url-name'>
+			<tuv xml:lang='vi'>
+				<seg>Tên đường dẫn đã tồn tại</seg>
+			</tuv>
+		</tu>
+		<tu tuid='auto-display-detail'>
+			<tuv xml:lang='vi'>
+				<seg>Tự động hiển thị chi tiết</seg>
+			</tuv>
+		</tu>
+		<tu tuid='yes'>
+			<tuv xml:lang='vi'>
+				<seg>Có</seg>
+			</tuv>
+		</tu>
+		<tu tuid='district-sub'>
+			<tuv xml:lang='vi'>
+				<seg>Huyện</seg>
+			</tuv>
+		</tu>
+		<tu tuid='priority_trip'>
+			<tuv xml:lang='vi'>
+				<seg>Độ ưu tiên trong Plan You Trip</seg>
+			</tuv>
+		</tu>
+		<tu tuid='update-profile'>
+			<tuv xml:lang='vi'>
+				<seg>Cập nhật thông tin cá nhân</seg>
+			</tuv>
+		</tu>
+		<tu tuid='menu-management'>
+			<tuv xml:lang='vi'>
+				<seg>Quản Lý Menu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='menu-list'>
+			<tuv xml:lang='vi'>
+				<seg>Danh sách menu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='create-menu'>
+			<tuv xml:lang='vi'>
+				<seg>Tạo Menu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='menu-name'>
+			<tuv xml:lang='vi'>
+				<seg>Tên menu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='please-input-name-menu'>
+			<tuv xml:lang='vi'>
+				<seg>Vui lòng nhập tên menu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='update-menu-fail'>
+			<tuv xml:lang='vi'>
+				<seg>Cập nhật menu thất bại</seg>
+			</tuv>
+		</tu>
+		<tu tuid='add-menu-fail'>
+			<tuv xml:lang='vi'>
+				<seg>Tạo menu thất bại</seg>
+			</tuv>
+		</tu>
+		<tu tuid='link'>
+			<tuv xml:lang='vi'>
+				<seg>Link</seg>
+			</tuv>
+		</tu>
+		<tu tuid='select-image'>
+			<tuv xml:lang='vi'>
+				<seg>Chọn Ảnh</seg>
+			</tuv>
+		</tu>
+		<tu tuid='upload'>
+			<tuv xml:lang='vi'>
+				<seg>Tải Lên</seg>
+			</tuv>
+		</tu>
+		<tu tuid='image'>
+			<tuv xml:lang='vi'>
+				<seg>Hình Ảnh</seg>
+			</tuv>
+		</tu>
+		<tu tuid='please-input-caption'>
+			<tuv xml:lang='vi'>
+				<seg>Vui lòng nhập chú thích</seg>
+			</tuv>
+		</tu>
+        <tu tuid='please-select-at-least-one-permission'>
+			<tuv xml:lang='vi'>
+				<seg>Vui lòng chọn ít nhất quyền cho 1 chức năng</seg>
+			</tuv>
+		</tu>
+		<tu tuid='approve-post'>
+			<tuv xml:lang='vi'>
+				<seg>Duyệt Bài Viết</seg>
+			</tuv>
+		</tu>
+		<tu tuid='display-in-menu'>
+			<tuv xml:lang='vi'>
+				<seg>Hiển thị trên menu</seg>
+			</tuv>
+		</tu>
+		<tu tuid='meta-description'>
+			<tuv xml:lang='vi'>
+				<seg>Thẻ meta description</seg>
+			</tuv>
+		</tu>
+		<tu tuid='meta-keyword'>
+			<tuv xml:lang='vi'>
+				<seg>Thẻ meta keyword</seg>
+			</tuv>
+		</tu>
+		<tu tuid='information-pages'>
+			<tuv xml:lang='vi'>
+				<seg>Trang thông tin</seg>
+			</tuv>
+		</tu>
+		<tu tuid='create-information'>
+			<tuv xml:lang='vi'>
+				<seg>Tạo trang thông tin</seg>
+			</tuv>
+		</tu>
+		<tu tuid='information-list'>
+			<tuv xml:lang='vi'>
+				<seg>Danh sách trang thông tin</seg>
+			</tuv>
+		</tu>
+		<tu tuid='update-info-fail'>
+			<tuv xml:lang='vi'>
+				<seg>Cập nhật thông tin thất bại</seg>
+			</tuv>
+		</tu>
+		<tu tuid='add-info-fail'>
+			<tuv xml:lang='vi'>
+				<seg>Tạo trang thông tin thất bại</seg>
+			</tuv>
+		</tu>
+                <tu tuid='info'>
+			<tuv xml:lang='vi'>
+				<seg>Thông Tin</seg>
+			</tuv>
+		</tu>
+                <tu tuid='info-list'>
+			<tuv xml:lang='vi'>
+				<seg>Danh sách trang thông tin</seg>
+			</tuv>
+		</tu>
+        <tu tuid='page'>
+			<tuv xml:lang='vi'>
+				<seg>Trang</seg>
+			</tuv>
+		</tu>
+		<tu tuid='newsletter-management'>
+			<tuv xml:lang='vi'>
+				<seg>Quản lý nội dung Newsletter</seg>
+			</tuv>
+		</tu>
+		<tu tuid='newsletter'>
+			<tuv xml:lang='vi'>
+				<seg>Newsletter</seg>
+			</tuv>
+		</tu>
+		<tu tuid='newsletter-list'>
+			<tuv xml:lang='vi'>
+				<seg>Danh sách Newsletter</seg>
+			</tuv>
+		</tu>
+		<tu tuid='is-external-url'>
+			<tuv xml:lang='vi'>
+				<seg>Có phải là liên kết bên ngoài?</seg>
+			</tuv>
+		</tu>
+		<tu tuid='external-url'>
+			<tuv xml:lang='vi'>
+				<seg>Url bên ngoài</seg>
+			</tuv>
+		</tu>
+		<tu tuid='group-category'>
+			<tuv xml:lang='vi'>
+				<seg>Nhóm Danh Mục</seg>
+			</tuv>
+		</tu>
+		<tu tuid='product'>
+			<tuv xml:lang='vi'>
+				<seg>Sản Phẩm</seg>
+			</tuv>
+		</tu>
+                <tu tuid='level'>
+			<tuv xml:lang='vi'>
+				<seg>Level</seg>
+			</tuv>
+		</tu>
+                <tu tuid='statistic'>
+			<tuv xml:lang='vi'>
+				<seg>Thống Kê</seg>
+			</tuv>
+		</tu>
+                <tu tuid='promotion-code'>
+			<tuv xml:lang='vi'>
+				<seg>Mã Khuyến Mãi</seg>
+			</tuv>
+		</tu>
+                <tu tuid='order'>
+			<tuv xml:lang='vi'>
+				<seg>Quản Lý Đơn Hàng</seg>
+			</tuv>
+		</tu>
+	</body>
+</tmx>

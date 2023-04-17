@@ -1,0 +1,43 @@
+<!-- Page header -->
+<div class="page-header">
+    <div class="page-header-content">
+        <div class="page-title">
+            <h3><i class="icon-file-picture2 position-left"></i> Banner - Danh Sách Banner</h3>
+        </div>
+        <div class="heading-elements">
+			<a href="/admin/<?php echo $this->controller?>/detail" class="btn btn-labeled btn-labeled-right bg-blue heading-btn"><?php echo $this->translate('create-banner')?> <b><i class="fa fa-plus" aria-hidden="true"></i></b></a>
+		</div>
+    </div>
+    <div class="breadcrumb-line">
+        <ul class="breadcrumb">
+            <li><a href="/admin/index/"><i class="icon-home2 position-left"></i> Trang Chủ</a></li>
+            <li><a href="/admin/banner/">Banner</a></li>
+            <li class="active">Danh Sách Banner</li>
+        </ul>
+    </div>
+</div>
+<!-- /page header -->
+<div class="content">
+    <!-- Default ordering -->
+    <div class="panel panel-flat">
+        <div class="panel-heading">
+            <h4 class="panel-title">Danh Sách Banner</h4>
+        </div>
+        <div class="panel-body">
+		</div>
+        <table id="bannerTable" class="table datatable-sorting">
+            <thead>
+                <tr>
+                    <th><?php echo $this->translate('id') ?></th>
+                    <th>Tiêu Đề</th>
+                    <th>Loại</th>
+                    <th><?php echo $this->translate('status') ?></th>
+                    <th class="text-center"><?php echo $this->translate('action') ?></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <!-- /default ordering -->
+</div>

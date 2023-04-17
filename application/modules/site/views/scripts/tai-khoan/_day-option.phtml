@@ -1,0 +1,7 @@
+<option value="">Ngày</option>
+<?php if ($this->numberOfDay > 0) { ?>
+    <?php for ( $d = 1; $d <= $this->numberOfDay; $d++) { ?>
+        <?php $day = ($d < 10 ) ? "0" . $d : $d; ?>
+        <option  <?php if($day == $this->slt_day){?> selected="selected" <?php } ?>  value="<?php echo $day ?>"><?php echo $day ?></option>
+    <?php } ?>
+<?php } ?>

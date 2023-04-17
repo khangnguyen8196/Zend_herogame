@@ -1,0 +1,209 @@
+<table border="0" cellpadding="0" cellspacing="0" width="100%"
+	height="100%"
+	style="border-spacing: 0; border-collapse: collapse; font-size: 14px">
+	<tbody>
+		<tr>
+			<td align="center" valign="top" style="border-collapse: collapse">
+
+				<table width="600" border="0"
+					cellpadding="0" cellspacing="0"
+					style="border-spacing: 0; border-collapse: collapse; font-size: 14px; max-width: 600px">
+					<tbody>
+						<tr>
+							<td
+								style="border-collapse: collapse">
+								<table width="100%" border="0" cellpadding="0" cellspacing="0"
+									style="border-spacing: 0; border-collapse: collapse; font-size: 14px; border-bottom: 1px solid #dee2e3; width: 100% !important">
+									<tbody>
+										<tr>
+											<td width="50%" height="49" valign="middle"
+												style="border-collapse: collapse; width: 50%"><a
+												href="herogame.vn" target="_blank"><img
+													src="http://<?php echo $_SERVER['SERVER_NAME']?>/site/img/logo.png"
+													width="100"></a></td>
+										</tr>
+									</tbody>
+								</table>
+							</td>
+						</tr>
+
+						<tr>
+							<td style="border-collapse: collapse">
+
+								<table border="0"
+									cellpadding="0" cellspacing="0" align="left"
+									style="border-spacing: 0; border-collapse: collapse; font-size: 14px">
+									<tbody>
+										<tr>
+											<td valign="top" style="border-collapse: collapse">
+												<div
+													style="margin-top: 20px">
+													<strong 
+														style="font-size: 16px">
+														Kính chào quý khách <?php echo $this->orderInfo['name']?>,
+													</strong>
+												</div>
+												<div style="margin-top: 10px; margin-bottom: 20px">
+													Hero Game vừa nhận được 
+													<strong style="color: #f36f21">đơn hàng # <?php echo $this->orderInfo['order_code']?></strong> của
+													quý khách đặt ngày <strong><?php echo date("d/m/Y", strtotime($this->orderInfo['created_date'])); ?></strong>
+													với hình thức thanh toán là <strong><?php 
+														if( $this->orderInfo['payment_method'] == 1 ) { 
+															echo 'Chuyển khoản';
+														} else if( $this->orderInfo['payment_method'] == 2 ){
+															echo 'COD';
+														} else if( $this->orderInfo['payment_method'] == 3 ){
+															echo 'Trả tiền mặt tại shop';
+														}
+													?></strong>.
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td align="center" width="100%"
+												style="border-collapse: collapse; background-color: #f2f4f6; border-top: 2px solid #646464">
+												<table  width="100%"
+													border="0" cellpadding="0" cellspacing="0" align="left"
+													style="border-spacing: 0; border-collapse: collapse; font-size: 14px">
+													<tbody>
+														<tr>
+															<td
+																valign="top"
+																style="border-collapse: collapse; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; text-align: left">
+																<div >
+																	<div 
+																		style="color: #646464">Đơn hàng sẽ được giao đến:</div>
+																	<div 
+																		style="margin-top: 5px">
+																		<strong 
+																			style="color: #f36f21"><?php echo $this->orderInfo['name']?> </strong>
+																	</div>
+																	<div 
+																		style="margin-top: 5px">
+																		<strong> <?php echo $this->orderInfo['address']?>
+																			<br> Phone: <?php echo $this->orderInfo['phone']?>
+																		</strong>
+																	</div>
+																</div>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</td>
+										</tr>
+
+
+										<tr>
+											<td align="left"
+												style="border-collapse: collapse; padding: 0">
+												<div
+													style="margin-top: 20px; margin-bottom: 10px; margin-right: 10px">
+													<strong>Sau đây là thông tin chi tiết về đơn hàng:</strong>
+												</div>
+											</td>
+										</tr>
+										<?php foreach ( $this->listProduct as $key => $item ){ ?>
+										<tr>
+											<td
+												style="border-collapse: collapse; border: 1px dashed #e7ebed; border-bottom: none">
+												<table 
+													width="100%" border="0" cellpadding="0" cellspacing="0"
+													align="left"
+													style="border-spacing: 0; border-collapse: collapse; font-size: 14px">
+													<tbody>
+														<tr>
+															<td
+																valign="top" align="center" height="120"
+																style="border-collapse: collapse; padding-top: 10px; padding-bottom: 10px">
+																<img style="width: 120px" src="http://<?php echo $_SERVER['SERVER_NAME']?>/upload/images/<?php echo $item['img']?>">
+															</td>
+															<td
+																valign="top"
+																style="border-collapse: collapse; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px">
+																<div style="margin-bottom: 5px">
+																	<?php echo $item['name']?> 
+																	<?php 
+																		if( empty($item['color_id']) == false && $item['color_id'] > 1) { 
+																			echo '-'. $item['color'];
+																		}
+																	?>
+																</div>
+																<div style="margin-bottom: 5px">
+																	&nbsp;
+																</div>
+																<div
+																	style="margin-bottom: 5px; color: #646464">Số lượng: <?php echo $item['number']?>
+																</div>
+															</td>
+															<td
+																valign="top" align="right"
+																style="border-collapse: collapse; padding-top: 10px; padding-right: 10px">
+																<strong><?php echo number_format($item['price']*$item['number']) . ' VNĐ' ?></strong>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</td>
+										</tr>
+										<?php } ?>
+										<tr>
+											<td
+												style="border-collapse: collapse; border: 1px dashed #e7ebed">
+												<div>
+													<table border="0" width="100%" cellpadding="0"
+														cellspacing="0" align="left"
+														style="border-spacing: 0; border-collapse: collapse; font-size: 14px; width: 100% !important">
+														<tbody>
+															<tr>
+																<td
+																	valign="top" align="right"
+																	style="border-collapse: collapse; padding-top: 10px; padding-right: 10px; color: #646464; width: 80%">Thành
+																	tiền:</td>
+																<td
+																	
+																	valign="top" align="right"
+																	style="border-collapse: collapse; padding-top: 10px; padding-right: 10px; color: #292929; min-width: 140px"><?php echo number_format($this->totalBeforedev) . ' VNĐ' ?></td>
+															</tr>
+															<tr>
+																<td
+																	valign="top" align="right"
+																	style="border-collapse: collapse; padding-top: 5px; padding-right: 10px; color: #646464; width: 80%">Giảm
+																	giá (Voucher):</td>
+																<td
+																	valign="top" align="right"
+																	style="border-collapse: collapse; padding-top: 5px; padding-right: 10px; color: #292929; min-width: 140px">-<?php echo number_format($this->devi) . ' VNĐ' ?></td>
+															</tr>
+															<tr>
+																<td
+																	valign="top" align="right"
+																	style="border-collapse: collapse; padding-top: 10px; padding-right: 10px; font-size: 16px; width: 80%"><strong>Tổng
+																		cộng:</strong></td>
+																<td
+																	valign="top" align="right"
+																	style="border-collapse: collapse; padding-top: 10px; padding-right: 10px; font-size: 16px; color: #646464; min-width: 140px"><strong
+																	style="color: #f36f21"><?php echo number_format($this->orderInfo['total']) . ' '
+                                                                                                                                                . ' VNĐ' ?></strong></td>
+															</tr>
+															<tr>
+																<td valign="top"
+																	align="right"
+																	style="border-collapse: collapse; width: 80%"></td>
+																<td
+																	valign="top" align="right"
+																	style="border-collapse: collapse; padding-top: 5px; padding-right: 10px; padding-bottom: 10px; font-size: 13px; color: #646464; min-width: 140px"></td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</td>
+		</tr>
+	</tbody>
+</table>

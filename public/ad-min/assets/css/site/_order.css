@@ -1,0 +1,9 @@
+.select2-search:after{
+	content: '';
+}
+.select2-dropdown{
+	background: lavender!important;
+}
+.select2-container .select2-selection--single {
+	height: 36px;
+}

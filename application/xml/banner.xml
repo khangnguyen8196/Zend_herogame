@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<root>
+	<form name="bannerDetailForm" >
+		<checkrules>
+			<title>
+				<validate>
+					<NotEmpty message="Vui lòng nhập tiêu đề" />
+				</validate>
+			</title>
+		</checkrules>
+	</form>	
+</root>	

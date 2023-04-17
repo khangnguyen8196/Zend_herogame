@@ -1,0 +1,53 @@
+<?php 
+	$title = Commons::getSettingByKey($this->setting, 'header-contact');
+	$logo = Commons::getSettingByKey($this->setting, LOGO);
+	$backgroundheader = Commons::getSettingByKey($this->setting, BACKGROUND_HEADER);
+	$vendor_logo1 = Commons::getSettingByKey($this->setting, 'logo_header_1');
+	$vendor_logo2 = Commons::getSettingByKey($this->setting, 'logo_header_2');
+	
+?>
+<header class="pheader">
+    <div class="ph-top">
+        <div class="container">
+            <div class="row">
+                <div class="contact-number">
+                    <strong><?php echo @$title['value']?></strong>
+                </div>
+                <?php echo $this->partial('/shared/_user_identity.phtml',array('user' => $this->customer_info)) ?>
+            </div>
+        </div>
+    </div>
+	<div class="ph-mid" <?php if( empty($backgroundheader) == false ){ ?>style="background-image:url(<?php echo $backgroundheader['value']?>)"<?php }?>>
+        <div class="container">
+            <div class="row">
+                <?php echo $this->partial('/shared/_logo.phtml', array('logo'=> $logo)) ?>
+                <?php echo $this->partial('/shared/_search.phtml') ?>
+                <div class="pull-right">
+                    <?php echo $this->partial('/shared/_vendor_logo.phtml', array('logo1' => @$vendor_logo1['value'], 'logo2' => @$vendor_logo2['value'] )) ?>
+                    <?php echo $this->render('/shared/_shopping_cart.phtml') ?>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <div class="ph-bot">
+        <?php echo $this->partial('/shared/_mega_menu.phtml', array( 'menu' => $this->menu)); ?>
+    </div>
+</header>
+
+<header class="pheader-mb">
+    <div class="mode-1">
+        <a href="javascript:;" class="ph-btn ph-btn-menu">
+            <i class="fa fa-bars"></i>
+        </a>
+        <a href="javascript:;" class="ph-btn ph-btn-search">
+            <i class="fa fa-search"></i>
+        </a>
+        <?php echo $this->partial('/shared/_logo.phtml', array('logo'=> $logo)) ?>
+    </div>
+    <div class="mode-2">
+        <?php echo $this->partial('/shared/_search.phtml') ?>
+    </div>
+</header>
+
+<?php echo $this->partial('/shared/_mobile_menu.phtml', array( 'menu' => $this->menu,'user' => $this->customer_info,'item_count'=>$this->item_count)); ?>

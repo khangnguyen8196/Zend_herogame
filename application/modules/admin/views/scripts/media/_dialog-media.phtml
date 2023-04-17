@@ -1,0 +1,71 @@
+            <div class="modal-dialog modal-full">
+                <div class="modal-content">
+                    <div class="modal-header bg-info">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h5 class="modal-title"><?php echo $this->translate('media') ?></h5>
+                    </div>
+                    <div class="modal-body" style="height: 600px; overflow: auto">
+                    <form enctype="multipart/form-data" method="post" id="formUploadImage">
+                    	<div class="form-group" id="fisrtContainer">
+							<div class="col-lg-10" style="display: inline-flex;">
+								<button type="button" id="addMore" class="btn btn-primary" style="margin-right: 11px;">
+								  	<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+								</button>
+								<input type="file" name="image[]" class="form-control imageInput" msg="Vui lòng chọn ảnh!" accept="image/*">
+							</div>
+							<div class="col-lg-2">
+								<span class="loading" style="display: none">
+									<i class="icon-spinner3 spinner"></i>
+								</span>
+								<button class="btn btn-success" id="uploadImage" ><?php echo $this->translate('upload')?></button>
+							</div>
+							<div class="col-lg-1 clear_image hidden" >
+								<button type="button" id="clearPath" class="btn btn-danger btn-icon btn-rounded"><i class="icon-cross2"></i></button>
+							</div>
+						</div>
+						</form>
+						<div class="gridContainer">
+						<br/>
+                        <h6 class="text-semibold"><?php echo $this->translate('select-image')?></h6>
+                        <div class="grid">
+                        <?php 
+                        	if ( empty( $this->listMedia ) == false ){
+                        		foreach ( $this->listMedia as $item ){
+                        ?>
+                       	<div class="grid-item col-lg-2">
+							<div class="thumbnail">
+								<div class="thumb">
+									<img src="<?php echo '/upload/images'.$item['url_thumnail']?>" alt="">
+									<div class="caption-overflow media-select-image" 
+										data_id="<?php echo $item['media_id']?>" 
+										data-src-thumb="<?php echo '/upload/images'.$item['url_thumnail']?>"
+										data-src="<?php echo '/upload/images'.$item['url']?>">  
+										<span>
+										</span>
+									</div>
+								</div>
+								<div class="caption media-title">
+									<h6 class="no-margin"><a href="#" class="text-default"><?php echo Commons::truncateStr( $item['url']) ?></a></h6>
+								</div>
+							</div>
+						</div>
+                        <?php 
+                        		}
+                        	}
+                        ?>
+						</div>
+						</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info close-media-dialog" data-dismiss="modal"><?php echo $this->translate('close') ?></button>
+                    </div>
+                </div>
+            </div>
+<div id="inputContainer" style="display: none">
+	<div class="form-group">
+		<div class="col-lg-10" style="display: inline-flex;">
+			<input type="file" name="image[]" class="form-control imageInput" msg="Vui lòng chọn ảnh!" accept="image/*">
+		</div>
+	</div>
+</div>
+            

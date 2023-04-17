@@ -1,0 +1,121 @@
+<?php
+$permissionList = array('view', 'add', 'edit', 'delete');
+?>
+<!-- Page header -->
+<div class="page-header">
+    <div class="page-header-content">
+        <div class="page-title">
+            <h3><i class="icon-rating3 position-left"></i>Phân Quyền - Thông Tin Quyền</h3>
+        </div>
+    </div>
+    <div class="breadcrumb-line">
+        <ul class="breadcrumb">
+            <li><a href="/admin/index/"><i class="icon-home2 position-left"></i> Trang Chủ</a></li>
+            <li><a href="/admin/permission/">Danh Sách Quyền</a></li>
+            <li class="active">Thông Tin Quyền</li>
+        </ul>
+    </div>
+</div>
+<!-- /page header -->
+<div class="content">
+    <!-- Basic layout-->
+    <form action="/admin/permission/add" id="add_edit_permission_frm" class="form-validate-jquery" method="post">
+        <div class="panel panel-flat">
+            <div class="panel-heading">
+                <h4 class="panel-title">Thông Tin Quyền</h4>
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <?php if (empty($this->message) == false) { ?>
+                            <?php
+                            $break = false;
+                            if (count($this->message) > 1) {
+                                $break = true;
+                            }
+                            ?>
+                            <div class="alert <?php echo (isset($this->success) == true) ? 'alert-success' : 'alert-danger' ?> alert-bordered">
+                                <button type="button" class="close" data-dismiss="alert"><span>&times;</span><span class="sr-only">Close</span></button>
+                                <?php
+                                foreach ($this->message as $value) {
+                                    echo $value;
+                                    if ($break == true)
+                                        echo "</br>";
+                                }
+                                ?>
+                            </div>
+                        <?php } ?>
+                    <label class="control-label col-lg-2"><?php echo $this->translate('permission_name') ?></label>
+                    <div class="col-lg-10">
+                        <input type="text" class="form-control" name="p_name" id="p_name" data-msg="<?php echo $this->translate('please-enter-permission-name') ?>" <?php echo (empty( $this->roleInfo ) == false )? "disabled" :"" ?> value="<?php echo ( empty( $this->roleInfo['role_name']) == false )?  $this->roleInfo['role_name']:"" ?>">
+                    </div>
+                </div>
+            </div>
+            <div class="content-divider text-muted form-group"><span></span></div>
+            <div class="table-responsive">
+                <label class="control-label col-lg-2"><?php echo $this->translate('permission') ?></label>
+                <table class="table">
+                    <thead>
+                        <tr class="alpha-info">
+                            <th class="text-center"><?php echo $this->translate("module-name"); ?></th>
+                            <th class="text-center"><?php echo $this->translate("view"); ?><br>
+                                    <input type="checkbox" class="control-primary checkAllAction" id="checkAllView"  rel="view">
+                            </th>
+                            <th class="text-center"><?php echo $this->translate("add"); ?><br><input type="checkbox" class="control-primary checkAllAction" id="checkAllAdd"  rel="add"></th>
+                            <th class="text-center"><?php echo $this->translate("update"); ?><br><input type="checkbox" class="control-primary checkAllAction" id="checkAllEdit"  rel="edit"></th>
+                            <th class="text-center"><?php echo $this->translate("delete"); ?><br><input type="checkbox" class="control-primary checkAllAction" id="checkAllDelete"  rel="delete"></th>
+                            <th class="text-center"><?php echo $this->translate("all"); ?><br><input type="checkbox" class="control-primary checkAllAction" id="checkAllAll"  rel="all"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (empty($this->resourcesList) == false && is_array($this->resourcesList)) { ?>
+                            <?php foreach ($this->resourcesList as $controller => $item) { ?>   
+                                <?php $count = 0; ?>
+                                <tr class="">
+                                    <td class="text-left"><?php echo $this->translate($controller) ?></td>
+                                    <!-- loop permission and print checkbox -->
+                                    <?php foreach ($permissionList as $action) { ?>
+                                        <td class="text-center">
+                                            <?php
+                                            if (isset($item['permissions'][$action]) == true) {
+                                                $item['permissions'][$action]["id"];
+                                                ?>
+                                                <input id="chkItem_<?php echo $item['permissions'][$action]["id"] ?>" controller="<?php echo $controller; ?>" class="control-primary chkItem" 
+                                                       action="<?php echo $item['permissions'][$action]["action_name"]; ?>" 
+                                                       type="checkbox" name="permissions[]" value="<?php echo $item['permissions'][$action]["id"] ?>" 
+                                                       <?php 
+                                                       if( empty( $this->roleInfo ["permission"] ) == false && in_array($item['permissions'][$action]["id"], $this->roleInfo ["permission"]) == true ){
+                                                           echo "checked='checked'"; $count++;
+                                                       }
+                                                       ?>
+                                                       />
+                                                   <?php } ?>
+                                        </td>
+                                    <?php } ?>
+                                    <!-- print checkbox All -->
+                                    <td class="text-center">
+                                        <input id="checkAllController_<?php echo $controller; ?>" type="checkbox" class="control-primary checkAllController" action="all" rel="<?php echo $controller; ?>" 
+                                        <?php
+                                        if ($count == count($item['permissions'])) {
+                                            echo "checked='checked'";
+                                        }
+                                        ?>
+                                        />
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        <?php } ?>
+                    </tbody>
+                </table>
+            </div>
+            <div class="panel-body">
+                <div class="form-group  text-right">
+                    <div class="col-lg-12">
+                        <button type="submit" class="btn btn-primary" id="create-permission-btn" ><?php echo $this->translate('add-permission') ?> <i class="icon-arrow-right14 position-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="id" name="id" value="<?php echo @$this->id ?>" />
+    </form>
+</div>
+

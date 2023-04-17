@@ -1,0 +1,13 @@
+<div class="side-box side-filter">
+    <header><?php echo $this->title ?></header>
+    <ul class="check-list">
+        <?php foreach ($this->list as $key => $item) { ?>
+        <li>
+            <label>
+                <input type="checkbox" name="<?php echo $this->name ?>" value="<?php echo $item['value'] ?>" />
+                <strong><?php echo $item['text'] ?></strong>
+            </label>
+        </li>
+        <?php } ?>
+    </ul>
+</div>

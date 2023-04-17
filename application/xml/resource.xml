@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+<root>
+    <banner>
+        <permissions>
+            <view permission_name="View" module_name="site" action_name="view" />
+            <edit permission_name="Edit" module_name="site" action_name="edit"/>
+            <add  permission_name="Add" module_name="site" action_name="add"/>
+            <delete permission_name="Delete" module_name="site" action_name="delete" />
+        </permissions>
+    </banner>
+    <product>
+        <permissions>
+            <view permission_name="View" module_name="site" action_name="view" />
+            <edit permission_name="Edit" module_name="site" action_name="edit"/>
+            <add  permission_name="Add" module_name="site" action_name="add"/>
+            <delete permission_name="Delete" module_name="site" action_name="delete" />
+        </permissions>
+    </product>
+    <group-category>
+        <permissions>
+            <view permission_name="View" module_name="site" action_name="view" />
+            <edit permission_name="Edit" module_name="site" action_name="edit"/>
+            <add  permission_name="Add" module_name="site" action_name="add"/>
+            <delete permission_name="Delete" module_name="site" action_name="delete" />
+        </permissions>
+    </group-category>
+    <menu>
+        <permissions>
+            <view permission_name="View" module_name="site" action_name="view" />
+            <edit permission_name="Edit" module_name="site" action_name="edit"/>
+            <add  permission_name="Add" module_name="site" action_name="add"/>
+            <delete permission_name="Delete" module_name="site" action_name="delete" />
+        </permissions>
+    </menu>
+    <category>
+        <permissions>
+            <view permission_name="View" module_name="site" action_name="view" />
+            <edit permission_name="Edit" module_name="site" action_name="edit"/>
+            <add  permission_name="Add" module_name="site" action_name="add"/>
+            <delete permission_name="Delete" module_name="site" action_name="delete" />
+        </permissions>
+    </category>
+    <permission>
+        <permissions>
+            <view permission_name="View" module_name="site" action_name="view" />
+            <edit permission_name="Edit" module_name="site" action_name="edit"/>
+            <add  permission_name="Add" module_name="site" action_name="add"/>
+            <delete permission_name="Delete" module_name="site" action_name="delete" />
+        </permissions>
+    </permission>
+    <post>
+        <permissions>
+            <view permission_name="View" module_name="site" action_name="view" />
+            <edit permission_name="Edit" module_name="site" action_name="edit"/>
+            <add  permission_name="Add" module_name="site" action_name="add"/>
+            <delete permission_name="Delete" module_name="site" action_name="delete" />
+        </permissions>
+    </post>
+    <user>
+        <permissions>
+            <view permission_name="View" module_name="site" action_name="view" />
+            <edit permission_name="Edit" module_name="site" action_name="edit"/>
+            <add  permission_name="Add" module_name="site" action_name="add"/>
+            <delete permission_name="Delete" module_name="site" action_name="delete" />
+        </permissions>
+    </user>
+    <media>
+        <permissions>
+            <view permission_name="View" module_name="site" action_name="view" />
+            <edit permission_name="Edit" module_name="site" action_name="edit"/>
+            <add  permission_name="Add" module_name="site" action_name="add"/>
+            <delete permission_name="Delete" module_name="site" action_name="delete" />
+        </permissions>
+    </media>
+    <gallery>
+        <permissions>
+            <view permission_name="View" module_name="site" action_name="view" />
+            <edit permission_name="Edit" module_name="site" action_name="edit"/>
+            <add  permission_name="Add" module_name="site" action_name="add"/>
+            <delete permission_name="Delete" module_name="site" action_name="delete" />
+        </permissions>
+    </gallery>
+    <setting>
+        <permissions>
+            <view permission_name="View" module_name="site" action_name="view" />
+            <edit permission_name="Edit" module_name="site" action_name="edit"/>
+            <add  permission_name="Add" module_name="site" action_name="add"/>
+            <delete permission_name="Delete" module_name="site" action_name="delete" />
+        </permissions>
+    </setting>
+    <xem-san-pham>
+        <permissions>
+            <view permission_name="View" module_name="site" action_name="view" />
+        </permissions>
+    </xem-san-pham>
+    <order>
+        <permissions>
+            <view permission_name="View" module_name="site" action_name="view" />
+            <edit permission_name="Edit" module_name="site" action_name="edit"/>
+            <add  permission_name="Add" module_name="site" action_name="add"/>
+            <delete permission_name="Delete" module_name="site" action_name="delete" />
+        </permissions>
+    </order>
+    <promotion-code>
+        <permissions>
+            <view permission_name="View" module_name="site" action_name="view" />
+            <edit permission_name="Edit" module_name="site" action_name="edit"/>
+            <add  permission_name="Add" module_name="site" action_name="add"/>
+            <delete permission_name="Delete" module_name="site" action_name="delete" />
+        </permissions>
+    </promotion-code>
+    <statistic>
+        <permissions>
+            <view permission_name="View" module_name="site" action_name="view" />
+        </permissions>
+    </statistic>
+    <product-color>
+       <permissions>
+            <view permission_name="View" module_name="site" action_name="view" />
+            <edit permission_name="Edit" module_name="site" action_name="edit"/>
+            <add  permission_name="Add" module_name="site" action_name="add"/>
+            <delete permission_name="Delete" module_name="site" action_name="delete" />
+        </permissions>
+    </product-color>
+</root> 

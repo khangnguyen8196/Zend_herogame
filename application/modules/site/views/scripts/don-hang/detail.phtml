@@ -1,0 +1,171 @@
+<?php $this->viewCssClass = 'order detail' ?>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 hidden-md-down no-gutter">
+            <?php echo $this->partial('/shared/_breadcrumbs.phtml') ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 no-gutter">
+            <div class="card card-inverse card-primary mt-4">
+                <div class="card-block">
+                    <h3 class="card-title text-center font-weight-normal m-0 clearfix">
+                        <div class="float-left">
+                            Đơn hàng:
+                            <strong>HOD231392184572917</strong>
+                        </div>
+                        <div class="d-inline-block">
+                            Đặt ngày:
+                            <strong><?php echo date('d/m/Y', mt_rand(1262055681,1262055681)) ?></strong>
+                        </div>
+                        <div class="float-right">
+                            Tổng tiền:
+                            <strong><?php echo number_format(rand(1000000, 20000000)) . '&#8363' ?></strong>
+                        </div>
+                    </h3>
+                </div>
+            </div>
+            <div class="card mt-4">
+                <div class="card-block">
+                    <div class="cart-list">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">#</th>
+                                    <th class="text-center">Hình</th>
+                                    <th class="text-left">Tên sản phẩm</th>
+                                    <th class="text-center">Số lượng</th>
+                                    <th class="text-right">Đơn giá</th>
+                                    <th class="text-right">Tổng cộng</th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <div class="scroller">
+                            <table class="table">
+                                <tbody>
+                                    <?php foreach ($this->data()->genSampleProducts(20, '50x50') as $key => $item) { ?>
+                                    <tr>
+                                        <td class="text-center">
+                                            <?php echo ($key + 1) ?>
+                                        </td>
+                                        <td class="text-center">
+                                            <?php echo $this->partial('/shared/_lazy_image.phtml', array(
+                                                'ratio' => '1x1',
+                                                'css' => 'photo',
+                                                'url' => $item['photo']
+                                            )) ?>
+                                        </td>
+                                        <td class="text-left">
+                                            <a class="name" href="/product/item">
+                                                <strong><?php echo $item['name'] ?></strong>
+                                            </a>
+                                        </td>
+                                        <td class="text-center">
+                                            x<?php echo rand(1, 10) ?>
+                                        </td>
+                                        <td class="text-right">
+                                            <strong><?php echo $item['priceA'] ?></strong>
+                                        </td>
+                                        <td class="text-right">
+                                            <strong><?php echo number_format(rand(1000000, 20000000)) . '&#8363' ?></strong>
+                                        </td>
+                                    </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="progress">
+                        <div class="milestone done">
+                            <div class="icon">
+                                <i class="fa fa-tags"></i>
+                            </div>
+                            <span class="text">Đang xử lý</span>
+                        </div>
+                        <div class="milestone done">
+                            <div class="icon">
+                                <i class="fa fa-truck"></i>
+                            </div>
+                            <span class="text">Đã được gởi đi</span>
+                            <hr/>
+                        </div>
+                        <div class="milestone">
+                            <div class="icon">
+                                <i class="fa fa-check"></i>
+                            </div>
+                            <span class="text">Đã giao hàng</span>
+                            <hr/>
+                        </div>
+                    </div>
+
+                    <div class="card events">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <span class="text-muted mr-2"><?php echo date('d/m/Y', mt_rand(1262055681,1262055681)) ?></span>
+                                Đơn hàng đã được đặt thành công, đang được HeroGame kiểm tra thông tin &amp; xác nhận.
+                            </li>
+                            <li class="list-group-item">
+                                <span class="text-muted mr-2"><?php echo date('d/m/Y', mt_rand(1262055681,1262055681)) ?></span>
+                                Đơn hàng đã được gởi đi, chúng tôi sẽ gọi cho bạn để nhận hàng.
+                            </li>
+                            <li class="list-group-item">
+                                <span class="text-muted mr-2"><?php echo date('d/m/Y', mt_rand(1262055681,1262055681)) ?></span>
+                                Đơn hàng đã được giao thành công.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row less-gutter">
+        <div class="col-md-6 col-12">
+            <div class="card shipping mt-4">
+                <div class="card-block">
+                    <h4 class="card-title">Địa chỉ giao hàng</h4>
+                    <ul class="card-text">
+                        <li>Nguyễn Hoàng Phương</li>
+                        <li>5 Nguyễn Gia Thiều, Phường 6, Quận 3, Tp. Hồ Chí Minh</li>
+                        <li>01212199614</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-12">
+            <div class="card summary mt-4">
+                <div class="card-block">
+                    <h4 class="card-title">Tóm tắt</h4>
+                    <ul class="card-text">
+                        <li>
+                            Tạm tính
+                            <strong><?php echo number_format(rand(1000000, 20000000)) . '&#8363' ?></strong>
+                        </li>
+                        <li>
+                            Phí vận chuyển
+                            <strong><?php echo number_format(rand(10000, 50000)) . '&#8363' ?></strong>
+                        </li>
+                        <li>
+                            Khuyến mãi
+                            <strong><?php echo number_format(rand(10000, 50000)) . '&#8363' ?></strong>
+                        </li>
+                        <li><hr/></li>
+                        <li>
+                            Tổng (Đã bao gồm VAT)
+                            <strong class="total"><?php echo number_format(rand(1000000, 20000000)) . '&#8363' ?></strong>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 no-gutter">
+            <div class="order-action">
+                <a class="btn btn-danger btn-delete" href="/product">Hủy đơn hàng</a>
+                <a class="btn btn-primary btn-back" href="/product">Tiếp tục mua hàng</a>
+            </div>
+        </div>
+    </div>
+</div>

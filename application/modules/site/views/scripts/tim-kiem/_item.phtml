@@ -1,0 +1,72 @@
+<div class="scroll" data-simplebar>
+	<?php if (empty($this->productList) == false || empty($this->postList) == false) { ?>
+	    <ul>
+	        <?php if (empty($this->productList) == false) { ?>
+	        	<li class="group">
+	                    <strong class="title">Sản phẩm</strong>
+	                    <ul>
+	                        <?php foreach ($this->productList as $key => $product) { ?>
+	                        <li>
+	                        	<?php
+		                            $productUrl = "/" . $product["url_product"];
+		                            $productImgUrl = "";
+		                            if (empty($product["image"]) == false) {
+		                                $productImgUrl = "/upload/images" . $product["image"];
+		                            }
+	                            ?>
+	                            <a href="<?php echo $productUrl ?>" title="<?php echo $product['title'] ?>">
+	                                <?php echo $this->partial('/shared/_lazy_image.phtml', array(
+	                                    'ratio' => '1x1',
+	                                    'css' => 'photo',
+	                                		'url' => $productImgUrl,
+	                                )) ?>
+	                                <div class="meta">
+	                                    <span class="name"> <?php echo $product['title']?><br/></span>
+	                                    <span class="price"><?php echo number_format($product['price_sales']) . '&#8363'  ?><br/></span>
+	                                </div>
+	                            </a>
+	                        </li>
+	                        <?php } ?>
+	                    </ul>
+	                </li>
+	        <?php } ?>
+	
+	        <?php if (empty($this->postList) == false) { ?>
+	            <li class="group">
+	                <strong class="title">Tin tức</strong>
+	                <ul>
+	                    <?php foreach ($this->postList as $key => $post) { ?>
+	                        <li>
+	                            <?php
+	                            $postUrl = "/bai-viet/" . $post["url_name"];
+	                            $postImageUrl = "";
+	                            if (empty($post['image_id']) == false) {
+	                                $postImageUrl = PHOTO_PATH . $post['image_id'];
+	                            }
+	                            ?>
+	                            <a href="<?php echo $postUrl ?>" title="<?php echo $product['title'] ?>">
+	                                <?php
+	                                echo $this->partial('/shared/_lazy_image.phtml', array(
+	                                    'ratio' => '1x1',
+	                                    'css' => 'photo',
+	                                    'url' => $postImageUrl,
+	                                ))
+	                                ?>
+	                                <div class="meta">
+	                                    <span class="title"><?php echo $post['title'] ?></span>
+	                                </div>
+	                            </a>
+	                        </li>
+	                    <?php } ?>
+	                </ul>
+	            </li>
+	        <?php } ?>
+	    </ul>
+	<?php } else { ?>
+	    <ul>
+	        <li class="group">
+	            Không tìm thấy kết quả
+	        </li>
+	    </ul>
+	<?php } ?>
+</div>

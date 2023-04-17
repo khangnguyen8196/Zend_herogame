@@ -1,0 +1,203 @@
+<div class="page-header">
+    <div class="page-header-content">
+        <div class="page-title">
+            <h4><i class="icon-menu2 position-left"></i> <span class="text-semibold">Menu - Thông Tin Menu</span></h4>
+        </div>
+    </div>
+    <div class="breadcrumb-line">
+        <ul class="breadcrumb">
+            <li><a href="/"><i class="icon-home2 position-left"></i> <?php echo $this->translate('home') ?></a></li>
+            <li><a href="/admin/menu">Danh Sách Menu</a></li>
+            <li class="active">Thông Tin Menu</li>
+        </ul>
+        <!-- tree -->
+    </div>
+</div>
+<div class="content">
+    <div class="panel panel-flat">
+        <div class="panel-heading">
+            <h5 class="panel-title">Thông Tin Menu</h5>
+        </div>
+        <div class="panel-body">
+            <div class="alert alert-danger alert-styled-left <?php
+            if (empty($this->error) == true) {
+                echo 'hidden';
+            }
+            ?>">
+                <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
+                <?php
+                if (empty($this->error) == false) {
+                    foreach ($this->error as $key => $value) {
+                        echo $value . '<br/>';
+                    }
+                }
+                ?>
+            </div>
+            <form class="form-horizontal" id="menuDetailForm" method="post" enctype="multipart/form-data">
+                <fieldset class="content-group">
+                    <legend class="text-bold"></legend>
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Tên</label>
+                        <div class="col-lg-10">
+                            <input type="text" name="name" id="name" placeholder="Tên" class="form-control" value="<?php echo @$this->info['name'] ?>" data-msg="Vui lòng nhập tên">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">URL</label>
+                        <div class="col-lg-10">
+                            <input type="text" name="url" id="url" placeholder="Url" class="form-control" value="<?php echo @$this->info['url'] ?>" data-msg="Vui lòng nhập đường dẫn">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Icon</label>
+                        <div class="col-lg-5">
+                            <input type="file" class="file-styled form-control" name='image_icon' id="image_icon"/> 
+                        </div>
+                        <label class="control-label col-lg-2"></label>
+                        <?php if (empty($this->info) == false && empty($this->info['image_icon']) == false) { ?>
+                            <div class="col-lg-5">
+                                <div class="col-lg-2 col-sm-4 parent">
+                                    <div class="thumbnail">
+                                        <div class="thumb">
+                                            <img class="img-media img-thumbnail-item" src="<?php echo '/upload/images' . $this->info['image_icon']; ?>" alt="">
+                                            <div class="caption-overflow">
+                                                <span>
+                                                    <a class="btn border-white text-white btn-flat btn-icon btn-rounded 
+                                                       ml-5 container-image" href="<?php echo '/upload/images' . $this->info['image_icon']; ?>" data-popup="lightbox">
+                                                        <i class="icon-plus3"></i>
+                                                    </a>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php } ?>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Icon Hover</label>
+                        <div class="col-lg-5">
+                            <input type="file" class="file-styled form-control" name='image_icon_hover' id="image_icon_hover"/> 
+                        </div>
+                        <label class="control-label col-lg-2"></label>
+                        <?php if (empty($this->info) == false && empty($this->info['image_icon_hover']) == false) { ?>
+                            <div class="col-lg-5">
+                                <div class="col-lg-2 col-sm-4 parent">
+                                    <div class="thumbnail">
+                                        <div class="thumb">
+                                            <img class="img-media img-thumbnail-item" src="<?php echo '/upload/images' . $this->info['image_icon_hover']; ?>" alt="">
+                                            <div class="caption-overflow">
+                                                <span>
+                                                    <a class="btn border-white text-white btn-flat btn-icon btn-rounded 
+                                                       ml-5 container-image" href="<?php echo '/upload/images' . $this->info['image_icon_hover']; ?>" data-popup="lightbox">
+                                                        <i class="icon-plus3"></i>
+                                                    </a>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php } ?>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Hình ảnh</label>
+                        <div class="col-lg-5">
+                            <input type="file" class="file-styled form-control" name='image' id="image"/> 
+                        </div>
+                        <label class="control-label col-lg-2"></label>
+                        <?php if (empty($this->info) == false && empty($this->info['image']) == false) { ?>
+                            <div class="col-lg-5">
+                                <div class="col-lg-2 col-sm-4 parent">
+                                    <div class="thumbnail">
+                                        <div class="thumb">
+                                            <img class="img-media img-thumbnail-item" src="<?php echo '/upload/images' . $this->info['image']; ?>" alt="">
+                                            <div class="caption-overflow">
+                                                <span>
+                                                    <a class="btn border-white text-white btn-flat btn-icon btn-rounded 
+                                                       ml-5 container-image" href="<?php echo '/upload/images' . $this->info['image']; ?>" data-popup="lightbox">
+                                                        <i class="icon-plus3"></i>
+                                                    </a>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php } ?>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Miêu tả</label>
+                        <div class="col-lg-10">
+                            <textarea id="description" name="description" class="form-control"><?php echo $this->info['description'] ?></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">&nbsp;</label>
+                        <div class="col-lg-2">
+                            <div class="checkbox">
+                                <label>
+                                    <div class="border-primary-600 text-primary-800"><span class="checked">
+                                            <input type="checkbox" class="control-primary" name="show_in_menu" 
+                                                <?php echo ( empty($this->info['show_in_menu']) == false ) ? 'checked="checked"' :"" ?> value="1"></span>
+                                    </div>
+                                    Show in Menu
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Menu cha</label>
+                        <div class="col-lg-2">
+                            <select name="parent_menu" id="parent_menu" class="form-control">
+                                <option value="0" data-level="">Top Level</option>
+                                <?php
+                                if (empty($this->parentMenu) == false) {
+                                    foreach ($this->parentMenu as $key => $value) { ?>
+                                        <option value="<?php echo $value["id"] ?>" 
+                                                data-level="<?php echo $value["level"] ?>" 
+                                        <?php
+                                            if ($this->info['parent_menu'] == $value["id"]) {
+                                                echo 'selected';
+                                            } ?>>
+                                            <?php echo $value["name"] ?></option>
+                                        <?php
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <!-- level -->
+                        <label class="control-label col-lg-1"><?php echo $this->translate('level') ?></label>
+                        <div class="col-lg-2">
+                            <input type="number" name="level_menu_display" id="level_menu_display" disabled
+                                   placeholder="<?php echo $this->translate('level') ?>" class="form-control" 
+                                   value="<?php echo (isset($this->info['level']) == true ) ? $this->info['level']: 0 ?>">
+                            <input type="hidden" name="level" id="level" value="<?php echo (isset($this->info['level']) == true ) ? $this->info['level']: 0 ?>" />
+                        </div>
+                        <label class="control-label col-lg-1"><?php echo $this->translate('priority') ?></label>
+                        <div class="col-lg-2">
+                            <input type="number" name="priority" id="priority" placeholder="<?php echo $this->translate('priority') ?>" class="form-control" value="<?php echo @$this->info['priority'] ?>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+				        <label class="control-label col-lg-2">Kiểu Menu</label>
+				        <div class="col-lg-2">
+				            <select name="style" id="style" class="form-control">
+				               <option value="1" <?php if( @$this->info['style'] == 1) { echo 'selected';}?>>Style 1</option>
+				               <option value="2" <?php if( @$this->info['style'] == 2) { echo 'selected';}?>>Style 2</option>
+				               <option value="3" <?php if( @$this->info['style'] == 3) { echo 'selected';}?>>Style 3</option>
+				            </select>
+				        </div>
+				    </div>
+                </fieldset>
+                <div class="text-right">
+                    <a href="/admin/menu"><button type="button" class="btn btn-default cancel-btn"><?php echo $this->translate('cancel') ?><i class="icon-arrow-right14 position-right"></i></button></a>
+                    <button type="submit" class="btn btn-primary submit-btn"><?php echo $this->translate('submit') ?> <i class="fa fa-plus" aria-hidden="true"></i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="modal_media" class="modal fade" data-keyboard="false" data-backdrop="static">
+</div>

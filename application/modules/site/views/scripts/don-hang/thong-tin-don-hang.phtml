@@ -1,0 +1,213 @@
+<?php $this->viewCssClass = 'order detail' ?>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 hidden-md-down no-gutter">
+             <?php echo $this->partial('/shared/_breadcrumbs.phtml',array('data'=> array('child' => array('name' => 'Thông Tin Đơn Hàng')))) ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 no-gutter">
+            <div class="card card-inverse card-primary mt-4">
+                <div class="card-block">
+                    <h3 class="card-title text-center font-weight-normal m-0 clearfix">
+                        <div class="float-left">
+                            Đơn hàng:
+                            <strong><?php echo $this->order['order_code']?></strong>
+                        </div>
+                        <div class="d-inline-block">
+                            Đặt ngày:
+                            <strong><?php echo date("d/m/Y h:i:s", strtotime($this->order['created_date'])); ?></strong>
+                        </div>
+                        <div class="float-right">
+                            <?php
+                                $system_discount = 0;
+                                if( empty($this->order['admin_discount']) == false && $this->order['admin_discount'] > 0 ){
+                                    $system_discount = $this->order['admin_discount'];
+                                }
+                            ?>
+                            Tổng tiền:
+                            <strong><?php echo number_format($this->order['total']-$system_discount) . '&#8363' ?></strong>
+                        </div>
+                    </h3>
+                </div>
+            </div>
+            <div class="card mt-4">
+                <div class="card-block">
+                    <div class="cart-list">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">#</th>
+                                    <th class="text-center">Hình</th>
+                                    <th class="text-left" style="width: 22%">Tên sản phẩm</th>
+                                    <th class="text-center" style="width: 12%">Màu</th>
+                                    <th class="text-center">Số lượng</th>
+                                    <th class="text-right">Đơn giá</th>
+                                    <th class="text-right">Tổng cộng</th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <div class="scroller">
+                            <table class="table">
+                                <tbody>
+                                    <?php $totalMoney = 0;?>
+                                    <?php foreach ($this->listproduct as $key => $item) { ?>
+                                    <?php $totalMoney += $item['number'] * $item['price'] ;?>
+                                    <tr>
+                                        <td class="text-center">
+                                            <?php echo ($key + 1) ?>
+                                        </td>
+                                        <td class="text-center">
+                                            <?php echo $this->partial('/shared/_lazy_image.phtml', array(
+                                                'ratio' => '1x1',
+                                                'css' => 'photo',
+                                                'url' => '/upload/images/'. $item['p_img']
+                                            )) ?>
+                                        </td>
+                                        <td class="text-left" style="width: 22%">
+                                            <a class="name" href="/<?php echo $item['p_url']?>">
+                                                <strong><?php echo $item['p_name'] ?></strong>
+                                            </a>
+                                        </td>
+                                        <td class="text-center" style="width: 10%">
+                                            <strong><?php if($item['product_color'] != 1)echo $item['p_color_name'] ?></strong>
+                                        </td>
+                                        <td class="text-center">
+                                            x<?php echo $item['number'] ?>
+                                        </td>
+                                        <td class="text-right">
+                                            <strong><?php echo number_format($item['price']) . '&#8363' ?></strong>
+                                        </td>
+                                        <td class="text-right">
+                                            <strong><?php echo number_format($item['price']*$item['number']) . '&#8363' ?></strong>
+                                        </td>
+                                    </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="progress">
+                        <div class="milestone done">
+                            <div class="icon">
+                                <i class="fa <?php if($this->order['status'] == 1) { echo 'fa-tags';} else { echo 'fa-check-circle-o'; }?>"></i>
+                            </div>
+                            <span class="text"><?php if($this->order['status'] == 1) { echo 'Đang xử lý';} else { echo 'Xác Nhận'; }?></span>
+                        </div>
+                        <div class="milestone <?php if($this->order['status'] > 2) { echo 'done';}?>">
+                            <div class="icon">
+                                <i class="fa fa-truck"></i>
+                            </div>
+                            <span class="text">Đã được gởi đi</span>
+                            <hr/>
+                        </div>
+                        <div class="milestone <?php if($this->order['status'] > 3 ) { echo 'done';}?>">
+                            <div class="icon">
+                                <i class="fa <?php if($this->order['status'] < 5 ) { echo 'fa-check';} else { echo 'fa-times'; } ?>"></i>
+                            </div>
+                            <span class="text"><?php if($this->order['status'] <= 4 ) { 
+                                echo 'Giao hàng thành công';
+                            } else { 
+                                echo 'Đã hủy';
+                            } ?></span>
+                            <hr/>
+                        </div>
+                    </div>
+
+                    <div class="card events">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <span class="text-muted mr-2"><?php echo date("d/m/Y h:i:s", strtotime($this->order['created_date'])); ?></span>
+                                Đơn hàng đã được đặt thành công, đang được HeroGame kiểm tra thông tin &amp; xác nhận.
+                            </li>
+                            <?php if( $this->order['status'] > 1 ) { ?>
+                            <li class="list-group-item">
+                                <span class="text-muted mr-2"><?php echo date("d/m/Y h:i:s", strtotime($this->order['updated_date'])); ?></span>
+                                <?php 
+                                if( $this->order['status'] == 2 ) { 
+                                    echo 'Đơn hàng của quý khác đã được Hero Game xác nhận.';
+                                } else if( $this->order['status'] == 3 ){
+                                    echo 'Đơn hàng của quý khách đã được gởi đi.';
+                                } else if( $this->order['status'] == 4 ){
+                                    echo 'Đơn hàng của quý khách đã được giao thành công.';
+                                } else if( $this->order['status'] == 5 ){
+                                    echo 'Đơn hàng của quý khách đã bị hủy.<br/>';
+                                } 
+                                ?>
+                            </li>
+                            <?php } ?>
+                            <?php
+                                if( empty($this->order['reject_reason']) == false){
+                                    echo '<li class="list-group-item text-danger">';
+                                    echo 'Ghi Chú (*): '. $this->order['reject_reason'];
+                                    echo '</li>';
+                                }
+                            ?>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row less-gutter">
+        <div class="col-md-6 col-12">
+            <div class="card shipping mt-4">
+                <div class="card-block">
+                    <h4 class="card-title">Địa chỉ giao hàng</h4>
+                    <ul class="card-text">
+                        <li><?php echo $this->order['name']?></li>
+                        <li><?php echo $this->order['address']?></li>
+                        <li><?php echo $this->order['place']?></li>
+                        <li><?php echo $this->order['phone']?></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-12">
+            <div class="card summary mt-4">
+                <div class="card-block">
+                    <h4 class="card-title">Tóm tắt</h4>
+                    <ul class="card-text">
+                        <li>
+                            Tạm tính
+                            <strong><?php echo number_format($totalMoney) . '&#8363' ?></strong>
+                        </li>
+                        <li>
+                            Khuyến mãi
+                            <strong> - <?php echo number_format($totalMoney - $this->order['total']) . '&#8363' ?></strong>
+                        </li>
+                        <?php
+                            $system_discount = 0;
+                            if( empty($this->order['admin_discount']) == false && $this->order['admin_discount'] > 0 ){
+                                $system_discount = $this->order['admin_discount'];
+                                ?>
+                                     <li>
+                                        Giảm giá từ Hero Game (*)
+                                        <strong> - <?php echo number_format($this->order['admin_discount']) . '&#8363' ?></strong>
+                                    </li>
+                                <?php
+                            }
+                        ?>
+                        <li><hr/></li>
+                        <li>
+                            Tổng (Đã bao gồm VAT)
+                            <strong class="total"><?php echo number_format($this->order['total']-$system_discount) . '&#8363' ?></strong>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 no-gutter">
+            <div class="order-action">
+                <?php if($this->order['status'] == 1){ ?>
+                    <a class="btn btn-danger btn-delete cancel-order" data-code="<?php echo $this->order['order_code'];?>">Hủy đơn hàng</a>
+                <?php } ?>
+                <a class="btn btn-primary btn-back" href="/">Tiếp tục mua hàng</a>
+            </div>
+        </div>
+    </div>
+</div>

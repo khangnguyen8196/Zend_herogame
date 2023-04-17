@@ -1,0 +1,101 @@
+<div class="page-header">
+	<div class="page-header-content">
+		<div class="page-title">
+			<h4><i class="icon-clipboard6 position-left"></i> <span class="text-semibold">Nhóm sản phẩm</span></h4>
+		</div>
+	</div>
+	<div class="breadcrumb-line">
+		<ul class="breadcrumb">
+			<li><a href="/"><i class="icon-home2 position-left"></i> <?php echo $this->translate('home')?></a></li>
+			<li><a href="/admin/group-category">Nhóm sản phẩm</a></li>
+			<li class="active">Tạo mới</li>
+		</ul>
+		<!-- tree -->
+	</div>
+</div>
+<div class="content">
+	<div class="panel panel-flat">
+		<div class="panel-heading">
+			<h5 class="panel-title">Nhóm sản phẩm</h5>
+		</div>
+		<div class="panel-body">
+			<div class="alert alert-danger alert-styled-left <?php if( empty($this->error) == true) { echo 'hidden';}?>">
+				<button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
+				<?php
+					if( empty($this->error) == false ){
+						foreach ($this->error as $key => $value ){
+							echo $value.'<br/>';
+						}
+					}
+				?>
+			</div>
+			<form class="form-horizontal" id="groupCategoryDetailForm" method="post" enctype="multipart/form-data">
+				<fieldset class="content-group">
+					<legend class="text-bold"></legend>
+					<div class="form-group">
+						<label class="control-label col-lg-2">Tên nhóm danh mục</label>
+						<div class="col-lg-10">
+							<input type="text" name="name" id="name" placeholder="Tên nhóm danh mục" class="form-control" value="<?php echo @$this->info['name']?>" data-msg="Vui lòng nhập tên">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-lg-2">URL</label>
+						<div class="col-lg-10">
+							<input type="text" name="url_slug" id="url_slug" placeholder="Url" class="form-control" value="<?php echo @$this->info['url_slug']?>" data-msg="Vui lòng nhập đường dẫn">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-lg-2">Menu</label>
+						<div class="col-lg-2">
+							<select name="url_menu" id="url_menu" class="form-control">
+								<option value>Không Có</option>
+								<?php
+									if( empty($this->listMenu) == false ){
+										foreach ($this->listMenu as $key => $value ){
+											?>
+												<option value="<?php echo $value['url']?>" <?php if( $this->info['url_menu'] == $value['url']){ echo 'selected'; }?>>
+												<?php echo $value['name']?></option>
+											<?php
+										}
+									}
+								?>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-lg-2"><?php echo $this->translate('image-post')?></label>
+						<div class="col-lg-5">
+							<input type="file" class="file-styled form-control" name='image' id="image"/> 
+						</div>
+						<label class="control-label col-lg-2"></label>
+						<?php if( empty($this->info) == false && empty($this->info['image']) == false){ ?>
+							<div class="col-lg-5">
+								<div class="col-lg-2 col-sm-4 parent">
+			                      	<div class="thumbnail">
+			                            <div class="thumb">
+				                            <img class="img-media img-thumbnail-item" src="<?php echo '/upload/images'.$this->info['image'];?>" alt="">
+				                           	<div class="caption-overflow">
+					                            <span>
+						                            <a class="btn border-white text-white btn-flat btn-icon btn-rounded 
+						                            	ml-5 container-image" href="<?php echo '/upload/images'.$this->info['image'];?>" data-popup="lightbox">
+							                        	<i class="icon-plus3"></i>
+							                        </a>
+						                    	</span>
+					                        </div>
+			                            </div>
+			                    	</div>
+			                     </div>
+							</div>
+						<?php } ?>
+					</div>
+				</fieldset>
+				<div class="text-right">
+					<a href="/admin/group-category"><button type="button" class="btn btn-default cancel-btn"><?php echo $this->translate('cancel')?><i class="icon-arrow-right14 position-right"></i></button></a>
+					<button type="submit" class="btn btn-primary submit-btn"><?php echo $this->translate('submit')?> <i class="fa fa-plus" aria-hidden="true"></i></button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div id="modal_media" class="modal fade" data-keyboard="false" data-backdrop="static">
+</div>

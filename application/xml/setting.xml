@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<root>
+	<form name="settingDetailForm" >
+		<checkrules>
+			<key>
+				<validate>
+					<NotEmpty message="please-input-key" />
+				</validate>
+			</key>
+		</checkrules>
+	</form>	
+</root>	

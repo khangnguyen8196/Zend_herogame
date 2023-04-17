@@ -1,0 +1,19 @@
+<?php
+    $dcol = isset($this->dcol) ? $this->dcol : 4;
+    $mcol = isset($this->mcol) ? $this->mcol : 2;
+    if( isset($this->qdsp) == false && empty( $_COOKIE["product_view_type"] ) == false ){
+        $this->qdsp = $_COOKIE["product_view_type"];
+    }
+    $ucss = isset($this->qdsp) ? $this->qdsp : 'grid';
+?>
+<div class="product-view <?php echo $this->qcss ?>">
+    <?php if($ucss == 'grid') { ?>
+    <ul class="grid grid-md-<?php echo $dcol ?> grid-<?php echo $mcol ?>">
+    <?php } else { ?>
+    <ul class="list">
+    <?php } ?>
+        <?php foreach ($this->data as $key => $item) {
+            echo '<li>' . $this->partial('/shared/_product_item.phtml', $item) . '</li>';
+        }?>
+    </ul>
+</div>

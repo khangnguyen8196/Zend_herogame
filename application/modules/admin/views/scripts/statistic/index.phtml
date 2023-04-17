@@ -1,0 +1,90 @@
+<div class="loader loader-default" data-text="Custom text"></div><!-- is-active!-->
+<div class="page-header">
+    <div class="page-header-content">
+        <div class="page-title">
+            <h4>
+                <i class="icon-file-stats position-left"></i> <span
+                    class="text-semibold">Thống Kê</span>
+            </h4>
+        </div>
+    </div>
+    <div class="breadcrumb-line">
+        <ul class="breadcrumb">
+            <li><a href="/admin/index/"><i class="icon-home2 position-left"></i> <?php echo $this->translate('home') ?></a></li>
+            <li><a href="/admin/statistic">Thống Kê</a></li>
+            <li class="active">Thống Kê</li>
+        </ul>
+        <!-- tree -->
+    </div>
+</div>
+<div class="content">
+    <div class="panel panel-flat">
+        <div class="panel-heading">
+            <h5 class="panel-title">Thống Kê</h5>
+        </div>
+        <div class="panel-body">
+            <div class="col-md-12">
+                <form id="statistic_frm" method="POST">
+                    <div class="col-md-4 ">
+                        <div class="form-group">
+                            <label>Từ Ngày</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                                <input type="text" item-type="search"  id="from_date" name="from_date"
+                                       data-format="yyyy-mm-dd" class="form-control datepicker"
+                                       value="<?php echo $this->post_data["from_date"] ?>"
+                                       placeholder="Chọn Ngày">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 ">
+                        <div class="form-group">
+                            <label>Tới Ngày</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                                <input type="text" item-type="search" id="to_date" name="to_date"
+                                       data-format="yyyy-mm-dd" class="form-control datepicker"
+                                       value="<?php echo $this->post_data["to_date"] ?>"
+                                       placeholder="Chọn Ngày">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label>&nbsp;</label>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" id="statistic_btn" >
+                                <i class="fa fa-search" aria-hidden="true"></i>&nbsp;<?php echo $this->translate('search') ?></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="row container-fluid">
+            <div class="col-md-12">
+                <div class="col-md-5">
+                    <div id="order_chart" style="height: 550px;"></div>
+                </div>
+                <div id="seperate" class="col-md-2" style="height: 400px; border-left: 1px solid lightblue; width: 1px; margin: 5%; display: none;"></div>
+                <div class="col-md-5">
+                    <div id="revenue_chart" style="height: 550px;"></div>
+                </div>  
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script type="text/javascript">
+<?php if( empty($this->error) == false){?>
+var error = '<?php echo $this->error ?>';
+<?php }?>
+<?php if (empty($this->statistic) == false) { ?>
+            var order_chart_data = <?php echo json_encode($this->statistic["order_chart_data"]); ?>;
+            var order_chart_title = '<?php echo $this->statistic["order_chart_title"]; ?>';
+            var order_chart_sub_title = '<?php echo $this->statistic["order_chart_sub_title"]; ?>';
+
+            var revenue_chart_data = <?php echo json_encode($this->statistic["revenue_chart_data"]); ?>;
+            var revenue_chart_title = '<?php echo $this->statistic["revenue_chart_title"]; ?>';
+            var revenue_chart_sub_title = '<?php echo $this->statistic["revenue_chart_sub_title"]; ?>';
+<?php } ?>
+</script>

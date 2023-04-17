@@ -1,0 +1,11 @@
+<?php if (empty($this->postMapping) == false) { ?>
+    <?php foreach ($this->postMapping as $key => $value) { ?>
+        <?php if (empty($value) == false) { ?>
+            <optgroup label="<?php echo $key ?>">
+                <?php foreach ($value as $post) { ?>
+                    <option <?php echo ( in_array($post["post_id"], $this->selectedRelativePost) ? "selected":"")?> value="<?php echo $post["post_id"] ?>"><?php echo $post["title"] ?></option>
+                <?php } ?>
+            </optgroup>
+        <?php } ?>
+    <?php } ?>
+<?php } ?>

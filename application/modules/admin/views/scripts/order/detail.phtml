@@ -1,0 +1,298 @@
+<div class="page-header">
+	<div class="page-header-content">
+		<div class="page-title">
+			<h4>
+				<i class="icon-cart-add2 position-left"></i> <span
+					class="text-semibold">Đơn Hàng - Thông Tin Đơn Hàng</span>
+			</h4>
+		</div>
+	</div>
+	<div class="breadcrumb-line">
+		<ul class="breadcrumb">
+			<li><a href="/"><i class="icon-home2 position-left"></i> Trang chủ</a></li>
+			<li><a href="/admin/order">Danh Sách Đơn Hàng</a></li>
+			<li class="active">Thông Tin Đơn Hàng</li>
+		</ul>
+		<!-- tree -->
+	</div>
+</div>
+<div class="content">
+	<div class="panel panel-flat">
+		<div class="panel-heading">
+			<h5 class="panel-title">Thông Tin Đơn Hàng</h5>
+		</div>
+		<div class="panel-body">
+			<div
+				class="alert alert-danger alert-styled-left <?php
+				if (empty ( $this->error ) == true) {
+					echo 'hidden';
+				}
+				?>">
+				<button type="button" class="close" data-dismiss="alert">
+					<span>×</span><span class="sr-only">Đóng</span>
+				</button>
+                <?php
+					if (empty ( $this->error ) == false) {
+						foreach ( $this->error as $key => $value ) {
+							echo $value . '<br/>';
+						}
+					}
+				?>
+            </div>
+			<form class="form-horizontal" id="orderForm" method="post"
+				enctype="multipart/form-data">
+				<fieldset class="content-group">
+					<legend class="text-bold"></legend>
+					<div class="form-group">
+						<label class="control-label col-lg-2">Tên Người Mua</label>
+						<div class="col-lg-2">
+							<input type="text" name="name" id="name"
+								placeholder="Tên Người Mua" class="form-control"
+								value="<?php echo @$this->info['name'] ?>"
+								data-msg="Vui lòng nhập tên">
+						</div>
+						<label class="control-label col-lg-1">User</label>
+						<div class="col-lg-7">
+							<select name="userId" id="userId" class="form-control" <?php if( empty($this->info['user_id']) == false ){ echo 'disabled="disabled"';}?>>
+								<?php if( empty($this->info['user_name']) == false ){?>
+									<option value="<?php echo $this->info['user_id'];?>" selected="selected"><?php echo $this->info['user_name']?></option>
+								<?php } else { ?>
+									<option value="-1" selected="selected">Khách Mới</option>
+								<?php } ?>
+							</select>
+							<input type="hidden" name="hiddenId" id="hiddenId" data-user="<?php echo $this->info['user_name']?>" value="<?php echo $this->info['user_id'];?>">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-lg-2">Mã khuyến mãi</label>
+						<div class="col-lg-2">
+							<input type="text" name="code" id="code" <?php if( @$this->id > 0 ){ echo 'disabled="disabled"';}?>
+								placeholder="Mã khuyến mãi" class="form-control"
+								value="<?php echo @$this->info['promotion_code'] ?>"
+								data-msg="Vui lòng nhập mã khuyến mãi">
+						</div>
+						<?php if(empty($this->id) == true ){?>
+						<button type="button" class="btn btn-success addpromotion">
+							Áp Dụng <i class="fa fa-gift" aria-hidden="true"></i>
+						</button>
+						<?php } ?>
+						<input type="hidden" id="apdungma" data-percent="" data-max="" name="apdungma" value="false">
+					</div>
+					<?php if(empty($this->info['user_id']) == false && $this->info['user_id'] != -1 ){?>
+						<div class="form-group">
+							<label class="control-label col-lg-2">Điểm Cộng</label>
+							<div class="col-lg-2">
+								<input type="text" name="score" id="score" disabled="disabled"
+									placeholder="" class="form-control"
+									value="<?php echo $this->info['score'] ?>">
+							</div>
+							<label class="control-label col-lg-1">Điểm Trừ</label>
+							<div class="col-lg-2">
+								<input type="text" name="discount" id="discount" disabled="disabled"
+									placeholder="" class="form-control"
+									value="<?php echo $this->info['discount'] ?>">
+							</div>
+						</div>
+					<?php } ?>
+					<div class="form-group">
+						<label class="control-label col-lg-2">Địa Chỉ</label>
+						<div class="col-lg-10">
+								<textarea rows="3" placeholder="Địa Chỉ" name="address" id="address" class="form-control" data-msg="Vui lòng nhập địa chỉ"><?php echo @$this->info['address'] ?></textarea>
+						</div>
+					</div>
+					<div class="form-group">
+                        <label class="control-label col-lg-2">Tỉnh/Thành Phố</label>
+                        <div class="col-lg-10">
+                                <textarea rows="3" placeholder="Địa Chỉ" name="place" id="place" class="form-control" data-msg="Vui lòng nhập tỉnh/thành phố"><?php echo @$this->info['place'] ?></textarea>
+                        </div>
+                    </div>
+					<div class="form-group">
+						<label class="control-label col-lg-2">Điện Thoại</label>
+						<div class="col-lg-10">
+							<input type="text" name="phone" id="phone"
+								placeholder="Điện thoại" class="form-control"
+								value="<?php echo @$this->info['phone'] ?>"
+								data-msg="Vui lòng nhập điện thoại">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-lg-2">Email</label>
+						<div class="col-lg-10">
+							<input type="text" name="email" id="email"
+								placeholder="Email" class="form-control"
+								value="<?php echo @$this->info['email'] ?>">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="control-label col-lg-2">Trạng Thái</label>
+						<div class="col-lg-4">
+							<select name="status" id="status" class="form-control">
+								<?php
+									foreach ( Commons::getStatusOrder() as $key => $value ){
+										?>
+										<option value="<?php echo $key?>" <?php if( $key == @$this->info['status']) { echo 'selected'; }?>><?php echo $value?></option>
+										<?php
+									}
+								?>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-lg-2">Thanh Toán</label>
+						<div class="col-lg-4">
+							<select name="is_pay" id="is_pay" class="form-control">
+								<option value="0" <?php if( @$this->info['is_pay'] == 0 ){ echo 'selected'; }?>>Chưa Thanh Toán</option>
+								<option value="1" <?php if( @$this->info['is_pay'] == 1 ){ echo 'selected'; }?>>Đã Thanh Toán</option>
+							</select>
+						</div>
+					</div>
+                                        <div class="form-group">
+						<label class="control-label col-lg-2">Phương Thức Thanh Toán</label>
+						<div class="col-lg-4">
+							<select name="payment_method" id="payment_method" class="form-control">
+								<option value="1" <?php if( @$this->info['payment_method'] == 1 ){ echo 'selected'; }?>>Chuyển Khoản</option>
+								<option value="2" <?php if( @$this->info['payment_method'] == 2 ){ echo 'selected'; }?>>COD</option>
+                                                                <option value="3" <?php if( @$this->info['payment_method'] == 3 ){ echo 'selected'; }?>>Trả Tiền Mặt Tại Shop</option>
+							</select>
+						</div>
+					</div>
+                                        <div class="form-group">
+						<label class="control-label col-lg-2">Ghi Chú</label>
+						<div class="col-lg-10">
+                                                    <textarea rows="3" placeholder="Ghi Chú" name="note" id="note" class="form-control"><?php echo @$this->info['note'] ?></textarea>
+						</div>
+					</div>
+                                        <div class="form-group">
+                                            <label class="control-label col-lg-2">Giảm Giá</label>
+                                            <div class="col-lg-10">
+                                                <input type="number" name="admin_discount" id="admin_discount" placeholder="Vui Lòng Nhập Số Tiền Muốn Giảm" class="form-control" value="<?php echo @$this->info['admin_discount'] ?>">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+						<label class="control-label col-lg-2">Lý Do:</label>
+						<div class="col-lg-10">
+                                                    <textarea rows="3" placeholder="Lý Do Hủy Đơn Hàng Hay Giảm Giá" name="reject_reason" id="reject_reason" class="form-control"><?php echo @$this->info['reject_reason'] ?></textarea>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-lg-2">Thành Tiền</label>
+						<div class="col-lg-4">
+							<span style="color: red; font-size: 30px" id="total_show"><?php if( empty($this->id) == false ){ 
+								echo number_format($this->info['total_before_sale']);} else { echo '0';}?></span> VNĐ
+							<input type="hidden" name="total" id="total_hide" value="0">
+						</div>
+						<label class="control-label col-lg-2">Giảm Còn</label>
+						<div class="col-lg-4">
+							<?php 
+								$total = 0;
+                                                                
+                                                                if( empty($this->info['total']) == false ){
+                                                                    $total = $this->info['total'];
+                                                                }
+                                                                $not_discount = $total;
+								if( empty($this->info['admin_discount']) == false ){
+									$total = $total - $this->info['admin_discount'];
+								}
+								
+							?>
+							<span style="color: green; font-size: 30px" id="total_show_down"><?php if( empty($this->id) == false ){ echo number_format($total);} else { echo '0';}?></span> VNĐ
+							<input type="hidden" name="total_down" id="total_hide_down" value="<?php echo $not_discount?>">
+						</div>
+					</div>
+					<?php if( empty($this->id) == true ){ ?>
+					<div class="form-group">
+						<label class="control-label col-lg-2">Chọn Sản Phẩm</label>
+						<div class="col-lg-5">
+							<select name="product" id="product" class="form-control">
+							</select>
+						</div>
+						<div class="col-lg-2">
+							<select  id="product_color" class="form-control">
+								<?php
+    								if( empty($this->color) == false){
+    								    foreach ( $this->color as $key => $item){
+    								        echo '<option value="'.$item['id'].'">'.$item['color_name'].'</option>';
+    								    }
+    								} else {
+    								    ?>
+    								    <option value="1">Màu Mặc Định</option>
+    								    <?php
+    								}
+								?>
+							</select>
+						</div>
+						<div class="col-lg-2">
+							<input type="number" name="sluong" id="sluong"
+								placeholder="Số Lượng" class="form-control"
+								value="1">
+						</div>
+						<button type="button" class="btn btn-success addproduct">
+							Thêm <i class="fa fa-cart-plus" aria-hidden="true"></i>
+						</button>
+					</div>
+					<?php } ?>
+					<div class="form-group">
+						<label class="control-label col-lg-2">Danh Sách Sản Phẩm</label>
+						<div class="col-lg-10">
+							 <table id="listProduct" class="table datatable-sorting">
+							 	<thead>
+					                <tr>
+					                	<th width="150px">Ảnh</th>
+					                    <th>Tên sản phẩm</th>
+					                    <th width="10%">Màu</th>
+					                    <th>Giá</th>
+					                    <th>Giá Sell</th>
+					                    <th>Số lượng</th>
+					                    <?php if( empty($this->id) == true ){ ?>
+					                    	<th>Hành động</th>
+					                    <?php } ?>
+					                </tr>
+					            </thead>
+					            <tbody id="listproductbody">
+					            	<?php if( empty($this->info['order_detail']) == false ){
+					            		foreach ( $this->info['order_detail'] as $key => $value ){
+					            			?>
+					            			<tr>
+					            				<td><img width="40px" height="40px" src="/upload/images/<?php echo $value['p_img']?>" /></td>
+					            				<td><?php echo $value['p_name']?></td>
+					            				<td>
+					            					<?php
+					            					if( empty($value['p_color_name']) == false ){
+					            					  echo $value['p_color_name'];
+					            					} else {
+					            					  echo '-';
+					            					}
+					            					?>
+					            				</td>
+					            				<td><?php echo number_format($value['p_price'])?></td>
+					            				<td><?php echo number_format($value['price'])?></td>
+					            				<td><?php echo $value['number']?></td>
+					            			</tr>
+					            			<?php
+					            		}
+					            	}?>
+				                </tbody>
+							 </table>
+						</div>
+					</div>
+				</fieldset>
+				<input type="hidden" name="id" id="id_order" value="<?php echo $this->info[id]?>">
+				<div class="text-right">
+					<a href="/admin/order">
+						<button type="button"
+							class="btn btn-default cancel-btn">
+							Hủy bỏ<i class="icon-arrow-right14 position-right"></i>
+						</button></a>
+					<?php if( (empty($this->info) == false && $this->info['status'] != 5) || (empty($this->info) == true)){ ?>
+					<button type="submit" class="btn btn-primary submit-btn">
+						Đồng ý <i class="fa fa-plus" aria-hidden="true"></i>
+					</button>
+					<?php } ?>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div id="modal_media" class="modal fade" data-keyboard="false"
+	data-backdrop="static"></div>

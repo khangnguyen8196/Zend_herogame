@@ -1,0 +1,170 @@
+<div class="page-header">
+    <div class="page-header-content">
+        <div class="page-title">
+            <h4><i class="icon-file-picture2 position-left"></i> <span class="text-semibold">Banner - Thông Tin Banner</span></h4>
+        </div>
+    </div>
+    <div class="breadcrumb-line">
+        <ul class="breadcrumb">
+            <li><a href="/admin/index"><i class="icon-home2 position-left"></i> Trang Chủ</a></li>
+            <li><a href="/admin/banner">Danh Sách Banner</a></li>
+            <li class="active">Thông Tin Banner</li>
+        </ul>
+        <!-- tree -->
+    </div>
+</div>
+<div class="content">
+    <div class="panel panel-flat">
+        <div class="panel-heading">
+            <h5 class="panel-title">Banner - Thông Tin Banner</h5>
+        </div>
+        <div class="panel-body">
+            <div class="alert alert-danger alert-styled-left <?php
+            if (empty($this->error) == true) {
+                echo 'hidden';
+            }
+            ?>">
+                <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
+                <?php
+                if (empty($this->error) == false) {
+                    foreach ($this->error as $key => $value) {
+                        echo $value . '<br/>';
+                    }
+                }
+                ?>
+            </div>
+            <form class="form-horizontal" id="bannerDetailForm" method="post" enctype="multipart/form-data">
+                <fieldset class="content-group">
+                    <legend class="text-bold"></legend>
+                    <div class="form-group">
+                        <label class="control-label col-lg-2"><?php echo $this->translate('title') ?></label>
+                        <div class="col-lg-10">
+                            <input type="text" name="title" id="title" placeholder="<?php echo $this->translate('title') ?>" class="form-control" value="<?php echo @$this->info['title'] ?>" data-msg="Vui lòng nhập tiêu đề">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Loại</label>
+                        <div class="col-lg-2">
+                            <select name="type" class="form-control">
+                                <option <?php echo ( @$this->info['type'] == 1 ) ? "selected" : "" ?> value="1" >Banner Chính</option>
+                                <option <?php echo ( @$this->info['type'] == 2 ) ? "selected" : "" ?> value="2">Banner Con Trái</option>
+                                <option <?php echo ( @$this->info['type'] == 3 ) ? "selected" : "" ?> value="3">Banner Con Giữa</option>
+                                <option <?php echo ( @$this->info['type'] == 4 ) ? "selected" : "" ?> value="4">Banner Con Phải</option>
+                                <option <?php echo ( @$this->info['type'] == 5 ) ? "selected" : "" ?> value="5">Banner Footer Trên</option>
+                                <option <?php echo ( @$this->info['type'] == 6 ) ? "selected" : "" ?> value="6">Banner Footer Dưới</option>
+                                <option <?php echo ( @$this->info['type'] == 7 ) ? "selected" : "" ?> value="7">Banner Header (1040x200)</option>
+                            </select>
+                        </div>
+                        <label class="control-label col-lg-1"><?php echo $this->translate('status') ?></label>
+                        <div class="col-lg-2">
+                            <select name="status" id="status" class="form-control">
+                                <option value="<?php echo STATUS_ACTIVE ?>" <?php
+                                if (@$this->info['status'] == STATUS_ACTIVE) {
+                                    echo 'selected';
+                                }
+                                ?>><?php echo $this->translate('active') ?></option>
+                                <option value="<?php echo STATUS_IN_ACTIVE ?>" <?php
+                                if (@$this->info['status'] == STATUS_IN_ACTIVE) {
+                                    echo 'selected';
+                                }
+                                ?>><?php echo $this->translate('in-active') ?></option>
+                            </select>
+                        </div>
+                        <label class="control-label col-lg-1">Menu</label>
+                        <div class="col-lg-2">
+                            <select name="page" id="page" class="form-control">
+                                <option value>Không Có</option>
+                                <option value="0">Trang chủ</option>
+                                <?php
+                                if (empty($this->listMenu) == false) {
+                                    foreach ($this->listMenu as $key => $value) {
+                                        ?>
+                                        <option value="<?php echo $value['url'] ?>" <?php
+                                        if ($this->info['page'] == $value['url']) {
+                                            echo 'selected';
+                                        }
+                                        ?>>
+                                                    <?php echo $value['name'] ?>
+                                        </option>
+                                        <?php
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">&nbsp;</label>
+                        <div class="col-lg-2">
+                            <div class="checkbox">
+                                <label>
+                                    <div class="border-primary-600 text-primary-800"><span class="checked">
+                                            <input type="checkbox" class="control-primary" name="is_video" id="is_video"
+                                                <?php echo ( empty($this->info['is_video']) == false ) ? 'checked="checked"' :"" ?> value="1"></span>
+                                    </div>
+                                    Is Video
+                                </label>
+                            </div>
+                        </div>
+                        <?php
+                        $style = 'style="display: none"';
+                        if( empty($this->info['is_video']) == false){
+                            $style = '';
+                        }
+                        ?>
+                        <label class="control-label col-lg-1" id="video_url_label" <?php echo $style ?> >Video url</label>
+                        <div class="col-lg-7" <?php echo $style ?> >
+                            <input type="text" name="video_url" id="video_url" placeholder="Video url" class="form-control" value="<?php echo @$this->info['video_url'] ?>">
+                        </div>
+                    </div>
+                    <div class="form-group" id="link_container">
+                        <label class="control-label col-lg-2">Link</label>
+                        <div class="col-lg-10">
+                            <input type="text" name="link" id="link" placeholder="Link" class="form-control" value="<?php echo @$this->info['link'] ?>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Mô tả</label>
+                        <div class="col-lg-10">
+                            <textarea name="description" id="description" rows="5" cols="5" class="form-control" placeholder="Mô tả"><?php echo @$this->info['description'] ?></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+						<label class="control-label col-lg-2">Ảnh</label>
+						<div class="col-lg-9">
+							<input type="file" name="image" id="image" class="form-control" accept="image/*">
+						</div>
+						<div class="col-lg-1 clear_image hidden" >
+							<button type="button" id="clearPath" class="btn btn-danger btn-icon btn-rounded"><i class="icon-cross2"></i></button>
+						</div>
+					</div>
+					
+					<?php if( empty( $this->info['image'] ) == false ){ ?>
+					<div class="form-group">
+						<label class="control-label col-lg-2"></label>
+						<div class="col-lg-3 col-sm-10">
+							<div class="thumbnail">
+								<div class="thumb">
+									<img src="<?php echo '/upload/images/full/'.@$this->info['image']?>" alt="">
+									<div class="caption-overflow">
+										<span>
+											<a href="<?php echo '/upload/images/full/'.@$this->info['image']?>" data-popup="lightbox" class="btn border-white text-white btn-flat btn-icon btn-rounded"><i class="icon-plus3"></i></a>
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<?php } ?>
+                </fieldset>
+                <div class="text-right">
+                    <input type="hidden" id="id" value="<?php echo $this->id ?>" />
+                    <a href="/admin/banner"><button type="button" class="btn btn-default cancel-btn"><?php echo $this->translate('cancel') ?><i class="icon-arrow-right14 position-right"></i></button></a>
+                    <button type="submit" class="btn btn-primary submit-btn"><?php echo $this->translate('submit') ?> <i class="fa fa-plus" aria-hidden="true"></i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="modal_media" class="modal fade" data-keyboard="false" data-backdrop="static">
+</div>

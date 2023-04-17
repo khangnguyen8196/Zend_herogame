@@ -1,0 +1,353 @@
+<fieldset class="content-group">
+    <legend class="text-bold"></legend>
+    <div class="form-group">
+        <label class="control-label col-lg-2"><?php echo $this->translate('title') ?></label>
+        <div class="col-lg-10">
+            <input type="text" name="title" id="title" placeholder="<?php echo $this->translate('title') ?>" class="form-control" value="<?php echo @$this->info['title'] ?>" data-msg="<?php echo $this->translate('please-input-title'); ?>">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2"><?php echo $this->translate('url-name') ?></label>
+        <div class="col-lg-10">
+            <input type="text" name="url_product" id="url_product" placeholder="<?php echo $this->translate('url-name') ?>" class="form-control" value="<?php echo @$this->info['url_product'] ?>" data-msg="<?php echo $this->translate('please-input-url-name'); ?>">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2">Thông Báo ( Thông báo về bảo hành hoặc khuyến mãi)</label>
+        <div class="col-lg-8">
+            <input type="text" name="notice_message" id="notice_message" placeholder="Thông Báo" class="form-control" value="<?php echo @$this->info['notice_message'] ?>">
+        </div>
+        <label class="control-label col-lg-1">Màu</label>
+        <div class="col-lg-1">
+            <input type="text" name="color" id="color" placeholder="Màu" class="form-control" value="<?php echo @$this->info['color'] ?>">
+        </div>
+    </div>
+    <div class="form-group">
+		<label class="control-label col-lg-2">Danh sách màu</label>
+		<div class="col-lg-5">
+			<select style="width: 100%; height:auto" multiple="multiple" class="select " id="product_color" name="product_color[]">
+			<?php foreach ( $this->listColor as $key => $color){ ?>
+				<option value="<?php echo $key ?>" <?php echo in_array($key, $this->info['product_color'] ) ? 'selected' : '' ?>><?php echo $color?></option>
+			<?php } ?>
+			</select>
+		</div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2">Hình ảnh đại diện</label>
+        <div class="col-lg-5">
+            <input type="file" class="file-styled form-control" name='image_product' id="image_product" accept="image/*"/>
+        </div>
+        
+        <?php if (empty($this->info) == false && empty($this->info['image']) == false) { ?>
+            <div class="col-lg-5">
+                <div class="col-lg-2 col-sm-4 parent">
+                    <div class="thumbnail">
+                        <div class="thumb">
+                            <img class="img-media img-thumbnail-item" src="<?php echo '/upload/images' . $this->info['image']; ?>" alt="">
+                            <div class="caption-overflow">
+                                <span>
+                                    <a class="btn border-white text-white btn-flat btn-icon btn-rounded lm-5 container-image" href="<?php echo '/upload/images' . $this->info['image']; ?>" data-popup="lightbox">
+                                        <i class="icon-plus3"></i>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2">Thư viện ảnh</label>
+        <button type="button" id="addMoreGallery" class="btn btn-primary" style="margin-right: 11px;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Thêm Ảnh</button>
+        <div class="col-lg-8 list-file-gallery" style="margin-left: -10px;">
+            <div class="form-group file-item">
+                <div class="col-lg-7">
+                    <input type="file" class="file-styled form-control" name='gallery[]' accept="image/*"/>
+                </div>
+                <div class="col-lg-2">
+                    <select class="form-control image_color" name="image_color[]">
+                        <?php if( empty( $this->listColor ) ){ ?>
+                            <option value="1">Màu Mặc Định - Không Màu</option>
+                        <?php }else{ ?>
+                            <?php foreach ( $this->listColor as $key => $color ){ ?>
+                                <?php if( in_array($key, $this->info['product_color'] )) { ?>
+                                    <option value="<?php echo $key ?>"><?php echo $color ?></option>
+                                <?php } ?>
+                            <?php } ?>
+                        <?php } ?>
+                    </select>
+                </div>
+                <div class="col-lg-2">
+                    <button type="button"  class="btn btn-alert remove" style="margin-right: 11px;">x</button>
+                </div>
+            </div>
+        </div>
+    </div>
+        <?php if (empty($this->info) == false && empty($this->info['gallery']) == false) { ?>
+        	<div class="form-group">
+				<div class="list-image">
+			    	<?php
+			    		$listGallery = explode(",",$this->info['gallery']);
+		                foreach ( $listGallery as $key => $item) {
+		                    ?>
+		                    <div class="col-lg-2 col-sm-4 parent img-item">
+		                        <div class="thumbnail">
+		                            <div class="thumb">
+		                                <img class="img-media img-thumbnail-item" style="height: 100px" src="<?php echo '/upload/images/' . $item; ?>" alt="">
+		                                <div class="caption-overflow">
+		                                    <span>
+		                                        <a class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5 container-image" href="<?php echo '/upload/images/' . $item; ?>" data-popup="lightbox">
+		                                            <i class="icon-plus3"></i>
+		                                        </a>
+		                                        <a  class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5">
+		                                            <i class="icon-cross2 remove-item-gallery" data-image-color="<?php echo $this->info['image_color'][$key] ?>" data-remove="<?php echo $item?>"></i>
+		                                        </a>
+		                                    </span>
+		                                </div>
+		                            </div>
+                                    <div class="color-name"><?php echo $this->listColor[$this->info['image_color'][$key]] ?></div>
+		                        </div>
+		                    </div>
+		                    <?php
+		                }
+		            ?>
+		        </div>
+			</div>
+        <?php } ?>
+   <div class="hidden list-delete-img">
+   </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2"><?php echo $this->translate('summary') ?></label>
+        <div class="col-lg-10">
+            <textarea rows="5" name="description" data-height="150px" class="rich-editor" id="description"><?php echo @$this->info['description'] ?></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2"><?php echo $this->translate('content-post') ?></label>
+        <div class="col-lg-10">
+            <textarea name="content" class="rich-editor" data-height="400px" id="content"  rows="5"><?php echo @$this->info['content'] ?></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2">Tình Trạng</label>
+        <div class="col-lg-10">
+            <textarea rows="5" name="product_note" data-height="150px" class="rich-editor" id="product_note"><?php echo @$this->info['product_note'] ?></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2">Bảo Hành</label>
+        <div class="col-lg-10">
+            <textarea rows="5" name="guarantee" data-height="150px" class="rich-editor" id="guarantee"><?php echo @$this->info['guarantee'] ?></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2">Giá</label>
+        <div class="col-lg-4">
+            <input type="number" name="price" id="price" placeholder="Giá" class="form-control" data-msg="Vui Lòng Nhập Giá" value="<?php echo @$this->info['price'] ?>">
+        </div>
+        <label class="control-label col-lg-1">Giá Sales</label>
+        <div class="col-lg-4">
+            <input type="number" name="price_sales" id="price_sales" placeholder="Giá Sales" class="form-control" value="<?php echo @$this->info['price_sales'] ?>">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2"><?php echo $this->translate('status') ?></label>
+        <div class="col-lg-4">
+            <select name="status" id="status" class="form-control">
+                <option value="<?php echo STATUS_ACTIVE ?>" <?php
+                if (@$this->info['status'] == STATUS_ACTIVE) {
+                    echo 'selected';
+                }
+                ?>><?php echo $this->translate('active') ?></option>
+                <option value="<?php echo STATUS_IN_ACTIVE ?>" <?php
+                if (@$this->info['status'] == STATUS_IN_ACTIVE) {
+                    echo 'selected';
+                }
+                ?>><?php echo $this->translate('in-active') ?></option>
+                <option value="<?php echo STATUS_IN_OUT_STOCK?>" <?php
+                if (@$this->info['status'] == STATUS_IN_OUT_STOCK) {
+                    echo 'selected';
+                }
+                ?>>Hết Hàng</option>
+            </select>
+        </div>
+
+
+        <label class="control-label col-lg-1"><?php echo $this->translate('priority') ?></label>
+        <div class="col-lg-4">
+            <input type="number" name="priority" id="priority" placeholder="<?php echo $this->translate('priority') ?>" class="form-control" value="<?php echo @$this->info['priority'] ?>">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2">Các thuộc tính</label>
+        <div class="col-lg-2">
+            <div class="checkbox">
+                <label>
+                    <div class="border-primary-600 text-primary-800"><span class="checked">
+                            <input  type="checkbox" class="control-primary checkbox"
+                            name="new_product" <?php if (@$this->info['new_product'] == 1) { ?>checked="checked" <?php } ?> value="1"/></span>
+                    </div>
+                    Sản Phẩm Mới
+                </label>
+            </div>
+        </div>
+        <div class="col-lg-2">
+            <div class="checkbox">
+                <label>
+                    <div class="border-primary-600 text-primary-800"><span class="checked">
+                             <input  type="checkbox" class="control-primary checkbox"
+                    name="best_sell" <?php if (@$this->info['best_sell'] == 1) { ?>checked="checked" <?php } ?>  value="1"/></span>
+                    </div>
+                    Pre-Order
+                </label>
+            </div>
+        </div>
+        <div class="col-lg-2">
+            <div class="checkbox">
+                <label>
+                    <div class="border-primary-600 text-primary-800"><span class="checked">
+                            <input  type="checkbox" class="control-primary checkbox"
+                    name="is_promotion" <?php if (@$this->info['is_promotion'] == 1) { ?>checked="checked" <?php } ?>  value="1"/></span>
+                    </div>
+                    Khuyến Mãi
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2"></label>
+        <div class="col-lg-8">
+            <div class="checkbox">
+                <label>
+                    <div class="border-primary-600 text-primary-800"><span class="checked">
+                            <input  type="checkbox" class="control-primary checkbox"
+                            name="show_in_category_home_page" <?php if (@$this->info['show_in_category_home_page'] == 1) { ?>checked="checked" <?php } ?> value="1"/></span>
+                    </div>
+                    Hiển Thị Sản Phẩm Trong Category Ở Trang Chủ
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2"></label>
+        <div class="col-lg-4">
+            <div class="checkbox">
+                <label>
+                    <div class="border-primary-600 text-primary-800"><span class="checked">
+                            <input  type="checkbox" class="control-primary checkbox"
+                            name="enable_promo" <?php if (@$this->info['enable_promo'] == 1) { ?>checked="checked" <?php } ?> value="1"/></span>
+                    </div>
+                    Có Đếm Ngược
+                </label>
+            </div>
+        </div>
+        <label class="control-label col-lg-1">Kết thúc:</label>
+        <div class="col-lg-4">
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="text" name="count_time"
+                           id="startdate" format="yyyy-mm-dd"
+                           class="form-control datetimepicker"
+                           placeholder="Thời gian kết thúc" value="<?php echo @$this->info['count_time'] ?>"> <span
+                           class="input-group-addon"><i class="icon-calendar"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2">Danh Mục</label>
+        <div class="col-lg-4">
+            <select name="id_category" id="id_category" class="select-search">
+                <?php
+                if (empty($this->listCategory) == false) {
+                    foreach ($this->listCategory as $key => $value) {
+                        ?>
+                        <option <?php
+                        if ($value['id'] == @$this->info['id_category']) {
+                            echo 'selected';
+                        }
+                        ?> value="<?php echo $value['id'] ?>"><?php echo $value['name'] ?></option>
+                            <?php
+                        }
+                    } else {
+                        ?>
+                    <option value>Không Chọn</option>
+                    <?php
+                }
+                ?>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2">Sản phẩm liên quan</label>
+        <div class="col-lg-10" >
+            <select style="width: 100%; height:auto" multiple="multiple" class="select " id="relative_product" name="relative_product[]"> </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2">Thẻ Meta Mô Tả</label>
+        <div class="col-lg-10">
+            <input type="text" name="meta_description" id="meta_description" placeholder="Thẻ Meta Mô Tả" class="form-control" value="<?php echo @$this->info['meta_description'] ?>">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2"><?php echo $this->translate('meta-keyword') ?></label>
+        <div class="col-lg-10">
+            <input maxlength="100" type="text" name="keyword" id="keyword_meta" placeholder="<?php echo $this->translate('meta-keyword') ?>" class="form-control" value="<?php echo @$this->info['keyword'] ?>">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2"><?php echo $this->translate('tag') ?></label>
+        <div class="col-lg-10">
+            <input maxlength="100" type="text" name="tag" id="tag" placeholder="<?php echo $this->translate('tag') ?>" class="form-control" value="<?php echo @$this->info['tag'] ?>">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2">Tiêu Đề Trang</label>
+        <div class="col-lg-10">
+            <input type="text" name="title_page" id="title_page" placeholder="Tiêu Đề Trang" class="form-control" value="<?php echo @$this->info['title_page'] ?>">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2">Title Facebook</label>
+        <div class="col-lg-10">
+            <input type="text" name="og_title" id="og_title" placeholder="Title Facebook" class="form-control" value="<?php echo @$this->info['og_title'] ?>">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2">Mô Tả Facebook</label>
+        <div class="col-lg-10">
+            <input type="text" name="og_description" id="og_description" placeholder="Mô Tả Facebook" class="form-control" value="<?php echo @$this->info['og_description'] ?>">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2">Site Name Facebook</label>
+        <div class="col-lg-10">
+            <input type="text" name="og_site_name" id="og_site_name" placeholder="Site Name Facebook" class="form-control" value="<?php echo @$this->info['og_site_name'] ?>">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2">Ảnh Facebook</label>
+        <div class="col-lg-8">
+            <input type="text" name="og_image" id="og_image" placeholder="Ảnh Facebook" class="form-control" value="<?php echo @$this->info['og_image'] ?>">
+        </div>
+        <div class="col-lg-2">
+            <button type="button" class="btn bg-teal-400 btn-labeled btn-rounded select-media og-img"><b><i class="icon-select2"></i></b> Chọn ảnh</button>
+        </div>
+    </div>
+</fieldset>
+<input type="hidden" name="id" id="id" value="<?php echo @$this->info["id"] ?>" />
+<input type="hidden" id="selected_relative_product" value="<?php echo @$this->info["relative_product"] ?>" />
+<style>
+    .color-name{
+        text-align: center;
+        font-weight: bold;
+        border-top: 1px solid #d1d1d1;
+        margin-top: 5px;
+        padding-top: 3px;
+    }
+</style>

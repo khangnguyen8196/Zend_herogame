@@ -1,0 +1,82 @@
+<!-- Page container -->
+<div class="page-container login-container">
+    <!-- Page content -->
+    <div class="page-content">
+        <!-- Main content -->
+        <div class="content-wrapper">
+            <!-- Content area -->
+            <div class="content">
+                <!-- Advanced login -->
+                <form method="post" action="" class="form-validate-jquery" id="login-frm">
+                    <div class="panel panel-body login-form">
+                        <div class="text-center">
+                            <img src="/ad-min/assets/images/logo.png" alt="Hero Game" width="195" height="95">
+                            <h5 class="content-group-lg"><?php echo $this->translate('login-to-your-account') ?> <small class="display-block"><?php echo $this->translate('enter-your-credentials') ?></small></h5>
+                        </div>
+                        <?php if (empty($this->message) == false) { ?>
+                            <div class="alert alert-danger alert-bordered">
+                                <button type="button" class="close" data-dismiss="alert"><span>&times;</span><span class="sr-only">Close</span></button>
+                                <?php
+                                $break = false;
+                                if (count($this->message) > 1) {
+                                    $break = true;
+                                }
+                                foreach ($this->message as $value) {
+                                    echo $value;
+                                    if ($break == true)
+                                        echo "</br>";
+                                }
+                                ?>
+                            </div>
+<?php } ?>
+                        <div class="form-group has-feedback has-feedback-left">
+                            <input type="text" class="form-control" data-msg="<?php echo $this->translate('please-enter-username') ?>" placeholder="<?php echo $this->translate('username') ?>" name="username">
+                            <div class="form-control-feedback">
+                                <i class="icon-user text-muted"></i>
+                            </div>
+                        </div>
+                        <div class="form-group has-feedback has-feedback-left">
+                            <input type="password" class="form-control" data-msg="<?php echo $this->translate('please-enter-password') ?>" placeholder="<?php echo $this->translate('password') ?>" name="password">
+                            <div class="form-control-feedback">
+                                <i class="icon-lock2 text-muted"></i>
+                            </div>
+                        </div>
+                        <div class="form-group login-options">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <?php /*
+                                      <label class="checkbox-inline">
+                                      <input type="checkbox" class="styled" checked="checked">
+                                      Remember
+                                      </label> */ ?>
+                                </div> 
+                                <div class="col-sm-6 text-right">
+                                    <a href="/admin/auth/forgot-password"><?php echo $this->translate('forgot-password') ?>?</a>
+                                </div>
+                            </div>
+                            <div class="row">
+<!--                                <script src='https://www.google.com/recaptcha/api.js'></script>
+                                <div class="g-recaptcha" data-size="compact " data-sitekey="<?php echo GOOGLE_RECAPTCHA_SITE_KEY ?>" data-callback="callback"></div>-->
+                                <div id="html_element"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button id="login-btn" type="submit" class="btn bg-blue btn-block"><?php echo $this->translate('login') ?> <i class="icon-circle-right2 position-right"></i></button>
+                        </div>	
+                    </div>
+                </form>
+                <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit&hl=vi"
+                        async defer>
+                </script>
+                <!-- /advanced login -->
+                <!-- footer -->
+                <?php echo $this->render('/partials/_footer.phtml') ?>
+                <!-- /footer -->
+            </div>
+            <!-- /content area -->
+        </div>
+        <!-- /main content -->
+    </div>
+    <!-- /page content -->
+</div>
+<!-- /page container -->

@@ -1,0 +1,45 @@
+<?php
+if (empty($this->menuCategory) == false) {
+    echo $this->partial('/shared/_category_menu.phtml', array(
+        'title' => 'Danh mục', 'data' => $this->menuCategory
+    ));
+}
+?>
+<?php
+if (isset($this->listCategoryPost) && empty($this->listCategoryPost) == false) {
+    echo $this->partial('/pages/_category.phtml', array(
+        'title' => 'Danh mục', 'data' => $this->listCategoryPost
+    ));
+}
+?>
+<div class="hidden-md-down">
+    <?php
+    if (empty($this->productBestSell) == false) {
+        echo $this->partial('/shared/_product_menu.phtml', array(
+            'title' => 'Bán chạy',
+            'data' => $this->productBestSell
+        ));
+    }
+    ?>
+
+    <?php
+    if (empty($this->newProducts) == false) {
+        echo $this->partial('/shared/_product_menu.phtml', array(
+            'title' => 'Mới cập nhật',
+            'data' => $this->newProducts
+        ));
+    }
+    ?>
+
+    <?php
+    if (empty($this->newestPost) == false) {
+        $top = $this->newestPost[0];
+        unset($this->newestPost[0]);
+        echo $this->partial('/shared/_post_menu.phtml', array(
+            'title' => 'Tin tức mới',
+            'top' => $top,
+            'data' => $this->newestPost
+        ));
+    }
+    ?>
+</div>

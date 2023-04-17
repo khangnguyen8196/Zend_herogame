@@ -1,0 +1,96 @@
+<?php $this->viewCssClass = 'post index list' ?>
+<?php 
+	$dataBreadcrumbs = array(
+			'child' => array(
+					'name' => 'Tin Tức'
+			));
+	if( empty( $this->cateInfo["name"] ) == false ){
+		$dataBreadcrumbs = array(
+				'parent' => array(
+						'name' => 'Tin Tức',
+						'url' => '/danh-muc-bai-viet'
+				),
+				'child' => array(
+						'name' => $this->cateInfo["name"]
+				));
+	} else {
+	}
+?>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 hidden-md-down no-gutter">
+            <?php echo $this->partial('/shared/_breadcrumbs.phtml',array('data' => $dataBreadcrumbs )) ?>
+        </div>
+    </div>
+    <div class="row">
+        <aside class="col-md-2  no-gutter">
+            <?php echo $this->render("/shared/_left-aside.phtml")?>
+        </aside>
+
+        <section class="col-md-10 col-12 both-gutter">
+        	<?php
+                $showbanner = Commons::getSettingByKey($this->setting, 'banner-list-product');
+            if( empty($showbanner) == false && $showbanner['value'] == STATUS_SHOW){
+            ?>
+            <div class="row hidden-md-down">
+                <?php if (empty($this->banner['child_' . BANNER_CHILD_HEADER]) == false) { ?>
+                    <div class="col-12">
+                        <?php
+                        echo $this->partial('/shared/_banner_rotator.phtml', array(
+                            'bhov' => true,
+                            'data' => $this->banner['child_' . BANNER_CHILD_HEADER]
+                        ))
+                        ?>
+                    </div>
+                <?php } ?>
+            </div>
+            <?php } ?>
+            <div class="tab-content">
+                <div class="tab-pane fade active show" role="tabpanel">
+                    <ul class="post-list" id="post-list-container">
+                    <?php if( empty( $this->listPost ) == false ){ ?>
+                    <?php $temp = 0; ?>
+                        <?php foreach ( $this->listPost as $key => $item) { ?>
+                        <?php 
+                        	$temp++;
+                        	if( $temp <= MAX_POST_OF_PAGE ){
+                        		$defaultImgUrl = '/img/260x173.png';
+                        		if( empty( $item['image_id'] ) == false ){
+                        			$defaultImgUrl = '/upload/images/' . $item['image_id'];
+                        		}	
+                        ?>
+		                        <li>
+		                            <div class="post-item">
+		                                <a class="avatar" href="<?php echo '/bai-viet/'.$item['url_name'] ?>">
+		                                    <?php echo $this->partial('/shared/_lazy_image.phtml', array(
+		                                        'ratio' => '6x4',
+		                                        'css' => 'photo',
+		                                        'url' => $defaultImgUrl
+		                                    )) ?>
+		                                </a>
+		                                <div class="detail">
+		                                    <h3>
+		                                        <a href="<?php echo '/bai-viet/'.$item['url_name'] ?>">
+		                                            <?php echo $item['title'] ?>
+		                                        </a>
+		                                    </h3>
+		                                    <p><?php echo $item['summary'] ?></p>
+		                                    <em><?php echo  UtilFormat::formatTimeForCreatedDate( $item['updated_at'], 'd/m/Y H:i:s' ) ?></em>
+		                                </div>
+		                            </div>
+		                        </li>
+                        	<?php } ?>
+                        <?php } ?>
+                    <?php } ?>
+                    </ul>
+					<?php if( count( $this->listPost ) > MAX_POST_OF_PAGE ){ ?>
+	                    <a class="btn btn-lg btn-block btn-primary mt-4 view-more" data-start="<?php echo MAX_POST_OF_PAGE ?>">Xem thêm</a>
+	                    <img style="display: none; padding-left: 50%;" id="loading" src="/img/Spinner.gif" />
+                    <?php } ?>
+                    <input type="hidden" id="maxPostConfig" value="<?php echo MAX_POST_OF_PAGE ?>"/>
+                    <input type="hidden" id="danhMuc" value="<?php echo @$this->danhMuc ?>"/>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>

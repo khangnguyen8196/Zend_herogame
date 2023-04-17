@@ -1,0 +1,161 @@
+<fieldset class="content-group">
+    <legend class="text-bold"></legend>
+    <div class="form-group">
+        <label class="control-label col-lg-2"><?php echo $this->translate('title') ?></label>
+        <div class="col-lg-10">
+            <input type="text" name="title" id="title" placeholder="<?php echo $this->translate('title') ?>" class="form-control" value="<?php echo @$this->info['title'] ?>" data-msg="<?php echo $this->translate('please-input-title'); ?>">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2"><?php echo $this->translate('url-name') ?></label>
+        <div class="col-lg-10">
+            <input type="text" name="url_name" id="url_name" placeholder="<?php echo $this->translate('url-name') ?>" class="form-control" value="<?php echo @$this->info['url_name'] ?>" data-msg="<?php echo $this->translate('please-input-url-name'); ?>">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2"><?php echo $this->translate('summary') ?></label>
+        <div class="col-lg-10">
+            <textarea rows="5" name="summary" data-height="150px" class="rich-editor" id="summary"><?php echo @$this->info['summary'] ?></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2"><?php echo $this->translate('image-post') ?></label>
+        <div class="col-lg-5">
+            <input type="file" class="file-styled form-control" name='image_id' id="image_id"/> 
+        </div>
+        <label class="control-label col-lg-2">( 360x230 hoặc 275x250 )</label>
+        <?php if (empty($this->info) == false && empty($this->info['image_id']) == false) { ?>
+            <div class="col-lg-5">
+                <div class="col-lg-2 col-sm-4 parent">
+                    <div class="thumbnail">
+                        <div class="thumb">
+                            <img class="img-media img-thumbnail-item" src="<?php echo '/upload/images/' . $this->info['image_id']; ?>" alt="">
+                            <div class="caption-overflow">
+                                <span>
+                                    <a class="btn border-white text-white btn-flat btn-icon btn-rounded 
+                                       ml-5 container-image" href="<?php echo '/upload/images/' . $this->info['image_id']; ?>" data-popup="lightbox">
+                                        <i class="icon-plus3"></i>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2"><?php echo $this->translate('content-post') ?></label>
+        <div class="col-lg-10">
+            <textarea name="content" class="rich-editor" data-height="400px" id="content"  rows="5"><?php echo @$this->info['content'] ?></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2"><?php echo $this->translate('status') ?></label>
+        <div class="col-lg-2">
+            <select name="status" id="status" class="form-control">
+                <option value="<?php echo STATUS_IN_ACTIVE ?>" <?php if (@$this->info['status'] == STATUS_IN_ACTIVE) {
+            echo 'selected';
+        } ?>><?php echo $this->translate('in-active') ?></option>
+                <option value="<?php echo STATUS_ACTIVE ?>" <?php if (@$this->info['status'] == STATUS_ACTIVE) {
+            echo 'selected';
+        } ?>><?php echo $this->translate('active') ?></option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2"><?php echo $this->translate('priority') ?></label>
+        <div class="col-lg-2">
+            <input type="number" name="priority" id="priority" placeholder="<?php echo $this->translate('priority') ?>" class="form-control" value="<?php echo @$this->info['priority'] ?>">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2">Danh Mục</label>
+        <div class="col-lg-4">
+            <select name="id_category" id="id_category" class="form-control">
+                <?php
+                if (empty($this->listCategory) == false) {
+                    foreach ($this->listCategory as $key => $value) {
+                        ?>
+                        <option <?php
+                        if ($value['id'] == @$this->info['id_category']) {
+                            echo 'selected';
+                        }
+                        ?> value="<?php echo $value['id'] ?>"><?php echo $value['name'] ?></option>
+                            <?php
+                        }
+                    } else {
+                        ?>
+                    <option value>Không Chọn</option>
+                    <?php
+                }
+                ?>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2">Bài viết liên quan</label>
+        <div class="col-lg-7" >
+            <select style="width: 100%; height:auto" multiple="multiple" class="select " id="relative_post" name="relative_post[]"> </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2"><?php echo $this->translate('meta-og-url') ?></label>
+        <div class="col-lg-10">
+            <input maxlength="100" type="text" name="og_url" id="og_url" placeholder="<?php echo $this->translate('meta-og-url') ?>" class="form-control" value="<?php echo @$this->info['og_url'] ?>">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2"><?php echo $this->translate('meta-og-title') ?></label>
+        <div class="col-lg-10">
+            <input maxlength="100" type="text" name="og_title" id="og_title" placeholder="<?php echo $this->translate('meta-og-title') ?>" class="form-control" value="<?php echo @$this->info['og_title'] ?>">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2"><?php echo $this->translate('meta-og-description') ?></label>
+        <div class="col-lg-10">
+            <input type="text" name="og_description" id="og_description" placeholder="<?php echo $this->translate('meta-og-description') ?>" class="form-control" value="<?php echo @$this->info['og_description'] ?>">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2"><?php echo $this->translate('meta-og-site-name') ?></label>
+        <div class="col-lg-10">
+            <input type="text" name="og_site_name" id="og_site_name" placeholder="<?php echo $this->translate('meta-og-site-name') ?>" class="form-control" value="<?php echo @$this->info['og_site_name'] ?>">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2"><?php echo $this->translate('meta-og-image') ?></label>
+        <div class="col-lg-8">
+            <input type="text" name="og_image" id="og_image" placeholder="<?php echo $this->translate('meta-og-image') ?>" class="form-control" value="<?php echo @$this->info['og_image'] ?>">
+        </div>
+        <div class="col-lg-2">
+            <button type="button" id="select-media" lang="<?php echo $this->lang ?>" class="btn bg-teal-400 btn-labeled btn-rounded"><b><i class="icon-select2"></i></b> Chọn ảnh</button>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2"><?php echo $this->translate('meta-description') ?></label>
+        <div class="col-lg-10">
+            <input type="text" name="description_meta" id="description_meta" placeholder="<?php echo $this->translate('meta-description') ?>" class="form-control" value="<?php echo @$this->info['description_meta'] ?>">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2"><?php echo $this->translate('meta-keyword') ?></label>
+        <div class="col-lg-10">
+            <input maxlength="100" type="text" name="keyword_meta" id="keyword_meta" placeholder="<?php echo $this->translate('meta-keyword') ?>" class="form-control" value="<?php echo @$this->info['keyword_meta'] ?>">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2"><?php echo $this->translate('tag') ?></label>
+        <div class="col-lg-10">
+            <input type="text" name="tag" id="tag" placeholder="<?php echo $this->translate('tag') ?>" class="form-control" value="<?php echo @$this->info['tag'] ?>">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2"><?php echo $this->translate('destination') ?></label>
+        <div class="col-lg-10">
+            <input type="text" name="destination" id="destination" placeholder="<?php echo $this->translate('destination') ?>" class="form-control" value="<?php echo @$this->info['destination'] ?>">
+        </div>
+    </div>
+</fieldset>
+<input type="hidden" name="id" id="id" value="<?php echo @$this->info["id"] ?>" />
+<input type="hidden" id="selected_relative_post" value="<?php echo @$this->info["relative_post"] ?>" />

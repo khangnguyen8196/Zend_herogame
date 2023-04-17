@@ -1,0 +1,11 @@
+<?php if (empty($this->productMapping) == false) { ?>
+    <?php foreach ($this->productMapping as $key => $value) { ?>
+        <?php if (empty($value) == false) { ?>
+            <optgroup label="<?php echo $key ?>">
+                <?php foreach ($value as $product) { ?>
+                    <option <?php echo ( in_array($product["id"], $this->selectedRelativeProduct) ? "selected":"")?> value="<?php echo $product["id"] ?>"><?php echo $product["title"] ?></option>
+                <?php } ?>
+            </optgroup>
+        <?php } ?>
+    <?php } ?>
+<?php } ?>

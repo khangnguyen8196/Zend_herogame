@@ -1,0 +1,69 @@
+<div class="page-header">
+	<div class="page-header-content">
+		<div class="page-title">
+			<h4><i class="icon-clipboard6 position-left"></i> <span class="text-semibold">Quản lý Bài Viết - Danh sách Bài Viết</span></h4>
+		</div>
+		<div class="heading-elements">
+			<a href="/admin/<?php echo $this->controller?>/detail/" class="btn btn-labeled btn-labeled-right bg-blue heading-btn"><?php echo $this->translate('create-post')?> <b><i class="fa fa-plus" aria-hidden="true"></i></b></a>
+		</div>
+	</div>
+	<div class="breadcrumb-line">
+		<ul class="breadcrumb">
+			<li><a href="/admin/index/"><i class="icon-home2 position-left"></i> <?php echo $this->translate('home')?></a></li>
+                        <li><a href="/admin/post">Bài Viết</a></li>
+			<li class="active">Danh Sách Bài Viết</li>
+		</ul>
+		<!-- tree -->
+	</div>
+</div>
+<div class="content">
+	<div class="panel panel-flat">
+		<div class="panel-heading">
+			<h5 class="panel-title">Danh Sách Bài Viết</h5>
+		</div>
+		<div class="panel-body">
+			<form id="searchPost">
+				<div class="col-md-12">
+					<div class="col-md-4 ">
+						<div class="form-group">
+							<label><?php echo $this->translate('created-at')?></label>
+							<div class="input-group">
+								<span class="input-group-addon"><i class="icon-calendar"></i></span>
+								<input type="text" item-type="search" mapping-column="5" data-format="yyyy-mm-dd" class="form-control datepicker" placeholder="<?php echo $this->translate('created-at')?>">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 ">
+						<div class="form-group">
+							<label><?php echo $this->translate('updated-at')?></label>
+							<div class="input-group">
+								<span class="input-group-addon"><i class="icon-calendar"></i></span>
+								<input type="text" item-type="search" mapping-column="7" data-format="yyyy-mm-dd" class="form-control datepicker" placeholder="<?php echo $this->translate('updated-at')?>">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12">
+					<div class="col-md-12">
+						<button type="button" class="btn btn-primary seach-form"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;<?php echo $this->translate('search')?></button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<table id="postTable" class="table datatable-pagination">
+			<thead>
+				<tr>
+					<th width="5%"><?php echo $this->translate('id')?></th>
+					<th><?php echo $this->translate('link')?></th>
+					<th><?php echo $this->translate('url-name')?></th>
+					<th width="8%"><?php echo $this->translate('created-at')?></th>
+					<th><?php echo $this->translate('created-by')?></th>
+					<th width="8%"><?php echo $this->translate('updated-at')?></th>
+					<th><?php echo $this->translate('updated-by')?></th>
+					<th><?php echo $this->translate('status')?></th>
+					<th class="text-center"><?php echo $this->translate('action')?></th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>

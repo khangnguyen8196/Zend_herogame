@@ -1,0 +1,26 @@
+<table width="500" border="0" align="center" cellpadding="0" cellspacing="0" class="receipt">
+    <thead>
+        <tr>
+            <th>User Name</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th class="text-center">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (empty($this->data) == false) { ?>
+            <?php foreach ($this->data as $value) { ?>
+                <tr>
+                    <td><?php echo $value['user_name'] ?></td>
+                    <td><?php echo $value['first_name'] ?></td>
+                    <td><?php echo $value['last_name'] ?></td>
+                    <td><?php echo $value['email'] ?></td>
+                    <td><?php echo $value['status'] ?></td>
+                    <td>&nbsp;</td>
+                </tr>  
+            <?php } ?>
+        <?php } ?>
+    </tbody>
+</table>

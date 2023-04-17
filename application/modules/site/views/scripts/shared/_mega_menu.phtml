@@ -1,0 +1,35 @@
+<?php
+$css = isset($this->css) ? $this->css : 'mega-menu';
+?>
+<div class="<?php echo $css ?>">
+    <nav>
+        <ul>
+            <li>
+                <a href="/">Trang chủ </a>
+            </li>
+            <?php
+            foreach ($this->menu as $key => $value) {
+                if (empty($value['child']) == true) {
+                    ?>
+                    <li>
+                        <?php
+                            $flash = '/';
+                            $url = parse_url($value['url']);
+                            if ($url['scheme'] == 'http' || $url['scheme'] == 'https') {
+                                $flash = '';
+                            }
+                        ?>
+                        <a href="<?php echo $flash . $value['url'] ?>"><?php echo $value['name'] ?></a>
+                    </li>
+                    <?php
+                } else {
+                    if (empty($value['style']) == true) {
+                        $value['style'] = 1;
+                    }
+                    echo $this->partial('/partials/_mega_menu_' . $value['style'] . '.phtml', array('data' => $value));
+                }
+            }
+            ?>
+        </ul>
+    </nav>
+</div>

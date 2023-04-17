@@ -1,0 +1,8 @@
+<div class="payment">
+    <?php
+    $payment = Commons::getSettingByKey($this->setting, PAYMENT);
+    if (empty($payment["value"]) == false) {
+        echo $payment["value"];
+    }
+    ?>
+</div>

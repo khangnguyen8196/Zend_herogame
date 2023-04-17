@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<root>
+	<form name="postDetailForm" >
+		<checkrules>
+			<title>
+				<validate>
+					<NotEmpty message="please-input-title-post" />
+				</validate>
+			</title>
+			<url_name>
+				<validate>
+					<NotEmpty message="please-input-url-name" />
+				</validate>
+			</url_name>
+			<category_id>
+				<validate>
+					<NotEmpty message="please-input-category-post" />
+				</validate>
+			</category_id>
+		</checkrules>
+	</form>	
+</root>	

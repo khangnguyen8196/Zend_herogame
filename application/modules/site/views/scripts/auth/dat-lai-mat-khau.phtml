@@ -1,0 +1,69 @@
+<style>
+	body{
+		background: rgba(42, 41, 111, 0.82);;
+		color: white;
+	}
+	.sign-up{
+		padding-top: 10px;
+	}
+	#legend img { 
+		margin:0 auto; 
+	}
+</style>
+<div class="container sign-up">
+  <div class="row">
+  	<div class="col-md-3"></div>
+  	<div class="col-md-6">
+  		<?php 
+  			if($this->success == 0 ){
+  		?>
+          <form class="form-horizontal" action="" method="POST">
+          <fieldset>
+            <div id="legend">
+            	<img src="/img/logo.png" class="img-responsive" alt="Cinque Terre">
+              	<h2>QUÊN MẬT KHẨU</h2>
+            </div>
+            <div class="alert alert-danger alert-styled-left <?php if( empty($this->error) == true) { echo 'hidden';}?>">
+				<button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
+				<?php
+					if( empty($this->error) == false ){
+						foreach ($this->error as $key => $value ){
+							echo $value.'<br/>';break;
+						}
+					}
+				?>
+			</div>
+            <div class="control-group">
+              <label class="control-label" for="username">Mật khẩu mới</label>
+              <div class="controls">
+                <input type="password" class="form-control" data-msg="<?php echo $this->translate('please-enter-new-password') ?>"placeholder="<?php echo $this->translate('new-password') ?>" 
+                                   name="r_new_password" id="r_new_password">
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="email">Nhập lại mật khẩu</label>
+              <div class="controls">
+              	<input type="password" class="form-control" data-msg="<?php echo $this->translate('please-enter-confirm-password') ?>" data-miss-match-msg="<?php echo $this->translate('confirm-new-password-not-correct') ?>"placeholder="<?php echo $this->translate('confirm-new-password') ?>" 
+                                   name="r_confirm_new_password" id="r_confirm_new_password">
+              </div>
+            </div>
+            <input type="hidden" value="<?php echo $this->token ?>" name="t" id="t"/>
+            <input type="hidden" value="<?php echo $this->email ?>" name="e" id="e"/>
+            <br/>
+            <div class="control-group">
+              <!-- Button -->
+              <div class="controls">
+                <input type="submit" id="smbtn" class="btn btn-success" value="Quên Mật Khẩu" />
+                <input type="reset" class="btn btn-fail" value="Hủy">
+              </div>
+            </div>
+          </fieldset>
+        </form>
+    <?php 
+  		} else {
+  			echo 'Đổi mật khẩu thành công.';
+  		}
+    ?>
+    </div> 
+  </div>
+</div>

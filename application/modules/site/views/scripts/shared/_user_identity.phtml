@@ -1,0 +1,35 @@
+<?php
+    $css = isset($this->css) ? $this->css : 'user-identity';
+?>
+<div class="<?php echo $css ?>">
+    <?php if ( empty($this->user) == false ) { ?>
+    <a href="/don-hang/lich-su-mua-hang">Danh sách Đơn Hàng</a>
+    <div id="uiAccountBtn" class="action">
+        <div class="text">
+            Xin Chào, <strong><?php echo trim($this->user["fullname"]) ?></strong>
+        </div>
+        <div class="popover">
+            <ul class="menu">
+                <li>
+                    <i class="fa fa-user-circle-o"></i>
+                    <a href="javascript:;"
+                        data-toggle="modal" id="userInfoBtn">Thông tin Tài Khoản</a>
+                </li>
+                <li>
+                    <i class="fa fa-key"></i>
+                    <a href="javascript:;"
+                        data-toggle="modal"
+                        data-target="#changePwdModal">Thay đổi Mật Khẩu</a>
+                </li>
+                <li>
+                    <i class="fa fa-sign-out"></i>
+                    <a href="/auth/dang-xuat">Đăng Xuất</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <?php } else { ?>
+    <a href="javascript:;" data-toggle="modal" data-target="#signupModal">Đăng Ký</a>
+    <a href="javascript:;" data-toggle="modal" data-target="#signinModal">Đăng Nhập</a>
+    <?php } ?>
+</div>

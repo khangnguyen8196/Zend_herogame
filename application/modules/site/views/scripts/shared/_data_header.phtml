@@ -1,0 +1,9 @@
+<?php
+    $this->qcss = $this->qcss . isset($this->description) ? ' has-dd' : '';
+?>
+<header class="data-header <?php echo $this->qcss ?>">
+    <?php echo $this->title ?>
+</header>
+<?php if(isset($this->description)) {
+    echo "<div class='data-description'>$this->description</div>";
+}?>

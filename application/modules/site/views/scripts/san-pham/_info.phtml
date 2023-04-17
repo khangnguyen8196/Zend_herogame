@@ -1,0 +1,124 @@
+<div class="info">
+    <div class="title">
+        <h1><?php echo $this->info["title"] ?></h1>
+        <h2><?php echo $this->info["description"] ?></h2>
+    </div>
+    <div class="intro">
+        <ul>
+            <li class='product-info' attr-count-down="<?php echo $this->info['count_time']?>" attr-enable-promo="<?php echo $this->info['enable_promo']?>">
+            </li>
+            <li>
+                <label>Giá tiền:</label>
+                <strong class="price-a"><?php if( $this->info["price_sales"] > 0 ) { echo number_format($this->info["price_sales"]) . '&#8363';} else { echo 'Liên hệ';} ?></strong>
+                <?php if ($this->info["price"] != $this->info["price_sales"]) { ?>
+                    <strong class="price-b"><?php echo number_format($this->info["price"]) . '&#8363' ?></strong>
+                <?php } ?>
+            </li>
+            <?php if (empty($this->info["product_note"]) == false) { ?>
+                <li>
+                    <label>Tình trạng:</label>
+                    <strong class="status-b"><?php echo $this->info["product_note"]; ?></strong>
+                </li>
+            <?php } ?>
+            <li>
+                <label>Trạng thái:</label>
+                <?php
+                $isOutOfOrder = false;
+                if( $this->info["status"] == STATUS_IN_OUT_STOCK ){
+                    $isOutOfOrder = true;
+                }
+                ?>
+                <strong class="status-a" <?php if($isOutOfOrder == true ){?> style="color:#000"  <?php }?>><?php echo Commons::getProductStatus($this->info["status"]); ?></strong>
+            </li>
+            <?php if (empty($this->info["guarantee"]) == false) { ?>
+                <li>
+                    <label>Bảo hành:</label>
+                    <strong><?php echo $this->info["guarantee"]; ?></strong>
+                </li>
+            <?php } ?>
+            <li>
+                <label>Danh mục:</label>
+                <a target="_blank" href="/danh-muc/<?php echo $this->info["category_url"] ?>"><strong><?php echo $this->info["category_name"] ?></strong></a>
+            </li>
+            <?php if (empty($this->info["tag"]) == false) { ?>
+                <?php
+                $tagsList = explode(",", $this->info["tag"]);
+                ?>
+                <li>
+                    <label>Từ khóa:</label>
+                    <?php foreach ($tagsList as $value) { ?>
+                        <a class="tag"><?php echo $value ?></a>
+                    <?php } ?>
+                </li>
+            <?php } ?>
+            <li>
+                <label>Chia sẻ:</label>
+                <div class="share">
+                    <div class="sharethis-inline-share-buttons"></div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    
+    <?php if( empty($this->color_list) == false && is_array($this->color_list) ){ ?>
+        <?php if( (count($this->color_list) > 1 ) || ( count($this->color_list) == 1 && empty($this->color_list[0]['id']) == false && $this->color_list[0]['id'] != 1 )){ ?>
+            <div class="intro color-box options" data-value="Màu">
+                <p class="color-label">
+                    <label>Chọn màu:</label>
+                    <span id="selected_color" ><?php echo !empty($this->color_list[0]['color_name']) ? $this->color_list[0]['color_name']:''?></span>
+                </p>
+                <ul class="color-list">
+                    <?php foreach( $this->color_list as $key => $color ){?>
+                        <?php 
+                            $active = '';
+                            if($key == 0 ){
+                                $active = 'active';
+                            }
+                        ?>
+                        <li class="color-items" data-id="<?php echo $color['id']?>">
+                            <a class="<?php echo $active ?>" data-id="<?php echo $color['id']?>" title="<?php echo $color['color_name']?>"><?php echo $color['color_name']?></a>
+                        </li>
+                    <?php }?>
+                </ul>
+            </div>
+        <?php } ?>
+    <?php } ?>
+    <?php if( $this->info["price_sales"] > 0 && $this->info["status"] != STATUS_IN_OUT_STOCK ) { ?>
+        <?php echo $this->render('/san-pham/_purchase.phtml') ?>
+    <?php } ?>
+    <div class="guide">
+        <?php
+        $productContact = Commons::getSettingByKey($this->setting, PRODUCT_CONTACT);
+        if (empty($productContact["value"]) == false) {
+            echo $productContact["value"];
+        }
+        ?>
+    </div>
+</div>
+<script type="application/ld+json">
+    <?php
+         $json_ld_data = [
+            "@context" => "http://schema.org",
+            "@type" => "product",
+            "sku" => $this->info['id'],
+            "name" => $this->info["title"],
+            "description" => $this->info["description"],
+            "image" => empty($this->info['image']) == false ? "https://herogame.vn/".PHOTO_PATH . $this->info['image']: "",
+            "url" => "https://herogame.vn/".$this->info["url_product"],
+            "offers" => [
+                "@context" => "http://schema.org",
+                "@type" => "offer",
+                 "url" => "https://herogame.vn/".$this->info["url_product"],
+                "price" => $this->info["price_sales"] > 0? $this->info["price_sales"]: $this->info["price"],
+                "priceCurrency" => "VND",
+                "availability" => 'https://schema.org/InStock',//"https://schema.org/OutOfStock"
+            ],
+            "brand" => [
+                "@context" => "http://schema.org",
+                "@type" => "Corporation", //Corporation, Thing, Brand
+                "name" => ""
+            ]
+        ];
+        echo json_encode($json_ld_data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    ?>
+</script>

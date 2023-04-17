@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<root>
+	<form name="groupCategoryDetailForm" >
+		<checkrules>
+			<name>
+				<validate>
+					<NotEmpty message="Vui lòng nhập tên" />
+				</validate>
+			</name>
+			<url_slug>
+				<validate>
+					<NotEmpty message="Vui lòng nhập url" />
+				</validate>
+			</url_slug>
+		</checkrules>
+	</form>	
+</root>	

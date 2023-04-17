@@ -1,0 +1,52 @@
+<div class="page-header">
+	<div class="page-header-content">
+		<div class="page-title">
+			<h4><i class="icon-clipboard6 position-left"></i> <span class="text-semibold">Quản lý Bài Viết - Thông Tin Bài Viết</span></h4>
+		</div>
+	</div>
+	<div class="breadcrumb-line">
+		<ul class="breadcrumb">
+			<li><a href="/admin/index"><i class="icon-home2 position-left"></i> <?php echo $this->translate('home')?></a></li>
+			<li><a href="/admin/post">Danh Sách Bài Viết</a></li>
+                        <li class="active">Thông Tin Bài Viết</li>
+		</ul>
+		<!-- tree -->
+	</div>
+</div>
+<div class="content">
+	<div class="panel panel-flat">
+		<div class="panel-heading">
+			<h5 class="panel-title">Thông Tin Bài Viết</h5>
+		</div>
+		<div class="panel-body">
+			<div class="alert alert-danger alert-styled-left <?php if( empty($this->error) == true ) { echo 'hidden';}?>">
+				<button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
+				<?php
+					if( empty($this->error) == false ){
+						foreach ($this->error as $key => $value ){
+							echo $value;
+						}
+					}
+					
+				?>
+			</div>
+			<form class="form-horizontal" id="postDetailForm" method="post" enctype="multipart/form-data">
+				<div class="col-md-12">
+						<div class="panel-body">
+							<div class="tabbable">
+								<div class="tab-content">
+									<?php echo $this->partial( "/post/_info.phtml", array('info' => @$this->info, 'listCategory' => $this->listCategory));?>
+								</div>
+							</div>
+						</div>
+				</div>
+				<div class="text-right">
+					<a href="/admin/post"><button type="button" class="btn btn-default cancel-btn"><?php echo $this->translate('cancel')?><i class="icon-arrow-right14 position-right"></i></button></a>
+					<button type="submit" class="btn btn-primary submit-btn"><?php echo $this->translate('submit')?> <i class="fa fa-plus" aria-hidden="true"></i></button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div id="modal_media" class="modal fade" data-keyboard="false" data-backdrop="static">
+</div>

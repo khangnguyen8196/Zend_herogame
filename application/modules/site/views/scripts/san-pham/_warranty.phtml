@@ -1,0 +1,8 @@
+<div class="warranty">
+    <?php
+    $warranty = Commons::getSettingByKey($this->setting, WARRANTY);
+    if (empty($warranty["value"]) == false) {
+        echo $warranty["value"];
+    }
+    ?>
+</div>

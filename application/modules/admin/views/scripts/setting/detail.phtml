@@ -1,0 +1,89 @@
+<div class="page-header">
+	<div class="page-header-content">
+		<div class="page-title">
+			<h4><i class="icon-cog3 position-left"></i> <span class="text-semibold">Cài Đặt - Thông Tin Cài Đặt</span></h4>
+		</div>
+	</div>
+	<div class="breadcrumb-line">
+		<ul class="breadcrumb">
+			<li><a href="/"><i class="icon-home2 position-left"></i> <?php echo $this->translate('home')?></a></li>
+			<li><a href="/admin/setting">Danh Sách Cài Đặt</a></li>
+			<li class="active">Thông Tin Cài Đặt</li>
+		</ul>
+		<!-- tree -->
+	</div>
+</div>
+<div class="content">
+	<div class="panel panel-flat">
+		<div class="panel-heading">
+			<h5 class="panel-title">Thông Tin Cài Đặt</h5>
+		</div>
+		<div class="panel-body">
+			<div class="alert alert-danger alert-styled-left <?php if( empty($this->error) == true) { echo 'hidden';}?>">
+				<button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
+				<?php
+					if( empty($this->error) == false ){
+						foreach ($this->error as $key => $value ){
+							echo $value.'<br/>';
+						}
+					}
+				?>
+			</div>
+			<form class="form-horizontal" id="settingDetailForm" method="post">
+				<fieldset class="content-group">
+					<legend class="text-bold"></legend>
+					<div class="form-group">
+						<label class="control-label col-lg-2"><?php echo $this->translate('key')?></label>
+						<div class="col-lg-10">
+							<input type="text" <?php echo ($this->isEdit == true)?"disabled":""?> name="key" id="key" placeholder="<?php echo $this->translate('key')?>" class="form-control" value="<?php echo @$this->info['key']?>" data-msg="<?php echo $this->translate('please-input-key'); ?>">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-lg-2"><?php echo $this->translate('type')?></label>
+						<div class="col-lg-3">
+							<select name="type" id="type" class="form-control" <?php echo ($this->isEdit == true)?"disabled":""?>>
+		                            	<option value="<?php echo TYPE_SETTING_VALUE ?>" <?php echo (@$this->info['type'] == TYPE_SETTING_VALUE)?"selected":""?>><?php echo $this->translate('input-value')?></option>
+		                           		<option value="<?php echo TYPE_SETTING_SHOW_HIDE ?>" <?php echo (@$this->info['type'] == TYPE_SETTING_SHOW_HIDE)?"selected":""?>><?php echo $this->translate('show-hide')?></option>
+		                           		<option value="<?php echo TYPE_SETTING_HTML ?>" <?php echo (@$this->info['type'] == TYPE_SETTING_HTML)?"selected":""?>>Nội Dung Web</option>
+							</select>
+							<?php if($this->isEdit == true){?>
+								<input type="hidden" name="type" value="<?php echo @$this->info['type'] ?>">
+							<?php }?>
+						</div>
+					</div>
+					<div class="form-group container-value-web">
+						<label class="control-label col-lg-2">Nội Dung Web</label>
+						<div class="col-lg-10">
+							<textarea name="web_content" id="web_content" rows=" <?php if(@$this->info['key']== 'style'){ ?>30<?php } else { echo 5;}?>" cols="5" class="form-control <?php if(@$this->info['key']!= 'style'){ ?>rich-editor <?php }?>" placeholder="<?php echo $this->translate('description')?>"><?php echo @$this->info['value']?></textarea>
+						</div>
+					</div>
+					<div class="form-group container-value" style="display: none">
+						<label class="control-label col-lg-2"><?php echo $this->translate('value')?></label>
+						<div class="col-lg-10">
+                                                    <textarea rows="5" name="value" id="value" placeholder="<?php echo $this->translate('value')?>" class="form-control" data-msg="<?php echo $this->translate('please-input-value'); ?>"><?php echo @$this->info['value']?></textarea>
+						</div>
+					</div>
+					<div class="form-group container-hide-show" style="display: none">
+						<label class="control-label col-lg-2"><?php echo $this->translate('show-hide')?></label>
+						<div class="col-lg-3">
+							<select name="show-hide" id="show-hide" class="form-control">
+		                            	<option value="<?php echo STATUS_SHOW ?>" <?php echo (@$this->info['value'] == STATUS_SHOW)?"selected":""?>><?php echo $this->translate('show')?></option>
+		                           		<option value="<?php echo STATUS_HIDE ?>" <?php echo (@$this->info['value'] == STATUS_HIDE)?"selected":""?>><?php echo $this->translate('hide')?></option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-lg-2"><?php echo $this->translate('description')?></label>
+						<div class="col-lg-10">
+							<textarea name="description" id="description" rows="5" cols="5" class="form-control" placeholder="<?php echo $this->translate('description')?>"><?php echo @$this->info['description']?></textarea>
+						</div>
+					</div>
+				</fieldset>
+				<div class="text-right">
+					<input type="hidden" name="isEdit" value="<?php echo $this->isEdit ?>" />
+					<a href="/admin/setting"><button type="button" class="btn btn-default cancel-btn"><?php echo $this->translate('cancel')?><i class="icon-arrow-right14 position-right"></i></button></a>
+					<button type="submit" class="btn btn-primary submit-btn"><?php echo $this->translate('submit')?> <i class="fa fa-plus" aria-hidden="true"></i></button>
+				</div>
+			</form>
+		</div>
+	</div>

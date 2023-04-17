@@ -1,0 +1,35 @@
+<div class="navbar navbar-inverse">
+    <div class="navbar-header">
+        <h3>HERO GAME</h3>
+
+        <ul class="nav navbar-nav visible-xs-block">
+            <li><a data-toggle="collapse" data-target="#navbar-mobile"><i class="icon-tree5"></i></a></li>
+            <li><a class="sidebar-mobile-main-toggle"><i class="icon-paragraph-justify3"></i></a></li>
+        </ul>
+    </div>
+
+    <div class="navbar-collapse collapse" id="navbar-mobile">	
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown dropdown-user">
+                <a class="dropdown-toggle" data-toggle="dropdown">
+                    <?php echo $this->translate('welcome')?>,
+                    <span><?php 
+                            if( empty( $this->login_info['first_name'] ) == false && empty( $this->login_info['last_name'] ) == false ){
+                                 echo $this->login_info['first_name'] .' '. $this->login_info['last_name'];
+                            }else{
+                               echo $this->login_info['user_name'] ;
+                            }
+                        ?></span>
+                    <i class="caret"></i>
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li><a href="/admin/profile?uid=<?php echo $this->login_info['user_id']?>"><i class="icon-user-plus"></i> <?php echo $this->translate('my-profile')?></a></li>
+                    <li><a data-toggle="modal" id="change-password-btn"><i class="icon-key"></i> <?php echo $this->translate('change-password')?></a></li>
+                    <li class="divider"></li>
+                    <li><a href="/admin/logout"><i class="icon-switch2"></i> <?php echo $this->translate('logout')?></a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>

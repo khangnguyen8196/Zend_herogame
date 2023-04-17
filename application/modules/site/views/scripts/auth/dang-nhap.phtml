@@ -1,0 +1,81 @@
+<style>
+	body{
+		background: rgba(42, 41, 111, 0.82);;
+		color: white;
+	}
+	.sign-up{
+		padding-top: 10px;
+	}
+	#legend img { 
+		margin:0 auto; 
+	}
+</style>
+<div class="container sign-up">
+  <div class="row">
+  	<div class="col-md-3"></div>
+  	<div class="col-md-6">
+  		<?php 
+  			if($this->success == 0 ){
+  		?>
+          <form class="form-horizontal" action="" method="POST">
+          <fieldset>
+            <div id="legend">
+            	<img src="/img/logo.png" class="img-responsive" alt="Cinque Terre">
+              	<h2>ĐĂNG NHẬP</h2>
+            </div>
+            <div class="alert alert-danger alert-styled-left <?php if( empty($this->error) == true) { echo 'hidden';}?>">
+            <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
+                <?php
+                if (empty($this->error) == false) {
+                    foreach ($this->error as $key => $value) {
+                        echo $value . '<br/>';
+                        break;
+                    }
+                }
+                ?>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="username">Tên Đăng Nhập</label>
+              <div class="controls">
+                <input type="text" id="username" name="username" value="<?php echo $this->info['user_name'];?>" placeholder="Tên Đăng Nhập" class="form-control input-lg" required="required">
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="password">Password</label>
+              <div class="controls">
+                <input type="password" id="password" name="password" placeholder="Password" class="form-control input-lg" required="required">
+                <p class="help-block">Password phải nhiều hơn 6 ký tự</p>
+              </div>
+            </div>
+            <div class="control-group">
+             	<div class="row">
+					<div class="col-md-6"></div> 
+            		<div class="col-md-6 text-right">
+						<a href="/auth/quen-mat-khau"><?php echo $this->translate('forgot-password') ?>?</a>
+					</div>
+            	</div>
+            </div>
+            <div class="control-group">
+            	<label class="control-label" for="">Mã xác nhận</label>
+            	<div class="controls">
+            		 <div id="recaptcha"></div>
+            	</div>
+            </div>
+            <br/>
+            <div class="control-group">
+              <!-- Button -->
+              <div class="controls">
+                <input type="submit" id="smbtn" class="btn btn-success" value="Đăng Nhập" />
+                <input type="reset" class="btn btn-fail" value="Hủy">
+              </div>
+            </div>
+          </fieldset>
+        </form>
+    <?php 
+  		} else {
+  			echo 'Đăng Ký Thành Công';
+  		}
+    ?>
+    </div> 
+  </div>
+</div>

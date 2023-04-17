@@ -1,0 +1,44 @@
+<footer class="pfooter">
+    <div class="pf-wrapper">
+        <div class="pf-top">
+            <div class="container">
+                <div class="row">
+                   <?php
+						$footer_info_1 = Commons::getSettingByKey($this->setting, 'footer_info_1');
+                        if( empty($footer_info_1) == false ){
+                        	echo $footer_info_1['value'];
+                        }
+                	?>
+                </div>
+            </div>
+        </div>
+        <div class="pf-mid">
+            <div class="container">
+                <div class="row">
+                    <?php
+                    	$footer_info_2 = Commons::getSettingByKey($this->setting, 'footer_info_2');
+                        if( empty($footer_info_2) == false ){
+                           	echo $footer_info_2['value'];
+                        }
+                    ?>
+                    <?php
+                           $footer_info_3 = Commons::getSettingByKey($this->setting, 'footer_info_3');
+	                           if( empty($footer_info_3) == false ){
+	                           echo $footer_info_3['value'];
+                           }
+                    ?>
+                </div>
+            </div>
+        </div>
+        <div class="pf-bot">
+            <div class="copyright">
+             	<?php
+					$footer_copy_right = Commons::getSettingByKey($this->setting, 'footer_copy_right');
+                    	if( empty($footer_copy_right) == false ){
+                        	echo $footer_copy_right['value'];
+		            	}
+				?>
+            </div>
+        </div>
+    </div>
+</footer>

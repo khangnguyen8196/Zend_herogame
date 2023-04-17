@@ -1,0 +1,22 @@
+<div class="detail">
+    <?php if (empty($this->info["content"]) == false) { ?>
+        <?php
+        $content = trim($this->info["content"]);
+        ?>
+    <?php /*
+        <div class="cnt cnt-short active">
+        </div>
+     * */ ?>
+        <div class="cnt cnt-all active">
+            <?php echo $content; ?>
+        </div>
+    <?php /*
+        <a class="btn-toggle" href="#">
+            <i class="fa fa-plus-circle active"></i>
+            <i class="fa fa-minus-circle"></i>
+            <span class="txt active">Click để xem nội dung đầy đủ</span>
+            <span class="txt">Click để thu gọn nội dung</span>
+        </a>
+     */ ?>
+    <?php } ?>
+</div>

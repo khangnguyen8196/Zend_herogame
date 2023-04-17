@@ -1,0 +1,13 @@
+<?php if (empty($this->cart_list_full_info) == false) { ?>
+    <?php foreach ($this->cart_list_full_info as $value) { ?>
+        <div class="item item_<?php echo $value["id"] ?>">
+            <div class="imgh r1x1 photo" data-lazy="<?php echo PHOTO_PATH . $value["image"] ?>"></div>
+            <div class="qty"><?php echo $value["qty"] ?></div>
+            <a href="/<?php echo $value["product_url"] ?>" class="name"><?php echo $value["title"] ?></a>
+            <div class="price"><?php echo number_format($value["price_sales"]) . '&#8363' ?></div>
+            <a class="remove remove_pr_popup" title="Loại bỏ" pid="<?php echo $value["id"] ?>">
+                <i class="fa fa-times"></i>
+            </a>
+        </div>
+    <?php } ?>
+<?php } ?>

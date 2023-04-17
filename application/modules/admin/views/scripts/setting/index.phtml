@@ -1,0 +1,97 @@
+<!-- Page header -->
+<div class="page-header">
+    <div class="page-header-content">
+        <div class="page-title">
+            <h3><i class="icon-cog3 position-left"></i> <span class="text-semibold">Cài Đặt - Danh Sách Cài Đặt</h3>
+        </div>
+        <div class="heading-elements">
+            <a href="/admin/<?php echo $this->controller ?>/detail" class="btn btn-labeled btn-labeled-right bg-blue heading-btn"><?php echo $this->translate('create-setting') ?> <b><i class="fa fa-plus" aria-hidden="true"></i></b></a>
+        </div>
+    </div>
+    <div class="breadcrumb-line">
+        <ul class="breadcrumb">
+            <li><a href="/admin/index/"><i class="icon-home2 position-left"></i> Trang Chủ</a></li>
+            <li><a href="/admin/setting/">Cài Đặt</a></li>
+            <li class="active">Danh Sách Cài Đặt</li>
+        </ul>
+    </div>
+</div>
+<!-- /page header -->
+<div class="content">
+    <!-- Default ordering -->
+    <div class="panel panel-flat">
+        <div class="panel-heading">
+            <h4 class="panel-title">Danh Sách Cài Đặt</h4>
+        </div>
+        <table id="settingTable" class="table datatable-sorting">
+            <thead>
+                <tr>
+                    <th width="50px">#</th>
+                    <th><?php echo $this->translate('description') ?></th>
+                    <?php /* <th width="200px"><?php echo $this->translate('key') ?></th> */ ?>
+                    <th width="100px"><?php echo $this->translate('type') ?></th>
+                    <th width="400px"><?php echo $this->translate('value') ?></th>
+                    <th class="text-center" width="200px"><?php echo $this->translate('action') ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                if (empty($this->list) == false) {
+                    $i = 1;
+                    foreach ($this->list as $item) {
+                        ?>
+                        <tr>
+                            <td><?php echo $i ?> </td>
+                            <td><?php echo $item['description'] ?></td>
+                            <?php /* <td><?php echo $item['key'] ?></td> */ ?>
+                            <td>
+                                <?php
+                                $type = '';
+                                if ($item['type'] == 1) {
+                                    $type = $this->translate('value');
+                                } elseif ($item['type'] == 2) {
+                                    $type = $this->translate('show-hide').'';
+                                }
+                                echo $type;
+                                ?>
+                            </td>
+                            <td>
+                                <?php
+                                $value = $item['value'];
+                                if ($item['type'] == 2) {
+                                    if ($item['value'] == STATUS_SHOW) {
+                                        $value = 'Hiện';
+                                    } else if ($item['value'] == STATUS_HIDE) {
+                                        $value = 'Ẩn';
+                                    }
+                                }
+                                echo $value;
+                                ?>
+                            </td>
+                            <td class="text-center">
+                                <ul class="icons-list">
+                                    <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="icon-menu9"> </i></a>
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li> <a href="/admin/setting/detail/key/<?php echo $item['key'] ?>"> <i class="icon-pencil3"></i> Chỉnh sửa</a> </li>
+                                            <li> <a onclick="pages.setting.deleteSetting('<?php echo $item['key'] ?>')"> <i class="icon-bin"></i> Xóa</a> </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <?php
+                        $i++;
+                    }
+                } else {
+                    ?>
+                    <tr>
+                        <td colspan="6" style="text-align: center;">Không có dữ liệu</td>
+                    </tr>
+                    <?php
+                }
+                ?>
+            </tbody>
+        </table>
+    </div>
+    <!-- /default ordering -->
+</div>

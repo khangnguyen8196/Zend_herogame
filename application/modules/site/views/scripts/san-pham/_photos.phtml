@@ -1,0 +1,87 @@
+<?php 
+$first_color_active = !empty($this->color_list[0]['id']) ? $this->color_list[0]['id']: '';
+$color_index = array();
+if(empty($this->info['image_color']) == false){
+  $color_index = explode(",", $this->info['image_color']);
+}
+$thumbs = array();
+if (empty($this->info['gallery']) == false) {
+  $thumbs = explode(",", $this->info['gallery']);
+}
+?>
+<div class="photos">
+    <div class="hidden-xs-down">
+        <div class="main">
+            <?php
+            $url = '';
+            if (empty($this->info['image']) == false) {
+                $url = PHOTO_PATH . $this->info['image'];
+            }
+            ?>
+            <?php
+            echo $this->partial('/shared/_lazy_image.phtml', array(
+                'ratio' => '1x1',
+                'css' => 'photo',
+                'url' => $url,
+                'attrs' => array(
+                    array(
+                        'name' => 'id',
+                        'value' => 'productMainPhoto'
+                    ),
+                    array(
+                        'name' => 'data-zoom-image',
+                        'value' => $url
+                    )
+                )
+            ))
+            ?>
+            <a id="productGalleryButton" class="btn-gallery" href="#">
+                <i class="fa fa-television"></i>
+                <span>Click để xem gallery</span>
+            </a>
+        </div>
+        <div id="productThumbPhotos" class="thumbs">
+            <?php if (empty($thumbs) == false) { ?>
+                <?php foreach ($thumbs as $key => $value) { ?>
+                    <?php $thumbClass = ($key == 0) ? 'active' : ''; ?>
+                    <?php $thumUrl = PHOTO_PATH . $value; ?>
+                    <a class="<?php //echo $thumbClass ?> image_thumbs color_<?php echo (empty($color_index) == true ) ? 1: $color_index[$key]?>" 
+                       data-image="<?php echo $thumUrl ?>"
+                       data-zoom-image="<?php echo $thumUrl ?>"
+                       <?php if(empty($color_index) == false && $color_index[$key] != $first_color_active){?> style="display: none;"<?php }?>>
+                           <?php
+                           echo $this->partial('/shared/_lazy_image.phtml', array(
+                               'ratio' => '1x1',
+                               'css' => 'photo',
+                               'url' => $thumUrl
+                           ));
+                           ?>
+                    </a>
+                <?php } ?>
+            <?php } ?>
+        </div>
+    </div>
+    <div class="hidden-md-up">
+        <ul id="productMobilePhotos" class="mobile">
+            <?php if (empty($thumbs) == false) { ?>
+                <?php foreach ($thumbs as $key => $value) { ?>
+                    <?php $thumbClass = ($key == 0) ? 'active' : ''; ?>
+                    <?php $thumUrl = PHOTO_PATH . $value; ?>
+                    <a class="<?php //echo $thumbClass ?> image_thumbs color_<?php echo (empty($color_index) == true ) ? 1: $color_index[$key]?>" 
+                       data-image="<?php echo $thumUrl ?>"
+                       data-index="<?php echo $key ?>"
+                       data-zoom-image="<?php echo $thumUrl ?>" 
+                       >
+                           <?php
+                           echo $this->partial('/shared/_lazy_image.phtml', array(
+                               'ratio' => '6x4',
+                               'css' => 'photo',
+                               'url' => $thumUrl
+                           ));
+                           ?>
+                    </a>
+                <?php } ?>
+            <?php } ?>
+        </ul>
+    </div>
+</div>

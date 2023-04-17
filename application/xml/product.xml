@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<root>
+	<form name="postDetailForm" >
+		<checkrules>
+			<title>
+				<validate>
+					<NotEmpty message="Vui Lòng Nhập Tên" />
+				</validate>
+			</title>
+			<url_product>
+				<validate>
+					<NotEmpty message="Vui Lòng Nhập Đường Dẫn" />
+				</validate>
+			</url_product>
+			<price>
+				<validate>
+					<NotEmpty message="Vui Lòng Nhập Giá" />
+				</validate>
+			</price>
+		</checkrules>
+	</form>	
+</root>	

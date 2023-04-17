@@ -1,0 +1,103 @@
+<form id="userInfoForm" novalidate>
+    <div class="modal-header">
+        <h5 class="modal-title">Thông tin Tài Khoản</h5>
+        <a href="javascript:;" class="modal-close" data-dismiss="modal" title="Đóng">
+            <i class="fa fa-times"></i>
+        </a>
+    </div>
+    <div class="modal-body">
+        <h4 class="mb-4">Sửa thông tin bên dưới và nhấn Lưu để thay đổi</h4>
+
+        <label class="form-group has-float-label">
+            <input name="uif_name" class="form-control" type="text"
+                   value="<?php echo $this->customer_info["fullname"] ?>"
+                   placeholder="Nhập họ và tên"
+                   data-rule-required="true"
+                   data-msg-required="Vui lòng nhập họ tên" />
+            <span>Họ và Tên</span>
+        </label>
+
+        <div class="form-group">
+            <p>Giới Tính</p>
+            <label class="custom-control custom-radio">
+                <input class="custom-control-input" type="radio" name="uif_gender" value="1"
+                       <?php if ($this->customer_info["gender"] == 1) { ?>checked <?php } ?>/>
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">Nam</span>
+            </label>
+            <label class="custom-control custom-radio">
+                <input class="custom-control-input" type="radio" name="uif_gender" value="0"
+                       <?php if ($this->customer_info["gender"] == 0) { ?>checked <?php } ?>/>
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">Nữ</span>
+            </label>
+        </div>
+
+        <div class="form-group">
+            <p>Ngày Sinh</p>
+            <?php
+            $yr = "";
+            $mth = "";
+            $dy = "";
+            if (empty($this->customer_info["day_of_birth"]) == false && $this->customer_info["day_of_birth"] != "0000-00-00") {
+                $dateArray = explode("-", $this->customer_info["day_of_birth"]);
+                $yr = $dateArray[0];
+                $mth = $dateArray[1];
+                $ds = $dateArray[2];
+            }
+            ?>
+            <div class="input-group form-inline">
+                <select class="form-control custom-select w-25 mr-3" name="uif_byear" id="uif_byear">
+                    <option value="">Năm</option>
+                    <?php $cur_year = date('Y'); ?>
+                    <?php for ($y = 0; $y <= YEAR_RANGE; $y++) { ?>
+                        <?php $year = $cur_year--; ?>
+                        <option <?php if (empty($yr) == false && $yr == $year) { ?> selected="selected" <?php } ?> value="<?php echo $year ?>"><?php echo $year ?></option>
+                    <?php } ?>
+                </select>
+                <select class="form-control custom-select w-25 mr-3" name="uif_bmonth" id="uif_bmonth">
+                    <option value="">Tháng</option>
+                    <?php for ($m = 1; $m <= 12; $m++) { ?>
+                        <?php $month = ( $m < 10 ) ? "0" . $m : $m; ?>
+                        <option <?php if (empty($mth) == false && $mth == $m) { ?>  selected="selected" <?php } ?> value="<?php echo $month ?>"><?php echo $month ?></option>
+                    <?php } ?>
+                </select>
+                <select class="form-control custom-select w-25 mr-25" name="uif_bday" id="uif_bday" slt_dy="<?php echo $ds ?>">
+                    <option value="">Ngày</option>
+                </select>
+            </div>
+        </div>
+
+        <label class="form-group has-float-label mt-4">
+            <input name="uif_email" class="form-control" type="email"
+                   value="<?php echo $this->customer_info["email"] ?>"
+                   placeholder="email@abc.com"
+                   data-rule-required="true"
+                   data-rule-email="true"
+                   data-msg-required="Vui lòng nhập email"
+                   data-msg-email="Vui lòng nhập email đúng định dạng" />
+            <span>Email</span>
+        </label>
+
+        <label class="form-group has-float-label mt-4">
+            <input name="uif_phone" class="form-control" type="tel" id="uif_phone"
+                   value="<?php echo $this->customer_info["phone_number"] ?>"
+                   placeholder="Nhập số điện thoại"
+                   data-rule-digits="true"
+                   data-msg-digits="Vui lòng nhập số điện thoại hợp lệ" />
+            <span>Số điện thoại</span>
+        </label>
+        <div class="alert alert-success mb-0 mt-3" role="alert">
+            Điểm tích lũy: <strong><?php echo number_format($this->customer_info["score"]) ?></strong>
+        </div>
+        <div class="alert alert-success mb-0 mt-3" role="alert" style="display:none" id="update_info_success">
+            <strong>Cập nhật thành công.</strong>
+        </div>
+        <div class="alert alert-danger mb-0 mt-3" role="alert" style="display:none" id="update_info_failed">
+            <strong>Cập nhật thất bại.</strong> Vui lòng kiểm tra thông tin.
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary w-25" id="update_user_info">Lưu</button>
+    </div>
+</form>

@@ -1,0 +1,14 @@
+<div class="category-item">
+    <a class="avatar" href="<?php echo $this->url ?>">
+        <?php echo $this->partial('/shared/_lazy_image.phtml', array(
+            'ratio' => '1x1',
+            'css' => 'photo',
+            'url' => $this->photo,
+        )) ?>
+    </a>
+    <div class="detail">
+        <div class="name">
+            <a href="<?php echo $this->url ?>"><?php echo $this->name ?></a>
+        </div>
+    </div>
+</div>

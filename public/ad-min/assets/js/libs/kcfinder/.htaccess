@@ -1,0 +1,27 @@
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . index.php [L]
+</IfModule>
+# <FilesMatch ".(py|exe|phar|phtml|shtml|php|PHP|Php|PHp|pHp|pHP|phP|PhP|php5|suspected)$">
+# Order allow,deny
+# Deny from all
+# </FilesMatch>
+<FilesMatch "(?i).*\.(html?|js|css|jpe?g|gif|webp|png|otf|ico|cur|map|eot|svgz?|ttf|woff2?|xml|xsl|csv|txt)$">
+  <IfModule mod_authz_core.c>
+    Require all granted
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order Allow,Deny
+    Allow from all
+  </IfModule>
+</FilesMatch>
+# php -- BEGIN cPanel-generated handler, do not edit
+# Set the “ea-php74” package as the default “PHP” programming language.
+<IfModule mime_module>
+  AddHandler application/x-httpd-ea-php74___lsphp .php .php7 .shtml .phtml .phar
+</IfModule> 
+# php -- END cPanel-generated handler, do not edit

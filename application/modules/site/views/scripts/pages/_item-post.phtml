@@ -1,0 +1,34 @@
+<?php if( empty( $this->listPost ) == false ){?>
+	<?php $temp = 0; ?>
+	<?php foreach ( $this->listPost as $item ){ ?>
+	<?php 
+		$temp++;
+		if( $temp <= MAX_POST_OF_PAGE ){
+			$defaultImgUrl = '/img/260x173.png';
+			if( empty( $item['image_id'] ) == false ){
+				$defaultImgUrl = '/upload/images/' . $item['image_id'];
+			}
+	?>
+			<li>
+				<div class="post-item">
+					<a class="avatar" href="<?php echo '/bai-viet/'.$item['url_name'] ?>">
+                    	<?php echo $this->partial('/shared/_lazy_image.phtml', array(
+                                        'ratio' => '6x4',
+                                        'css' => 'photo',
+                                        'url' => $defaultImgUrl
+	                                    )) ?>
+			   		</a>
+			  		<div class="detail">
+						<h3>
+							<a href="<?php echo '/bai-viet/'.$item['url_name'] ?>">
+								<?php echo $item['title'] ?>
+				      		</a>
+				      	</h3>
+				       	<p><?php echo $item['summary'] ?></p>
+				    	<em><?php echo  UtilFormat::formatTimeForCreatedDate( $item['updated_at'], 'd/m/Y H:i:s' ) ?></em>
+			  		</div>
+		        </div>
+			</li>
+	<?php } ?>
+	<?php } ?>
+<?php } ?>

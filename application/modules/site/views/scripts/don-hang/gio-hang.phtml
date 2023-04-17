@@ -1,0 +1,116 @@
+<?php $this->viewCssClass = 'order cart' ?>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 hidden-md-down no-gutter">
+            <?php echo $this->partial('/shared/_breadcrumbs.phtml',array('data'=> array('child' => array('name' => 'Giỏ Hàng')))) ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 no-gutter">
+            <?php 
+            $isEmptyCart = true;
+            if(empty($this->cart_list) == false){
+                $isEmptyCart = false;
+            }
+            ?>
+            <div class="cart-list <?php echo ($isEmptyCart == true ) ? "empty":""?>">
+                <table class="table">
+                    <?php if ($isEmptyCart == true) { ?>
+                        <tbody>
+                            <tr>
+                                <td>Giỏ hàng của bạn đang trống!</td>
+                            </tr>
+                        </tbody>
+                    <?php } else { ?>
+                    <thead>
+                        <tr>
+                            <th class="text-center">#</th>
+                            <th class="text-center">Hình</th>
+                            <th class="text-left" style="width: 30%">Tên sản phẩm</th>
+                            <th class="text-center">Mã hàng</th>
+                            <th class="text-center">Màu</th>
+                            <th class="text-center">Số lượng</th>
+                            <th class="text-right">Đơn giá</th>
+                            <th class="text-right">Tổng cộng</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (empty($this->cart_list) == false) { ?>
+                            <?php foreach ($this->cart_list as $key => $value) { ?>
+                                <tr>
+                                    <td class="text-center">
+                                        <?php echo ($key + 1) ?>
+                                    </td>
+                                    <td class="text-center">
+                                        <?php
+                                        $photo = "";
+                                        if (empty($value["image"]) == false) {
+                                            $photo = PHOTO_PATH . $value["image"];
+                                        }
+                                        echo $this->partial('/shared/_lazy_image.phtml', array(
+                                            'ratio' => '1x1',
+                                            'css' => 'photo',
+                                            'url' => $photo
+                                        ))
+                                        ?>
+                                    </td>
+                                    <td class="text-left">
+                                        <a class="name" href="/<?php echo $value["url_product"] ?>">
+                                            <strong><?php echo $value['title'] ?></strong>
+                                        </a>
+                                    </td>
+                                    <td class="text-center">
+                                        <?php echo empty($value['product_code']) == false ? $value['product_code']:"#" ?>
+                                    </td>
+                                    <td class="text-center">
+                                        <strong><?php echo $value['color_name'] ?></strong>
+                                    </td>
+                                    <td class="text-center">
+                                        <input class="form-control qty pr_qty" type="tel" maxlength="3" pid="<?php echo $value['id'] ?>" colorid="<?php echo $value['color_id'] ?>" value="<?php echo $value['qty'] ?>" />
+                                        <button type="button" class="btn btn-primary btn-update update_pr" title="Cập nhật">
+                                            <i class="fa fa-check"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-danger btn-remove remove_pr" title="Loại bỏ" pid="<?php echo $value['id'] ?>" colorid="<?php echo $value['color_id'] ?>">
+                                            <i class="fa fa-times"></i>
+                                        </button>
+                                    </td>
+                                    <td class="text-right">
+                                        <strong id="p_price" p_price="<?php echo $value['price_sales'] ?>" ><?php echo number_format($value['price_sales']) . '&#8363' ?></strong>
+                                    </td>
+                                    <td class="text-right">
+                                        <strong id="total_money"><?php echo number_format($value['total_money']) . '&#8363' ?></strong>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        <?php } ?>
+                        <tr>
+                            <td colspan="7" class="text-right">
+                                Thành tiền
+                            </td>
+                            <td class="text-right">
+                                <strong class="subtotal"><?php echo number_format($this->total_money) . '&#8363' ?></strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="7" class="text-right">
+                                Tổng cộng
+                            </td>
+                            <td class="text-right">
+                                <strong class="total"><?php echo number_format($this->total_money) . '&#8363' ?></strong>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <?php }?>
+                </table>
+            </div>
+
+            <div class="cart-action">
+                <a class="btn btn-secondary btn-back" href="/">Tiếp tục mua hàng</a>
+                <?php if($isEmptyCart == false){?>
+                <a class="btn btn-primary btn-next" id="payment_btn" href="">Thanh toán</a>
+                <?php }?>
+            </div>
+        </div>
+    </div>
+</div>

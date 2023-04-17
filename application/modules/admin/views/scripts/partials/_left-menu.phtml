@@ -1,0 +1,166 @@
+<!-- Main sidebar -->
+<div class="sidebar sidebar-main">
+    <div class="sidebar-content">	
+        <!-- Main navigation -->
+        <div class="sidebar-category sidebar-category-visible">
+            <div class="category-content no-padding">
+                <ul class="navigation navigation-main navigation-accordion">
+
+                    <!-- Main -->
+                    <li class="<?php echo ($this->module == 'admin' && $this->controller == "index") ? "active" : "" ?>"><a href="/admin/index"><i class="icon-home4"></i> <span>Trang Chủ</span></a></li>
+                    <?php if (UtilAuth::hasPrivilege('post', ACTION_VIEW) == true || UtilAuth::hasPrivilege('post', ACTION_ADD) == true || UtilAuth::hasPrivilege('post', ACTION_EDIT) == true) { ?>
+                        <!-- post managerment -->
+                        <li class="<?php echo ($this->module == 'admin' && $this->controller == "post") ? "active" : "" ?>">
+                            <a href="#"><i class="icon-clipboard6"></i> <span>Bài Viết</span></a>
+                            <ul>
+                                <li class="<?php echo ($this->module == 'admin' && $this->module == 'admin' && $this->controller == "post" && $this->action == "index") ? "active" : "" ?>"><a href="/admin/post">Danh Sách Bài Viết</a></li>
+                            </ul>
+                        </li>
+                    <?php } ?>
+                    <?php
+                    if (UtilAuth::hasPrivilege('group-category', ACTION_VIEW) == true || UtilAuth::hasPrivilege('group-category', ACTION_ADD) == true || UtilAuth::hasPrivilege('group-category', ACTION_EDIT) == true ||
+                            UtilAuth::hasPrivilege('category', ACTION_VIEW) == true || UtilAuth::hasPrivilege('category', ACTION_ADD) == true || UtilAuth::hasPrivilege('category', ACTION_EDIT) == true || UtilAuth::hasPrivilege('product', ACTION_VIEW) == true || UtilAuth::hasPrivilege('product', ACTION_ADD) == true || UtilAuth::hasPrivilege('product', ACTION_EDIT) == true
+                    ) {
+                        ?>
+                        <li class="<?php echo ($this->module == 'admin' && $this->controller == "group-category") ? "active" : "" ?>">
+                            <a href="#"><i class="icon-stack3"></i> <span>Sản Phẩm</span></a>
+                            <ul>
+                                <?php if (UtilAuth::hasPrivilege('product', ACTION_VIEW) == true || UtilAuth::hasPrivilege('product', ACTION_ADD) == true || UtilAuth::hasPrivilege('product', ACTION_EDIT) == true) {
+                                    ?>
+                                    <li class="<?php echo ($this->module == 'admin' && $this->module == 'admin' && $this->controller == "product" && $this->action == "index") ? "active" : ""
+                                    ?>"><a href="/admin/product"> Danh Sách Sản Phẩm</a></li>
+                                    <?php } ?>
+                            </ul>
+                        </li>
+
+                    <?php } ?>
+                    <?php if (UtilAuth::hasPrivilege('category', ACTION_VIEW) == true || UtilAuth::hasPrivilege('category', ACTION_ADD) == true || UtilAuth::hasPrivilege('category', ACTION_EDIT) == true) {
+                        ?>
+                        <li class="<?php echo ($this->module == 'admin' && $this->controller == "category") ? "active" : "" ?>">
+                            <a href="#"><i class="icon-dice"></i> <span>Danh Mục</span></a>
+                            <ul>
+                                <li class="<?php echo ($this->module == 'admin' && $this->module == 'admin' && $this->controller == "category" && $this->action == "index") ? "active" : "" ?>"><a href="/admin/category">Danh Sách Danh Mục</a></li>
+                                <li class="<?php echo ($this->module == 'admin' && $this->module == 'admin' && $this->controller == "category" && $this->action == "detail") ? "active" : "" ?>"><a href="/admin/category/detail">Thông Tin Danh Mục</a></li>
+                            </ul>
+                        </li>
+                    <?php } ?>        
+                    <?php if (UtilAuth::hasPrivilege('menu', ACTION_VIEW) == true || UtilAuth::hasPrivilege('menu', ACTION_ADD) == true || UtilAuth::hasPrivilege('menu', ACTION_EDIT) == true) {
+                        ?>
+                        <li class="<?php echo ($this->module == 'admin' && $this->controller == "menu") ? "active" : "" ?>">
+                            <a href="#"><i class="icon-menu2"></i> <span>Menu</span></a>
+                            <ul>
+                                <li class="<?php echo ($this->module == 'admin' && $this->module == 'admin' && $this->controller == "menu" && $this->action == "index") ? "active" : "" ?>"><a href="/admin/menu">Danh Sách Menu</a></li>
+                                <li class="<?php echo ($this->module == 'admin' && $this->module == 'admin' && $this->controller == "menu" && $this->action == "detail") ? "active" : "" ?>"><a href="/admin/menu/detail">Thông Tin Menu</a></li>
+                            </ul>
+                        </li>
+                    <?php } ?>
+                    <?php if (UtilAuth::hasPrivilege('order', ACTION_VIEW) == true || UtilAuth::hasPrivilege('order', ACTION_ADD) == true || UtilAuth::hasPrivilege('order', ACTION_EDIT) == true) {
+                        ?>
+                        <li class="<?php echo ($this->module == 'admin' && $this->controller == "order") ? "active" : "" ?>">
+                            <a href="#"><i class="icon-cart-add2"></i> <span>Đơn Hàng</span></a>
+                            <ul>
+                                <li class="<?php echo ($this->module == 'admin' && $this->module == 'admin' && $this->controller == "order" && $this->action == "index") ? "active" : "" ?>"><a href="/admin/order">Danh Sách Đơn Hàng</a></li>
+                                <li class="<?php echo ($this->module == 'admin' && $this->module == 'admin' && $this->controller == "order" && $this->action == "detail") ? "active" : "" ?>"><a href="/admin/order/detail">Thông Tin Đơn Hàng</a></li>
+                            </ul>
+                        </li>
+                    <?php } ?>
+                    <?php if (UtilAuth::hasPrivilege('promotion-code', ACTION_VIEW) == true || UtilAuth::hasPrivilege('promotion-code', ACTION_ADD) == true || UtilAuth::hasPrivilege('promotion-code', ACTION_EDIT) == true) {
+                        ?>
+                        <li class="<?php echo ($this->module == 'admin' && $this->controller == "promotion-code") ? "active" : "" ?>">
+                            <a href="#"><i class="icon-barcode2"></i> <span>Mã Khuyến Mãi</span></a>
+                            <ul>
+                                <li class="<?php echo ($this->module == 'admin' && $this->module == 'admin' && $this->controller == "promotion-code" && $this->action == "index") ? "active" : "" ?>"><a href="/admin/promotion-code">Danh Sách Mã Khuyến Mãi</a></li>
+                                <li class="<?php echo ($this->module == 'admin' && $this->module == 'admin' && $this->controller == "promotion-code" && $this->action == "detail") ? "active" : "" ?>"><a href="/admin/promotion-code/detail">Thông Tin Mã Khuyến Mãi</a></li>
+                            </ul>
+                        </li>
+                    <?php } ?>
+                    <?php if (UtilAuth::hasPrivilege('banner', ACTION_VIEW) == true || UtilAuth::hasPrivilege('banner', ACTION_ADD) == true || UtilAuth::hasPrivilege('banner', ACTION_EDIT) == true) {
+                        ?>
+                        <li class="<?php echo ($this->module == 'admin' && $this->controller == "banner") ? "active" : "" ?>">
+                            <a href="#"><i class="icon-file-picture2"></i> <span>Banner</span></a>
+                            <ul>
+                                <li class="<?php echo ($this->module == 'admin' && $this->module == 'admin' && $this->controller == "banner" && $this->action == "index") ? "active" : "" ?>"><a href="/admin/banner">Danh Sách Banner</a></li>
+                                <li class="<?php echo ($this->module == 'admin' && $this->module == 'admin' && $this->controller == "banner" && $this->action == "detail") ? "active" : "" ?>"><a href="/admin/banner/detail">Thông Tin Banner</a></li>
+                            </ul>
+                        </li>
+                    <?php } ?>
+                    <?php if (UtilAuth::hasPrivilege('media', ACTION_VIEW) == true || UtilAuth::hasPrivilege('media', ACTION_ADD) == true || UtilAuth::hasPrivilege('media', ACTION_EDIT) == true) { ?>
+                        <!-- media managerment -->
+                        <li class="<?php echo ($this->module == 'admin' && $this->controller == "media") ? "active" : "" ?>">
+                            <a href="#"><i class="icon-images2"></i> <span>Thư Viện Ảnh</span></a>
+                            <ul>
+                                <li class="<?php echo ($this->controller == "media" && $this->action == "index" ) ? "active" : "" ?>"><a href="/admin/media">Danh Sách Thư Viện Ảnh</a></li>
+                            </ul>
+                        </li>
+                    <?php } ?>
+                    <?php if (UtilAuth::hasPrivilege('setting', ACTION_VIEW) == true || UtilAuth::hasPrivilege('setting', ACTION_EDIT) == true) { ?>
+                        <li class="<?php echo ($this->module == 'admin' && $this->controller == "setting") ? "active" : "" ?>">
+                            <a href="#"><i class="icon-cog3"></i> <span>Cài Đặt</span></a>
+                            <ul>
+                                <?php if (UtilAuth::hasPrivilege('setting', ACTION_VIEW) == true) { ?>
+                                    <li class="<?php echo ($this->module == 'admin' && $this->controller == "setting" && $this->action == "index" ) ? "active" : "" ?>"><a href="/admin/setting">Danh Sách Cài Đặt</a></li>
+                                <?php } ?>
+                            </ul>
+                        </li>
+                    <?php } ?>
+                    <?php if (UtilAuth::hasPrivilege('user', ACTION_VIEW) == true || UtilAuth::hasPrivilege('user', ACTION_ADD) == true || UtilAuth::hasPrivilege('user', ACTION_EDIT) == true) { ?>
+                        <!-- User management -->
+                        <li class="<?php echo ($this->module == 'admin' && $this->controller == "user") ? "active" : "" ?>">
+                            <a href="#"><i class="icon-people"></i> <span>Người Dùng</span></a>
+                            <ul>
+                                <?php if (UtilAuth::hasPrivilege('user', ACTION_VIEW) == true) { ?>
+                                    <li class="<?php echo ($this->module == 'admin' && $this->controller == "user" && $this->action == "index" ) ? "active" : "" ?>"><a href="/admin/user/index">Danh Sách Người Dùng</a></li>
+                                <?php } ?>
+                                <?php if (UtilAuth::hasPrivilege('user', ACTION_ADD) == true || UtilAuth::hasPrivilege('user', ACTION_EDIT) == true) { ?>
+                                    <li class="<?php echo ($this->module == 'admin' && $this->controller == "user" && $this->action == "add") ? "active" : "" ?>"><a href="/admin/user/add">Thông Tin Người Dùng</a></li>
+                                <?php } ?>
+                            </ul>
+                        </li>
+                    <?php } ?>
+                    <?php
+                    if (UtilAuth::hasPrivilege('statistic', ACTION_VIEW) == true ) {
+                        ?>
+                        <!-- Statistics management -->
+                        <li class="<?php echo ($this->module == 'admin' && $this->controller == "statistic") ? "active" : "" ?>">
+                            <a href="#"><i class="icon-file-stats"></i> <span>Thống Kê</span></a>
+                            <ul>
+                                <?php if (UtilAuth::hasPrivilege('statistic', ACTION_VIEW) == true) { ?>
+                                    <li class="<?php echo ($this->module == 'admin' && $this->controller == "statistic" && $this->action == "index" ) ? "active" : "" ?>"><a href="/admin/statistic/index">Thống Kê</a></li>
+                                <?php } ?>
+                            </ul>
+                        </li>
+                    <?php } ?>
+                      <?php
+                    if (UtilAuth::hasPrivilege('product-color', ACTION_VIEW) == true ) {
+                        ?>
+                        <!-- Statistics management -->
+                        <li class="<?php echo ($this->module == 'admin' && $this->controller == "product-color") ? "active" : "" ?>">
+                            <a href="#"><i class="icon-cube"></i> <span>Màu Sản Phẩm</span></a>
+                            <ul>
+                                <?php if (UtilAuth::hasPrivilege('product-color', ACTION_VIEW) == true) { ?>
+                                    <li class="<?php echo ($this->module == 'admin' && $this->controller == "product-color" && $this->action == "index" ) ? "active" : "" ?>"><a href="/admin/product-color/index">Màu Sản Phẩm</a></li>
+                                <?php } ?>
+                            </ul>
+                        </li>
+                    <?php } ?>
+                    <?php if (UtilAuth::hasPrivilege('permission', ACTION_VIEW) == true || UtilAuth::hasPrivilege('permission', ACTION_ADD) == true || UtilAuth::hasPrivilege('permission', ACTION_EDIT) == true) { ?>
+                        <!-- Permission management -->
+                        <li class="<?php echo ($this->module == 'admin' && $this->controller == "permission") ? "active" : "" ?>">
+                            <a href="#"><i class="icon-rating3"></i> <span>Phân Quyền</span></a>
+                            <ul>
+                                <?php if (UtilAuth::hasPrivilege('permission', ACTION_VIEW) == true) { ?>
+                                    <li class="<?php echo ($this->module == 'admin' && $this->controller == "permission" && $this->action == "index" ) ? "active" : "" ?>"><a href="/admin/permission/index">Danh Sách Quyền</a></li>
+                                <?php } ?>
+                                <?php if (UtilAuth::hasPrivilege('permission', ACTION_ADD) == true || UtilAuth::hasPrivilege('permission', ACTION_EDIT) == true) { ?>
+                                    <li class="<?php echo ($this->module == 'admin' && $this->controller == "permission" && $this->action == "add") ? "active" : "" ?>"><a href="/admin/permission/add">Thông Tin Quyền</a></li>
+                                <?php } ?>
+                            </ul>
+                        </li>
+                    <?php } ?>
+                </ul>
+            </div>
+        </div>
+        <!-- /main navigation -->
+    </div>
+</div>
+<!-- /main sidebar -->

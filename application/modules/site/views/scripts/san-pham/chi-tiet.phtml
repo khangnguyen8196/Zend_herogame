@@ -1,0 +1,100 @@
+<?php $this->viewCssClass = 'product detail' ?>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 hidden-md-down no-gutter">
+            <?php echo $this->partial('/shared/_breadcrumbs.phtml',array('data' => array(
+            		'parent' => array(
+            			'name' =>  @$this->info["category_name"],
+            			'url' => '/danh-muc/'.@$this->info["category_url"]
+            		),
+            		'child' => array(
+            			'name' => @$this->info['title']
+            		)
+            ))) ?>
+        </div>
+    </div>
+    <div class="row">
+        <aside class="col-md-2 col-12 no-gutter">
+            <?php
+            if (empty($this->menuCategory) == false) {
+                echo $this->partial('/shared/_category_menu.phtml', array(
+                    'title' => 'Danh mục', 'data' => $this->menuCategory
+                ));
+            }
+            ?>
+            <div class="hidden-md-down">
+                <?php
+                if (empty($this->newestPost) == false) {
+                    $top = $this->newestPost[0];
+                    unset($this->newestPost[0]);
+                    echo $this->partial('/shared/_post_menu.phtml', array(
+                        'title' => 'Tin tức mới',
+                        'top' => $top,
+                        'data' => $this->newestPost
+                    ));
+                }
+                ?>
+            </div>
+        </aside>
+        <section class="col-md-10 col-12 left-gutter">
+            <div class="product-item-view">
+                <div class="piv-top">
+                    <?php echo $this->render('/san-pham/_photos.phtml') ?>
+                    <?php echo $this->render('/san-pham/_info.phtml') ?>
+                </div>
+                <div class="piv-bot">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#tbdtl" data-toggle="tab" role="tab">Mô tả - Thông số kỹ thuật</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#tbcmt" data-toggle="tab" role="tab">Đánh giá</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#tbbnf" data-toggle="tab" role="tab">Quyền lợi</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#tbpay" data-toggle="tab" role="tab">Thanh toán</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#tbwarr" data-toggle="tab" role="tab">Bảo hành</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="tbdtl" class="tab-pane fade active show" role="tabpanel">
+                            <?php echo $this->render('/san-pham/_detail.phtml') ?>
+                        </div>
+                        <div id="tbcmt" class="tab-pane fade" role="tabpanel">
+                            <?php echo $this->render('/shared/_data_comment.phtml') ?>
+                        </div>
+                        <div id="tbbnf" class="tab-pane fade" role="tabpanel">
+                            <?php echo $this->render('/san-pham/_benefit.phtml') ?>
+                        </div>
+                        <div id="tbpay" class="tab-pane fade" role="tabpanel">
+                            <?php echo $this->render('/san-pham/_payment.phtml') ?>
+                        </div>
+                        <div id="tbwarr" class="tab-pane fade" role="tabpanel">
+                            <?php echo $this->render('/san-pham/_warranty.phtml') ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <?php
+            if (empty($this->relative_product) == false) {
+                echo $this->partial('/shared/_quick_view.phtml', array(
+                    'qdsp' => 'slider',
+                    'custom_class' => 'product-relative',
+                    'tabs' => array(
+                        array(
+                            'title' => 'Sản phẩm liên quan',
+                            'data' => $this->relative_product
+                        )
+                    )
+                ));
+            }
+            ?>
+        </section>
+    </div>
+</div>

@@ -1,0 +1,96 @@
+<div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="modalstatus" aria-hidden="true">
+</div>
+<div class="page-header">
+	<div class="page-header-content">
+		<div class="page-title">
+			<h4>
+				<i class="icon-stack3 position-left"></i> <span
+					class="text-semibold">Sản Phẩm - Danh Sách Sản Phẩm</span>
+			</h4>
+		</div>
+		<div class="heading-elements">
+			<a href="/admin/<?php echo $this->controller?>/detail/"
+				class="btn btn-labeled btn-labeled-right bg-blue heading-btn">Tạo
+				Sản Phẩm <b><i class="fa fa-plus" aria-hidden="true"></i></b>
+			</a>
+		</div>
+	</div>
+	<div class="breadcrumb-line">
+		<ul class="breadcrumb">
+			<li><a href="/admin/index/"><i class="icon-home2 position-left"></i> <?php echo $this->translate('home')?></a></li>
+			<li><a href="/admin/product">Sản Phẩm</a></li>
+			<li class="active">Danh Sách Sản Phẩm</li>
+		</ul>
+		<!-- tree -->
+	</div>
+</div>
+<div class="content">
+	<div class="panel panel-flat">
+		<div class="panel-heading">
+			<h5 class="panel-title">Danh Sách Sản Phẩm</h5>
+		</div>
+		<div class="panel-body">
+			<form id="searchPost">
+				<div class="col-md-12">
+					<div class="col-md-4 ">
+						<div class="form-group">
+							<label>Danh mục</label> <select item-type="search"
+								mapping-column="3" class="select-search">
+								<option value="">Tất cả</option>
+								<?php if( empty( $this->listCategory ) == false ){ ?>
+								<?php foreach ( $this->listCategory as $category ){ ?>
+									<option value="<?php echo $category['id'] ?>"><?php echo $category['name'] ?></option>
+								<?php } ?>
+								<?php } ?>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-4 ">
+						<div class="form-group">
+							<label><?php echo $this->translate('created-at')?></label>
+							<div class="input-group">
+								<span class="input-group-addon"><i class="icon-calendar"></i></span>
+								<input type="text" item-type="search" mapping-column="5"
+									data-format="yyyy-mm-dd" class="form-control datepicker"
+									placeholder="<?php echo $this->translate('created-at')?>">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 ">
+						<div class="form-group">
+							<label><?php echo $this->translate('updated-at')?></label>
+							<div class="input-group">
+								<span class="input-group-addon"><i class="icon-calendar"></i></span>
+								<input type="text" item-type="search" mapping-column="7"
+									data-format="yyyy-mm-dd" class="form-control datepicker"
+									placeholder="<?php echo $this->translate('updated-at')?>">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12">
+					<div class="col-md-12">
+						<button type="button" class="btn btn-primary seach-form">
+							<i class="fa fa-search" aria-hidden="true"></i>&nbsp;<?php echo $this->translate('search')?></button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<table id="productTable" class="table datatable-pagination">
+			<thead>
+				<tr>
+					<th width="5%"><?php echo $this->translate('id')?></th>
+					<th>Tên Sản Phẩm</th>
+					<th width="8%">Hình Ảnh</th>
+					<th width="8%">Danh Mục</th>
+					<th>Giá</th>
+					<th width="8%"><?php echo $this->translate('created-at')?></th>
+					<th width="8%"><?php echo $this->translate('updated-at')?></th>
+					<th><?php echo $this->translate('updated-by')?></th>
+					<th><?php echo $this->translate('status')?></th>
+					<th class="text-center"><?php echo $this->translate('action')?></th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>

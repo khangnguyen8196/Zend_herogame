@@ -1,0 +1,23 @@
+<div class="purchase">
+    <form id="purc_frm" name="purc_frm" method="POST">
+        <ul class="qty">
+            <li>
+                <a id="minus" style="cursor: pointer"><i class="fa fa-minus"></i></a>
+            </li>
+            <li>
+                <input type="tel" readonly min="1" max="100" value="1" id="number"/>
+            </li>
+            <li>
+                <a id="plus" style="cursor: pointer"><i class="fa fa-plus"></i></a>
+            </li>
+        </ul>
+        <button class="btn-cart" id="add_to_cart">
+            <i class="fa fa-cart-plus"></i>
+            <span>Thêm vào giỏ</span>
+        </button>
+        <input type="hidden" id="pid" name="pid" value="<?php echo $this->info["id"]?>"/>
+        <input type="hidden" id="qty" name="qty"/>
+        <input type="hidden" id="t" name="t"/>
+        <input type="hidden" id="color" name="color" value="<?php echo !empty($this->color_list[0]['id']) ? $this->color_list[0]['id']:'1'?>" />
+    </form>
+</div>

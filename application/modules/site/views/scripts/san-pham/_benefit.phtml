@@ -1,0 +1,8 @@
+<div class="benefit">
+    <?php
+    $benefit = Commons::getSettingByKey($this->setting, BENEFIT);
+    if (empty($benefit["value"]) == false) {
+        echo $benefit["value"];
+    }
+    ?>
+</div>

@@ -1,0 +1,48 @@
+<?php $this->viewCssClass = 'order result' ?>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="thanks">
+                <?php if($this->status == 1) { ?>
+                    <header>
+                        <h1>Đặt hàng thành công!</h1>
+                        <em>Mã đơn hàng: <strong><a href="/don-hang/thong-tin-don-hang?order-code=<?php echo $this->orderCode?>"><?php echo $this->orderCode?></a></strong></em>
+                        <img src="/img/balloons-confetti.png" />
+                    </header>
+                    <ul>
+                        <li>
+                            <p>Thông tin chi tiết về đơn hàng đã được gởi đến email <strong><a href="mailto:<?php echo $this->email?>"><?php echo $this->email?></a></strong></p>
+                            <p>Nếu không nhận được email, vui lòng kiểm tra thêm Spam/Junk hoặc Bulk mail.</p>
+                        </li>
+                        <li>
+                            <p>Shop sẽ liên lạc với Quý khách để xác nhận đơn hàng và tiến hành giao hàng. Cảm ơn bạn đã mua hàng.</p>
+                        </li>
+                    </ul>
+                    <footer>
+                        <a class="btn btn-success" href="/don-hang/thong-tin-don-hang?order-code=<?php echo $this->orderCode?>">Chi tiết đơn hàng</a>
+                        <a class="btn btn-primary" href="/">Tiếp tục mua hàng</a>
+                    </footer>
+                <?php } else { ?>
+                    <header>
+                        <h1>Đặt hàng thất bại!</h1>
+                    </header>
+                    <ul>
+                        <li>
+                            <p>Đã xảy ra lỗi trong quá trình đặt hàng.</p>
+                        </li>
+                        <?php
+                            if( empty($this->error) == false ){
+                                foreach ($this->error  as $key => $value){
+                                    ?>
+                                        <li><p><?php echo $value;?></p></li>
+                                    <?php
+                                }
+                            }
+                        ?>
+                    </ul>
+                <?php } ?>
+            </div>
+        </div>
+    </div>
+</div>

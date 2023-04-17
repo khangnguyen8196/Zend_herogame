@@ -1,0 +1,34 @@
+<div class="data-filter">
+    <div class="display hidden-md-down">
+        <a class="grid-view 
+        <?php 
+        echo ( ( empty($_COOKIE["product_view_type"]) == false && $_COOKIE["product_view_type"] == "grid" ) 
+                || empty($_COOKIE["product_view_type"]) == true ) ? "active" : ""
+        ?>" href="#">
+            <i class="fa fa-th"></i>
+        </a>
+        <a class="list-view <?php echo ( empty($_COOKIE["product_view_type"]) == false && $_COOKIE["product_view_type"] == "list" ) ? "active" : "" ?>" href="#">
+            <i class="fa fa-th-list"></i>
+        </a>
+    </div>
+    <div class="limit">
+        <label>Hiển thị:</label>
+        <select id="item_limit" name="item_limit">
+            <?php foreach ($this->limit as $key => $item) { ?>
+                <option <?php echo ( $item["value"] == $this->selected_page_size ) ? "selected='selected'" : "" ?> value="<?php echo $item["value"] ?>">
+                    <?php echo $item["text"] ?>
+                </option>
+            <?php } ?>
+        </select>
+    </div>
+    <div class="sort">
+        <label>Sắp xếp theo:</label>
+        <select id="sort_type" name="sort_type">
+            <?php foreach ($this->sort as $key => $item) { ?>
+                <option <?php echo ( $item["value"] == $this->sorted ) ? "selected='selected'" : "" ?> value="<?php echo $item["value"] ?>">
+                    <?php echo $item["text"] ?>
+                </option>
+            <?php } ?>
+        </select>
+    </div>
+</div>

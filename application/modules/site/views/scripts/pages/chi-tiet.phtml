@@ -1,0 +1,71 @@
+<?php $this->viewCssClass = 'post detail' ?>
+<?php 
+	if( empty( $this->info["category-name"] ) == false ){
+		$dataBreadcrumbs = array(
+            		'parent' => array(
+            			'name' =>  @$this->info["category-name"],
+            			'url' => '/danh-muc-bai-viet/'.@$this->info["category-url"]
+            		),
+            		'child' => array(
+            			'name' => @$this->info['title']
+            		));
+	} else {
+		$dataBreadcrumbs = array(
+				'child' => array(
+						'name' => @$this->info['title']
+				));
+	}
+?>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 hidden-md-down no-gutter">
+            <?php echo $this->partial('/shared/_breadcrumbs.phtml',array('data' => $dataBreadcrumbs )) ?>
+        </div>
+    </div>
+    <div class="row">
+        <aside class="col-md-2 hidden-md-down no-gutter">
+            <?php echo $this->render("/shared/_left-aside.phtml")?>
+        </aside>
+
+        <section class="col-md-10 col-12 both-gutter">
+            <div class="post-detail">
+                <header>
+                    <h1><?php echo $this->info['title'] ?></h1>
+                    <div class="meta">
+                    <?php if( empty( $this->info["category-name"] ) == false ){ ?>
+                        <a class="category" href="/danh-muc-bai-viet/<?php echo @$this->info["category-url"] ?>"><?php echo $this->info["category-name"]?></a>,
+                        <?php } ?> bởi
+                        <a class="author"><?php echo $this->info['created_by'] ?></a>
+                        <em class="date">
+                            <i class="fa fa-clock-o"></i>
+                            <?php echo  UtilFormat::formatTimeForCreatedDate( $this->info['updated_at'], 'd/m/Y H:i:s' ) ?>
+                        </em>
+                    </div>
+                    <div class="react">
+                        <div class="share">
+                            <div class="sharethis-inline-share-buttons"></div>
+                        </div>
+                    </div>
+                </header>
+                <?php if( empty( $this->relative_post ) == false ){ ?>
+                	<ul class="related">
+                		<?php foreach ( $this->relative_post as $relative ) { ?>
+		                    <li>
+		                        <i class="fa fa-caret-right"></i>
+		                        <a href="/bai-viet/<?php echo $relative['url_name']?>"><?php echo $relative['title'] ?></a>
+		                    </li>
+                		<?php } ?>
+                	</ul>
+                <?php } ?>
+                <div class="content">
+                    <div class="news_if">
+                        <?php echo $this->info['content'] ?>  
+                    </div>
+                </div>
+                <footer>
+                    <?php echo $this->partial('/shared/_data_comment.phtml') ?>
+                </footer>
+            </div>
+        </section>
+	</div>
+</div>

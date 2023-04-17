@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<root>
+	<form name="orderForm" >
+		<checkrules>
+			<name>
+				<validate>
+					<NotEmpty message="please-input-name" />
+				</validate>
+			</name>
+			<address>
+				<validate>
+					<NotEmpty message="please-input-address" />
+				</validate>
+			</address>
+			<phone>
+				<validate>
+					<NotEmpty message="please-input-phone" />
+				</validate>
+			</phone>
+		</checkrules>
+	</form>	
+</root>	

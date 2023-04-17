@@ -1,0 +1,41 @@
+<div class="page-header">
+	<div class="page-header-content">
+		<div class="page-title">
+			<h4><i class="icon-barcode2 position-left"></i> <span class="text-semibold">Mã Khuyến Mãi - Danh Sách Mã Khuyến Mãi</span></h4>
+		</div>
+		<div class="heading-elements">
+			<a href="/admin/<?php echo $this->controller?>/detail" class="btn btn-labeled btn-labeled-right bg-blue heading-btn">Tạo Mã Khuyến Mãi <b><i class="fa fa-plus" aria-hidden="true"></i></b></a>
+		</div>
+	</div>
+	<div class="breadcrumb-line">
+		<ul class="breadcrumb">
+			<li><a href="/admin/index/"><i class="icon-home2 position-left"></i> Trang Chủ</a></li>
+                        <li><a href="/admin/promotion-code">Mã Khuyến Mãi</a></li>
+			<li class="active">Danh Sách Mã Khuyến Mãi</li>
+		</ul>
+		<!-- tree -->
+	</div>
+</div>
+<div class="content">
+	<div class="panel panel-flat">
+		<div class="panel-heading">
+			<h5 class="panel-title">Danh Sách Mã Khuyến Mãi</h5>
+		</div>
+		<div class="panel-body">
+			<form id="searchCategory">
+			</form>
+		</div>
+		<table id="promoCodeTable" class="table datatable-pagination">
+			<thead>
+				<tr>
+					<th width="5%">#</th>
+					<th width="20%">Tên Khuyến Mãi</th>
+					<th>Mã Khuyến Mãi</th>
+					<th>Ngày Bắt Đầu</th>
+					<th>Ngày Kết Thúc</th>
+					<th class="text-center">Hành Động</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>

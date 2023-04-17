@@ -1,0 +1,151 @@
+<!-- Page header -->
+<div class="page-header">
+    <div class="page-header-content">
+        <div class="page-title">
+            <h3><i class="icon-people position-left"></i> <span class="text-semibold">Người Dùng - Thông Tin Người Dùng</h3>
+        </div>
+    </div>
+    <div class="breadcrumb-line">
+        <ul class="breadcrumb">
+            <li><a href="/index/"><i class="icon-home2 position-left"></i> Trang Chủ</a></li>
+            <li><a href="/user/">Danh Sách Người Dùng</a></li>
+            <li class="active">Thông Tin Người Dùng</li>
+        </ul>
+    </div>
+</div>
+<!-- /page header -->
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <!-- Basic layout-->
+            <form action="/admin/user/add" id="add_edit_user_frm" class="form-validate-jquery" method="post">
+                <div class="panel panel-flat">
+                    <div class="panel-body">
+                        <div class="text-center">
+                            <div class="icon-object border-success text-success"><i class="icon-plus3"></i></div>
+                            <h5 class="content-group-lg"><?php echo ( empty($this->loggedAccountInfo) == false ) ? $this->translate('update-account') : $this->translate('create-account') ?> <small class="display-block"><?php echo $this->translate('all-fields-are-required') ?></small></h5>
+                        </div>
+                        <?php if (empty($this->message) == false) { ?>
+                            <?php
+                            $break = false;
+                            if (count($this->message) > 1) {
+                                $break = true;
+                            }
+                            ?>
+                            <div class="alert <?php echo (isset($this->success) == true) ? 'alert-success' : 'alert-danger' ?> alert-bordered">
+                                <button type="button" class="close" data-dismiss="alert"><span>&times;</span><span class="sr-only">Close</span></button>
+                                <?php
+                                foreach ($this->message as $value) {
+                                    echo $value;
+                                    if ($break == true)
+                                        echo "</br>";
+                                }
+                                ?>
+                            </div>
+                        <?php } ?>
+                        <div class="form-group has-feedback">
+                            <input type="text" class="form-control" placeholder="<?php echo $this->translate('username') ?>" 
+                                   id="username" name="username" data-msg="<?php echo $this->translate('please-enter-username') ?>" 
+                                   <?php echo (empty($this->loggedAccountInfo['user_name']) == false ) ? 'disabled' : "" ?>
+                                   value="<?php echo (empty($this->loggedAccountInfo['user_name']) == false ) ? $this->loggedAccountInfo['user_name'] : "" ?>">
+                            <div class="form-control-feedback">
+                                <i class="icon-user-plus text-muted"></i>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group has-feedback">
+                                    <input type="text" class="form-control" placeholder="<?php echo $this->translate('first_name') ?>" 
+                                           id="first_name" name="first_name" data-msg="<?php echo $this->translate('please-enter-first-name') ?>"
+                                           value="<?php echo (empty($this->loggedAccountInfo['first_name']) == false ) ? $this->loggedAccountInfo['first_name'] : "" ?>">
+                                    <div class="form-control-feedback">
+                                        <i class="icon-user-check text-muted"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group has-feedback">
+                                    <input type="text" class="form-control" placeholder="<?php echo $this->translate('last_name') ?>" 
+                                           id="last_name" name="last_name" data-msg="<?php echo $this->translate('please-enter-last-name') ?>"
+                                           value="<?php echo (empty($this->loggedAccountInfo['last_name']) == false ) ? $this->loggedAccountInfo['last_name'] : "" ?>">
+                                    <div class="form-control-feedback">
+                                        <i class="icon-user-check text-muted"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <?php if (empty($this->loggedAccountInfo) == true) { ?>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group has-feedback">
+                                        <input type="password" class="form-control" placeholder="<?php echo $this->translate('create-password') ?>" id="password" name="password" data-msg="<?php echo $this->translate('please-enter-password') ?>">
+                                        <div class="form-control-feedback">
+                                            <i class="icon-user-lock text-muted"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group has-feedback">
+                                        <input type="password" class="form-control" placeholder="<?php echo $this->translate('repeat-password') ?>" id="repeat_password" name="repeat_password" data-msg="<?php echo $this->translate('please-enter-repeat-password') ?>" data-miss-match-msg="<?php echo $this->translate('repeat-pass-not-match') ?>">
+                                        <div class="form-control-feedback">
+                                            <i class="icon-user-lock text-muted"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php } ?>
+                        <div class="row">
+                            <div class="<?php echo ( empty($this->loggedAccountInfo) == false ) ? 'col-md-12' : 'col-md-6' ?>">
+                                <div class="form-group has-feedback">
+                                    <input type="email" class="form-control" placeholder="<?php echo $this->translate('your-email') ?>" 
+                                           id="email" name="email" data-msg="<?php echo $this->translate('please-enter-email') ?>" 
+                                           data-error-email="<?php echo $this->translate('please-enter-correct-email') ?>"
+                                           value="<?php echo (empty($this->loggedAccountInfo['email']) == false ) ? $this->loggedAccountInfo['email'] : "" ?>">
+                                    <div class="form-control-feedback">
+                                        <i class="icon-mention text-muted"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php if (empty($this->loggedAccountInfo) == true) { ?>
+                                <div class="col-md-6">
+                                    <div class="form-group has-feedback">
+                                        <input type="email" class="form-control" placeholder="<?php echo $this->translate('repeat-your-email') ?>" id="repeat_email" name="repeat_email" data-msg="<?php echo $this->translate('please-enter-repeat-email') ?>" data-error-email="<?php echo $this->translate('please-enter-correct-email') ?>" data-miss-match-msg="<?php echo $this->translate('repeat-email-not-match') ?>">
+                                        <div class="form-control-feedback">
+                                            <i class="icon-mention text-muted"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                        </div>
+                        <?php if ( $this->login_info['role_id'] == ADMIN_ROLE_ID) { ?>
+                            <div class="form-group has-feedback">
+                                <select class="select-role" name="role">
+                                    <?php if (empty($this->roleList) == false && is_array($this->roleList) == true) { ?>
+                                        <?php foreach ($this->roleList as $value) { ?>
+                                            <option value="<?php echo $value['role_id'] ?>"><?php echo $value['role_name'] ?></option>
+                                        <?php } ?>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        <?php } ?>
+                        <div class="text-right">
+                            <button type="submit" class="btn bg-teal-400 btn-labeled btn-labeled-right ml-10" id="add-update-user-btn">
+                                <?php if (empty($this->loggedAccountInfo) == true) { ?>
+                                    <b><i class="icon-plus3"></i></b> <?php echo $this->translate('create-account') ?>
+                                <?php } else { ?>
+                                    <b><i class="icon-pencil7"></i></b> <?php echo $this->translate('update-account') ?>
+                                    <?php } ?>
+                            </button>
+                        </div>
+                        <input type="hidden" id="uid" name="uid" value="<?php echo ( empty($this->id) == false ) ? $this->id : "" ?>"/>
+                    </div>
+                </div>
+            </form>
+            <!-- /basic layout -->
+        </div>
+    </div>
+</div>
+

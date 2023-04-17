@@ -1,0 +1,106 @@
+<?php $this->viewCssClass = 'product index list' ?>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 hidden-md-down no-gutter">
+            <?php
+            echo $this->partial('/shared/_breadcrumbs.phtml', array('data' => array(
+                    'child' => array(
+                        'name' => @$this->categoryInfo['name']
+                    )
+                )));
+            ?>
+        </div>
+    </div>
+    <div class="row">
+        <aside class="col-md-2 col-12 no-gutter">
+            <?php
+            echo $this->partial('/shared/_sf_inputrange.phtml', array(
+                'title' => 'Lọc theo giá',
+                'name' => 'attribute[19]',
+                'min' => Commons::getMinProductPrice(),
+                'max' => Commons::getMaxProductPrice(),
+                'step' => 1000,
+                'unit' => '₫'
+            ))
+            ?>
+            <?php echo $this->render("/shared/_left-aside.phtml") ?>
+        </aside>
+
+        <section class="col-md-10 col-12 both-gutter">
+            <?php
+            $showbanner = Commons::getSettingByKey($this->setting, 'banner-list-product');
+            if (empty($showbanner) == false && $showbanner['value'] == STATUS_SHOW) {
+                ?>
+                <div class="row hidden-md-down">
+                    <?php if (empty($this->banner['child_' . BANNER_CHILD_HEADER]) == false) { ?>
+                        <div class="col-12">
+                            <?php
+                            echo $this->partial('/shared/_banner_rotator.phtml', array(
+                                'bhov' => true,
+                                'data' => $this->banner['child_' . BANNER_CHILD_HEADER]
+                            ))
+                            ?>
+                        </div>
+                    <?php } ?>
+                </div>
+            <?php } ?>
+            <?php
+            echo $this->partial('/shared/_data_header.phtml', array(
+                'title' => $this->categoryInfo['name'],
+                'description' => @$this->categoryInfo['summary']
+            ))
+            ?>
+            <?php
+            echo $this->partial('/shared/_data_filter.phtml', array(
+                'sort' => $this->sortList,
+                'limit' => $this->pageSize,
+                'selected_page_size' => $this->selected_page_size,
+                'sorted' => $this->sorted
+            ))
+            ?>
+            <?php
+            $res = Commons::_buildProductResponse($this->paginator);
+
+            echo $this->partial('/shared/_product_view.phtml', array(
+                'data' => $res,
+                'dcol' => 5
+            ))
+            ?>
+            <!-- pagination -->
+            <?php if (count($this->paginator) > 1) { ?>
+                <?php echo $this->paginator; ?>
+            <?php } ?>
+        </section>
+    </div>
+</div>
+<?php echo $this->render("/shared/_filter_submit_frm.phtml") ?>
+<?php
+$imageBottom = Commons::getSettingByKey($this->setting, 'image-bottom');
+if (empty($imageBottom) == false && $imageBottom['value'] == STATUS_SHOW) {
+    ?>
+    <?php
+    $footer_video = Commons::getSettingByKey($this->setting, 'footer_youtube_video');
+    $footer_background = Commons::getSettingByKey($this->setting, 'footer_backgound_mage');
+    $banner_f_top = array();
+    if (empty($this->banner['child_' . BANNER_CHILD_FOOTER_TOP]) == false) {
+        $banner_f_top = $this->banner['child_' . BANNER_CHILD_FOOTER_TOP];
+    };
+    $banner_f_bot = array();
+    if (empty($this->banner['child_' . BANNER_CHILD_FOOTER_BOT]) == false) {
+        $banner_f_bot = $this->banner['child_' . BANNER_CHILD_FOOTER_BOT];
+    };
+    ?>
+    <?php
+    echo $this->partial('/shared/_video_view.phtml', array(
+        'burl' => $footer_background['value'],
+        'vurl' => $footer_video['value'],
+        'bcf1' => array(
+            'data' => $banner_f_top
+        ),
+        'bcf2' => array(
+            'data' => $banner_f_bot
+        ),
+    ))
+    ?>
+
+<?php } ?>

@@ -1,0 +1,22 @@
+<?php
+    $attrs = '';
+    if (isset($this->attrs)) {
+        foreach ($this->attrs as $key => $attr) {
+            $attrs .= ' ' . $attr['name'] . '="' . $attr['value'] . '"';
+        }
+    }
+?>
+<?php if($this->useImg) { ?>
+    <img class="<?php echo $this->css ?>" data-lazy="<?php echo $this->url ?>" <?php echo $attrs ?>
+         width="<?php echo $this->width ?>" height="<?php echo $this->height ?>" />
+<?php } else { ?>
+    <?php if(isset($this->ratio)) { ?>
+    <div class="imgh r<?php echo $this->ratio ?> <?php echo $this->css ?>" data-lazy="<?php echo $this->url ?>" <?php echo $attrs ?>></div>
+    <?php } else { ?>
+    <div class="imgh r0x0 <?php echo $this->css ?>" data-lazy="<?php echo $this->url ?>" <?php echo $attrs ?>>
+        <?php if(isset($this->width) && isset($this->height)) { ?>
+        <div style="padding-top:<?php echo ($this->height / $this->width) * 100 ?>%"></div>
+        <?php } ?>
+    </div>
+    <?php } ?>
+<?php } ?>

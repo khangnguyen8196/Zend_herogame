@@ -1,0 +1,179 @@
+<?php $this->viewCssClass = 'home index' ?>
+
+<?php
+echo $this->partial('/shared/_banner_slider.phtml', array(
+    'bhov' => true,
+    'data' => $this->banner['main']
+))
+?>
+
+<div class="container">
+    <div class="row less-gutter hidden-md-down">
+        <?php if (empty($this->banner['child_' . BANNER_CHILD_LEFT]) == false) { ?>
+            <div class="col-4">
+                <?php
+                echo $this->partial('/shared/_banner_rotator.phtml', array(
+                    'bhov' => true,
+                    'data' => $this->banner['child_' . BANNER_CHILD_LEFT]
+                ))
+                ?>
+            </div>
+        <?php } ?>
+        <?php if (empty($this->banner['child_' . BANNER_CHILD_MID]) == false) { ?>
+            <div class="col-4">
+                <?php
+                echo $this->partial('/shared/_banner_rotator.phtml', array(
+                    'bhov' => true,
+                    'data' => $this->banner['child_' . BANNER_CHILD_MID]
+                ))
+                ?>
+            </div>
+        <?php } ?>
+        <?php if (empty($this->banner['child_' . BANNER_CHILD_RIGHT]) == false) { ?>
+            <div class="col-4">
+                <?php
+                echo $this->partial('/shared/_banner_rotator.phtml', array(
+                    'bhov' => true,
+                    'data' => $this->banner['child_' . BANNER_CHILD_RIGHT]
+                ))
+                ?>
+            </div>
+        <?php } ?>
+    </div>
+    <div class="row">
+        <!-- Left menu-->
+        <aside class="col-md-2 no-gutter">
+            <?php
+	            if( empty( $this->menuCategory) == false ){
+		            echo $this->partial('/shared/_category_menu.phtml', array(
+		                'title' => 'Danh mục', 'data' => $this->menuCategory
+		            ));
+	            }
+            ?>
+            <div class="hidden-md-down">
+	            <?php
+		            if( empty($this->productBestSell) == false ){
+			            echo $this->partial('/shared/_product_menu.phtml', array(
+			                'title' => 'Pre-Order',
+			                'data' => $this->productBestSell
+			            ));
+		            }
+	            ?>
+	
+	            <?php
+		            if( empty($this->newProducts) == false ){
+			            echo $this->partial('/shared/_product_menu.phtml', array(
+			                'title' => 'Mới cập nhật',
+			                'data' => $this->newProducts
+			            ));
+		            }
+	            ?>
+				
+	            <?php
+	            	if( empty($this->newestPost) == false ){
+	            		$top = $this->newestPost[0];
+	            		unset($this->newestPost[0]);
+	            		echo $this->partial('/shared/_post_menu.phtml', array(
+	            				'title' => 'Tin tức mới',
+	                            'top' => $top,
+	            				'data' => $this->newestPost
+	            		));
+	            	}
+	            ?>
+			</div>
+        </aside>
+        <!-- Left menu -->
+        <!-- Content -->
+        <section class="col-md-10 col-12 left-gutter">
+            <!-- get list category -->
+            <?php
+            if (empty($this->listCategory) == false) {
+                echo $this->partial('/shared/_quick_view.phtml', array(
+                    'qtyp' => 'category',
+                	'qcss' => 'list-game-mc',
+                    'tabs' => array(
+                        array(
+                            'title' => 'Chọn Máy Chơi Game',
+                            'data' => $this->listCategory
+                        )
+                    ),
+                	'dcol' => 3,
+                	'headerCss' => 'hidden'	
+                ));
+            }
+            ?>
+            <!-- end get list category -->
+            <?php
+            echo $this->partial('/shared/_quick_view.phtml', array(
+                'qdsp' => 'slider',
+            	'dcol' => 4,
+                'tabs' => array(
+                    array(
+                        'title' => 'Pre-Order',
+                        'data' => $this->contentProductGroup["best_sell"]
+                    ),
+                    array(
+                        'title' => 'Hàng Mới Về',
+                        'data' => $this->contentProductGroup["new_arrival"]
+                    ),
+                    array(
+                        'title' => 'Hot deal',
+                        'data' => $this->contentProductGroup["promotion"]
+                    )
+                )
+            ))
+            ?>
+            <?php if (empty($this->productGroupByCategory) == false) { 
+                $i = 0;
+                $tabs = array();
+                foreach ($this->productGroupByCategory as $key => $value) {
+                    if( $i < 3 ){
+                        $tabs[] = array(
+                                'title' => $key,
+                                'data' => $value
+                        );
+                        $i++;
+                    }
+                    if( $i == 3 ){
+                        echo $this->partial('/shared/_quick_view.phtml', array(
+                            'qdsp' => 'grid',
+                            'dcol' => 4,
+                            'tabs' => $tabs
+                        ));
+                        $tabs = array();
+                        $i = 0;
+                    }
+                }
+                if( $i > 0 ){
+                    echo $this->partial('/shared/_quick_view.phtml', array(
+                        'qdsp' => 'grid',
+                        'dcol' => 4,
+                        'tabs' => $tabs
+                    ));
+                }
+            } ?>
+        </section>
+    </div>
+</div>
+<?php 
+	$footer_video = Commons::getSettingByKey($this->setting, 'footer_youtube_video');
+	$footer_background = Commons::getSettingByKey($this->setting, 'footer_backgound_mage');
+	$banner_f_top = array();
+	if( empty($this->banner['child_' . BANNER_CHILD_FOOTER_TOP]) == false ){
+		$banner_f_top = $this->banner['child_' . BANNER_CHILD_FOOTER_TOP];
+	};
+	$banner_f_bot = array();
+	if( empty($this->banner['child_' . BANNER_CHILD_FOOTER_BOT]) == false ){
+		$banner_f_bot = $this->banner['child_' . BANNER_CHILD_FOOTER_BOT];
+	};
+?>
+<?php echo $this->partial('/shared/_video_view.phtml', array(
+    'burl' => $footer_background['value'],
+    'vurl' => $footer_video['value'],
+    'bcf1' => array(
+        'data' => $banner_f_top
+    ),
+    'bcf2' => array(
+        'data' => $banner_f_bot
+    ),
+)) ?>

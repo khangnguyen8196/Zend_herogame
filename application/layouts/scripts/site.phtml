@@ -1,0 +1,111 @@
+<?php echo $this->doctype(); ?>
+<html lang="en">
+    <head>
+        <?php echo $this->headMeta(); ?>
+        <meta property="fb:app_id" content="146746129286405">
+        <?php $url = "http://".$_SERVER[HTTP_HOST].$_SERVER[REQUEST_URI]; ?>
+    	<meta property="og:url" content="<?php echo $url;?>">
+        <?php echo $this->headTitle(); ?>
+        <?php echo $this->headLink(); ?>
+        <script type="text/javascript" >
+            var language = '<?php echo (!empty($this->lang_code)) ? $this->lang_code : 'vi'; ?>';
+            var currController = '<?php echo $this->controller; ?>';
+            var currAction = '<?php echo $this->action; ?>';
+            var frontLink = '<?php echo $this->front_link;?>';
+            var is_reset = '<?php echo @$this->is_reset ?>';
+            var banner_qc = {};
+                
+        </script>
+        <?php 
+        	$style = Commons::getSettingByKey( $this->setting, 'style');
+        	if( empty($style) == false ){
+        		echo $style['value'];
+        	}
+        	$noel = Commons::getSettingByKey( $this->setting, 'NOEL');
+        	if( empty($noel) == false && $noel['value'] == 1){
+        		?>
+        		<script type="text/javascript" src="/site/js/pages/snowstorm.js"></script>
+        		<style>
+        			.pcontent{
+        				background: url('/img/stripe-green.jpg');
+        			}
+        			.product-item,body.product .data-description, body.post .post-list, .list-game-mc, .product.detail .product-item-view{
+        				background:#fff;
+        			}
+        		</style>
+        		<?php
+        		
+        	}
+                $quancao = Commons::getSettingByKey($this->setting, 'BANNER_QUAN_CAO');
+                if( empty($quancao) == false){
+                    ?>
+                        <script>
+                             banner_qc = <?php echo $quancao['value']; ?>;
+                        </script>
+                    <?php
+                }
+        ?>
+        <!-- Global site tag (gtag.js) - Google Ads: 972030121 -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-972030121"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+        
+          gtag('config', 'AW-972030121');
+        </script>
+        <script>
+        document.addEventListener("DOMContentLoaded", function(event) {
+          jQuery('#add_to_cart').on('click', function() {
+           gtag('event', 'conversion', {'send_to': 'AW-972030121/6vykCIqcu5cBEKmBwM8D'});
+          });
+          jQuery('#payment_btn').on('click', function() {
+           gtag('event', 'conversion', {'send_to': 'AW-972030121/eD51CK_FxpcBEKmBwM8D'});
+          });
+          jQuery('.btn-success.w-25').on('click', function() {
+           gtag('event', 'conversion', {'send_to': 'AW-972030121/IGzDCJfpxpcBEKmBwM8D'});
+          });
+        });
+        </script>
+    </head>
+    <body class="<?php echo $this->viewCssClass?>">
+        <div class="loader loader-default" data-text="Custom text"></div><!-- is-active!-->
+        <div class="pview">
+            <a id="pGoTop" href="javascript:;">
+                <i class="fa fa-chevron-up"></i>
+            </a>
+            <a id="pCall" href="tel:+84906221218">
+                <i class="fa fa-phone"></i>
+            </a>
+            <?php echo $this->render('/shared/_modal.phtml'); ?>
+            <?php echo $this->render('/shared/_header.phtml'); ?>
+            <div class="pcontent">
+                <?php if( ($this->action !== 'chi-tiet' && $this->controller == 'san-pham') ||  $this->controller != 'san-pham'){  ?>
+                    <div style="display: none;" id="taotestthui">
+                        <h1><?php echo @$this->headingData['h1'];?></h1>
+                        <h2><?php echo @$this->headingData['h2'];?></h2>
+                    </div>
+                <?php } ?>
+                <?php echo $this->layout()->content; ?>
+            </div>
+            <?php echo $this->render('/shared/_footer.phtml'); ?>
+        </div>
+        <?php echo $this->headScript(); ?>
+        <?php echo $this->render('/partials/_chat_fb.phtml'); ?>
+         <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-88846233-1"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+        
+          gtag('config', 'UA-88846233-1');
+        </script>
+        <!-- Google Tag Manager -->
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-KHB545W');</script>
+        <!-- End Google Tag Manager -->
+</html>

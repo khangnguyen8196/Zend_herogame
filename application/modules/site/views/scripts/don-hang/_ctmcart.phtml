@@ -1,0 +1,69 @@
+<div class="ctm-cart">
+    <div class="product-list">
+		<div class="scroller">
+	        <?php foreach ($this->cart_list as $key => $value) { ?>
+	        <?php
+	            $photo = "";
+	            if (empty($value["image"]) == false) {
+	                $photo = PHOTO_PATH . $value["image"];
+	            }
+	        ?>
+	        <div class="product-item">
+	            <?php echo $this->partial('/shared/_lazy_image.phtml', array(
+	                'ratio' => '1x1',
+	                'css' => 'photo',
+	                'url' => $photo
+	            )) ?>
+	            <div class="qty"><?php echo $value['qty'] ?></div>
+	            <div class="name"><?php echo $value['title'] ?><?php if(empty($value['color_name']) == false){?></br>Màu: <?php echo $value['color_name']?> <?php }?></div>
+	            <div class="price"><?php echo number_format($value['price_sales']) . '&#8363' ?></div>
+	        </div>
+	        <?php } ?>
+        </div>
+    </div>
+
+    <div class="code-form">
+        <div class="form-group">
+            <label>Mã giảm giá</label>
+            <input name="promotionCode" id="promotionCode" class="form-control" type="text" />
+            <input type="hidden" id="checkPromotion" name="checkPromotion" value="false">
+            <span class="loading_promotion" style="margin-left: .5rem; margin-top:.5rem;display: none; "><i class="fa fa-circle-o-notch fa-spin" style="font-size:18px"></i></span>
+            <button id="btnPromotion" type="button" class="btn btn-primary">Áp dụng</button>
+            <em class="form-message error error-promotion" style="display:none"></em>
+        </div>
+        <?php if(empty($this->customer) == false ){ ?>
+            <div class="form-group">
+                <label>Sử dụng điểm chiết khấu</label>
+                <input name="discount" id="discount" class="form-control" type="text" />
+                <input type="hidden" name="checkdisCount" id="checkdisCount" value="false">
+                <span class="loading_discount" style="margin-left: .5rem; margin-top:.5rem;display: none; "><i class="fa fa-circle-o-notch fa-spin" style="font-size:18px"></i></span>
+                <button id="btnDisCount" type="button" class="btn btn-primary">Áp dụng</button>
+                <em class="form-message error error-discount" style="display:none"></em>
+                <em class="form-message" style="font-style: italic;">Điểm hiện tại: <?php echo number_format($this->customer['score'])?></em>
+            </div>
+        <?php } ?>
+    </div>
+
+    <div class="subtotal-list">
+        <div class="line">
+            <label>Tạm tính:</label>
+            <span class="price"><?php echo number_format($this->total) . '&#8363' ?></span>
+        </div>
+        <div class="line">
+            <label>Giảm giá:</label>
+            <span class="price text-success">- <?php echo '<span id="priceDiscount">'.number_format(0).'</span>' . '&#8363' ?></span>
+        </div>
+    </div>
+
+    <div class="cart-total">
+        <div class="line">
+            <label>Tổng cộng</label>
+            <span class="price" id="totalPrice" data-total="<?php echo number_format($this->total)?>"><?php echo number_format($this->total) . '&#8363' ?></span>
+        </div>
+    </div>
+
+    <a href="/don-hang/gio-hang" class="btn-block">
+        <i class="fa fa-angle-left"></i>
+        <span>Quay lại giỏ hàng</span>
+    </a>
+</div>

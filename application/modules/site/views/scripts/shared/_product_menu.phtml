@@ -1,0 +1,20 @@
+<div class="side-box product-menu">
+    <header><?php echo $this->title ?></header>
+    <ul>
+        <?php foreach ($this->data as $key => $product) { ?>
+        <li>
+            <a href="<?php echo $product['url'] ?>">
+                <?php echo $this->partial('/shared/_lazy_image.phtml', array(
+                    'ratio' => '1x1',
+                    'css' => 'photo',
+                    'url' => $product['photo'],
+                )) ?>
+                <div class="detail">
+                    <span class="name"><?php echo $product['name'] ?></span>
+                    <span class="price"><?php echo $product['priceA'] ?></span>
+                </div>
+            </a>
+        </li>
+        <?php } ?>
+    </ul>
+</div>

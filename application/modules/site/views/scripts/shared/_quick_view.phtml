@@ -1,0 +1,58 @@
+<?php
+    // Default values
+    // 'tidx' => 0,
+    // 'dcol' => 5,
+    // 'mcol' => 2,
+    // 'qcss' => '',
+    // 'qdsp' => 'grid',
+    // 'qtyp' => 'product'
+    $dcol = isset($this->dcol) ? $this->dcol : 5;
+    $mcol = isset($this->mcol) ? $this->mcol : 2;
+    $ucss = isset($this->qdsp) ? $this->qdsp : 'grid';
+    for ($x = 0; $x < count($this->tabs); $x++) {
+        $this->tabs[$x]['uuid'] = 'wg' . uniqid();
+    }
+    $headerCss = @$this->headerCss;
+?>
+<div class="quick-view <?php echo $this->qcss ?>">
+    <ul class="nav nav-tabs <?php echo $headerCss;?>" role="tablist">
+      <?php foreach ($this->tabs as $key => $tab) {
+          $tcss = ($key == $this->tidx) ? 'active' : ''
+      ?>
+          <li class="nav-item">
+              <a class="nav-link <?php echo $tcss ?>" href="#<?php echo $tab['uuid'] ?>" data-toggle="tab" role="tab">
+                  <?php echo $tab['title'] ?>
+              </a>
+          </li>
+      <?php } ?>
+    </ul>
+    <div class="tab-content <?=@$this->custom_class?>">
+        <?php foreach ($this->tabs as $key => $tab) {
+            $tcss = ($key == $this->tidx) ? 'active show' : ''
+        ?>
+        <div id="<?php echo $tab['uuid'] ?>" class="tab-pane fade <?php echo $tcss ?>" role="tabpanel">
+                    <?php
+                $customClass = $ucss;
+                if( count($tab['data']) < 5 ){
+                    $customClass = 'grid';
+                } 
+            ?>
+            <?php if($customClass == 'grid') { ?>
+            <ul class="grid grid-md-<?php echo $dcol ?> grid-<?php echo $mcol ?>">
+            <?php } else { ?>
+            <ul class="slider" data-dcol="<?php echo $dcol ?>" data-mcol="<?php echo $mcol ?>">
+            <?php } ?>
+                <?php
+                    $partialPath = '/shared/_product_item.phtml';
+                    if ($this->qtyp == 'category') {
+                        $partialPath = '/shared/_category_item.phtml';
+                    }
+                    foreach ($tab['data'] as $key => $data) {
+                        echo '<li>' . $this->partial($partialPath, $data) . '</li>';
+                    }
+                ?>
+            </ul>
+        </div>
+        <?php } ?>
+    </div>
+</div>

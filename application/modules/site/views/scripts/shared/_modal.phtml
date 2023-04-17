@@ -1,0 +1,388 @@
+<?php if (empty($this->customer_info) == true) { ?>
+    <div id="signinModal" class="modal fade" data-backdrop="static">
+        <div class="modal-dialog h-100 d-flex flex-column justify-content-center my-0" role="document">
+            <div class="modal-content">
+                <form id="signinForm" novalidate>
+                    <div class="modal-header">
+                        <h5 class="modal-title">Đăng Nhập</h5>
+                        <a href="javascript:;" class="modal-close" data-dismiss="modal" title="Đóng">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                    <div class="modal-body">
+                        <label class="form-group has-float-label">
+                            <input name="sif_usr" class="form-control" type="text" placeholder="Nhập Tài Khoản"
+                                   data-rule-required="true"
+                                   data-msg-required="Vui lòng nhập Tài Khoản" />
+                            <span>Tài Khoản</span>
+                        </label>
+
+                        <label class="form-group has-float-label">
+                            <input name="sif_pwd" class="form-control" type="password" placeholder="Nhập Mật Khẩu"
+                                   data-rule-required="true"
+                                   data-msg-required="Vui lòng nhập Mật Khẩu" />
+                            <span>Mật Khẩu</span>
+                        </label>
+
+                        <div class="form-group d-flex">
+                            <a href="javascript:;" class="ml-auto"
+                               data-dismiss="modal"
+                               data-toggle="modal"
+                               data-target="#forgotPwdModal">Bạn quên Mật Khẩu?</a>
+                        </div>
+                        <div class="form-group mb-0" id="recaptcha_signin"> </div>
+                        <div class="alert alert-danger mb-0 mt-3" role="alert" style="display:none" id="signin_failed">
+                            <strong>Đăng nhập thất bại</strong> Tài Khoản hoặc Mật Khẩu không đúng.
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success w-25"
+                                data-dismiss="modal"
+                                data-toggle="modal"
+                                data-target="#signupModal">Đăng Ký</button>
+                        <button type="submit" class="btn btn-primary w-25" id="login-btn" disabled="disabled" >Đăng Nhập</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<?php } ?>
+<?php if (empty($this->customer_info) == true) { ?>
+    <div id="signupModal" class="modal fade" data-backdrop="static">
+        <div class="modal-dialog h-100 d-flex flex-column justify-content-center my-0" role="document">
+            <div class="modal-content">
+                <form id="signupForm" novalidate>
+                    <div class="modal-header">
+                        <h5 class="modal-title">Đăng Ký</h5>
+                        <a href="javascript:;" class="modal-close" data-dismiss="modal" title="Đóng">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                    <div class="modal-body">
+                        <label class="form-group has-float-label">
+                            <input name="suf_usr" class="form-control" type="text" placeholder="Nhập Tài Khoản"
+                                   data-rule-required="true"
+                                   data-msg-required="Vui lòng nhập Tài Khoản" />
+                            <span>Tài Khoản</span>
+                        </label>
+
+                        <label class="form-group has-float-label">
+                            <input name="suf_email" class="form-control" type="email" placeholder="email@abc.com"
+                                   data-rule-required="true"
+                                   data-rule-email="true"
+                                   data-msg-required="Vui lòng nhập Email"
+                                   data-msg-email="Vui lòng nhập Email đúng định dạng" />
+                            <span>Email</span>
+                        </label>
+
+                        <label class="form-group has-float-label">
+                            <input name="suf_name" class="form-control" type="text" placeholder="Nhập Họ và Tên"
+                                   data-rule-required="true"
+                                   data-msg-required="Vui lòng nhập Họ và Tên" />
+                            <span>Họ và Tên</span>
+                        </label>
+
+                        <label class="form-group has-float-label">
+                            <input id="sufPwd" name="suf_pwd" class="form-control" type="password" placeholder="Nhập Mật Khẩu"
+                                   data-rule-required="true"
+                                   minlength="6"
+                                   data-msg-required="Vui lòng nhập Mật Khẩu" />
+                            <span>Mật Khẩu</span>
+                        </label>
+
+                        <label class="form-group has-float-label">
+                            <input name="suf_rpwd" class="form-control" type="password" placeholder=""
+                                   minlength="6"
+                                   data-rule-required="true"
+                                   data-rule-equalto="#sufPwd"
+                                   data-msg-required="Vui lòng xác nhận mật khẩu"
+                                   data-msg-equalto="Mật khẩu xác nhận chưa trùng khớp" />
+                            <span>Xác nhận Mật Khẩu</span>
+                        </label>
+
+                        <div class="form-group mt-4">
+                            <label class="custom-control custom-checkbox">
+                                <input class="custom-control-input" type="checkbox"
+                                       name="suf_accept"
+                                       data-rule-required="true"
+                                       data-msg-required="" />
+                                <span class="custom-control-indicator"></span>
+                                <span class="custom-control-description">
+                                    Tôi đã đọc và đồng ý các
+                                    <a class="text-uppercase" href="#">Điều khoản thỏa thuận</a>
+                                </span>
+                            </label>
+                        </div>
+
+                        <div class="form-group mb-0" id="recaptcha_signup"> </div>
+
+                        <div class="alert alert-danger mb-0 mt-3" role="alert" style="display:none" id="signup_failed">
+                            <strong>Đăng ký thất bại.</strong> Vui lòng kiểm tra thông tin.
+                        </div>
+                        <div class="alert alert-success mb-0 mt-3" role="alert" style="display:none" id="signup_success">
+                            <strong>Đăng ký Tài Khoản thành công.</strong>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success w-25"
+                                data-dismiss="modal"
+                                data-toggle="modal"
+                                data-target="#signinModal">Đăng Nhập</button>
+                        <button type="submit" class="btn btn-primary w-25" id="signup_btn" disabled="disabled">Đăng Ký</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<?php } ?>
+
+<?php if (empty($this->customer_info) == true) { ?>
+    <div id="forgotPwdModal" class="modal fade" data-backdrop="static">
+        <div class="modal-dialog h-100 d-flex flex-column justify-content-center my-0" role="document">
+            <div class="modal-content">
+                <form id="forgotPwdForm" novalidate>
+                    <div class="modal-header">
+                        <h5 class="modal-title">Lấy lại Mật Khẩu</h5>
+                        <a href="javascript:;" class="modal-close" data-dismiss="modal" title="Đóng">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                    <div class="modal-body">
+                        <label class="form-group has-float-label">
+                            <input name="fpf_usr" class="form-control" type="text" placeholder="Nhập Tài Khoản"
+                                   data-rule-required="true"
+                                   data-msg-required="Vui lòng nhập Tài Khoản" />
+                            <span>Tài Khoản</span>
+                        </label>
+
+                        <label class="form-group has-float-label">
+                            <input name="fpf_email" class="form-control" type="email" placeholder="email@abc.com"
+                                   data-rule-required="true"
+                                   data-rule-email="true"
+                                   data-msg-required="Vui lòng nhập Email"
+                                   data-msg-email="Vui lòng nhập email đúng định dạng" />
+                            <span>Email</span>
+                        </label>
+                        <div class="form-group mb-0" id="recaptcha_forgot"> </div>
+                        <div class="alert alert-danger mb-0 mt-3" role="alert" style="display:none" id="forgot_failed">
+                            <strong>Thất bại.</strong> Tài khoản hoặc Email không hợp lệ.
+                        </div>
+
+                        <div class="alert alert-success mb-0 mt-3" role="alert" style="display:none" id="forgot_success">
+                            <strong>Thông tin yêu cầu đặt lại mật khẩu đã được gửi đến email.</strong> Vui lòng kiểm tra email của bạn.
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary w-25" id="confirm_forgot" disabled="disabled">Xác nhận</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<?php } ?>
+<?php if (empty($this->customer_info) == true) { ?>
+    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit&hl=vi" async defer></script>
+    <script>
+        var verifySigninCallback = function (response) {
+            if (response.length > 0) {
+                $("#signinForm #login-btn").prop('disabled', false);
+            }
+        };
+
+        var verifyForgotCallback = function (response) {
+            if (response.length > 0) {
+                $("#forgotPwdForm #confirm_forgot").prop('disabled', false);
+            }
+        };
+
+        var verifySignupCallback = function (response) {
+            if (response.length > 0) {
+                $("#signupForm #signup_btn").prop('disabled', false);
+            }
+        };
+
+        var onloadCallback = function () {
+            grecaptcha.render('recaptcha_signin', {
+                'sitekey': '6LdqWTEUAAAAAO230nKg4Rq8s53RqO10zQiF8-QH',
+                'callback': verifySigninCallback,
+            });
+
+            grecaptcha.render('recaptcha_forgot', {
+                'sitekey': '6LdqWTEUAAAAAO230nKg4Rq8s53RqO10zQiF8-QH',
+                'callback': verifyForgotCallback,
+            });
+
+            grecaptcha.render('recaptcha_signup', {
+                'sitekey': '6LdqWTEUAAAAAO230nKg4Rq8s53RqO10zQiF8-QH',
+                'callback': verifySignupCallback,
+            });
+        };
+    </script>
+<?php } ?>
+<?php if (empty($this->customer_info) == true && $this->is_reset == 1) { ?>
+<div id="resetPwdModal" class="modal fade" data-backdrop="static">
+        <div class="modal-dialog h-100 d-flex flex-column justify-content-center my-0" role="document">
+            <div class="modal-content">
+                <form id="resetPwdForm" novalidate>
+                    <div class="modal-header">
+                        <h5 class="modal-title">Đặt lại Mật Khẩu</h5>
+                        <a href="javascript:;" class="modal-close" data-dismiss="modal" title="Đóng">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                    <div class="modal-body">
+                        <label class="form-group has-float-label">
+                            <input id="cpfNewPwd" name="cpf_npwd" class="form-control" type="password" placeholder="Nhập mật khẩu mới"
+                                   data-rule-required="true"
+                                   data-msg-required="Vui lòng nhập mật khẩu mới" />
+                            <span>Mật khẩu mới</span>
+                        </label>
+
+                        <label class="form-group has-float-label">
+                            <input name="cpf_rpwd" class="form-control" type="password" placeholder="Xác nhận mật khẩu"
+                                   data-rule-required="true"
+                                   data-rule-equalto="#cpfNewPwd"
+                                   data-msg-required="Vui lòng xác nhận mật khẩu"
+                                   data-msg-equalto="Mật khẩu xác nhận chưa trùng khớp" />
+                            <span>Xác nhận mật khẩu</span>
+                        </label>
+
+                        <div class="alert alert-danger mb-0 mt-3" role="alert" style="display:none" id="reset_pass_failed">
+                            <strong>Đổi mật khẩu thất bại.</strong> Vui lòng kiểm tra thông tin.
+                        </div>
+
+                        <div class="alert alert-success mb-0 mt-3" role="alert" style="display:none" id="reset_pass_success">
+                            <strong>Mật khẩu đã được đổi.</strong> Vui lòng dùng mật khẩu mới trong lần đăng nhập kế tiếp.
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary w-25" id="reset_pass_btn">Lưu</button>
+                    </div>
+                    <input type="hidden" name="e" value="<?php echo $this->e ?>"/>
+                    <input type="hidden" name="t" value="<?php echo $this->t ?>"/>
+                </form>
+            </div>
+        </div>
+    </div>
+<?php } ?>
+<?php if (empty($this->customer_info) == false) { ?>
+    <div id="changePwdModal" class="modal fade" data-backdrop="static">
+        <div class="modal-dialog h-100 d-flex flex-column justify-content-center my-0" role="document">
+            <div class="modal-content">
+                <form id="changePwdForm" novalidate>
+                    <div class="modal-header">
+                        <h5 class="modal-title">Thay đổi Mật Khẩu</h5>
+                        <a href="javascript:;" class="modal-close" data-dismiss="modal" title="Đóng">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                    <div class="modal-body">
+                        <label class="form-group has-float-label">
+                            <input name="cpf_opwd" class="form-control" type="password" placeholder="Nhập mật khẩu cũ"
+                                   data-rule-required="true"
+                                   data-msg-required="Vui lòng nhập mật khẩu cũ" />
+                            <span>Mật khẩu cũ</span>
+                        </label>
+
+                        <label class="form-group has-float-label">
+                            <input id="cpfNewPwd" name="cpf_npwd" class="form-control" type="password" placeholder="Nhập mật khẩu mới"
+                                   data-rule-required="true"
+                                   data-msg-required="Vui lòng nhập mật khẩu mới" />
+                            <span>Mật khẩu mới</span>
+                        </label>
+
+                        <label class="form-group has-float-label">
+                            <input name="cpf_rpwd" class="form-control" type="password" placeholder="Xác nhận mật khẩu"
+                                   data-rule-required="true"
+                                   data-rule-equalto="#cpfNewPwd"
+                                   data-msg-required="Vui lòng xác nhận mật khẩu"
+                                   data-msg-equalto="Mật khẩu xác nhận chưa trùng khớp" />
+                            <span>Xác nhận mật khẩu</span>
+                        </label>
+
+                        <div class="alert alert-danger mb-0 mt-3" role="alert" style="display:none" id="change_pass_failed">
+                            <strong>Đổi mật khẩu thất bại.</strong> Vui lòng kiểm tra thông tin.
+                        </div>
+
+                        <div class="alert alert-success mb-0 mt-3" role="alert" style="display:none" id="change_pass_success">
+                            <strong>Mật khẩu đã được đổi.</strong> Vui lòng dùng mật khẩu mới trong lần đăng nhập kế tiếp.
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary w-25" id="change_pass_btn">Xác nhận</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<?php } ?>
+<?php if (empty($this->customer_info) == false) { ?>
+    <div id="userInfoModal" class="modal fade" data-backdrop="static">
+        <div class="modal-dialog h-100 d-flex flex-column justify-content-center my-0" role="document">
+            <div class="modal-content" id="userInfoContent"></div>
+        </div>
+    </div>
+<?php } ?>
+
+<div id="cartModal" class="modal fade" data-backdrop="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">&nbsp;</h5>
+                <a href="javascript:;" class="modal-close" data-dismiss="modal" title="Đóng">
+                    <i class="fa fa-times"></i>
+                </a>
+            </div>
+            <div class="modal-body">
+                Bạn đã thêm
+                <a class="product" id="product_name" href="#">&nbsp;</a>
+                vào
+                <a class="cart" href="/don-hang/gio-hang">Giỏ hàng</a>
+                thành công!
+            </div>
+            <div class="modal-footer">
+                <a href="/don-hang/gio-hang" class="btn btn-primary">Xem giỏ hàng</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="alertModalRejectOrder" tabindex="-1" role="dialog" aria-labelledby="alertModalRejectOrder" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">&nbsp;</h5>
+                <a href="javascript:;" class="modal-close" data-dismiss="modal" title="Đóng">
+                    <i class="fa fa-times"></i>
+                </a>
+            </div>
+            <div class="modal-body">
+                Bạn Có Muốn Hủy Hóa Đơn Này?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary rejectOrder">OK</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- Modal -->
+<div class="modal fade" id="alertResult" tabindex="-1" role="dialog" aria-labelledby="alertResult" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">&nbsp;</h5>
+                <a href="javascript:;" class="modal-close" data-dismiss="modal" title="Đóng">
+                    <i class="fa fa-times"></i>
+                </a>
+            </div>
+            <div class="modal-body">
+                <span id="result-text"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>

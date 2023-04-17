@@ -1,0 +1,71 @@
+<!-- Page header -->
+<div class="page-header">
+    <div class="page-header-content">
+        <div class="page-title">
+            <h3><i class="icon-cog3 position-left"></i> <span class="text-semibold">Màu Sản phẩm - Danh Sách Màu Sản Phẩm</h3>
+        </div>
+        <div class="heading-elements">
+            <a href="/admin/<?php echo $this->controller ?>/detail" class="btn btn-labeled btn-labeled-right bg-blue heading-btn">Tạo Màu Mới <b><i class="fa fa-plus" aria-hidden="true"></i></b></a>
+        </div>
+    </div>
+    <div class="breadcrumb-line">
+        <ul class="breadcrumb">
+            <li><a href="/admin/index/"><i class="icon-home2 position-left"></i> Trang Chủ</a></li>
+            <li><a href="/admin/setting/">Màu Sản Phẩmt</a></li>
+            <li class="active">Danh Sách Màu Sản Phẩmt</li>
+        </ul>
+    </div>
+</div>
+<!-- /page header -->
+<div class="content">
+    <!-- Default ordering -->
+    <div class="panel panel-flat">
+        <div class="panel-heading">
+            <h4 class="panel-title">Danh Sách Màu Sản Phẩm</h4>
+        </div>
+        <table id="productColorTable" class="table datatable-sorting">
+            <thead>
+                <tr>
+                    <th width="50px">#</th>
+                    <th width="">Tên Màu</th>
+                    <th class="text-center" width="200px"><?php echo $this->translate('action') ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                if (empty($this->list) == false) {
+                    $i = 1;
+                    foreach ($this->list as $item) {
+                        ?>
+                        <tr>
+                            <td><?php echo $i ?> </td>
+                            <td><?php echo $item['color_name'] ?></td>
+                            <td class="text-center">
+                                <ul class="icons-list">
+                                    <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="icon-menu9"> </i></a>
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li> <a href="/admin/product-color/detail/id/<?php echo $item['id'] ?>"> <i class="icon-pencil3"></i> Chỉnh sửa</a> </li>
+                                            <?php if($item['id'] != 1 ){  ?>
+                                            <li> <a onclick="pages.productColor.deleteColor('<?php echo $item['id'] ?>')"> <i class="icon-bin"></i> Xóa</a> </li>
+                                            <?php } ?>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <?php
+                        $i++;
+                    }
+                } else {
+                    ?>
+                    <tr>
+                        <td colspan="6" style="text-align: center;">Không có dữ liệu</td>
+                    </tr>
+                    <?php
+                }
+                ?>
+            </tbody>
+        </table>
+    </div>
+    <!-- /default ordering -->
+</div>

@@ -1,0 +1,31 @@
+<?php
+$css = isset($this->css) ? $this->css : 'shopping-cart';
+?>
+<div class="<?php echo $css ?>" id="shopping-cart">
+    <div class="icon">
+        <i class="fa fa-shopping-cart"></i>
+        <?php
+        $isAvailItem = '';
+        $item_count = "&nbsp;";
+        if (isset($this->item_count) && $this->item_count > 0) {
+            $item_count = $this->item_count;
+            $isAvailItem = "active";
+        }
+        ?>
+        <span class="badge <?php echo $isAvailItem; ?>" id="cart_item_count"><?php echo $item_count; ?></span>
+    </div>
+    <span class="text">Giỏ hàng</span>
+    <?php if (empty($this->popover_list) == false) { ?>
+        <div class="popover">
+            <div class="basket">
+                <div class="scroller">
+                    <div id="popupover_container"></div>
+                </div>
+            </div>
+            <div class="footer">
+                <a href="/order/cart" class="btn btn-primary">Xem giỏ hàng</a>
+                <a href="/order/checkout" class="btn btn-primary">Thanh toán</a>
+            </div>
+        </div>
+    <?php } ?>
+</div>

@@ -1,0 +1,27 @@
+/* User management */
+.dataTables_wrapper .datatable-scroll .table tbody tr td button.btn {
+    margin-left: 5px;
+}
+#add_edit_user_frm .form-group .validation-error-label:before {
+    content: none!important;
+}
+#add_edit_user_frm .form-group.has-feedback div.form-control-feedback {
+    top:0px!important;
+}
+/* Permission */
+#add_edit_permission_frm .form-group .validation-error-label:before {
+    content: none!important;
+}
+#add_edit_permission_frm .form-group.has-feedback div.form-control-feedback {
+    top:0px!important;
+}
+.media-title{
+	padding: 5px;
+	    background-color: rgba(221, 221, 221, 0.82);
+}
+.rich-media .content-wrapper{
+	display: block !important;
+}
+.home-content .margin-bottom{
+    margin-bottom: 15px;
+}

@@ -1,0 +1,74 @@
+<!-- Page header -->
+<div class="page-header">
+    <div class="page-header-content">
+        <div class="page-title">
+            <h3><i class="icon-images2 position-left"></i>Thư Viện Ảnh - Danh Sách Thư Viện Ảnh</h3>
+        </div>
+        <div class="heading-elements">
+			<a href="/admin/<?php echo $this->controller?>/detail" class="btn btn-labeled btn-labeled-right bg-blue heading-btn"><?php echo $this->translate('create-media')?> <b><i class="fa fa-plus" aria-hidden="true"></i></b></a>
+		</div>
+    </div>
+    <div class="breadcrumb-line">
+        <ul class="breadcrumb">
+            <li><a href="/admin/index/"><i class="icon-home2 position-left"></i> Trang Chủ</a></li>
+            <li><a href="/admin/media/">Thư Viện Ảnh</a></li>
+            <li class="active">Danh Sách Thư Viện Ảnh</li>
+        </ul>
+    </div>
+</div>
+<!-- /page header -->
+<div class="content">
+    <!-- Default ordering -->
+    <div class="panel panel-flat">
+        <div class="panel-heading">
+            <h4 class="panel-title">Danh Sách Thư Viện Ảnh</h4>
+        </div>
+        <div class="panel-body">
+			<form id="searchForm">
+				<div class="col-md-12">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label><?php echo $this->translate('created-at')?></label>
+							<div class="input-group">
+								<span class="input-group-addon"><i class="icon-calendar"></i></span>
+								<input type="text" item-type="search" mapping-column="8" data-format="yyyy-mm-dd" class="form-control datepicker" placeholder="<?php echo $this->translate('created-at')?>">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label><?php echo $this->translate('updated-at')?></label>
+							<div class="input-group">
+								<span class="input-group-addon"><i class="icon-calendar"></i></span>
+								<input type="text" item-type="search" mapping-column="9" data-format="yyyy-mm-dd" class="form-control datepicker" placeholder="<?php echo $this->translate('updated-at')?>">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12">
+					<div class="col-md-12 text-right">
+						<button type="button" class="btn btn-primary seach-form"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;<?php echo $this->translate('search')?></button>
+					</div>
+				</div>
+			</form>
+		</div>
+        <table id="mediaTable" class="table datatable-sorting">
+            <thead>
+                <tr>
+                    <th>#</th>
+					<th><?php echo $this->translate('thumbnail')?></th>
+					<th><?php echo $this->translate('type')?></th>
+					<th><?php echo $this->translate('created-by')?></th>
+					<th><?php echo $this->translate('updated-by')?></th>
+					<th><?php echo $this->translate('created-at')?></th>
+					<th><?php echo $this->translate('updated-at')?></th>
+					<th><?php echo $this->translate('status')?></th>
+					<th class="text-center"><?php echo $this->translate('action')?></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <!-- /default ordering -->
+</div>

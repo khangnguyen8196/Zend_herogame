@@ -1,0 +1,91 @@
+<?php $this->viewCssClass = 'order list' ?>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 hidden-md-down no-gutter">
+            <?php echo $this->partial('/shared/_breadcrumbs.phtml',array('data'=> array('child' => array('name' => 'Lịch Sử Mua Hàng')))) ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 no-gutter">
+            <div class="order-list">
+            	<?php if( empty($this->order) == false ){ ?>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="text-center">#</th>
+                            <th class="text-left">Mã đơn hàng</th>
+                            <th class="text-left">Ngày đặt hàng</th>
+                            <th class="text-right">Tổng tiền</th>
+                            <th class="text-left">Tình trạng</th>
+                            <th class="text-right"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ( $this->order as $key => $item ) { ?>
+                        <tr>
+                            <td class="text-center">
+                                <?php echo ($key + 1) ?>
+                            </td>
+                            <td class="text-left">
+                                <a href="/don-hang/thong-tin-don-hang?order-code=<?php echo $item['order_code']?>">
+                                    <strong><?php echo $item['order_code']?></strong>
+                                </a>
+                            </td>
+                            <td class="text-left">
+                                <?php echo date("d/m/Y", strtotime($item['created_date'])); ?>
+                            </td>
+                            <td class="text-right">
+                                <?php
+                                    $system_discount = 0;
+                                    if( empty($item['admin_discount']) == false && $item['admin_discount'] > 0 ){
+                                        $system_discount = $item['admin_discount'];
+                                    }
+                                ?>
+                                <?php echo number_format($item['total'] - $system_discount) . '&#8363' ?>
+                            </td>
+                            <td class="text-left">
+                                <em>
+                                	<?php 
+                                		if($item['status'] == 1){
+                                			echo "Đang Xử Lý";
+                                		} else if( $item['status'] == 2 ){
+                                			echo "Đang xử lý";
+                                		} else if( $item['status'] == 3 ){
+                                			echo "Đang vận chuyển";
+                                		} else if( $item['status'] == 4 ){
+                                			echo "Giao hàng thành công";
+                                		} else if( $item['status'] == 5 ){
+                                			echo "Đã hủy";
+                                		}
+                                	?>
+                                </em>
+                                <span><?php echo date("d/m/Y", strtotime($item['updated_date'])); ?></span>
+                            </td>
+                            <td class="text-right">
+                            	<?php
+                            		if( $item['status'] == 1){
+                            			?>
+                            				<button class="btn btn-danger cancel-order" data-code="<?php echo $item['order_code'];?>"  type="button">Hủy</button>
+                            			<?php
+                            		} else {
+                            			?>
+                            				<a href="/don-hang/thong-tin-don-hang?order-code=<?php echo $item['order_code']?>">
+			                                    <strong>Chi Tiết</strong>
+			                                </a>
+                            			<?php
+                            		}
+                            	?>
+                                
+                            </td>
+                        </tr>
+                        <?php } ?>
+                    </tbody>
+                </table>
+                <?php } else {
+                	echo "Bạn chưa có đơn hàng nào.";
+                }?>
+            </div>
+        </div>
+    </div>
+</div>
