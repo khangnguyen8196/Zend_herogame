@@ -1,0 +1,73 @@
+<div class="page-header">
+	<div class="page-header-content">
+		<div class="page-title">
+			<h4><i class="icon-cog3 position-left"></i> <span class="text-semibold">Phân Loại Sản phẩm - Chi Tiết</span></h4>
+		</div>
+	</div>
+	<div class="breadcrumb-line">
+		<ul class="breadcrumb">
+			<li><a href="/"><i class="icon-home2 position-left"></i> <?php echo $this->translate('home')?></a></li>
+			<li><a href="/admin/product-variant">Danh Sách Phân Loại Sản Phẩm</a></li>
+			<li class="active">Chi tiết</li>
+		</ul>
+		<!-- tree -->
+	</div>
+</div>
+<div class="content">
+	<div class="panel panel-flat">
+		<div class="panel-heading">
+			<h5 class="panel-title">Chi Tiết</h5>
+		</div>
+		<div class="panel-body">
+			<div class="alert alert-danger alert-styled-left <?php if( empty($this->error) == true) { echo 'hidden';}?>">
+				<button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
+				<?php
+					if( empty($this->error) == false ){
+						foreach ($this->error as $key => $value ){
+							echo $value.'<br/>';
+						}
+					}
+				?>
+			</div>
+			<form class="form-horizontal" id="productVariantDetailForm" method="post">
+				<fieldset class="content-group">
+					<legend class="text-bold"></legend>
+					<div class="form-group">
+						<label class="control-label col-lg-2">Tên Phân Loại</label>
+						<div class="col-lg-10">
+							<input type="text"  name="variant_name" id="variant_name" placeholder="Tên Phân Loại" class="form-control" 
+							value="<?php echo @$this->info['variant_name']?>" data-msg="Vui Lòng Nhập Tên Phân Loại">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-lg-2">Giá Sản Phẩm</label>
+						<div class="col-lg-10">
+							<input type="text"  name="variant_price" id="variant_price"  placeholder="Giá Sản PHẩm" class="form-control" 
+							value="<?php echo @$this->info['variant_price']?>" data-msg="Vui Lòng Nhập Giá Sản Phẩm">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-lg-2">Giá Sales Sản Phẩm</label>
+						<div class="col-lg-10">
+							<input type="text"  name="variant_price_sales" id="variant_price_sales" placeholder="Giá Sales Sản PHẩm" class="form-control" 
+							value="<?php echo @$this->info['variant_price_sales']?>" data-msg="Vui Lòng Nhập Giá Sales Sản Phẩm">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-lg-2">ID Sản Phẩm</label>
+						<div class="col-lg-10">
+							<input type="text"  name="product_id" id="product_id"  placeholder="ID Sản Phẩm" class="form-control" 
+							value="<?php echo @$this->info['product_id']?>" data-msg="Vui ID Sản Phẩm">
+						</div>
+					</div>
+				</fieldset>
+				<input type="hidden" name="id" id="id" value="<?php echo @$this->id ?>" />
+				<div class="text-right">
+					<input type="hidden" name="isEdit" value="<?php echo $this->isEdit ?>" />
+					<a href="/admin/product-variant"><button type="button" class="btn btn-default cancel-btn"><?php echo $this->translate('cancel')?><i class="icon-arrow-right14 position-right"></i></button></a>
+					<button type="submit" class="btn btn-primary submit-btn"><?php echo $this->translate('submit')?> <i class="fa fa-plus" aria-hidden="true"></i></button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

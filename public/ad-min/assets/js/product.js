@@ -83,7 +83,7 @@ pages = $.extend(pages, {
         		$('#color').colorpicker();
         		me.initValidation();
         		$(document).on('click', '.submit-btn', {}, function ( ) {
-	                if ( pages.validation.validator['#productDetailForm'].form() == false ) {
+	                if ( pages.validation.validator['#postDetailForm'].form() == false ) {
 	                    return false;
 	                }
 	                $(".submit-btn").submit();
@@ -200,7 +200,122 @@ pages = $.extend(pages, {
     			$('.close-media-dialog').click();
                 
             });
-        	
+
+			// add row
+			var index = 1;
+			$("#addRow").click(function () {
+				var html = '';
+				html += 	'<div class="inputFormRow" >';
+				html += 		'<div class="form-group">';
+				html += 			'<label class="control-label col-lg-2">Tên Loại</label>';
+				html += 			'<div class="col-lg-2">';
+				html += 				'<input type= "text" class="form-control variant-name" name="variant_name[]" data-name="variant_name[]" placeholder="Tên Loại" value="" data-msg="Vui Lòng Nhập Tên Loại">';
+				html += 			'</div>';
+				html += 			'<label class="control-label col-lg-1">Giá</label>';
+				html += 			'<div class="col-lg-2">';
+				html += 				'<input type="number" class="form-control variant-price" name="variant_price[]" data-name="variant_price[]" placeholder="Giá" value="" data-msg="Vui Lòng Nhập Giá Loại">';
+				html += 			'</div>';
+				html += 			'<label class="control-label col-lg-1">Giá Sales</label>';
+				html += 			'<div class="col-lg-2">';
+				html += 				'<input type="number" class="form-control variant-price-sales" name="variant_price_sales[]" data-name="variant_price_sales[]" placeholder="Giá Sales" value="" data-msg="Vui Lòng Nhập Giá Sales Loại">';
+				html += 			'</div>';
+				html += 			'<input type="hidden"  name="variant_id[]" value="0">';
+				html += 			'<div class="input-group-append">';
+				html += 				'<button id="removeRow" type="button" class="btn btn-danger">Remove</button>';
+				html += 			'</div>';
+				html += 		'</div>';
+				html += 		'<div class="form-group">';
+				html += 			'<label class="control-label col-lg-2">Ảnh Loại Sản Phẩm</label>';
+				html += 			'<button type="button"  class="btn btn-primary add-img-variant" data-variant-id="' + index + '" style="margin-right: 11px;"><span aria-hidden="true"></span> + Thêm Ảnh</button>';
+				html += 			'<div class="col-lg-8 list-file-variant-img" id="newVariantImg_' + index + '" style="margin-left: -10px;">';
+				html += 				'<div class="form-group file-item">';
+				html += 					'<div class="col-lg-7">';
+				html +=                         '<input type="hidden"  name = "variant_image_id[]" value="0">',
+				html += 						'<input type="file" class="file-styled form-control" name="url_image['+ index +'][]" data-variant-id="' + index + '" accept="image/*"/>';
+				html += 					'</div>';
+				html += 					'<div class="col-lg-2">';
+				html += 						'<button type="button"  class="btn btn-alert remove" style="margin-right: 11px;">x</button>';
+				html += 					'</div>';
+				html += 				'</div>';
+				html += 			'</div>';
+				html += 		'</div>';
+				html += 	'</div>';
+				$('#newRow').append(html);
+				index++;
+			});
+			
+			$(document).on("click", ".add-img-variant", function () {
+				var variant_id = $(this).data('variant-id');
+				$('#newVariantImg_' + variant_id).append(
+				'<div class="form-group file-item-variant">' +
+				'<div class="col-lg-7">' +
+				'<input type="file" class="file-styled form-control" name="url_image[' + variant_id + '][]" data-variant-id="' + variant_id + '" accept="image/*" />' +
+				'</div>' +
+				'<div class="col-lg-2">' +
+				'<button type="button"  class="btn btn-alert remove-variant-img" style="margin-right: 11px;">x</button>' +
+				'</div>' +
+				'</div>'
+				);
+			});
+			// delete img variant
+			$(document).on('click', '.remove-item-variant-img', function() {
+				var variant_id = $('.list-delete-variant-img').data('variation-id');
+        		var val = $(this).attr('data-remove-variant-img');
+        		$('#delete-variant-img_'+variant_id).append('<input type="hidden" name="url_image_delete[]" value="'+val+'">');
+        		$(this).parents('.img-item-variant').remove();
+        	});
+        	$(document).on('click', '.remove-variant-img', function() {
+        		$(this).parents('.file-item-variant').remove();
+        	});
+			//end 
+
+		   	$(document).on('click', '#removeRow', function () {
+				$(this).closest('.inputFormRow').remove();
+			});
+
+	  	 	// remove row
+			$(document).on('click', '#removeVariant', function() {
+				var variantId = $(this).data('id');
+				deleteVariant(variantId);
+			});
+			function deleteVariant(variantId) {
+				bootbox.confirm('Bạn Có Muốn Xóa Loại Này', function(result) {
+					if (result) {
+						$.ajax({
+							url: '/admin/product-variant/delete',
+							type: 'GET',
+							data: {id: variantId},
+							beforeSend: function () {
+								
+							},
+							success: function (data) {
+								if (data.Code > 0) {
+									bootbox.alert('Xóa Thành Công');
+									$('.inputFormRowVariant').find('input[value="' + variantId + '"]').closest('.inputFormRowVariant').remove();
+								} else {
+									bootbox.alert('Xóa Thất Bại');
+								}
+							},
+							error: function (data) {
+								
+							}
+						});
+					}
+				});
+			} 
+			
+			function checkVariantStatus() {
+				$('.inputFormRowVariant').each(function() {
+					var status = $(this).find('input[name^="variant_status"]').val();
+					if (status == 1) {
+						$(this).show();
+					} else {
+						$(this).hide();
+					}
+				});
+			}
+			checkVariantStatus();
+
         	$(document).on('click', '#saveproduct', {}, function ( ) {
         		var data = {id: $('#idProduct').val(), type: $('#typeProduct').val() };
         		if( $('#nameP').length > 0 ){
@@ -232,6 +347,7 @@ pages = $.extend(pages, {
             });
             if (currAction  == "detail") {
                 pages.product.getListProduct();
+                pages.product.getListCombo();
             }
         },
         showMedia: function () {
@@ -253,36 +369,51 @@ pages = $.extend(pages, {
                 }
             });
         },
-        initValidation: function(){
-        	var loptions = {
-                    rules: {
-                    	title: {
-                            required: true
-                        },
-                        url_product: {
-			                required: true
-			            },
-			            price:{
-			            	required: true
-			            }
-			       
-                        
-                    },
-                    messages: {
-                    	title: {
-                            required: $("#title").attr('data-msg')
-                        },
-                        url_product: {
-                            required: $("#url_product").attr('data-msg')
-                        },
-                        price: {
-                            required: $("#price").attr('data-msg')
-                        }
-                    }
-                };
-        	 pages.validation.setupValidation("#postDetailForm", loptions);
-             
-        },
+		initValidation: function(){
+			var loptions = {
+					rules: {
+						title: {
+							required: true
+						},
+						url_product: {
+							required: true
+						},
+						price:{
+							required: true
+						},
+						'variant_name[]': {
+							required: true
+						},
+						'variant_price[]': {
+							required: true
+						},
+						'variant_price_sales[]': {
+							required: true
+						}
+					},
+					messages: {
+						title: {
+							required: $("#title").attr('data-msg')
+						},
+						url_product: {
+							required: $("#url_product").attr('data-msg')
+						},
+						price: {
+							required: $("#price").attr('data-msg')
+						},
+						'variant_name[]': {
+							required: $(".variant-name").attr('data-msg')
+						},
+						'variant_price[]': {
+							required: $(".variant-price").attr('data-msg')
+						},
+						'variant_price_sales[]': {
+							required: $(".variant-price-sales").attr('data-msg')
+						}
+					},
+				};	
+			pages.validation.setupValidation("#postDetailForm", loptions);
+		},
         initDatatable: function(){
         	var me = this;
         	var aoColumns = [
@@ -433,6 +564,29 @@ pages = $.extend(pages, {
                         $("#relative_product").html(data.Data);
                         $('#relative_product').select2({
                             placeholder: "Những sản phẩm liên quan...",
+                            minimumResultsForSearch: "-1",
+                            width: '100%',
+                        });
+                    }
+                },
+                error: function (data) {
+
+                }
+            });
+        },
+		getListCombo: function () {
+            $.ajax({
+                'url': '/admin/product/get-list-combo',
+                'type': 'GET',
+                'data': {id: $("#id").val(), selectRelativeCombo : $("#selected_relative_combo").val()},
+                beforeSend: function () {
+
+                },
+                success: function (data) {
+                    if (data.Code > 0 && data.Data != "") {
+                        $("#relative_combo").html(data.Data);
+                        $('#relative_combo').select2({
+                            placeholder: "Những Combo liên quan...",
                             minimumResultsForSearch: "-1",
                             width: '100%',
                         });

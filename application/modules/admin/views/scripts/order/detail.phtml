@@ -238,6 +238,7 @@
 							 <table id="listProduct" class="table datatable-sorting">
 							 	<thead>
 					                <tr>
+										<th width="50px">#</th>
 					                	<th width="150px">Ảnh</th>
 					                    <th>Tên sản phẩm</th>
 					                    <th width="10%">Màu</th>
@@ -254,21 +255,73 @@
 					            		foreach ( $this->info['order_detail'] as $key => $value ){
 					            			?>
 					            			<tr>
-					            				<td><img width="40px" height="40px" src="/upload/images/<?php echo $value['p_img']?>" /></td>
-					            				<td><?php echo $value['p_name']?></td>
+												<td><?php echo $key + 1?></td>
+					            			<?php if( empty($value['combo_id']) == false ){?>
+												<td><img width="40px" height="40px" src="/upload/images/<?php echo $value['c_img']?>" /></td>
+					            			<?php } else {?>
+												<td><img width="40px" height="40px" src="/upload/images/<?php echo $value['p_img']?>" /></td>
+
+					            			<?php }?>
+					            
 					            				<td>
 					            					<?php
-					            					if( empty($value['p_color_name']) == false ){
-					            					  echo $value['p_color_name'];
+					            					if( empty($value['c_combo_name']) == false ){
+					            					  echo $value['c_combo_name'];
 					            					} else {
-					            					  echo '-';
+														echo $value['p_name'];
 					            					}
 					            					?>
 					            				</td>
-					            				<td><?php echo number_format($value['p_price'])?></td>
+					            				<td>
+					            					<?php
+					            					if( empty($value['p_variant_name']) == false ){
+					            					  echo $value['p_variant_name'];
+					            					} else {
+					            					  echo 'Mặc Định';
+					            					}
+					            					?>
+					            				</td>
+												<td>
+					            					<?php
+					            					if( empty($value['p_variant_price']) == false ){
+														echo number_format($value['p_variant_price']);
+					            					} elseif(!empty($value['combo_id']) && $value['combo_id'] != 0){
+														if(!empty($this->listCombo)){
+															$total_price =0;
+															foreach($this->listCombo[$value['combo_id']] as $comboDetail){
+																$price = $comboDetail['price'];
+                                    							$total_price += $price; 
+															}
+															echo number_format($total_price);
+														}
+													}else{
+														echo number_format($value['p_price']);
+													}
+					            					
+					            					?>
+					            				</td>
+					            				
 					            				<td><?php echo number_format($value['price'])?></td>
 					            				<td><?php echo $value['number']?></td>
 					            			</tr>
+											<?php 
+												if(!empty($value['combo_id']) && $value['combo_id'] != 0){
+													if(!empty($this->listCombo)){
+														foreach($this->listCombo[$value['combo_id']] as $comboDetail){
+														?>
+															<tr>
+																<td style="border-top:none !important"><?php echo ''?></td>
+																<td style="border-top:none !important"><img width="40px" height="40px" src="/upload/images/<?php echo $comboDetail['image']?>" /></td>
+																<td style="border-top:none !important"><?php echo $comboDetail['title'] ?></td>
+																<td style="border-top:none !important"><?php echo 'Mặc Định';?></td>
+																<td style="border-top:none !important"><?php echo number_format($comboDetail['price'])?></td>
+																<td style="border-top:none !important"><?php echo number_format($comboDetail['price_sales'])?></td>
+																<td style="border-top:none !important"><?php echo $value['number']?></td>
+															</tr>
+														<?php }		
+													}
+												} 
+											?>
 					            			<?php
 					            		}
 					            	}?>

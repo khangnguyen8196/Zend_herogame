@@ -73,6 +73,7 @@ pages = $.extend(pages, {
         	
         	if (currAction  == "detail") {
                 pages.post.getListPost();
+				pages.post.getListProduct()
             }
         },
         showMedia: function () {
@@ -249,6 +250,29 @@ pages = $.extend(pages, {
 
                 }
             });
-        }
+        },
+		getListProduct: function () {
+            $.ajax({
+                'url': '/admin/product/get-list-product',
+                'type': 'GET',
+                'data': {id: $("#id").val(), selectRelativeProduct : $("#selected_relative_product").val()},
+                beforeSend: function () {
+
+                },
+                success: function (data) {
+                    if (data.Code > 0 && data.Data != "") {
+                        $("#relative_product").html(data.Data);
+                        $('#relative_product').select2({
+                            placeholder: "Những sản phẩm liên quan...",
+                            minimumResultsForSearch: "-1",
+                            width: '100%',
+                        });
+                    }
+                },
+                error: function (data) {
+
+                }
+            });
+        },
     }
 });

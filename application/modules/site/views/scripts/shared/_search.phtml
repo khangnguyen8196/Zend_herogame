@@ -2,9 +2,12 @@
     $css = isset($this->css) ? $this->css : 'search';
 ?>
 <div class="<?php echo $css ?>">
+<form id="form-search" action="<?php echo $this->url(array('module' => 'site', 'controller' => 'tim-kiem', 'action' => 'search'), 'default', true) ?>" method="get">
     <i class="fa fa-search"></i>
     <i class="fa fa-times"></i>
-    <input id="searchV" type="search" class="searchV" placeholder="Nhập từ khóa cần tìm..." />
-    <div class="results searchResult" id="searchResult">
-    </div>
+    <input id="searchV" name="keyword" type="search" class="searchV" value="<?php echo $_GET['keyword'] ?>" placeholder="Nhập từ khóa cần tìm..." />
+</form>
 </div>
+
+
+

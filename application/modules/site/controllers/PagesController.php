@@ -6,6 +6,7 @@
 class Site_PagesController extends FrontEndAction {
 
 	protected $_postMdl = "";
+	protected $_productMdl ="";
 	protected $_categoryMdl = "";
     /**
      * (non-PHPdoc)
@@ -16,6 +17,7 @@ class Site_PagesController extends FrontEndAction {
         $this->getInfoPage(array('banner' => true, 'category' => false, 'new_post' => true, 'product_best_sell' => false,'new_products' => false));
         $this->_categoryMdl = new Category();
         $this->_postMdl = new Post();
+		$this->_productMdl = new Product();
         $this->loadJs('pages/tintuc');
         $params = array();
         $params["type_of_category"] = CATEGORY_TYPE_POST;
@@ -66,6 +68,7 @@ class Site_PagesController extends FrontEndAction {
             'h2' => $info['title']
         );
     	$this->view->relative_post = $this->_getRelativePost( $info["relative_post"] );
+		$this->view->relative_product = $this->_getRelativeProduct($info["relative_product"]);
     	$this->_setMeta( $info );
     }
     
@@ -115,5 +118,23 @@ class Site_PagesController extends FrontEndAction {
     		$this->ajaxResponse( CODE_SUCCESS, '', $response );
     	}
     	$this->ajaxResponse( CODE_HAS_ERROR );
+    }
+
+	private function _getRelativeProduct($productIdList) {
+        $relativeProduct = array();
+        if (empty($productIdList) == false) {
+            $productIdList = explode(",", $productIdList);
+            if (empty($productIdList) == false) {
+                foreach ($productIdList as $key => $value) {
+                    $productInfo = $this->_productMdl->fetchProductById($value);
+                    $relativeProduct[$value] = $productInfo;
+                }
+            }
+        }
+        
+        if( empty($relativeProduct) == false ){
+            $relativeProduct = Commons::_buildProductResponse($relativeProduct);
+        }
+        return $relativeProduct;
     }
 }

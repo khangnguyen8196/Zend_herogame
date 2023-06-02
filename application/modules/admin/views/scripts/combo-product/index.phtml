@@ -1,0 +1,41 @@
+<!-- Page header -->
+<div class="page-header">
+    <div class="page-header-content">
+        <div class="page-title">
+            <h3><i class="icon-cog3 position-left"></i> <span class="text-semibold">Combo Sản Phẩm - Danh Sách Combo Sản Phẩm</h3>
+        </div>
+        <div class="heading-elements">
+            <a href="/admin/<?php echo $this->controller ?>/detail" class="btn btn-labeled btn-labeled-right bg-blue heading-btn">Tạo Combo Mới <b><i class="fa fa-plus" aria-hidden="true"></i></b></a>
+        </div>
+    </div>
+    <div class="breadcrumb-line">
+        <ul class="breadcrumb">
+            <li><a href="/admin/index/"><i class="icon-home2 position-left"></i> Trang Chủ</a></li>
+            <li><a href="/admin/setting/">Combo sản phẩm</a></li>
+            <li class="active">Danh Sách Combo Sản Phẩmt</li>
+        </ul>
+    </div>
+</div>
+<!-- /page header -->
+<div class="content">
+    <!-- Default ordering -->
+    <div class="panel panel-flat">
+        <div class="panel-heading">
+            <h4 class="panel-title">Danh Sách Combo Sản Phẩm</h4>
+        </div>
+        <table id="comboProductTable" class="table datatable-pagination">
+        <thead>
+                <tr>
+                    <th width="50px">#</th>
+                    <th width="">Tên Combo Sản Phẩm</th>
+                    <th width="">Hình ảnh</th>
+                    <th width="">Giá Combo Sản Phẩm </th>
+                    <th width="">Trạng Thái </th>
+                    <th class="text-center" width="200px"><?php echo $this->translate('action') ?></th>
+                </tr>
+            </thead>
+		</table>
+        
+    </div>
+    <!-- /default ordering -->
+</div>

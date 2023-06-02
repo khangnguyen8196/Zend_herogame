@@ -3,10 +3,17 @@
 		<div class="scroller">
 	        <?php foreach ($this->cart_list as $key => $value) { ?>
 	        <?php
-	            $photo = "";
+            if(empty($value['id_combo'])==false){
+                $photo = "";
+	            if (empty($value["image_cb"]) == false) {
+	                $photo = PHOTO_PATH . $value["image_cb"];
+	            }
+            }else {
+                $photo = "";
 	            if (empty($value["image"]) == false) {
 	                $photo = PHOTO_PATH . $value["image"];
 	            }
+            }
 	        ?>
 	        <div class="product-item">
 	            <?php echo $this->partial('/shared/_lazy_image.phtml', array(
@@ -15,8 +22,15 @@
 	                'url' => $photo
 	            )) ?>
 	            <div class="qty"><?php echo $value['qty'] ?></div>
-	            <div class="name"><?php echo $value['title'] ?><?php if(empty($value['color_name']) == false){?></br>Màu: <?php echo $value['color_name']?> <?php }?></div>
-	            <div class="price"><?php echo number_format($value['price_sales']) . '&#8363' ?></div>
+	            <div class="name"><?php echo $value['title'] ?><?php if(empty($value['variant_name']) == false){?></br>Màu: <?php echo isset($value['variant_name']) ?$value['variant_name'] :'Mặc Định' ?> <?php }?></div>
+                <div class="price">
+                    <?php if (empty($value['variant_name'])) {
+                        $price = $value['price_sales'];
+                    } else {
+                        $price = $value['variant_price_sales'];
+                    }?>
+                    <strong id="p_price" p_price="<?php echo $price ?>"><?php echo number_format($price) . '&#8363' ?></strong>
+                </div>
 	        </div>
 	        <?php } ?>
         </div>

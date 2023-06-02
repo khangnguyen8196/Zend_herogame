@@ -1,0 +1,172 @@
+<div class="page-header">
+	<div class="page-header-content">
+		<div class="page-title">
+			<h4><i class="icon-cog3 position-left"></i> <span class="text-semibold">Combo Sản Phẩm</span></h4>
+		</div>
+	</div>
+	<div class="breadcrumb-line">
+		<ul class="breadcrumb">
+			<li><a href="/"><i class="icon-home2 position-left"></i> <?php echo $this->translate('home')?></a></li>
+			<li><a href="/admin/combo-product">Danh Sách Combo Sản Phẩm</a></li>
+			<li class="active">Chi tiết</li>
+		</ul>
+		<!-- tree -->
+	</div>
+</div>
+<div class="content">
+	<div class="panel panel-flat">
+		<div class="panel-heading">
+			<h5 class="panel-title">Chi Tiết</h5>
+		</div>
+		<div class="panel-body">
+			<div class="alert alert-danger alert-styled-left <?php if( empty($this->error) == true) { echo 'hidden';}?>">
+				<button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
+				<?php
+					if( empty($this->error) == false ){
+						foreach ($this->error as $key => $value ){
+							echo $value.'<br/>';
+						}
+					}
+				?>
+			</div>
+			<form class="form-horizontal" id="comboProductDetailForm" method="post" enctype="multipart/form-data">
+				<fieldset class="content-group">
+					<legend class="text-bold"></legend>
+					<div class="form-group">
+						<label class="control-label col-lg-2">Tên Combo Sản Phẩm</label>
+						<div class="col-lg-10">
+							<input type="text"  name="title" id="title" placeholder="Tên Combo" class="form-control" 
+							value="<?php echo @$this->info['title']?>" data-msg="Vui Lòng Nhập Tên Combo">
+						</div>
+					</div>
+					<div class="form-group">
+					<label class="control-label col-lg-2">Hình ảnh đại diện</label>
+					<div class="col-lg-5">
+						<input type="file" class="file-styled form-control" name='image_combo' id="image_combo" accept="image/*"/>
+					</div>
+					
+					<?php if (empty($this->info) == false && empty($this->info['image_cb']) == false) { ?>
+						<div class="col-lg-5">
+							<div class="col-lg-2 col-sm-4 parent">
+								<div class="thumbnail">
+									<div class="thumb">
+										<img class="img-media img-thumbnail-item" src="<?php echo '/upload/images' . $this->info['image_cb']; ?>" alt="">
+										<div class="caption-overflow">
+											<span>
+												<a class="btn border-white text-white btn-flat btn-icon btn-rounded lm-5 container-image" href="<?php echo '/upload/images' . $this->info['image_cb']; ?>" data-popup="lightbox">
+													<i class="icon-plus3"></i>
+												</a>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					<?php } ?>
+				</div>
+					<input type="hidden" name="id" value="<?php echo@$this->info['id']; ?>">
+				<?php if(empty($this->listComboDetail)==false){?>
+					<div class="form-group">
+						<button type="button" class="btn btn-primary add-product"  data-comboDetail-id="0" data-product-index="0" data-target="#modalProductList" style="margin-right: 11px;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Thêm sản phẩm</button>
+						<label class="control-label col-lg-2">Chọn sản phẩm</label>
+						<div class="col-lg-8 list-product" id="listProduct_" style="margin-left: -10px;">
+						<?php 
+							foreach ($this->listComboDetail as $key => $item){?>
+							<div class="form-group file-item">
+								<div class="col-lg-6">
+									<input type="hidden" name="combo_detail_id[<?php echo $key ?>]" value="<?php echo $item['id'] ?>" />
+									<input type="text" class="form-control product-name-input" value="<?php echo $item['product_title']?>" placeholder="Chọn sản phẩm"  data-combo-id="<?php echo $item['id'] ?>"  data-input-id="<?php echo $item['id'] ?>" />
+									<input type="hidden" class="form-control product-id-input" name="product_id[]" value="<?php echo $item['product_id']?>" placeholder=""  data-combo-id="<?php echo $item['id'] ?>" data-input-id="<?php echo $item['id'] ?>" />
+								</div>
+								<div class="col-lg-2">
+									<input type="text" class="form-control product-price-input"  value="<?php echo $item['price']?>" placeholder=""  data-combo-id="<?php echo $item['id'] ?>" data-input-id="<?php echo $item['id'] ?>" disabled />
+								</div>
+								<div class="col-lg-2">
+									<button type="button" id ="delete-product_<?php echo $item['id'] ?>" class="btn btn-alert remove-product-list" style="margin-right: 11px;" data-combo-id ="<?php echo $item['id'] ?>" data-remove="<?php echo $item['id'] ?>">x</button>
+								</div>
+							</div>
+							<div class="hidden list-delete-product" id ="delete-product_input_<?php echo $item['id'] ?>" data-combo-id="<?php echo $item['id'] ?>"><?php echo $item['id'] ?></div>
+						<?php } ?>
+						</div>
+					</div>
+				<?php } else {?>
+					<div class="form-group">
+						<button type="button" class="btn btn-primary add-product"  data-comboDetail-id="0" data-product-index="0" data-target="#modalProductList" style="margin-right: 11px;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Thêm sản phẩm</button>
+						<label class="control-label col-lg-2">Chọn sản phẩm</label>
+						<div class="col-lg-8 list-product" id="listProduct_0" style="margin-left: -10px;">
+							<div class="form-group file-item">
+								<div class="col-lg-6">
+									<input type="hidden" name="combo_detail_id[]" value="0" />
+									<input type="text" class="form-control product-name-input" value="" placeholder="Chọn sản phẩm"  data-combo-id="0" data-input-id="0" />
+									<input type="hidden" class="form-control product-id-input" name="product_id[]" value="" placeholder=""  data-combo-id="0" data-input-id="0" />
+								</div>
+								<div class="col-lg-2">
+									<input type="text" class="form-control product-price-input"  value="" placeholder="Giá sản phẩm"  data-combo-id="0" data-input-id="0" disabled />
+								</div>
+								<div class="col-lg-2">
+									<button type="button"  class="btn btn-alert remove-product" style="margin-right: 11px;">x</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				<?php }?>
+					<div class="form-group">
+						<label class="control-label col-lg-2">Tổng  giá sản phẩm</label>
+						<div class="col-lg-6">
+						<input type="text"class="form-control total-price"  name="total_price" id="total_price"  placeholder="Tổng giá sản phẩm" 
+						value="<?php echo @$this->info['total_price']?>" data-msg="Tổng giá sản phẩm">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-lg-2">Giá Combo Sản Phẩm</label>
+						<div class="col-lg-6">
+							<input type="text"  name="total_discount" id="total_discount"  placeholder="Giá Combo Sản Phẩm" class="form-control" 
+							value="<?php echo @$this->info['total_discount']?>" data-msg="Vui Lòng Nhập Giá Combo Sản Phẩm">
+						</div>
+					</div>
+				</fieldset>
+				<input type="hidden" name="id" id="id" value="<?php echo @$this->id ?>" />
+				<div class="text-right">
+					<input type="hidden" name="isEdit" value="<?php echo $this->isEdit ?>" />
+					<a href="/admin/combo-product"><button type="button" class="btn btn-default cancel-btn"><?php echo $this->translate('cancel')?><i class="icon-arrow-right14 position-right"></i></button></a>
+					<button type="submit" class="btn btn-primary submit-btn"><?php echo $this->translate('submit')?> <i class="fa fa-plus" aria-hidden="true"></i></button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+<!-- Modal form -->
+<div class="modal fade" id="modalProductList" tabindex="-1" role="dialog" aria-labelledby="modalProductListLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width: 70%;margin: 30px auto;">
+		<div class="modal-content">
+		<div class="modal-header">
+			<h4 class="modal-title" id="myModalLabel">Modal title</h4>
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		</div>
+		<div class="modal-body">
+			<form id="selectProduct">
+				<table id="listProductTable" class="table datatable-pagination">
+					<thead>
+						<tr>
+							<th class="text-center">Action</th>
+							<th width="5%"><?php echo $this->translate('id')?></th>
+							<th>Tên Sản Phẩm</th>
+							<th width="8%">Hình Ảnh</th>
+							<th width="8%">Danh Mục</th>
+							<th>Giá</th>
+							<th><?php echo $this->translate('status')?></th>
+						</tr>
+					</thead>
+				</table>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Huỷ</button>
+					<button type="submit" class="btn btn-primary">Xác nhận</button>
+			</form>
+		</div>
+		</div>
+	</div>
+</div>
+
+
+

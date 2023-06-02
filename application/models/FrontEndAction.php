@@ -118,6 +118,9 @@ class FrontEndAction extends Zend_Controller_Action {
     	if( empty($data['banner']) == false && $data['banner'] == true ){
     		$this->view->banner = self::_getBanner();
     	}
+        if( empty($data['banner']) == false && $data['banner'] == true ){
+    		$this->view->banner_vertical = self::_getBannerVertical();
+    	}
     }
     /**
      *
@@ -148,11 +151,49 @@ class FrontEndAction extends Zend_Controller_Action {
     			}
     			$list['main'][] = $item;
     		} else {
-    			$width = 510;
-    			$height = 222;
+    			$width = 168;
+    			$height = 300;
     			if($value['type'] == BANNER_CHILD_HEADER ){
     				$width = 1040;
     				$height = 200;
+    			}
+                if($value['type'] == BANNER_CHILD_FOOTER_TOP ){
+                    $width = 235;
+    			    $height = 235;
+                }
+                if($value['type'] == BANNER_CHILD_FOOTER_BOT ){
+                    $width = 235;
+    			    $height = 235;
+                }
+    			$item = array(
+    					'width' => $width,
+    					'height' => $height,
+    					'outside' => 1, // Set if this banner link to another website or not. Value: True/False
+    					'url' => @$value['link'],
+    					'photo' => '/upload/images/full/' . $value['image'],
+                        'id_category' => $value['id_category']
+    			);
+    			if( $value['is_video'] == 1  ){
+    				$item =  array(
+    						'width' => $width,
+    						'height' => $height,
+                            'title' => $value['title'],
+    						'video' => $value['video_url']
+    				);
+    			}
+    			$list['child_' . $value['type']][] = $item;
+    		}
+    	}
+    	return $list;
+    }
+
+    private function _getBannerVertical() {
+    	$banner = self::getBannerByType();
+    	$list = array();
+    	foreach ($banner as $key => $value) {
+    			if($value['type'] == BANNER_CHILD_LEFT_VERTICAL1 ){
+    				$width = 600;
+    				$height =  1000;
     			}
     			$item = array(
     					'width' => $width,
@@ -169,7 +210,7 @@ class FrontEndAction extends Zend_Controller_Action {
     				);
     			}
     			$list['child_' . $value['type']][] = $item;
-    		}
+    		
     	}
     	return $list;
     }
@@ -458,7 +499,8 @@ class FrontEndAction extends Zend_Controller_Action {
         } else if( empty($data['description']) == false ){
             $this->view->headMeta()->appendName('description', $data['description']);
         }else {
-            $this->view->headMeta()->appendName('description', 'Herogame - Gọi điện để đặt hàng ngay 0906.221.218  (Call-Sms-Viber-Zalo)');
+            $this->view->headMeta()->appendName('description', 'Herogame - Gọi điện để đặt hàng ngay 0902.923.986  (Call-Sms-Viber-Zalo)');
+            // $this->view->headMeta()->appendName('description', 'Herogame - Gọi điện để đặt hàng ngay 0906.221.218  (Call-Sms-Viber-Zalo)');
     	}
     	if (empty($data['keyword_meta']) == false ) {
     		$this->view->headMeta()->appendName('keywords', $data['keyword_meta']);
@@ -501,38 +543,80 @@ class FrontEndAction extends Zend_Controller_Action {
      */
     public function getProductsFullInfo($cart_list, &$totalMoney) {
         $productMdl = new Product();
-        $mdlProductColor = new ProductColor();
-        $cart_list_full_info = array();
-        
-        if (empty($cart_list) == false && is_array($cart_list)) {
-            foreach ($cart_list as $p_id => $value) {
-                $p_full_info = $productMdl->getProductInfoById($p_id);
-                if (empty($p_full_info) == true) {
-                    continue;
-                }
-                if (empty($value) == false && is_array($value)) {
-                    foreach($value as $color_id => $qty){
-                        $color = $mdlProductColor->fetchColorById($color_id);
-                        $p_full_info["qty"] = $qty;
-                        $p_full_info["total_money"] = $qty * $p_full_info["price_sales"];
-                        $p_full_info["color_name"] = $color['color_name'];
-                        $p_full_info["color_id"] = $color['id'];
-                        $totalMoney = $totalMoney + $p_full_info["total_money"];
-
-                        $cart_list_full_info[] = $p_full_info;
+        $mdlProductVariant = new ProductVariant();
+        $mdlCombo = new ComboProduct();
+        $cart_list_full_info = array();;
+        if (!empty($cart_list) && is_array($cart_list)) {
+            if(!empty($cart_list['combos'])) {
+                foreach($cart_list['combos'] as $c_id => $value) {
+                    $combo_info = $mdlCombo->fetchComboProductById($c_id);
+                    $combo_detail_list = $value['products'];
+                    if(empty($combo_info)) {
+                        continue;
                     }
-                }else{
-                    $p_full_info["qty"] = $value;
-                    $p_full_info["total_money"] = $value * $p_full_info["price_sales"];
-                    $p_full_info["color_name"] = '';
-                    $p_full_info["color_id"] = '';
-                    $totalMoney = $totalMoney + $p_full_info["total_money"];
-
-                    $cart_list_full_info[] = $p_full_info;
+                    
+                    $combo_product = array();
+                    $combo_product['id_combo'] = $combo_info['id']; 
+                    $combo_product['combo_code'] = $combo_info['combo_code']; 
+                    $combo_product['title'] = $combo_info['title'];
+                    $combo_product['qty'] = $value['qty'];
+                    $combo_product['image_cb'] = $combo_info['image_cb'];
+                    $combo_product["price_sales"]= $combo_info["total_discount"];
+                    $combo_product["total_money"] = $value['qty'] * $combo_product["price_sales"];
+                    $totalMoney += $combo_product["total_money"];
+                    
+                    $combo_product['products'] = array();
+                    foreach($combo_detail_list as $p_id => $product) {
+                        $combo_detail = $productMdl->getProductInfoById($p_id);
+                        $combo_detail["qty"] = $value['qty'];
+                        $combo_detail["price_sales"] = $combo_detail["price_sales"];
+                        $combo_detail["title"] = $combo_detail['title'];
+                        $combo_detail["combo_id"] = $combo_detail["combo_id"];
+                        $combo_detail["total_money"] = $value['qty'] * $combo_detail["price_sales"];
+                        
+                        $combo_product['products'][] = $combo_detail;
+                    }
+                    $cart_list_full_info[] = $combo_product;
                 }
             }
+            if(!empty($cart_list['products'])) {
+                foreach ($cart_list['products'] as $p_id => $value) {
+                    $p_full_info = $productMdl->getProductInfoById($p_id);
+                    
+                    if (empty($p_full_info)) {
+                        continue;
+                    }
+                    if (!empty($value['variant']) && is_array($value['variant'])) {
+                        $variant_list = $mdlProductVariant->getProductVariants($p_id);
+                        foreach ($value['variant'] as $i=>$var) {
+                            foreach ($variant_list as $variant) {
+                                if ($variant['id'] == $i) {
+                                    $p_full_info["qty"] = $var['qty'];
+                                    $p_full_info["variant_price_sales"] = $variant["variant_price_sales"];
+                                    $p_full_info["variant_name"] = $variant['variant_name'];
+                                    $p_full_info["variant_id"] = $variant['id'];
+                                    $p_full_info["total_money"] = $var['qty'] * $variant["variant_price_sales"];
+                                    $totalMoney += $p_full_info["total_money"];
+                                    $cart_list_full_info[] = $p_full_info;
+                                }
+                            }
+                        }
+                    } else {
+                        $p_full_info["qty"] = $value['qty'];
+                        $p_full_info["total_money"] = $value['qty'] * $p_full_info["price_sales"];
+                        $p_full_info["variant_name"] = '';
+                        $p_full_info["variant_id"] = '';
+                        $totalMoney += $p_full_info["total_money"];
+                        $cart_list_full_info[] = $p_full_info;
+                    }
+                }
+            }       
         }
         return $cart_list_full_info;
-    }
 
+    }
+    
+    
+
+                                         
 }

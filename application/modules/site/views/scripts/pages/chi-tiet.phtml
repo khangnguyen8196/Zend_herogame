@@ -62,6 +62,20 @@
                         <?php echo $this->info['content'] ?>  
                     </div>
                 </div>
+                <?php
+                if (empty($this->relative_product) == false) {
+                    echo $this->partial('/shared/_quick_view.phtml', array(
+                        'qdsp' => 'slider',
+                        'custom_class' => 'product-relative',
+                        'tabs' => array(
+                            array(
+                                'title' => 'Sản phẩm liên quan',
+                                'data' => $this->relative_product
+                            )
+                        )
+                    ));
+                }
+                ?>
                 <footer>
                     <?php echo $this->partial('/shared/_data_comment.phtml') ?>
                 </footer>

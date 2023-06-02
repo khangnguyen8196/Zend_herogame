@@ -5,6 +5,7 @@
         <meta property="fb:app_id" content="146746129286405">
         <?php $url = "http://".$_SERVER[HTTP_HOST].$_SERVER[REQUEST_URI]; ?>
     	<meta property="og:url" content="<?php echo $url;?>">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css" integrity="sha512-wR4oNhLBHf7smjy0K4oqzdWumd+r5/+6QO/vDda76MW5iug4PT7v86FoEkySIJft3XA0Ae6axhIvHrqwm793Nw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <?php echo $this->headTitle(); ?>
         <?php echo $this->headLink(); ?>
         <script type="text/javascript" >
@@ -37,11 +38,69 @@
         		
         	}
                 $quancao = Commons::getSettingByKey($this->setting, 'BANNER_QUAN_CAO');
+               
                 if( empty($quancao) == false){
                     ?>
                         <script>
                              banner_qc = <?php echo $quancao['value']; ?>;
                         </script>
+                        <style>
+                            .fancybox-wrap.fancybox-desktop.fancybox-type-html.fancybox-opened .fancybox-skin .fancybox-outer .fancybox-inner {
+                                overflow: auto !important;
+                                width: 550px !important;
+                                height: 460px !important;
+
+                            }
+                            .fancybox-wrap.fancybox-desktop.fancybox-type-html.fancybox-opened .fancybox-skin .fancybox-outer .fancybox-inner a img {
+                                position: absolute;
+                                top: 50%;
+                                left: 50%;
+                                transform: translate(-50%, -50%) scale(0.3);
+                            }
+                            @media screen and (max-width: 1024px){
+                                .fancybox-wrap.fancybox-desktop.fancybox-type-html.fancybox-opened .fancybox-skin .fancybox-outer .fancybox-inner {
+                                overflow: auto !important;
+                                width: 698px !important;
+                                height: 600px !important;
+
+                                }
+                                .fancybox-wrap.fancybox-desktop.fancybox-type-html.fancybox-opened .fancybox-skin .fancybox-outer .fancybox-inner a img {
+                                    position: absolute;
+                                    top: 50%;
+                                    left: 50%;
+                                    transform: translate(-50%, -50%) scale(0.7);
+                                }
+                            }
+                            @media screen and (max-width: 767px){
+                                .fancybox-wrap.fancybox-desktop.fancybox-type-html.fancybox-opened .fancybox-skin .fancybox-outer .fancybox-inner {
+                                overflow: auto !important;
+                                width: 320px !important;
+                                height: 280px !important;
+
+                                }
+                                .fancybox-wrap.fancybox-desktop.fancybox-type-html.fancybox-opened .fancybox-skin .fancybox-outer .fancybox-inner a img {
+                                    position: absolute;
+                                    top: 50%;
+                                    left: 50%;
+                                    transform: translate(-50%, -50%) scale(0.7);
+                                }
+                            }
+                            @media screen and (max-width: 480px){
+                                .fancybox-wrap.fancybox-desktop.fancybox-type-html.fancybox-opened .fancybox-skin .fancybox-outer .fancybox-inner {
+                                overflow: auto !important;
+                                width: 300px !important;
+                                height: 280px !important;
+
+                                }
+                                .fancybox-wrap.fancybox-desktop.fancybox-type-html.fancybox-opened .fancybox-skin .fancybox-outer .fancybox-inner a img {
+                                    position: absolute;
+                                    top: 50%;
+                                    left: 50%;
+                                    transform: translate(-50%, -50%) scale(0.7);
+                                }
+                            }
+                            
+                        </style>
                     <?php
                 }
         ?>
@@ -74,7 +133,7 @@
             <a id="pGoTop" href="javascript:;">
                 <i class="fa fa-chevron-up"></i>
             </a>
-            <a id="pCall" href="tel:+84906221218">
+            <a id="pCall" href="tel:+84902923986">
                 <i class="fa fa-phone"></i>
             </a>
             <?php echo $this->render('/shared/_modal.phtml'); ?>
@@ -92,6 +151,7 @@
         </div>
         <?php echo $this->headScript(); ?>
         <?php echo $this->render('/partials/_chat_fb.phtml'); ?>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js" integrity="sha512-XtmMtDEcNz2j7ekrtHvOVR4iwwaD6o/FUJe6+Zq+HgcCsk3kj4uSQQR8weQ2QVj1o0Pk6PwYLohm206ZzNfubg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
          <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-88846233-1"></script>
         <script>

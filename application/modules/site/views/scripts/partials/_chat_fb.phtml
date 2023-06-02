@@ -1,77 +1,68 @@
 
+<!-- Messenger Plugin chat Code -->
 <div id="fb-root"></div>
-<style>
-#cfacebook {
-	position: fixed;
-	bottom: 0px;
-	right: 10px;
-	z-index: 999999999999999;
-	width: 250px;
-	height: auto;
-	overflow: hidden;
-}
 
-#cfacebook .fchat {
-	float: left;
-	width: 100%;
-	height: 270px;
-	overflow: hidden;
-	display: none;
-	background-color: #fff;
-}
+<!-- Your Plugin chat code -->
+<div id="fb-customer-chat" class="fb-customerchat">
+</div>
 
-#cfacebook .fchat .fb-page {
-	margin-top: -130px;
-	float: left;
-}
-
-#cfacebook a.chat_fb {
-	float: left;
-	padding: 0 5px;
-	width: 250px;
-	color: #fff;
-	text-decoration: none;
-	height: 40px;
-	line-height: 40px;
-	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
-	background-repeat: repeat-x;
-	background-size: auto;
-	background-position: 0 0;
-	background-color: #3a5795;
-	border: 0;
-	border-bottom: 1px solid #133783;
-	z-index: 9999999;
-	margin-right: 12px;
-	font-size: 18px;
-}
-
-#cfacebook a.chat_fb:hover {
-	color: yellow;
-	text-decoration: none;
-}
-</style>
-<script>(function(d, s, id) {
-              var js, fjs = d.getElementsByTagName(s)[0];
-              if (d.getElementById(id)) return;
-              js = d.createElement(s); js.id = id;
-              js.src = "//connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v2.5";
-              fjs.parentNode.insertBefore(js, fjs);
-              }(document, 'script', 'facebook-jssdk'));
-      </script>
 <script>
-        jQuery(document).ready(function () {
-            jQuery(".chat_fb").click(function() {
-            jQuery('.fchat').toggle('slow');
-            });
-        });
-    </script>
-<div id="cfacebook" class="hidden-md-down"><a href="javascript:;" class="chat_fb"
-	onclick="return false;"><i class="fa fa-comment-o"></i> Herogame - hỗ trợ online</a>
-<div class="fchat">
-<div class="fb-page" data-tabs="messages"
-	data-href="https://www.facebook.com/herogamestore" data-width="250"
-	data-height="400" data-small-header="false"
-	data-adapt-container-width="true" data-hide-cover="false"
-	data-show-facepile="true" data-show-posts="false"></div>
-</div>
-</div>
+  var chatbox = document.getElementById('fb-customer-chat');
+  chatbox.setAttribute("page_id", "100111066262770");
+  chatbox.setAttribute("attribution", "biz_inbox");
+</script>
+
+<!-- Your SDK code -->
+<script>
+  window.fbAsyncInit = function() {
+	FB.init({
+	  xfbml            : true,
+	  version          : 'v17.0'
+	});
+  };
+
+  (function(d, s, id) {
+	var js, fjs = d.getElementsByTagName(s)[0];
+	if (d.getElementById(id)) return;
+	js = d.createElement(s); js.id = id;
+	js.src = 'https://connect.facebook.net/vi_VN/sdk/xfbml.customerchat.js';
+	fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+<a class="chat-mobile" href="https://m.me/100111066262770" target="_blank">
+	<img src="/site/img/fb_mess.png" alt="">
+</a>
+<!-- <i class="fa fa-commenting-o" aria-hidden="true"></i> -->
+<style>
+	@media screen and (min-width: 768px){
+		.chat-mobile {
+			display: none;
+		}
+	}
+	@media screen and (max-width: 767px){
+		#fb-root {
+			display: none !important;
+		}
+		#fb-customer-chat{
+			display: none !important;
+		}
+		.chat-mobile {
+			position: fixed;
+			bottom: 14px;
+			right: 0px;
+			z-index: 999999999999999;
+			width: 60px;
+			height: auto;
+			overflow: hidden;
+			font-size: 44px;
+		}
+		.chat-mobile img {
+			width: 44px;
+			height: 44px;
+			border: none;
+		}
+	}
+	
+</style>
+
+

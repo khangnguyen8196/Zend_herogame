@@ -23,6 +23,48 @@
                 'unit' => '₫'
             ))
             ?>
+            <div class="banner-mobile">
+                <?php
+                    $showbanner = Commons::getSettingByKey($this->setting, 'banner-list-product');
+                    if (empty($showbanner) == false && $showbanner['value'] == STATUS_SHOW) {
+                        ?>
+                        <div class="row">
+                            <?php if (empty($this->banner['child_' . BANNER_CHILD_HEADER]) == false && $this->categoryInfo) {
+                                $categoryId = $this->categoryInfo['id'];
+                                $banners = $this->banner['child_' . BANNER_CHILD_HEADER];
+                                $matchedBanners = [];
+                                $fallbackBanners = [];
+                                
+                                foreach ($banners as $key => $banner) {
+                                    if (!empty($banner['id_category']) && $banner['id_category'] == $categoryId) {
+                                        $matchedBanners[] = $banner;
+                                    } else if (empty($banner['id_category'])) {
+                                        $fallbackBanners[] = $banner;
+                                    }
+                                }
+                                if (!empty($matchedBanners)) { ?>
+                                    <div class="col-12">
+                                        <?php
+                                        echo $this->partial('/shared/_banner_rotator.phtml', array(
+                                            'bhov' => true,
+                                            'data' => $matchedBanners
+                                        ));
+                                        ?>
+                                    </div>
+                                <?php } else if (!empty($fallbackBanners)) { ?>
+                                    <div class="col-12">
+                                        <?php
+                                        echo $this->partial('/shared/_banner_rotator.phtml', array(
+                                            'bhov' => true,
+                                            'data' => $fallbackBanners
+                                        ));
+                                        ?>
+                                    </div>
+                                <?php }
+                            } ?>
+                        </div>
+                <?php } ?>
+            </div>
             <?php echo $this->render("/shared/_left-aside.phtml") ?>
         </aside>
 
@@ -32,16 +74,39 @@
             if (empty($showbanner) == false && $showbanner['value'] == STATUS_SHOW) {
                 ?>
                 <div class="row hidden-md-down">
-                    <?php if (empty($this->banner['child_' . BANNER_CHILD_HEADER]) == false) { ?>
-                        <div class="col-12">
-                            <?php
-                            echo $this->partial('/shared/_banner_rotator.phtml', array(
-                                'bhov' => true,
-                                'data' => $this->banner['child_' . BANNER_CHILD_HEADER]
-                            ))
-                            ?>
-                        </div>
-                    <?php } ?>
+                    <?php if (empty($this->banner['child_' . BANNER_CHILD_HEADER]) == false && $this->categoryInfo) {
+                        $categoryId = $this->categoryInfo['id'];
+                        $banners = $this->banner['child_' . BANNER_CHILD_HEADER];
+                        $matchedBanners = [];
+                        $fallbackBanners = [];
+                        
+                        foreach ($banners as $key => $banner) {
+                            if (!empty($banner['id_category']) && $banner['id_category'] == $categoryId) {
+                                $matchedBanners[] = $banner;
+                            } else if (empty($banner['id_category'])) {
+                                $fallbackBanners[] = $banner;
+                            }
+                        }
+                        if (!empty($matchedBanners)) { ?>
+                            <div class="col-12">
+                                <?php
+                                echo $this->partial('/shared/_banner_rotator.phtml', array(
+                                    'bhov' => true,
+                                    'data' => $matchedBanners
+                                ));
+                                ?>
+                            </div>
+                        <?php } else if (!empty($fallbackBanners)) { ?>
+                            <div class="col-12">
+                                <?php
+                                echo $this->partial('/shared/_banner_rotator.phtml', array(
+                                    'bhov' => true,
+                                    'data' => $fallbackBanners
+                                ));
+                                ?>
+                            </div>
+                        <?php }
+                    } ?>
                 </div>
             <?php } ?>
             <?php
@@ -104,3 +169,16 @@ if (empty($imageBottom) == false && $imageBottom['value'] == STATUS_SHOW) {
     ?>
 
 <?php } ?>
+<style>
+    .banner-mobile {
+        display: none;
+    }
+   @media screen and (max-width: 767px){
+    .banner-mobile .banner-rotator {
+        display: block;
+    }
+    .banner-mobile {
+        display: block;
+    }
+   }
+</style>

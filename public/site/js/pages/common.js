@@ -57,20 +57,9 @@ pages = $.extend(pages, {
                 
             }
             $(document).on('keyup', '.searchV', {}, function (e) {
-                if (me.timeout != null) {
-                    clearTimeout(me.timeout);
-                    me.timeout = null;
-                }
-                var val = $(this).val().trim();
-                me.timer = setTimeout(function () {
-                    pages.common.search(val);
-                }, 600);
-
-            });
-            $(".search .fa-times").click(function(){
-            	$("input[id='searchV']").val('');
-            	$(".searchResult").removeClass("active");
-            	$(".searchResult").html('');
+                if (e.keyCode == 13) {
+                    $(this).closest('form').submit();
+                  }
             });
             $(document).on('click', '#shopping-cart', {}, function (e) {
                 e.preventDefault();
@@ -207,6 +196,8 @@ pages = $.extend(pages, {
                 });
             });
             pages.common.createElementCountDown();
+          
+            
         },
         /**
          * 
@@ -372,6 +363,9 @@ pages = $.extend(pages, {
     	    updateClockDetail();
     	    var timeinterval = setInterval(updateClockDetail, 1000);
     	}
+        
+
+
 
     }
 });

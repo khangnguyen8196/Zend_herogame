@@ -1,0 +1,377 @@
+
+<div class="side-box post-menu pc">
+    <header><?php echo $this->title ?><a href="/danh-sach-bai-viet/" style="margin-left:20px">Xem tất cả</a></header>
+	<div class="post-menu-list">
+		<?php if (empty($this->top) == false ) { ?>
+				<a href="<?php echo $this->top['url'] ?>">
+					<?php echo $this->partial('/shared/_lazy_image.phtml', array(
+						'ratio' => '1x1',
+						'css' => 'photo',
+						'url' => $this->top['photo'],
+					)) ?>	
+					<div class="detail">
+						<?php
+							$shorts = $this->top['title'];
+							$date = $this->top['date'];
+							$summary = $this->top['summary'];
+							// $lens = strlen($this->top['title']);
+							// if(  $lens > 50 ) {
+							// 	$pos =  strrpos($this->top['title'], ' ', 50 - $lens );
+							// 	$shorts = substr($this->top['title'],0,$pos).'...';
+							// }
+							// $maxLength = 120;
+							// $strippedSummary = strip_tags($summary); // Loại bỏ các thẻ HTML
+							// $summary_short = substr($strippedSummary, 0, $maxLength);
+
+							// if (strlen($strippedSummary) > $maxLength) {
+							// 	$summary_short .= '...';
+							// }		
+						?>
+						<span class="title" title="<?php echo $this->top['title'] ?>" >
+							<?php echo $shorts; ?>
+						</span>
+						<div>
+							<span class="summary">
+								<?php echo $this->top['summary'] ?>
+							</span>
+						</div>
+						<div class="date" title="<?php echo $this->top['date'] ?>">
+							<?php echo 'Ngày: '.$date; ?>
+						</div>
+					</div>
+				</a>
+		<?php } ?>
+		<?php if( empty($this->data) == false ){ ?>
+			<?php foreach ($this->data as $key => $post) { ?>
+				<?php if( empty($post['photo']) == false ){ ?>
+						<a href="<?php echo $post['url'] ?>">
+							<?php echo $this->partial('/shared/_lazy_image.phtml', array(
+								'ratio' => '1x1',
+								'css' => 'photo',
+								'url' => $post['photo'],
+							)) ?>
+							<div class="detail">
+								<?php
+									$shorts = $post['title'];
+									$date = $post['date'];
+									$summary = $post['summary'];
+									// $lens = strlen($post['title']);
+									// if(  $lens > 50 ) {
+									// 	$pos =  strrpos($post['title'], ' ', 50 - $lens );
+									// 	$shorts = substr($post['title'],0,$pos).'...';
+									// }
+									// $maxLength = 100;
+									// $strippedSummary = strip_tags($summary); // Loại bỏ các thẻ HTML
+									// $summary_short = substr($strippedSummary, 0, $maxLength);
+
+									// if (strlen($strippedSummary) > $maxLength) {
+									// 	$summary_short .= '...';
+									// }		
+								?>
+								<span class="title" title="<?php echo $post['title'] ?>" >
+									<?php echo $shorts; ?>
+								</span>
+								<div>
+									<span class="summary">
+										<?php echo $post['summary'] ?>
+									</span>
+								</div>
+								<div class="date" title="<?php echo $post['date'] ?>">
+									<?php echo 'Ngày: '.$date; ?>
+								</div>
+							</div>
+						</a>
+				<?php } ?>
+			<?php } ?>
+		<?php } ?> 
+	</div>
+</div>
+<div class="side-box post-menu mobile">
+    <header><?php echo $this->title ?><a href="/danh-sach-bai-viet/" style="margin-left:20px">Xem tất cả</a></header>
+	<div class="post-menu-content">
+		<div class="post-menu-list">
+		<?php if (empty($this->top) == false ) { ?>
+					<a href="<?php echo $this->top['url'] ?>">
+						<?php echo $this->partial('/shared/_lazy_image.phtml', array(
+							'ratio' => '1x1',
+							'css' => 'photo',
+							'url' => $this->top['photo'],
+						)) ?>	
+						<div class="detail">
+							<?php
+								$shorts = $this->top['title'];
+								$date = $this->top['date'];
+								$summary = $this->top['summary'];
+
+								// $lens = strlen($this->top['title']);
+								// if(  $lens > 46 ) {
+								// 	$pos =  strrpos($this->top['title'], ' ', 46 - $lens );
+								// 	$shorts = substr($this->top['title'],0,$pos).'...';
+								// }
+								// $maxLength = 100;
+								// $strippedSummary = strip_tags($summary); // Loại bỏ các thẻ HTML
+								// $summary_short = substr($strippedSummary, 0, $maxLength);
+
+								// if (strlen($strippedSummary) > $maxLength) {
+								// 	$summary_short .= '...';
+								// }		
+							?>
+							<span class="title" >
+								<?php echo $this->top['title'] ?>
+							</span>
+							<div>
+								<span class="summary">
+								<?php echo $this->top['summary'] ?>
+								</span>
+							</div>
+							<div class="date" title="<?php echo $this->top['date'] ?>">
+								<?php echo 'Ngày: '.$date; ?>
+							</div>
+						</div>
+					</a>
+			<?php } ?>
+			<?php if( empty($this->data) == false ){ ?>
+				<?php foreach ($this->data as $key => $post) { ?>
+					<?php if( empty($post['photo']) == false ){ ?>
+							<a href="<?php echo $post['url'] ?>">
+								<?php echo $this->partial('/shared/_lazy_image.phtml', array(
+									'ratio' => '6x4',
+									'css' => 'photo',
+									'url' => $post['photo'],
+								)) ?>
+								<div class="detail">
+									<?php
+										$shorts = $post['title'];
+										// $lens = strlen($post['title']);
+										// if(  $lens > 46 ) {
+										// 	$pos =  strrpos($post['title'], ' ', 46 - $lens );
+										// 	$shorts = substr($post['title'],0,$pos).'...';
+										// }
+
+										$date = $post['date'];
+										$summary = $post['summary'];
+										// $maxLength = 100;
+
+										// $strippedSummary = strip_tags($summary);
+										// $summary_short = substr($strippedSummary, 0, $maxLength);
+
+										// if (strlen($strippedSummary) > $maxLength) {
+										// 	$summary_short .= '...';
+										// }
+									?>
+									<span  class="title">
+										<?php echo $post['title'] ?>
+									</span>
+									<div>
+										<span class="summary">
+											<?php echo $post['summary'] ?>
+										</span>
+									</div>
+									<div class="date" title="<?php echo $post['date'] ?>">
+										<?php echo 'Ngày: '.$date; ?>
+									</div>
+							
+								</div>
+							</a>
+					<?php } ?>
+				<?php } ?>
+			<?php } ?> 
+		</div>
+	</div>
+</div>
+
+<style>
+	.post-home .side-box.post-menu.mobile{
+		display: none;
+	}
+	.post-home .side-box.post-menu.pc{
+		display:block;
+		width:100%;
+	}
+	.post-home .pc .post-menu-list{
+		display:flex;
+		flex-wrap: wrap;
+	}
+	.post-home .pc .post-menu-list a{
+		position: relative;
+		text-decoration: none;
+		white-space: normal;
+		overflow-wrap: break-word;
+		height: 258px;
+		margin-right: 16px;
+		border: 1px solid #ccc;	
+
+	}
+	.post-home  .post-menu-list a .detail {
+		margin:5px
+	}
+	.post-home .post-menu-list a .detail .title{
+		font-size: 14px;
+		font-weight: 600;
+		color: black;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: normal;
+	}
+	.post-home .post-menu-list a .detail .summary{
+		font-size: 12px;
+		color: grey;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 4;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: normal;
+	}
+	.post-home .post-menu-list a .detail div .summary span{
+		color: grey !important;
+		font-size: 12px !important;
+		font-weight: 500;
+	}
+	.post-home .post-menu-list a .detail div .summary strong span{
+		color: grey !important;
+		font-size: 12px !important;
+		font-weight: 500;
+	}
+	.post-home .post-menu-list a .detail .date{
+		font-size: 12px;
+		color: grey;
+		position: absolute;
+		bottom: 0;
+	}
+	.post-home .pc .post-menu-list a:last-child{
+		margin-right: 0px;	
+	}
+	.post-home .pc .post-menu-list .imgh {
+		width: 100%;
+		max-height: 120px;
+		margin-right: 5px;
+		background-size: cover;
+		border-bottom: 1px solid grey;	
+	}
+
+	.pc .post-menu-list .slick-dots {
+ 		margin-top: 10px;
+		margin: auto;
+		display: flex;
+	}
+	.pc .post-menu-list .slick-dots li {
+		display: block;
+		width: 10px;
+		height: 10px;
+		background: gray;
+		border-radius: 50%;
+		margin: 3px;
+	}
+	.pc .post-menu-list .slick-dots li button {
+		display: none;
+	}
+	.pc .post-menu-list .slick-dots li.slick-active{
+		background-color: black;
+	}
+
+	@media screen and (max-width: 767px) {
+		.post-home .side-box.post-menu.pc {
+        display: none;
+    }
+    .post-home .side-box.post-menu.mobile {
+        display: block;
+        width: 100%;
+    }
+	.post-home .side-box.post-menu.mobile .post-menu-content .post-menu-list {
+		display: flex;
+		flex-wrap: wrap;
+	}
+
+	.post-home .side-box.post-menu.mobile .post-menu-content .post-menu-list a {
+		position: relative;
+		min-height: 220px;
+		margin-bottom: 14px;
+		margin-right: 5px;
+		border: 1px solid #ccc;	
+	}
+	.post-home .side-box.post-menu.mobile .post-menu-content .post-menu-list .imgh {
+		width: 100%;
+		max-height: 80px;
+		margin-right: 5px;
+		background-size: cover;
+		border-bottom: 1px solid grey;	
+	}
+	.mobile .post-menu-content .post-menu-list .slick-dots {
+ 		margin-top: 10px;
+		margin: auto;
+		display: flex;
+	}
+	.mobile .post-menu-content .post-menu-list .slick-dots li {
+		display: block;
+		width: 10px;
+		height: 10px;
+		background: gray;
+		border-radius: 50%;
+		margin: 3px;
+	}
+	.mobile .post-menu-content .post-menu-list .slick-dots li button {
+		display: none;
+	}
+	.mobile .post-menu-content .post-menu-list .slick-dots li.slick-active{
+		background-color: black;
+	}
+}
+@media screen and (max-width: 480px) {
+	.post-home .side-box.post-menu {
+        display: none;
+    }
+    .post-home .side-box.post-menu.mobile {
+        display: block;
+        width: 100%;
+    }
+	.post-home .side-box.post-menu.mobile .post-menu-content .post-menu-list {
+		display: flex;
+		flex-wrap: wrap;
+	}
+
+	.post-home .side-box.post-menu.mobile .post-menu-content .post-menu-list a {
+		position: relative;
+		min-height: 220px;
+		margin-bottom: 14px;
+		margin-right: 5px;
+		border: 1px solid #ccc;	
+	}
+	.post-home .side-box.post-menu.mobile .post-menu-content .post-menu-list .imgh {
+		width: 100%;
+		max-height: 80px;
+		margin-right: 5px;
+		background-size: cover;
+		border-bottom: 1px solid grey;	
+	}
+	.mobile .post-menu-content .post-menu-list .slick-dots {
+ 		margin-top: 10px;
+		margin: auto;
+		display: flex;
+	}
+	.mobile .post-menu-content .post-menu-list .slick-dots li {
+		display: block;
+		width: 10px;
+		height: 10px;
+		background: gray;
+		border-radius: 50%;
+		margin: 3px;
+	}
+	.mobile .post-menu-content .post-menu-list .slick-dots li button {
+		display: none;
+	}
+	.mobile .post-menu-content .post-menu-list .slick-dots li.slick-active{
+		background-color: black;
+	}
+}
+</style>
+
+
+
+
+
+
+

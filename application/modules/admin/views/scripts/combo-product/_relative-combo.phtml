@@ -1,0 +1,13 @@
+<?php if (empty($this->arrCombo) == false) { ?>
+    <?php foreach ($this->arrCombo as $productId => $combos) { ?>
+        <optgroup label="<?php echo 'Danh sách Combo' ?>">
+            <?php foreach ($combos as $combo) { ?>
+                <option <?php echo (in_array($combo["combo_id"], $this->selectedRelativeCombo) ? "selected" : "") ?> value="<?php echo $combo["combo_id"] ?>"><?php echo $combo["title"] ?></option>
+            <?php } ?>
+        </optgroup>
+    <?php } ?>
+<?php } ?>
+
+
+    
+

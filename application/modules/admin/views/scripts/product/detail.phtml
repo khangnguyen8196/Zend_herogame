@@ -36,7 +36,7 @@
             <form class="form-horizontal" id="postDetailForm" method="post" enctype="multipart/form-data">
                 <div class="col-md-12">
                     <div class="panel-body">
-                                                <?php echo $this->partial("/product/_info.phtml", array('info' => @$this->info, 'listImg' => $this->listImg, 'listCategory' => $this->listCategory, 'listColor' => $this->listColor)); ?>
+                                                <?php echo $this->partial("/product/_info.phtml", array('info' => @$this->info, 'listImg' => $this->listImg, 'listCategory' => $this->listCategory, 'listColor' => $this->listColor,'variants'=>$this->variants,'listVariantImg'=>$this->listVariantImg,'listCombo'=>$this->listCombo)); ?>
 
                     </div>
                 </div>

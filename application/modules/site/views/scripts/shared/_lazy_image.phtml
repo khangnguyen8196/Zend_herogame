@@ -13,7 +13,7 @@
     <?php if(isset($this->ratio)) { ?>
     <div class="imgh r<?php echo $this->ratio ?> <?php echo $this->css ?>" data-lazy="<?php echo $this->url ?>" <?php echo $attrs ?>></div>
     <?php } else { ?>
-    <div class="imgh r0x0 <?php echo $this->css ?>" data-lazy="<?php echo $this->url ?>" <?php echo $attrs ?>>
+    <div class="imgh r0x0 <?php echo $this->css ?>" data-lazy="<?php echo $this->url ?>" <?php echo $attrs ?> >
         <?php if(isset($this->width) && isset($this->height)) { ?>
         <div style="padding-top:<?php echo ($this->height / $this->width) * 100 ?>%"></div>
         <?php } ?>

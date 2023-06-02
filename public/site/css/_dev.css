@@ -15,10 +15,10 @@
 }
 #pCall {
     background: rgba(5, 239, 42, 0.9);
-    width: 3.5rem;
-    height: 3.5rem;
+    width: 44px;
+    height: 44px;
     left: .9rem;
-    bottom: 2em;
+    bottom: 1.5rem;
 }
 .product-item-view .piv-top .photos .photo {
 	background-size: contain;
@@ -108,27 +108,27 @@ ul.slider .product-item .btn.cart:hover {
 .news_if p{
     margin: 15px 0;
 }
-.color-box {
+.color-box, .variant-box {
     margin: 0!important;
 }
-.color-box .color-label{
+.color-box .color-label, .variant-box .variant-label{
     line-height: 18px;
     margin: 0 0 5px;
     display: block;
 }
-ul.color-list {
+ul.color-list, ul.variant-list  {
     display: inline-block;
     list-style: none;
     padding: 0;
     margin: 0;
 }
-ul.color-list li {
+ul.color-list li , ul.variant-list li {
     float: left;
     display: block;
     text-align: center;
     box-sizing: border-box;
 }
-ul.color-list li a {
+ul.color-list li a, ul.variant-list li a {
     display: block;
     padding: .30rem .5rem;
     margin-right: 10px;
@@ -142,7 +142,7 @@ ul.color-list li a {
     text-decoration: none;
     min-width: 6.5rem;
 }
-ul.color-list li.color-items a.active {
+ul.color-list li.color-items a.active , ul.variant-list li.variant-items a.active {
     color: #fff;
     background: #189eff;
     border: 1px solid #189eff;

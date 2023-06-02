@@ -43,6 +43,28 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="control-label col-lg-2">Danh Mục</label>
+                        <div class="col-lg-4">
+                            <select name="id_category" id="id_category" class="select-search">
+                                <option value>Không Chọn</option>
+                                <?php
+                                if (empty($this->listCategory) == false) {
+                                    foreach ($this->listCategory as $key => $value) {
+                                        ?>
+                                        <option <?php
+                                        if ($value['id'] == @$this->info['id_category']) {
+                                            echo 'selected';
+                                        }
+                                        ?> value="<?php echo $value['id'] ?>"><?php echo $value['name'] ?></option>
+                                            <?php
+                                        }
+                                    } 
+                                
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="control-label col-lg-2">Loại</label>
                         <div class="col-lg-2">
                             <select name="type" class="form-control">
@@ -53,6 +75,18 @@
                                 <option <?php echo ( @$this->info['type'] == 5 ) ? "selected" : "" ?> value="5">Banner Footer Trên</option>
                                 <option <?php echo ( @$this->info['type'] == 6 ) ? "selected" : "" ?> value="6">Banner Footer Dưới</option>
                                 <option <?php echo ( @$this->info['type'] == 7 ) ? "selected" : "" ?> value="7">Banner Header (1040x200)</option>
+                                <option <?php echo ( @$this->info['type'] == 8 ) ? "selected" : "" ?> value="8">Banner Dọc Trái 1 </option>
+                                <option <?php echo ( @$this->info['type'] == 9 ) ? "selected" : "" ?> value="9">Banner Dọc Trái 2</option>
+                                <option <?php echo ( @$this->info['type'] == 10 ) ? "selected" : "" ?> value="10">Banner Dọc Trái 3</option>
+                                <option <?php echo ( @$this->info['type'] == 11 ) ? "selected" : "" ?> value="11">Banner Con Trái 2</option>
+                                <option <?php echo ( @$this->info['type'] == 12 ) ? "selected" : "" ?> value="12">Banner Con Giữa 2</option>
+                                <option <?php echo ( @$this->info['type'] == 13 ) ? "selected" : "" ?> value="13">Banner Con Phải 2</option>
+                                <option <?php echo ( @$this->info['type'] == 14 ) ? "selected" : "" ?> value="14">Banner Con Trái 3</option>
+                                <option <?php echo ( @$this->info['type'] == 15 ) ? "selected" : "" ?> value="15">Banner Con Giữa 3</option>
+                                <option <?php echo ( @$this->info['type'] == 16 ) ? "selected" : "" ?> value="16">Banner Con Phải 3</option>
+                                <option <?php echo ( @$this->info['type'] == 17 ) ? "selected" : "" ?> value="17">Banner Con Trái 4</option>
+                                <option <?php echo ( @$this->info['type'] == 18 ) ? "selected" : "" ?> value="18">Banner Con Giữa 4</option>
+                                <option <?php echo ( @$this->info['type'] == 19 ) ? "selected" : "" ?> value="19">Banner Con Phải 4</option>
                             </select>
                         </div>
                         <label class="control-label col-lg-1"><?php echo $this->translate('status') ?></label>

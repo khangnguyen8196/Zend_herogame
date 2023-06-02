@@ -178,7 +178,31 @@ pages = $.extend(pages, {
 				            label = 'Banner Footer Dưới';
 				        } else if (row["type"] == 7) {
 				            label = 'Banner Header (1024x200)';
-				        } 
+				        } else if (row["type"] == 8) {
+				            label = 'Banner Dọc Trái 1';
+				        } else if (row["type"] == 9) {
+				            label = 'Banner Dọc Trái 2';
+				        } else if (row["type"] == 10) {
+				            label = 'Banner Dọc Trái 3';
+				        }else if (row["type"] == 11) {
+				            label = 'Banner Con Trái 2';
+				        } else if (row["type"] == 12) {
+				            label = 'Banner Con Giữa 2';
+				        } else if (row["type"] == 13) {
+				            label = 'Banner Con Phải 2';
+				        }else if (row["type"] == 14) {
+				            label = 'Banner Con Trái 3';
+				        } else if (row["type"] == 15) {
+				            label = 'Banner Con Giữa 3';
+				        } else if (row["type"] == 16) {
+				            label = 'Banner Con Phải 3';
+				        }else if (row["type"] == 17) {
+				            label = 'Banner Con Trái 4';
+				        } else if (row["type"] == 18) {
+				            label = 'Banner Con Giữa 4';
+				        } else if (row["type"] == 19) {
+				            label = 'Banner Con Phải 4';
+				        }
 				        return label;
 				    },
 				    "targets": 2,

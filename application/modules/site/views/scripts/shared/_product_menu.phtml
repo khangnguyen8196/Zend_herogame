@@ -1,12 +1,12 @@
 <div class="side-box product-menu">
-    <header><?php echo $this->title ?></header>
+    <header style="background:red"><?php echo $this->title ?></header>
     <ul>
         <?php foreach ($this->data as $key => $product) { ?>
         <li>
             <a href="<?php echo $product['url'] ?>">
                 <?php echo $this->partial('/shared/_lazy_image.phtml', array(
                     'ratio' => '1x1',
-                    'css' => 'photo',
+                    'css' => 'photo', 
                     'url' => $product['photo'],
                 )) ?>
                 <div class="detail">

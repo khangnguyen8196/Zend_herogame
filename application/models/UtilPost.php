@@ -9,7 +9,7 @@ class UtilPost {
      * @param type $limit
      * @return type
      */
-    public static function getNewestPost($limit = 5) {
+    public static function getNewestPost($limit = 4) {
         $postMdl = new Post();
         //declare parameters
         $params["updated_at"] = date("Y-m-d H:i:s");

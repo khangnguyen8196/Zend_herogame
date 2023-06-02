@@ -122,4 +122,28 @@
             <delete permission_name="Delete" module_name="site" action_name="delete" />
         </permissions>
     </product-color>
+    <product-variant>
+       <permissions>
+            <view permission_name="View" module_name="site" action_name="view" />
+            <edit permission_name="Edit" module_name="site" action_name="edit"/>
+            <add  permission_name="Add" module_name="site" action_name="add"/>
+            <delete permission_name="Delete" module_name="site" action_name="delete" />
+        </permissions>
+    </product-variant>
+    <variant-image>
+       <permissions>
+            <view permission_name="View" module_name="site" action_name="view" />
+            <edit permission_name="Edit" module_name="site" action_name="edit"/>
+            <add  permission_name="Add" module_name="site" action_name="add"/>
+            <delete permission_name="Delete" module_name="site" action_name="delete" />
+        </permissions>
+    </variant-image>
+    <combo-product>
+       <permissions>
+            <view permission_name="View" module_name="site" action_name="view" />
+            <edit permission_name="Edit" module_name="site" action_name="edit"/>
+            <add  permission_name="Add" module_name="site" action_name="add"/>
+            <delete permission_name="Delete" module_name="site" action_name="delete" />
+        </permissions>
+    </combo-product>
 </root> 

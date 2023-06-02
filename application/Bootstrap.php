@@ -371,6 +371,16 @@ class Bootstrap extends Zend_Application_Bootstrap_BootstrapAbstract {
                 )
         );
         $router->addRoute('/pages/', $route1_8 );
+
+        $route1_9 = new Zend_Controller_Router_Route(
+            '/tim-kiem', 
+            array(
+                'module' =>'site',
+                'controller' => 'tim-kiem',
+                'action'=> 'search'
+            )
+        );
+        $router->addRoute('/tim-kiem/', $route1_9);
         
     }
 

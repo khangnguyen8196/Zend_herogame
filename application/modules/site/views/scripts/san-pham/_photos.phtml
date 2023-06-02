@@ -1,12 +1,21 @@
-<?php 
+<?php
+$list_variant =!empty($this->list_variant) ? $this->list_variant: '';
+
 $first_color_active = !empty($this->color_list[0]['id']) ? $this->color_list[0]['id']: '';
 $color_index = array();
 if(empty($this->info['image_color']) == false){
-  $color_index = explode(",", $this->info['image_color']);
+    $color_index = explode(",", $this->info['image_color']);
 }
-$thumbs = array();
+
+$thumbs_color = array();
 if (empty($this->info['gallery']) == false) {
-  $thumbs = explode(",", $this->info['gallery']);
+    $thumbs_color = explode(",", $this->info['gallery']);
+    // echo "<pre>";print_r($thumbs_color);exit;
+}
+
+$thumbs = array();
+if (empty($this->list_variant_img) == false) {
+    $thumbs = $this->list_variant_img;
 }
 ?>
 <div class="photos">
@@ -41,47 +50,156 @@ if (empty($this->info['gallery']) == false) {
             </a>
         </div>
         <div id="productThumbPhotos" class="thumbs">
-            <?php if (empty($thumbs) == false) { ?>
-                <?php foreach ($thumbs as $key => $value) { ?>
+            <?php if (empty($thumbs_color) == false) { ?>
+                <?php foreach ($thumbs_color as $key => $value) { ?>
                     <?php $thumbClass = ($key == 0) ? 'active' : ''; ?>
                     <?php $thumUrl = PHOTO_PATH . $value; ?>
                     <a class="<?php //echo $thumbClass ?> image_thumbs color_<?php echo (empty($color_index) == true ) ? 1: $color_index[$key]?>" 
-                       data-image="<?php echo $thumUrl ?>"
-                       data-zoom-image="<?php echo $thumUrl ?>"
-                       <?php if(empty($color_index) == false && $color_index[$key] != $first_color_active){?> style="display: none;"<?php }?>>
-                           <?php
-                           echo $this->partial('/shared/_lazy_image.phtml', array(
-                               'ratio' => '1x1',
-                               'css' => 'photo',
-                               'url' => $thumUrl
-                           ));
-                           ?>
+                    data-image="<?php echo $thumUrl ?>"
+                    data-zoom-image="<?php echo $thumUrl ?>"
+                    <?php if(empty($color_index) == false && $color_index[$key] != $first_color_active){?> style="display: none;"<?php }?>
+                    >
+                        <?php
+                        echo $this->partial('/shared/_lazy_image.phtml', array(
+                            'ratio' => '1x1',
+                            'css' => 'photo',
+                            'url' => $thumUrl
+                        ));
+                        ?>
                     </a>
+                <?php } ?>
+            <?php } ?>
+            <?php if (!empty($list_variant)) { ?>
+                <?php foreach ($list_variant as $variant) { ?>
+                    <?php $variant_images = $thumbs[$variant['id']]; ?>
+                    <?php if(empty($variant_images)==false){?>
+                        <?php foreach ($variant_images as $key => $value) { ?>
+                        <?php $thumbClass = ($variant['id'] == $list_variant[0]['id'] && $key == 0) ? 'active' : ''; ?>
+                        <?php $thumUrl = PHOTO_PATH . $value; ?> 
+                        <a class="<?php //echo $thumbClass ?> image_thumbs variant_<?php echo $variant['id'] ?>" 
+                        data-image="<?php echo $thumUrl ?>"
+                        data-zoom-image="<?php echo $thumUrl ?>"
+                        <?php if($variant['id'] != $list_variant[0]['id']){?> style="display: none;"<?php }?>
+                        >
+                            <?php
+                            echo $this->partial('/shared/_lazy_image.phtml', array(
+                                'ratio' => '1x1',
+                                'css' => 'photo',
+                                'url' => $thumUrl
+                            ));
+                            ?>
+                        </a>
+                    <?php } ?>
+                    <?php }?>
                 <?php } ?>
             <?php } ?>
         </div>
     </div>
+    
     <div class="hidden-md-up">
+        <?php if (!empty($list_variant)) { ?>
+            <?php
+                $variant_image = $thumbs[$list_variant[0]['id']];
+                if ($variant_image === null) {
+                    $variant_image = []; // Gán giá trị mặc định là một mảng rỗng
+                } else {
+                    $variant_image = $variant_image;
+                }
+            ?>
+            <input type="hidden" class="variant-image" data-id="<?=$list_variant[0]['id']?>" value='<?php echo json_encode($variant_image)?>'>
+            <?php 
+              $filteredThumbs = array();
+                foreach ($thumbs as $variantId => $variantThumbs) {
+                  if ($variantId != $list_variant[0]['id']) {
+                      if (!empty($variantThumbs)) {
+                          $filteredThumbs[$variantId] = $variantThumbs;
+                      }
+                  }
+                }
+                foreach ($filteredThumbs as $variantId => $variantThumbs) {
+                ?>
+                    <input type="hidden" class="variants-image" data-id="<?=$variantId?>" value='<?php echo json_encode($variantThumbs)?>'>
+                <?php
+                }
+            ?>
+            
+        <?php } ?>
+        <?php if (!empty($thumbs_color)) { ?>
+            <input type="hidden" class="color-image" data-id="1" value='<?php echo json_encode($thumbs_color)?>'>
+        <?php } ?>
         <ul id="productMobilePhotos" class="mobile">
-            <?php if (empty($thumbs) == false) { ?>
-                <?php foreach ($thumbs as $key => $value) { ?>
+            <?php if (!empty($list_variant)) { ?>
+                <?php foreach ($list_variant as $variant) { ?>
+                    <?php $variant_images = $thumbs[$variant['id']];?>
+                    <?php if(empty($variant_images)==false){?>
+                        <?php foreach ($variant_images as $key => $value) { ?>
+                            <?php $thumbClass = ($variant['id'] == $list_variant[0]['id'] && $key == 0) ? 'active' : ''; ?>
+                            <?php $thumUrl = PHOTO_PATH . $value; ?> 
+                            <a class="<?php //echo $thumbClass ?> image_thumbs variant_<?php echo $variant['id'] ?>" 
+                            data-image="<?php echo $thumUrl ?>"
+                            data-index="<?php echo $key ?>"
+                            data-zoom-image="<?php echo $thumUrl ?>"
+                            >
+                            <?php
+                            echo $this->partial('/shared/_lazy_image.phtml', array(
+                                'ratio' => '6x4',
+                                'css' => 'photo',
+                                'url' => $thumUrl
+                            ));
+                            ?>
+                        </a>
+                        <?php } ?>
+                    <?php }?>   
+                <?php } ?>
+            <?php } ?>
+            <?php if (empty($thumbs_color) == false) { ?>
+                <?php foreach ($thumbs_color as $key => $value) { ?>
                     <?php $thumbClass = ($key == 0) ? 'active' : ''; ?>
                     <?php $thumUrl = PHOTO_PATH . $value; ?>
                     <a class="<?php //echo $thumbClass ?> image_thumbs color_<?php echo (empty($color_index) == true ) ? 1: $color_index[$key]?>" 
-                       data-image="<?php echo $thumUrl ?>"
-                       data-index="<?php echo $key ?>"
-                       data-zoom-image="<?php echo $thumUrl ?>" 
-                       >
-                           <?php
-                           echo $this->partial('/shared/_lazy_image.phtml', array(
-                               'ratio' => '6x4',
-                               'css' => 'photo',
-                               'url' => $thumUrl
-                           ));
-                           ?>
+                    data-image="<?php echo $thumUrl ?>"
+                    data-index="<?php echo $key ?>"
+                    data-zoom-image="<?php echo $thumUrl ?>" 
+                    >
+                        <?php
+                        echo $this->partial('/shared/_lazy_image.phtml', array(
+                            'ratio' => '6x4',
+                            'css' => 'photo',
+                            'url' => $thumUrl
+                        ));
+                        ?>
                     </a>
                 <?php } ?>
             <?php } ?>
         </ul>
+        <div class="custom-dots"></div>
     </div>
+
 </div>
+
+<style>
+    .custom-dots  {
+        display: flex;
+        margin: auto;
+    }
+    .custom-dots .slick-dots {
+        margin: auto;
+        display: flex;
+        margin: auto;
+        align-items: center;
+    }
+    .custom-dots .slick-dots li  {
+        display: block;
+        width: 10px;
+        height: 10px;
+        background: gray;
+        border-radius: 50%;
+        margin: 3px;
+    }
+    .custom-dots .slick-dots li button {
+        display: none;
+    }
+    .custom-dots .slick-dots li.slick-active{
+        background-color: black;
+    }
+</style>

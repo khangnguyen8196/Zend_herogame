@@ -180,6 +180,9 @@ class Post extends Zend_Db_Table_Abstract {
         if (isset($data["relative_post"]) == true) {
             $datain["relative_post"] = implode(',', $data["relative_post"]);
         }
+        if (isset($data['relative_product']) == true) {
+            $datain['relative_product'] = implode(',',$data['relative_product']);
+        }
         if (empty($id) == false) {
             $where[] = $this->getAdapter()->quoteInto("post_id = ?", $id, Zend_Db::INT_TYPE);
             return $this->update($datain, $where);

@@ -29,7 +29,7 @@
                             <th class="text-center">Hình</th>
                             <th class="text-left" style="width: 30%">Tên sản phẩm</th>
                             <th class="text-center">Mã hàng</th>
-                            <th class="text-center">Màu</th>
+                            <th class="text-center">Loại</th>
                             <th class="text-center">Số lượng</th>
                             <th class="text-right">Đơn giá</th>
                             <th class="text-right">Tổng cộng</th>
@@ -42,6 +42,21 @@
                                     <td class="text-center">
                                         <?php echo ($key + 1) ?>
                                     </td>
+                                    <?php if(empty($value['id_combo'])==false){?>
+                                    <td class="text-center">
+                                        <?php
+                                        $photo = "";
+                                        if (empty($value["image_cb"]) == false) {
+                                            $photo = PHOTO_PATH . $value["image_cb"];
+                                        }
+                                        echo $this->partial('/shared/_lazy_image.phtml', array(
+                                            'ratio' => '1x1',
+                                            'css' => 'photo',
+                                            'url' => $photo
+                                        ))
+                                        ?>
+                                    </td>
+                                    <?php } else {?>
                                     <td class="text-center">
                                         <?php
                                         $photo = "";
@@ -55,33 +70,129 @@
                                         ))
                                         ?>
                                     </td>
+                                    <?php }?>
                                     <td class="text-left">
                                         <a class="name" href="/<?php echo $value["url_product"] ?>">
                                             <strong><?php echo $value['title'] ?></strong>
                                         </a>
                                     </td>
+                                    
+                                    <?php if(empty($value['id_combo'])==false){?>
+                                    <td class="text-center">
+                                        <?php echo empty($value['combo_code']) == false ? $value['combo_code']:"#" ?>
+                                    </td>
+                                    <?php }else{?>
                                     <td class="text-center">
                                         <?php echo empty($value['product_code']) == false ? $value['product_code']:"#" ?>
                                     </td>
+                                    <?php }?>
+
                                     <td class="text-center">
-                                        <strong><?php echo $value['color_name'] ?></strong>
+                                        <strong>
+                                            <?php 
+                                            if(empty($value['variant_name'])) {
+                                                echo "Mặc Định"; // Thay đổi tên loại sản phẩm tại đây
+                                            } else {
+                                                echo $value['variant_name'];
+                                            }
+                                            ?>
+                                        </strong>
                                     </td>
-                                    <td class="text-center">
-                                        <input class="form-control qty pr_qty" type="tel" maxlength="3" pid="<?php echo $value['id'] ?>" colorid="<?php echo $value['color_id'] ?>" value="<?php echo $value['qty'] ?>" />
-                                        <button type="button" class="btn btn-primary btn-update update_pr" title="Cập nhật">
-                                            <i class="fa fa-check"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-danger btn-remove remove_pr" title="Loại bỏ" pid="<?php echo $value['id'] ?>" colorid="<?php echo $value['color_id'] ?>">
-                                            <i class="fa fa-times"></i>
-                                        </button>
-                                    </td>
+                                    <?php if(!empty($value['id_combo'])){?>
+                                        <td class="text-center">
+                                            <input class="form-control qty cb_qty" type="tel" maxlength="3" pid="<?php echo $value['id_combo'] ?>" variantid="<?php echo $value['variant_id'] ?>" value="<?php echo $value['qty'] ?>" />
+                                            <button type="button" class="btn btn-primary btn-update update_cb" title="Cập nhật">
+                                                <i class="fa fa-check"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-remove remove_pr" title="Loại bỏ" pid="<?php echo $value['id_combo'] ?>" variantid="<?php echo $value['variant_id'] ?>">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </td>
+                                    <?php } else {?>
+                                        <td class="text-center">
+                                            <input class="form-control qty pr_qty" type="tel" maxlength="3" pid="<?php echo $value['id'] ?>" variantid="<?php echo $value['variant_id'] ?>" value="<?php echo $value['qty'] ?>" />
+                                            <button type="button" class="btn btn-primary btn-update update_pr" title="Cập nhật">
+                                                <i class="fa fa-check"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-remove remove_pr" title="Loại bỏ" pid="<?php echo $value['id'] ?>" variantid="<?php echo $value['variant_id'] ?>">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </td>
+                                    <?php }?>
+                                    
                                     <td class="text-right">
-                                        <strong id="p_price" p_price="<?php echo $value['price_sales'] ?>" ><?php echo number_format($value['price_sales']) . '&#8363' ?></strong>
+                                        <?php if (empty($value['variant_name'])) {
+                                            $price = $value['price_sales'];
+                                        } else {
+                                            $price = $value['variant_price_sales'];
+                                        }?>
+                                        <strong id="p_price" p_price="<?php echo $price ?>"><?php echo number_format($price) . '&#8363' ?></strong>
                                     </td>
+
                                     <td class="text-right">
                                         <strong id="total_money"><?php echo number_format($value['total_money']) . '&#8363' ?></strong>
                                     </td>
                                 </tr>
+                                <?php if (!empty($value['products'])) { ?>
+                                    <?php foreach ($value['products'] as $i => $item) { ?>
+                                        <tr>
+                                            <td class="text-center" style="border-top:none !important">
+                                              
+                                            </td>
+
+                                            <td class="text-center" style="border-top:none !important">
+                                                <?php
+                                                $photo = "";
+                                                if (empty($item["image"]) == false) {
+                                                    $photo = PHOTO_PATH . $item["image"];
+                                                }
+                                                echo $this->partial('/shared/_lazy_image.phtml', array(
+                                                    'ratio' => '1x1',
+                                                    'css' => 'photo',
+                                                    'url' => $photo
+                                                ))
+                                                ?>
+                                            </td>
+                                            <td class="text-left" style="border-top:none !important">
+                                                <a class="name" href="/<?php echo $item["url_product"] ?>">
+                                                    <strong><?php echo $item['title'] ?></strong>
+                                                </a>
+                                            </td>
+                                            <td class="text-center" style="border-top:none !important">
+                                                <?php echo empty($item['product_code']) == false ? $item['product_code']:"#" ?>
+                                            </td>
+                                            <td class="text-center" style="border-top:none !important">
+                                                <strong>
+                                                    <?php 
+                                                    if(empty($item['variant_name'])) {
+                                                        echo "Mặc Định"; 
+                                                    } else {
+                                                        echo $item['variant_name'];
+                                                    }
+                                                    ?>
+                                                </strong>
+                                            </td>
+                                            <td class="text-center" style="border-top:none !important">
+                                                <input class="form-control qty cb_qty" type="tel" maxlength="3" pid="<?php echo $item['id'] ?>" variantid="<?php echo $item['variant_id'] ?>" value="<?php echo $item['qty'] ?>" disabled  />
+                                               
+                                            </td>
+                                        
+                                            <td class="text-right" style="border-top:none !important">
+                                                <?php if (empty($item['variant_name'])) {
+                                                    $price = $item['price_sales'];
+                                                } else {
+                                                    $price = $item['variant_price_sales'];
+                                                }?>
+                                                <strong id="p_price" p_price="<?php echo $price ?>"><?php echo number_format($price) . '&#8363' ?></strong>
+                                            </td>
+
+                                            <td class="text-right" style="border-top:none !important">
+                                                <strong id="total_money"><?php echo number_format($item['total_money']) . '&#8363' ?></strong>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                <?php }?>
+
                             <?php } ?>
                         <?php } ?>
                         <tr>

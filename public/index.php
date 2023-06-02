@@ -11,7 +11,7 @@ set_include_path( get_include_path() .
 // APPLICATION_ENV defines which config section is loaded
 if(!defined('APPLICATION_ENV')) {
     // define('APPLICATION_ENV', 'production');
-    define('APPLICATION_ENV', 'production');
+    define('APPLICATION_ENV', 'development');
 }
 require_once 'Zend/Application.php';
 $application = new Zend_Application(APPLICATION_ENV,

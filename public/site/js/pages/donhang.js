@@ -23,11 +23,15 @@ pages = $.extend(pages, {
             });
             $(document).on('click', '.remove_pr', {}, function (e) {
                 e.preventDefault();
-                pages.donhang.removeProduct($(this).attr("pid"), $(this).attr("colorid"));
+                pages.donhang.removeProduct($(this).attr("pid"), $(this).attr("variantid"));
             });
             $(document).on('click', '.update_pr', {}, function (e) {
                 e.preventDefault();
                 pages.donhang.updateProduct();
+            });
+            $(document).on('click', '.update_cb', {}, function (e) {
+                e.preventDefault();
+                pages.donhang.updateCombo();
             });
             $(document).on('click', '#payment_btn', {}, function (e) {
                 e.preventDefault();
@@ -199,12 +203,12 @@ pages = $.extend(pages, {
          * 
          * @returns {undefined}
          */
-        removeProduct: function (id, color_id) {
+        removeProduct: function (id, variant_id) {
             var token = $.cookie("token");
             $.ajax({
                 url: "/don-hang/xoa-san-pham",
                 type: 'POST',
-                data: {pid: id, colorid: color_id, t: token},
+                data: {pid: id, variantid: variant_id, t: token},
                 beforeSend: function () {
                     $(".update_pr").prop("disabled", true);
                     $(".remove_pr").prop("disabled", true);
@@ -233,13 +237,13 @@ pages = $.extend(pages, {
                 $.each($("input.pr_qty"), function (k, v) {
                     var pid = $(v).attr("pid");
                     var qty = $(v).val();
-                    var color_id = $(v).attr("colorid");
+                    var variant_id = $(v).attr("variantid");
                     if( isNaN(qty) == true){
                         alert("Số lượng sản phẩm không hợp lệ!");
                         return false;
                     }
-                    if( color_id.length > 0 ){
-                        data[ pid+"|"+ color_id] = qty;
+                    if( variant_id.length > 0 ){
+                        data[ pid+"|"+ variant_id] = qty;
                     }else{
                         data[ pid ] = qty;
                     }
@@ -262,6 +266,48 @@ pages = $.extend(pages, {
                     },
                     error: function () {
                         $(".update_pr").prop("disabled", false);
+                        $(".remove_pr").prop("disabled", false);
+                    }
+                });
+            }
+        },
+        updateCombo: function ( ) {
+            if ($("input.cb_qty").length > 0) {
+                var data = {};
+                var t = $.cookie("token");
+                
+                $.each($("input.cb_qty"), function (k, v) {
+                    var pid = $(v).attr("pid");
+                    var qty = $(v).val();
+                    var variant_id = $(v).attr("variantid");
+                    if( isNaN(qty) == true){
+                        alert("Số lượng sản phẩm không hợp lệ!");
+                        return false;
+                    }
+                    if( variant_id.length > 0 ){
+                        data[ pid+"|"+ variant_id] = qty;
+                    }else{
+                        data[ pid ] = qty;
+                    }
+                });
+                
+                $.ajax({
+                    url: "/don-hang/cap-nhat-don-hang-combo",
+                    type: 'POST',
+                    data: {data: data, t:t},
+                    beforeSend: function () {
+                        $(".update_cb").prop("disabled", true);
+                        $(".remove_pr").prop("disabled", true);
+                    },
+                    success: function (data) {
+                        $(".update_cb").prop("disabled", false);
+                        $(".remove_pr").prop("disabled", false);
+                        if (data.Code > 0) {
+                            window.location = "/don-hang/gio-hang";
+                        }
+                    },
+                    error: function () {
+                        $(".update_cb").prop("disabled", false);
                         $(".remove_pr").prop("disabled", false);
                     }
                 });

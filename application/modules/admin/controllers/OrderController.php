@@ -271,6 +271,21 @@ class Admin_OrderController extends FrontBaseAction {
                 $info = $this->post_data;
             }
         }
+        $listCombo = array();
+        if (!empty($listOrderDetail)) {
+            foreach ($listOrderDetail as $key => $value) {
+                if (!empty($value['combo_id']) && $value['combo_id'] != 0) {
+                    $listProducts = $modelProduct->getProductByComboId($value['combo_id']);
+                    if (!empty($listProducts)) {
+                        foreach ($listProducts as $product) {
+                            $listCombo[$value['combo_id']][] = $product;
+                        }
+                    }
+                }
+            }
+        }
+        $this->view->listCombo = $listCombo;
+
         $productColor = new ProductColor();
         $listColor = $productColor->fetchAllColor();
         $this->view->color = $listColor;

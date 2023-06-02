@@ -17,6 +17,21 @@
 					<NotEmpty message="Vui Lòng Nhập Giá" />
 				</validate>
 			</price>
+			<variant_name>
+				<validate>
+					<NotEmpty message="Vui Lòng Nhập Tên Loại" />
+				</validate>
+			</variant_name>
+			<variant_price>
+				<validate>
+					<NotEmpty message="Vui Lòng Nhập Giá Loại" />
+				</validate>
+			</variant_price>
+			<variant_price_sales>
+				<validate>
+					<NotEmpty message="Vui Lòng Nhập Giá Sales Loại" />
+				</validate>
+			</variant_price_sales>
 		</checkrules>
 	</form>	
 </root>	

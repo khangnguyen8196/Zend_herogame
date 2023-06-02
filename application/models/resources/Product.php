@@ -217,6 +217,9 @@ class Product extends Zend_Db_Table_Abstract {
         if (isset($data['id_category']) == true) {
             $datain['id_category'] = $data['id_category'];
         }
+        if (isset($data['combo_id']) == true) {
+            $datain['combo_id'] = $data['combo_id'];
+        }
         if (isset($data['updated_at']) == true) {
             $datain['updated_date'] = $data['updated_at'];
         }
@@ -255,6 +258,9 @@ class Product extends Zend_Db_Table_Abstract {
         }
         if (isset($data['relative_product']) == true) {
             $datain['relative_product'] = $data['relative_product'];
+        }
+        if (isset($data['relative_combo']) == true) {
+            $datain['relative_combo'] = implode(',',$data['relative_combo']);
         }
         if (isset($data['product_color']) == true) {
             $datain['product_color'] = $data['product_color'];
@@ -414,7 +420,7 @@ class Product extends Zend_Db_Table_Abstract {
      * @param type $key
      * @return type
      */
-    public function search($key) {
+    public function search($key,$params = array()) {
         $select = $this->getAdapter()->select();
         $select = $select->from($this->_name)
                 ->columns(array('product.created_date' => new Zend_Db_Expr("DATE_FORMAT(product.created_date,'%Y-%m-%d %H:%i:%s')")))
@@ -424,9 +430,25 @@ class Product extends Zend_Db_Table_Abstract {
         $select = $select->where("product.status <> ?", STATUS_DELETE);
         $select = $select->where("product.status <> ?", STATUS_IN_ACTIVE);
         if (empty($key) == false) {
-            $select->where('upper( product.title ) LIKE upper(?) or upper( product.description ) LIKE upper(?) or upper( product.content ) LIKE upper(?)', '%' . $key . '%');
-            $case = new Zend_Db_Expr($this->getAdapter()->quoteInto('case when upper( product.title ) LIKE upper(?) then 1 when upper( product.description ) LIKE upper(?) then 2 else 3 end', '%' . $key . '%'));
+            $key =str_replace(' ','%',(string)$key);
+            $select->where('upper( product.title ) LIKE upper(?) or upper( product.description ) LIKE upper(?) or upper( product.content ) LIKE upper(?) or upper( c.name ) LIKE upper(?)', '%' . $key . '%');
+            $case = new Zend_Db_Expr($this->getAdapter()->quoteInto('case when upper( product.title ) LIKE upper(?) then 1
+            when upper( product.description ) LIKE upper(?) then 2 
+            when upper( c.name ) LIKE upper(?) then 3 
+            else 4 end', '%' . $key . '%'));
             $select = $select->order($case);
+        }
+        //
+        if (empty($params["minRange"]) == false && is_numeric($params["minRange"]) == true) {
+            $select = $select->where("price_sales >=?", $params["minRange"]);
+        }
+        if (empty($params["maxRange"]) == false && is_numeric($params["maxRange"]) == true) {
+            $select = $select->where("price_sales <=?", $params["maxRange"]);
+        }
+        if (empty($params["sort"]) == false) {
+            $select = $select->order($params["sort"]);
+        } else {
+            $select = $select->order("priority desc");
         }
         $result = $this->getAdapter()->fetchAll($select);
         if (empty($result) == true) {
@@ -468,5 +490,13 @@ class Product extends Zend_Db_Table_Abstract {
     public function updateProduct( $data, $id ) {
     	$where[] = $this->getAdapter()->quoteInto("id = ?", $id, Zend_Db::INT_TYPE);
     	return $this->update($data, $where);
+    }
+
+    public function getProductByComboId($combo_id) {
+        $select = $this->getAdapter()->select()
+            ->from(array('p' => 'product'))
+            ->where('combo_id= ?', $combo_id)
+            ->order('id ASC');
+        return $this->getAdapter()->fetchAll($select);
     }
 }

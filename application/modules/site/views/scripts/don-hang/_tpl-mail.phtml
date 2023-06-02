@@ -123,8 +123,10 @@
 																<div style="margin-bottom: 5px">
 																	<?php echo $item['name']?> 
 																	<?php 
-																		if( empty($item['color_id']) == false && $item['color_id'] > 1) { 
-																			echo '-'. $item['color'];
+																		if( empty($item['variant_name']) == false ) { 
+																			echo '-'. $item['variant_name'];
+																		}else{
+																			echo '-'. ' Mặc định';
 																		}
 																	?>
 																</div>

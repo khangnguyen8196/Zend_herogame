@@ -23,16 +23,6 @@
         </div>
     </div>
     <div class="form-group">
-		<label class="control-label col-lg-2">Danh sách màu</label>
-		<div class="col-lg-5">
-			<select style="width: 100%; height:auto" multiple="multiple" class="select " id="product_color" name="product_color[]">
-			<?php foreach ( $this->listColor as $key => $color){ ?>
-				<option value="<?php echo $key ?>" <?php echo in_array($key, $this->info['product_color'] ) ? 'selected' : '' ?>><?php echo $color?></option>
-			<?php } ?>
-			</select>
-		</div>
-    </div>
-    <div class="form-group">
         <label class="control-label col-lg-2">Hình ảnh đại diện</label>
         <div class="col-lg-5">
             <input type="file" class="file-styled form-control" name='image_product' id="image_product" accept="image/*"/>
@@ -57,65 +47,6 @@
             </div>
         <?php } ?>
     </div>
-    <div class="form-group">
-        <label class="control-label col-lg-2">Thư viện ảnh</label>
-        <button type="button" id="addMoreGallery" class="btn btn-primary" style="margin-right: 11px;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Thêm Ảnh</button>
-        <div class="col-lg-8 list-file-gallery" style="margin-left: -10px;">
-            <div class="form-group file-item">
-                <div class="col-lg-7">
-                    <input type="file" class="file-styled form-control" name='gallery[]' accept="image/*"/>
-                </div>
-                <div class="col-lg-2">
-                    <select class="form-control image_color" name="image_color[]">
-                        <?php if( empty( $this->listColor ) ){ ?>
-                            <option value="1">Màu Mặc Định - Không Màu</option>
-                        <?php }else{ ?>
-                            <?php foreach ( $this->listColor as $key => $color ){ ?>
-                                <?php if( in_array($key, $this->info['product_color'] )) { ?>
-                                    <option value="<?php echo $key ?>"><?php echo $color ?></option>
-                                <?php } ?>
-                            <?php } ?>
-                        <?php } ?>
-                    </select>
-                </div>
-                <div class="col-lg-2">
-                    <button type="button"  class="btn btn-alert remove" style="margin-right: 11px;">x</button>
-                </div>
-            </div>
-        </div>
-    </div>
-        <?php if (empty($this->info) == false && empty($this->info['gallery']) == false) { ?>
-        	<div class="form-group">
-				<div class="list-image">
-			    	<?php
-			    		$listGallery = explode(",",$this->info['gallery']);
-		                foreach ( $listGallery as $key => $item) {
-		                    ?>
-		                    <div class="col-lg-2 col-sm-4 parent img-item">
-		                        <div class="thumbnail">
-		                            <div class="thumb">
-		                                <img class="img-media img-thumbnail-item" style="height: 100px" src="<?php echo '/upload/images/' . $item; ?>" alt="">
-		                                <div class="caption-overflow">
-		                                    <span>
-		                                        <a class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5 container-image" href="<?php echo '/upload/images/' . $item; ?>" data-popup="lightbox">
-		                                            <i class="icon-plus3"></i>
-		                                        </a>
-		                                        <a  class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5">
-		                                            <i class="icon-cross2 remove-item-gallery" data-image-color="<?php echo $this->info['image_color'][$key] ?>" data-remove="<?php echo $item?>"></i>
-		                                        </a>
-		                                    </span>
-		                                </div>
-		                            </div>
-                                    <div class="color-name"><?php echo $this->listColor[$this->info['image_color'][$key]] ?></div>
-		                        </div>
-		                    </div>
-		                    <?php
-		                }
-		            ?>
-		        </div>
-			</div>
-        <?php } ?>
-   <div class="hidden list-delete-img">
    </div>
     <div class="form-group">
         <label class="control-label col-lg-2"><?php echo $this->translate('summary') ?></label>
@@ -151,6 +82,125 @@
             <input type="number" name="price_sales" id="price_sales" placeholder="Giá Sales" class="form-control" value="<?php echo @$this->info['price_sales'] ?>">
         </div>
     </div>
+    <!--add_product_variant-->
+    <input type="hidden" name="id" value="<?php echo@$this->info['id']; ?>">
+<?php if(empty($this->variants)==false) {?>
+        <div class="form_variant">
+            <?php
+                foreach ( $this->variants as $key => $item) { 
+                ?>
+                <div id="inputFormRow" class="inputFormRowVariant  <?php if ($item['status'] == 0) { echo 'd-none'; } ?>">
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Tên Loại</label>
+                        <div class="col-lg-2">
+                            <input type="text" id="variant_name_" name="variant_name[]" data-name="variant_name[]" placeholder ="Tên Loại" class="form-control" value="<?php echo $item['variant_name'] ?> " data-msg="Vui Lòng Nhập Tên Loại">
+                        </div>
+                        <label class="control-label col-lg-1">Giá</label>
+                        <div class="col-lg-2">
+                            <input type="number" id="variant_price_" name="variant_price[]" data-name="variant_price[]" placeholder="Giá" class="form-control" value="<?php echo $item['variant_price'] ?>" data-msg="Vui Lòng Nhập Giá Loại">
+                        </div>
+                        <label class="control-label col-lg-1">Giá Sales</label>
+                        <div class="col-lg-2">
+                            <input type="number" id="variant_price_sales_" name="variant_price_sales[]" data-name="variant_price_sales[]" placeholder="Giá Sales" class="form-control" value="<?php echo $item['variant_price_sales'] ?>" data-msg="Vui Lòng Nhập Giá Sales Loại">
+                        </div>
+                        <input type="hidden" name="variant_id[<?php echo $key ?>]" value="<?php echo $item['id'] ?>">
+                        <input type="hidden" name="product_id[<?php echo $key ?>]" value="<?php echo $item['product_id']; ?>">
+                        <input type="hidden" name="variant_status[<?php echo $key ?>]" value="<?php echo $item['status']; ?>">
+                        <div class="input-group-append">
+                            <button id="removeVariant" type="button" data-id="<?php echo $item['id'] ?>" class="btn btn-danger">Remove</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Ảnh Loại Sản Phẩm</label>
+                        <button type="button" class="btn btn-primary add-img-variant" data-variant-id="<?php echo $item['id'] ?>"  style="margin-right: 11px;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Thêm Ảnh</button>
+                        <div class="col-lg-8 list-file-variant-img" id="newVariantImg_<?php echo $item['id'] ?>" style="margin-left: -10px;">
+                            <div class="form-group file-item-variant">
+                                <div class="col-lg-7">
+                                    <input type="file" class="file-styled form-control" name="url_image[<?php echo $item['id'] ?>][]" data-variant-id="<?php echo $item['id'] ?>" accept="image/*"/>
+                                </div>
+                                <div class="col-lg-2">
+                                    <button type="button"  class="btn btn-alert remove-variant-img" style="margin-right: 11px;">x</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        <?php if (empty($this->listVariantImg[$item['id']] == false)) { ?>
+                            <div class="form-group">
+                                <div class="list-image">
+                                    <?php
+                                        foreach ($this->listVariantImg[$item['id']] as $i => $value) {
+                                    ?>
+                                            <div class="col-lg-2 col-sm-4 parent img-item-variant">
+                                                <div class="thumbnail">
+                                                    <div class="thumb">
+                                                        <img class="img-media img-thumbnail-item" style="height: 100px" src="<?php echo '/upload/images/' . $value; ?>" alt="">
+                                                        <div class="caption-overflow">
+                                                            <span>
+                                                                <a class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5 container-image" href="<?php echo '/upload/images/' . $value; ?>" data-popup="lightbox">
+                                                                    <i class="icon-plus3"></i>
+                                                                </a>
+                                                                <a  class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5">
+                                                                    <i class="icon-cross2 remove-item-variant-img" data-url-image="<?php echo $value ?>" data-remove-variant-img="<?php echo $value?>"></i>
+                                                                </a>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    <?php
+                                        }
+                                    ?>
+                                </div>
+                            </div>
+                        <?php } ?>
+                    <div class="hidden list-delete-variant-img" id ="delete-variant-img_<?php echo $item['id'] ?>" data-variation-id="<?php echo $item['id'] ?>"><?php echo $item['id'] ?></div>
+                </div>   
+            <?php } ?>
+                <div id="newRow"></div>
+                    <button id="addRow" type="button" class="btn btn-info" style="left: 83%;margin-bottom:20px;">+ Thêm Loại</button>
+        </div>
+<?php } else {?>
+    <div class="form_variant">
+            <div class="inputFormRow">
+                <div class="form-group">
+                    <label class="control-label col-lg-2">Tên Loại</label>
+                    <div class="col-lg-2">
+                        <input type="text" class="form-control variant-name"  name="variant_name[]" data-name="variant_name[]" placeholder ="Tên Loại" value="Mặc Định" data-msg="Vui Lòng Nhập Tên Loại">
+                    </div>
+                    <label class="control-label col-lg-1">Giá</label>
+                    <div class="col-lg-2">
+                        <input type="number" class="form-control variant-price" name="variant_price[]" data-name="variant_price[]" placeholder="Giá" value="" data-msg="Vui Lòng Nhập Giá Loại">
+                    </div>
+                    <label class="control-label col-lg-1">Giá Sales</label>
+                    <div class="col-lg-2">
+                        <input type="number" class = "form-control variant-price-sales" name="variant_price_sales[]" data-name="variant_price_sales[]" placeholder="Giá Sales" value="" data-msg="Vui Lòng Nhập Giá Sales Loại">
+                    </div>
+                    <input type="hidden"  name = "variant_id[]" value="0">
+                    <div class="input-group-append">
+                        <button id="removeRow" type="button" class="btn btn-danger">Remove</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-lg-2">Ảnh Loại Sản Phẩm</label>
+                    <button type="button" class="btn btn-primary add-img-variant" data-variant-id="0"  style="margin-right: 11px;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Thêm Ảnh</button>
+                    <div class="col-lg-8 list-file-variant-img" id="newVariantImg_0" style="margin-left: -10px;">
+                        <div class="form-group file-item-variant">
+                            <div class="col-lg-7">
+                                <input type="file" class="file-styled form-control" name="url_image[0][]" data-variant-id="0" accept="image/*"/>
+                            </div>
+                            <div class="col-lg-2">
+                                <button type="button"  class="btn btn-alert remove-variant-img" style="margin-right: 11px;">x</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="newRow"></div>
+                <button id="addRow" type="button" class="btn btn-info" style="left: 83%;margin-bottom:20px;" >+ Thêm Loại</button>
+    </div>
+<?php } ?>
+              
+    <!--end add_product_variant-->
     <div class="form-group">
         <label class="control-label col-lg-2"><?php echo $this->translate('status') ?></label>
         <div class="col-lg-4">
@@ -283,6 +333,36 @@
         </div>
     </div>
     <div class="form-group">
+        <label class="control-label col-lg-2">Combo Product</label>
+        <div class="col-lg-4">
+            <select name="combo_id" id="combo_id" class="select-search">
+                <option value>Không Chọn</option>
+               <?php
+                if (empty($this->listCombo) == false) {
+                    foreach ($this->listCombo as $key => $value) {
+                        ?>
+                        <option <?php
+                        if ($value['id'] == @$this->info['combo_id']) {
+                            echo 'selected';
+                        }
+                        ?> value="<?php echo $value['id'] ?>"><?php echo $value['title'] ?></option>
+                            <?php
+                        }
+                    } else {
+                        ?>
+                    <?php
+                }
+                ?>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-2">Combo liên quan</label>
+        <div class="col-lg-10" >
+            <select style="width: 100%; height:auto" multiple="multiple" class="select " id="relative_combo" name="relative_combo[]"> </select>
+        </div>
+    </div>
+    <div class="form-group">
         <label class="control-label col-lg-2">Sản phẩm liên quan</label>
         <div class="col-lg-10" >
             <select style="width: 100%; height:auto" multiple="multiple" class="select " id="relative_product" name="relative_product[]"> </select>
@@ -342,6 +422,8 @@
 </fieldset>
 <input type="hidden" name="id" id="id" value="<?php echo @$this->info["id"] ?>" />
 <input type="hidden" id="selected_relative_product" value="<?php echo @$this->info["relative_product"] ?>" />
+<input type="hidden" id="selected_relative_combo" value="<?php echo @$this->info["relative_combo"] ?>" />
+
 <style>
     .color-name{
         text-align: center;
@@ -349,5 +431,8 @@
         border-top: 1px solid #d1d1d1;
         margin-top: 5px;
         padding-top: 3px;
+    }
+    .form_variant .hide  {
+        display: none;
     }
 </style>

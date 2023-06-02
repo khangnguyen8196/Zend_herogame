@@ -81,6 +81,8 @@ class Admin_BannerController extends FrontBaseAction {
      */
     public function detailAction() {
         $models = new Banner();
+        $modelCategory = new Category();
+        $listCategory = $modelCategory->listAllCategory();
         $mdlMedia = new Media();
         $info = array();
         $error = array();
@@ -113,6 +115,7 @@ class Admin_BannerController extends FrontBaseAction {
                     'status' => $data['status'],
                     'video_url' => $data['video_url'],
                     'is_video' => $isVideo,
+                    'id_category'=>$data['id_category'],
                 );
                 $rs = $models->saveBanner($dataIn, $id);
                 $public_path = UPLOAD_PATH.'/images/full/';
@@ -153,6 +156,7 @@ class Admin_BannerController extends FrontBaseAction {
             }
             $info = $data;
         }
+        $this->view->listCategory = $listCategory;
         $this->view->info = $info;
         $this->view->id = $id;
         $this->view->error = $error;

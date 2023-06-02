@@ -469,7 +469,7 @@ class Commons {
 		}
 		return $productRes;
 	}
-	
+
 	/**
 	 *
 	 * @param type $value        	
@@ -536,8 +536,7 @@ class Commons {
 		$product ["count_down"] = $value ["count_time"];
 		$product ["enable_promo"] = $value ["enable_promo"];
 		return $product;
-	}
-	
+	}	
 	/**
 	 *
 	 * @return array
@@ -656,14 +655,24 @@ class Commons {
 	 */
 	public static function countItemInCart($cart_list) {
 		$countItem = 0;
-		if (empty ( $cart_list ) == false && is_array ( $cart_list )) {
-			foreach ( $cart_list as $product_id => $value ) {
-				if (empty ( $value ) == false && is_array ( $value )) {
-					foreach($value as $color_id => $value ){
-						$countItem = $countItem + $value;
+		if (isset($cart_list) && is_array($cart_list)) {
+			if(!empty($cart_list['products'])){
+				foreach ($cart_list['products'] as $value) {
+					if(!empty($value['qty'])){
+						$qty = ($value['qty']);
 					}
-				}else{
-					$countItem = $countItem + $value;
+					if(!empty($value['variant']['qty'])){
+						$qty = ($value['variant']['qty']);
+					}
+					$countItem += $qty;
+				}
+			}
+			if(!empty($cart_list['combos'])){
+				foreach ($cart_list['combos'] as $combo) {
+					if(!empty($combo['qty'])){
+						$qty = $combo['qty'];
+					}
+					$countItem += $qty;
 				}
 			}
 		}

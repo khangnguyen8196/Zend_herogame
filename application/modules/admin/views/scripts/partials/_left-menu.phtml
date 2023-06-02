@@ -143,6 +143,21 @@
                             </ul>
                         </li>
                     <?php } ?>
+            
+                    <?php
+                    if (UtilAuth::hasPrivilege('combo-product', ACTION_VIEW) == true ) {
+                        ?>
+                        <!-- Statistics management -->
+                        <li class="<?php echo ($this->module == 'admin' && $this->controller == "combo-product") ? "active" : "" ?>">
+                            <a href="#"><i class="icon-cube"></i> <span>Combo Sản Phẩm</span></a>
+                            <ul>
+                                <?php if (UtilAuth::hasPrivilege('combo-product', ACTION_VIEW) == true) { ?>
+                                    <li class="<?php echo ($this->module == 'admin' && $this->controller == "combo-product" && $this->action == "index" ) ? "active" : "" ?>"><a href="/admin/combo-product/index">Combo Sản Phẩm</a></li>
+                                <?php } ?>
+                            </ul>
+                        </li>
+                    <?php } ?>
+
                     <?php if (UtilAuth::hasPrivilege('permission', ACTION_VIEW) == true || UtilAuth::hasPrivilege('permission', ACTION_ADD) == true || UtilAuth::hasPrivilege('permission', ACTION_EDIT) == true) { ?>
                         <!-- Permission management -->
                         <li class="<?php echo ($this->module == 'admin' && $this->controller == "permission") ? "active" : "" ?>">

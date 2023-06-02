@@ -29,6 +29,7 @@ if ($banActiveIndex < 0 || $banActiveIndex >= count($this->data)) {
                 $ytvideo = 'https://www.youtube.com/watch?v=' . $videoid;
                 $ytthumb = 'https://img.youtube.com/vi/' . $videoid . '/maxresdefault.jpg';
             ?>
+          
             <a class="banner-video <?php echo $banCss ?>" href="<?php echo $ytvideo ?>">
                 <i class="fa fa-youtube-play"></i>
                 <?php echo $this->partial('/shared/_lazy_image.phtml', array(

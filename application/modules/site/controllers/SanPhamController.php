@@ -7,6 +7,10 @@ class Site_SanPhamController extends FrontEndAction {
 
     protected $_categoryMdl = "";
     protected $_productMdl = "";
+    protected $_variantMdl = "";
+    protected $_variantImgMdl = ""; 
+    protected $_comboMdl = ""; 
+    protected $_comboDetailMdl = ""; 
 
     /**
      * (non-PHPdoc)
@@ -16,6 +20,10 @@ class Site_SanPhamController extends FrontEndAction {
         parent::init();
         $this->_categoryMdl = new Category();
         $this->_productMdl = new Product();
+        $this->_variantMdl = new ProductVariant();
+        $this->_variantImgMdl = new VariantImage();
+        $this->_comboMdl = new ComboProduct();
+        $this->_comboDetailMdl = new ComboDetail();
         $this->view->pageSize = Commons::pageSizeList();
         $this->view->sortList = Commons::sortList();
         $this->loadJs('pages/sangpham');
@@ -112,13 +120,26 @@ class Site_SanPhamController extends FrontEndAction {
         if (empty($productInfo) == true) {
             $this->_redirect("/");
         }
-        $color_list = Commons::getProductColor($productInfo['product_color']);
         
-        $this->view->color_list = $color_list;   
+        $color_list = Commons::getProductColor($productInfo['product_color']);
+        $list_variant = $this->_variantMdl->getProductVariants($productInfo['id']);
+        $list_variant_img = $this->_variantImgMdl->getProductImages($productInfo['id']);
+       
+        if (isset($productInfo['combo_id'])) {
+            $combo_product = $this->_comboMdl->fetchComboProductById($productInfo['combo_id']);
+            $combo_detail = $this->_comboDetailMdl->getProductByComboId($productInfo['combo_id']);
+            $this->view->combo_detail=$combo_detail;
+            $this->view->combo_product=$combo_product;
+        }
+
+        $this->view->color_list = $color_list; 
+        $this->view->list_variant = $list_variant;   
+        $this->view->list_variant_img = $list_variant_img;   
         
         $this->_setMeta( $productInfo );
         $this->view->info = $productInfo;
         $this->view->relative_product = $this->_getRelativeProduct($productInfo["relative_product"]);
+
     }
 
     /**
@@ -143,5 +164,4 @@ class Site_SanPhamController extends FrontEndAction {
         }
         return $relativeProduct;
     }
-
 }

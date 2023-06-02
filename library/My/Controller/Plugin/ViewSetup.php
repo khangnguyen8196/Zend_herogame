@@ -132,6 +132,8 @@ class My_Controller_Plugin_ViewSetup extends Zend_Controller_Plugin_Abstract {
                 $view->headLink()->appendStylesheet($auto->autoRefreshRewriter("/site/css/style.css"));
                 $view->headLink()->appendStylesheet($auto->autoRefreshRewriter("/site/css/css-loader.css"));
                 $view->headLink()->appendStylesheet($auto->autoRefreshRewriter("/site/css/_dev.css"));
+                
+
                 // load font
                 //load library js
                 $view->headScript()->appendFile($auto->autoRefreshRewriter('/site/js/site.min.js', 'text/javascript'));
@@ -141,6 +143,8 @@ class My_Controller_Plugin_ViewSetup extends Zend_Controller_Plugin_Abstract {
                 $view->headScript()->appendFile($auto->autoRefreshRewriter('/site/js/library/jquery.form.min.js', 'text/javascript'));
                 $view->headScript()->appendFile($auto->autoRefreshRewriter('//platform-api.sharethis.com/js/sharethis.js#property=5981940f52281100123ebd6a&product=inline-share-buttons'));
                 $view->headScript()->appendFile($auto->autoRefreshRewriter('/site/js/pages/common.js', 'text/javascript'));
+                $view->headScript()->appendFile($auto->autoRefreshRewriter('/site/js/slide-post-mobile.js', 'text/javascript'));
+                
                 
                 $custInfo = UtilAuth::getCustommerLoginInfo();
             if (empty($custInfo) == true) {
