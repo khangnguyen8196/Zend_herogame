@@ -275,7 +275,8 @@ class Admin_OrderController extends FrontBaseAction {
         if (!empty($listOrderDetail)) {
             foreach ($listOrderDetail as $key => $value) {
                 if (!empty($value['combo_id']) && $value['combo_id'] != 0) {
-                    $listProducts = $modelProduct->getProductByComboId($value['combo_id']);
+                    $modelComboDetail =new ComboDetail();
+                    $listProducts = $modelComboDetail->getProductByComboId($value['combo_id']);
                     if (!empty($listProducts)) {
                         foreach ($listProducts as $product) {
                             $listCombo[$value['combo_id']][] = $product;

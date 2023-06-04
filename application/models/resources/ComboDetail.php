@@ -99,7 +99,7 @@ class ComboDetail extends Zend_Db_Table_Abstract {
     public function getComboByProductId($product_id) {
         $select = $this->getAdapter()->select();
         $select->from(array('cd' => 'combo_detail'), array('product_id','combo_id'))
-            ->join(array('cb' => 'combo_product'), 'cb.id = cd.combo_id', array('title'))
+            ->join(array('cb' => 'combo_product'), 'cb.id = cd.combo_id', array('title','total_discount','image_cb'))
             ->where('cd.product_id = ?', $product_id)
             ->where('cd.status = ?', STATUS_ACTIVE)
             ->where('cb.status = ?', STATUS_ACTIVE);

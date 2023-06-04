@@ -217,8 +217,11 @@ class Product extends Zend_Db_Table_Abstract {
         if (isset($data['id_category']) == true) {
             $datain['id_category'] = $data['id_category'];
         }
+        // if (isset($data['combo_id']) == true) {
+        //     $datain['combo_id'] = $data['combo_id'];
+        // }
         if (isset($data['combo_id']) == true) {
-            $datain['combo_id'] = $data['combo_id'];
+            $datain['combo_id'] = implode(',',$data['combo_id']);
         }
         if (isset($data['updated_at']) == true) {
             $datain['updated_date'] = $data['updated_at'];
@@ -258,9 +261,6 @@ class Product extends Zend_Db_Table_Abstract {
         }
         if (isset($data['relative_product']) == true) {
             $datain['relative_product'] = $data['relative_product'];
-        }
-        if (isset($data['relative_combo']) == true) {
-            $datain['relative_combo'] = implode(',',$data['relative_combo']);
         }
         if (isset($data['product_color']) == true) {
             $datain['product_color'] = $data['product_color'];

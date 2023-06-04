@@ -571,7 +571,7 @@ class Site_DonHangController extends FrontEndAction {
             if( empty( $orderInfo) == false ){
                 $this->view->order = $orderInfo;
                 $orderDetail = new OrderDetail();
-                $modelProduct = new Product();
+                $modelComboDetail = new ComboDetail();
                 $list = $orderDetail->getListOrderDetail($orderInfo['id']);
                 $this->view->listproduct = $list;
 
@@ -579,7 +579,7 @@ class Site_DonHangController extends FrontEndAction {
                 if (!empty($list)) {
                     foreach ($list as $key => $value) {
                         if (!empty($value['combo_id']) && $value['combo_id'] != 0) {
-                            $listProducts = $modelProduct->getProductByComboId($value['combo_id']);
+                            $listProducts = $modelComboDetail->getProductByComboId($value['combo_id']);
                             if (!empty($listProducts)) {
                                 foreach ($listProducts as $product) {
                                     $listCombo[$value['combo_id']][] = $product;

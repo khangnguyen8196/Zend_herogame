@@ -125,12 +125,15 @@ class Site_SanPhamController extends FrontEndAction {
         $list_variant = $this->_variantMdl->getProductVariants($productInfo['id']);
         $list_variant_img = $this->_variantImgMdl->getProductImages($productInfo['id']);
        
-        if (isset($productInfo['combo_id'])) {
-            $combo_product = $this->_comboMdl->fetchComboProductById($productInfo['combo_id']);
-            $combo_detail = $this->_comboDetailMdl->getProductByComboId($productInfo['combo_id']);
-            $this->view->combo_detail=$combo_detail;
-            $this->view->combo_product=$combo_product;
+        $list_combo_product = $this->_comboDetailMdl->getComboByProductId($productInfo['id']);
+        $list_combo_detail = array();
+        foreach ($list_combo_product as $combo_product) {
+            $combo_detail = $this->_comboDetailMdl->getProductByComboId($combo_product['combo_id']);
+            $list_combo_detail[$combo_product['combo_id']] = $combo_detail; 
         }
+        $this->view->list_combo_detail = $list_combo_detail;
+        $this->view->list_combo_product=$list_combo_product;
+        
 
         $this->view->color_list = $color_list; 
         $this->view->list_variant = $list_variant;   

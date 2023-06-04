@@ -115,6 +115,8 @@ pages = $.extend(pages, {
                 $(".variant-items a").removeClass("active");
                 var variant_id = $(this).attr("data-id");
                 var variant0Id = $("input[data-var0-id]").data("var0-id");
+                var vcId = $('.combo-product').data('vc-id');
+                console.log(variant_id);
                 if (isNaN(variant_id) == false) {
                     $(this).children("a").addClass("active");
                     $("#selected_variant").text($(this).text());
@@ -130,10 +132,26 @@ pages = $.extend(pages, {
                     $("#variant_price_sales").val(variant_price_sales);
                     $("#variant_price").val(variant_price);
                     $("#variant_name").val(variant_name);
+                    if(variant_price!=variant_price_sales){
+                        $('strong.price-b.hidden').css('opacity','1');
+                    }else {   
+                            $('.hidden').css('opacity','0');
+                    }
+                    if(variant_price==variant_price_sales){
+                        $('strong.price-b').addClass('hidden');
+                    }
+
+                    if(variant_id !=vcId){
+                        $('.combo-product').hide();
+                    }else {
+                        $('.combo-product').show();
+                    }
+
             
                     if ($("#productMobilePhotos.mobile").is(':visible') == true) {
                         pages.sanpham.processGalleryMobile(variant_id);
                     } else {
+
                         $(".image_thumbs").removeClass("active");
                         $(".image_thumbs").hide();
                         if (variant0Id == variant_id) {
@@ -143,6 +161,8 @@ pages = $.extend(pages, {
                             $('.variant_0_id, .image_thumbs:not([class*=variant_])').show(); 
                         } else {
                             $('.variant_' + variant_id).show();
+                            var variantImage = $('.variant_' + variant_id).find('.imgh.r1x1.photo').eq(0);
+                            variantImage.trigger("click");
                         }
                         
                     }
@@ -195,23 +215,22 @@ pages = $.extend(pages, {
                   }
                 });
             });
-            
+
             $(document).ready(function() {
                 $(".more-expand").click(function() {
+                  var comboId = $(this).data('combo-id');
                   $(this).hide();
-                  $(".more-collapse").show();
-                  $(".info-detail").show();
+                  $(".more-collapse[data-combo-id='" + comboId + "']").show();
+                  $(".info-detail[data-combo-id='" + comboId + "']").show();
                 });
-                
+              
                 $(".more-collapse").click(function() {
+                  var comboId = $(this).data('combo-id');
                   $(this).hide();
-                  $(".more-expand").show();
-                  $(".info-detail").hide();
+                  $(".more-expand[data-combo-id='" + comboId + "']").show();
+                  $(".info-detail[data-combo-id='" + comboId + "']").hide();
                 });
-            });
-              
-            
-              
+              });     
         },
         /**
          * 

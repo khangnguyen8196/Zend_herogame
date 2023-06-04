@@ -42,7 +42,7 @@ class ComboProduct extends Zend_Db_Table_Abstract {
     public function fetchComboProductById( $id ) {
         $db = $this->getAdapter();
         $where[] = $db->quoteInto( "id = ?", $id, Zend_Db::INT_TYPE );
-        $where[] = $db->quoteInto( "status = ?", STATUS_ACTIVE, Zend_Db::INT_TYPE ); // Thêm điều kiện này vào
+        $where[] = $db->quoteInto( "status = ?", STATUS_ACTIVE, Zend_Db::INT_TYPE ); 
         $result = $this->fetchRow( $where );
         if ( empty( $result ) == true ) {
             return array();

@@ -578,15 +578,15 @@ pages = $.extend(pages, {
             $.ajax({
                 'url': '/admin/product/get-list-combo',
                 'type': 'GET',
-                'data': {id: $("#id").val(), selectRelativeCombo : $("#selected_relative_combo").val()},
+                'data': {id: $("#id").val(), selectCombo : $("#selected_combo").val()},
                 beforeSend: function () {
 
                 },
                 success: function (data) {
                     if (data.Code > 0 && data.Data != "") {
-                        $("#relative_combo").html(data.Data);
-                        $('#relative_combo').select2({
-                            placeholder: "Những Combo liên quan...",
+                        $("#combo_id").html(data.Data);
+                        $('#combo_id').select2({
+                            placeholder: "Danh sách combo sản phẩm",
                             minimumResultsForSearch: "-1",
                             width: '100%',
                         });

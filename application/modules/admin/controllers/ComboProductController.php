@@ -102,39 +102,54 @@ class Admin_ComboProductController extends FrontBaseAction {
 
 
                 $combo_id = isset($_POST['id']) ? $_POST['id'] : $rs;
-                if( !empty($_POST['product_id'])){
-                    foreach($_POST['product_id'] as $key => $value){
-                        $product= $mdProduct->fetchProductById($value);
-                        $pro = [
-                            'product_id' => $value,
-                            'combo_id' => $rs,
-                            'price' => $product['price'],
-                            'status' => STATUS_ACTIVE,
-                            'product_title' =>$product['title'],
-                        ];
-                        if ($_POST['combo_detail_id'][$key] > 0) {
-                            $comboDetail = $mdComboDetail->fetchComboDetailById($_POST['combo_detail_id'][$key]);
-                            if (!empty($comboDetail)) {
-                                $pro['combo_id'] = $comboDetail['combo_id'];
+                $deleted = false;
+                if (!empty($_POST['combo_id_delete'])) {
+                    $list_combo_detail = $mdComboDetail->getAllComboDetailIdsByComboId($info['id']);
+                    if (!empty($list_combo_detail)) {
+                        foreach ($_POST['combo_id_delete'] as $valued) {
+                            if (in_array($valued, $list_combo_detail)) {
+                                $mdComboDetail->deleteComboDetail($valued);
+                                $deleted = true; // Đánh dấu đã xoá combo_detail
                             }
-                            $mdComboDetail->saveComboDetail($pro, $_POST['combo_detail_id'][$key]);
-
-                            $list_combo_detail = $mdComboDetail->getAllComboDetailIdsByComboId($info['id']);
-                            if (!empty($_POST['combo_id_delete']) && !empty($list_combo_detail)) {
-                                foreach ($_POST['combo_id_delete'] as $keyd => $valued ) {
-                                    if (in_array($valued, $list_combo_detail)) {
-                                        $mdComboDetail->deleteComboDetail($valued);
-                                    }
-                                }         
-                            }                            
-                        }else {
-                            if(!empty($combo_id)){
-                                $pro['combo_id'] = $combo_id;
-                                $mdComboDetail->saveComboDetail($pro);
+                        }
+                    }
+                }
+                if (!$deleted) {
+                    if( !empty($_POST['product_id'])){
+                        foreach($_POST['product_id'] as $key => $value){
+                            $product= $mdProduct->fetchProductById($value);
+                            $pro = [
+                                'product_id' => $value,
+                                'combo_id' => $rs,
+                                'price' => $product['price'],
+                                'status' => STATUS_ACTIVE,
+                                'product_title' =>$product['title'],
+                            ];
+                            if ($_POST['combo_detail_id'][$key] > 0) {
+                                $comboDetail = $mdComboDetail->fetchComboDetailById($_POST['combo_detail_id'][$key]);
+                                if (!empty($comboDetail)) {
+                                    $pro['combo_id'] = $comboDetail['combo_id'];
+                                }
+                                $mdComboDetail->saveComboDetail($pro, $_POST['combo_detail_id'][$key]);
+    
+                                // $list_combo_detail = $mdComboDetail->getAllComboDetailIdsByComboId($info['id']);
+                                // if (!empty($_POST['combo_id_delete']) && !empty($list_combo_detail)) {
+                                //     foreach ($_POST['combo_id_delete'] as $keyd => $valued ) {
+                                //         if (in_array($valued, $list_combo_detail)) {
+                                //             $mdComboDetail->deleteComboDetail($valued);
+                                //         }
+                                //         break;
+                                //     }         
+                                // }                            
                             }else {
-                                $mdComboDetail->saveComboDetail($pro);
+                                if(!empty($_POST['id'])){
+                                    $pro['combo_id'] = $_POST['id'];
+                                    $mdComboDetail->saveComboDetail($pro);
+                                }else {
+                                    $mdComboDetail->saveComboDetail($pro);
+                                }
+                                
                             }
-                            
                         }
                     }
                 }

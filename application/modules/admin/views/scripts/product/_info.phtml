@@ -333,33 +333,9 @@
         </div>
     </div>
     <div class="form-group">
-        <label class="control-label col-lg-2">Combo Product</label>
-        <div class="col-lg-4">
-            <select name="combo_id" id="combo_id" class="select-search">
-                <option value>Không Chọn</option>
-               <?php
-                if (empty($this->listCombo) == false) {
-                    foreach ($this->listCombo as $key => $value) {
-                        ?>
-                        <option <?php
-                        if ($value['id'] == @$this->info['combo_id']) {
-                            echo 'selected';
-                        }
-                        ?> value="<?php echo $value['id'] ?>"><?php echo $value['title'] ?></option>
-                            <?php
-                        }
-                    } else {
-                        ?>
-                    <?php
-                }
-                ?>
-            </select>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-lg-2">Combo liên quan</label>
+        <label class="control-label col-lg-2">Combo Sản Phẩm</label>
         <div class="col-lg-10" >
-            <select style="width: 100%; height:auto" multiple="multiple" class="select " id="relative_combo" name="relative_combo[]"> </select>
+            <select style="width: 100%; height:auto" multiple="multiple" class="select " id="combo_id" name="combo_id[]"> </select>
         </div>
     </div>
     <div class="form-group">
@@ -422,7 +398,7 @@
 </fieldset>
 <input type="hidden" name="id" id="id" value="<?php echo @$this->info["id"] ?>" />
 <input type="hidden" id="selected_relative_product" value="<?php echo @$this->info["relative_product"] ?>" />
-<input type="hidden" id="selected_relative_combo" value="<?php echo @$this->info["relative_combo"] ?>" />
+<input type="hidden" id="selected_combo" value="<?php echo @$this->info["combo_id"] ?>" />
 
 <style>
     .color-name{

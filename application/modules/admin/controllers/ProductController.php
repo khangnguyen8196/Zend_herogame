@@ -557,11 +557,11 @@ class Admin_ProductController extends FrontBaseAction {
                 $arrCombo[$productId][] = $combo;
             }
         }
-        $selectedRelativeCombo = array();
-        if( empty($this->post_data["selectRelativeCombo"]) == false){
-            $selectedRelativeCombo = explode(',', $this->post_data["selectRelativeCombo"]);
+        $selectedCombo = array();
+        if( empty($this->post_data["selectCombo"]) == false){
+            $selectedCombo = explode(',', $this->post_data["selectCombo"]);
         }
-        $this->view->selectedRelativeCombo = $selectedRelativeCombo;
+        $this->view->selectedCombo = $selectedCombo;
         $this->view->arrCombo = $arrCombo;
         $html = $this->view->render("/combo-product/_relative-combo.phtml");
         $this->ajaxResponse(CODE_SUCCESS, '', $html);

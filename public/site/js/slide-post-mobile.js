@@ -75,16 +75,16 @@ $(document).ready(function() {
 
 $(document).ready(function() {
 	var slidesShow = 6;
-	$('.banner-yt-pc').on('init reInit beforeChange', function(event, slick, currentSlide, nextSlide) {
-		var $clonedSlides = $(slick.$slider).find('.slick-cloned .banner-video');
+	// $('.banner-yt-pc').on('init reInit beforeChange', function(event, slick, currentSlide, nextSlide) {
+	// 	var $clonedSlides = $(slick.$slider).find('.slick-cloned .banner-video');
 		
-		$clonedSlides.each(function(index) {
-		  var $originalSlide = $(slick.$slides).eq((index - slidesShow));
-		  var $originalImage = $originalSlide.find('.imgh.r0x0');
-		  var dataLazyUrl = $originalImage.data('lazy');
-		  $(this).find('.imgh.r0x0').css('background-image', 'url("' + dataLazyUrl + '")');
-		});
-	});
+	// 	$clonedSlides.each(function(index) {
+	// 	  var $originalSlide = $(slick.$slides).eq((index - slidesShow));
+	// 	  var $originalImage = $originalSlide.find('.imgh.r0x0');
+	// 	  var dataLazyUrl = $originalImage.data('lazy');
+	// 	  $(this).find('.imgh.r0x0').css('background-image', 'url("' + dataLazyUrl + '")');
+	// 	});
+	// });
 	$('.banner-yt-pc').slick({
 		dots: false,
 		arrows: true,
@@ -101,16 +101,16 @@ $(document).ready(function() {
 
 $(document).ready(function() {
 	var slidesShow = 2;
-	$('.banner-yt').on('init reInit beforeChange', function(event, slick, currentSlide, nextSlide) {
-		var $clonedSlides = $(slick.$slider).find('.slick-cloned .banner-video');
+	// $('.banner-yt').on('init reInit beforeChange', function(event, slick, currentSlide, nextSlide) {
+	// 	var $clonedSlides = $(slick.$slider).find('.slick-cloned .banner-video');
 		
-		$clonedSlides.each(function(index) {
-		  var $originalSlide = $(slick.$slides).eq((index - slidesShow));
-		  var $originalImage = $originalSlide.find('.imgh.r0x0');
-		  var dataLazyUrl = $originalImage.data('lazy');
-		  $(this).find('.imgh.r0x0').css('background-image', 'url("' + dataLazyUrl + '")');
-		});
-	});
+	// 	$clonedSlides.each(function(index) {
+	// 	  var $originalSlide = $(slick.$slides).eq((index - slidesShow));
+	// 	  var $originalImage = $originalSlide.find('.imgh.r0x0');
+	// 	  var dataLazyUrl = $originalImage.data('lazy');
+	// 	  $(this).find('.imgh.r0x0').css('background-image', 'url("' + dataLazyUrl + '")');
+	// 	});
+	// });
   	$('.banner-yt').slick({
     dots: false,
     touchMove: true,
@@ -118,9 +118,8 @@ $(document).ready(function() {
     slidesToScroll: 2,
     infinite: true,
     arrows: true,
-	swipeToSlide: true,
-	touchMove:true,
-	speed:500,
+	swipe: true,
+	speed:300,
 	easing: 'easeInOutCubic',
     appendDots: $('.custom-dots'),
 	prevArrow: '<button class="slick-prev slick-arrow" aria-label="Previous" type="button"></button>',
