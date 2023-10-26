@@ -22,7 +22,7 @@ return array(
 // GENERAL SETTINGS
 
     'disabled' => false,
-    'uploadURL' => "uploads",
+    'uploadURL' => "upload_resource",
     'uploadDir' => "",
     'theme' => "default",
 

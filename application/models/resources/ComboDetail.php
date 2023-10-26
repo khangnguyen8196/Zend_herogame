@@ -104,9 +104,5 @@ class ComboDetail extends Zend_Db_Table_Abstract {
             ->where('cd.status = ?', STATUS_ACTIVE)
             ->where('cb.status = ?', STATUS_ACTIVE);
         return $this->getAdapter()->fetchAll($select);        
-    }
-    
-    
-    
- 
+    } 
 }

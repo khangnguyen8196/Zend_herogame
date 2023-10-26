@@ -11,13 +11,13 @@ class Admin_ComboProductController extends FrontBaseAction {
      */
     public function init() {
         parent::init();
+        $this->isLoggedIn();
+        $this->hasViewPermission();
         $this->view->headScript()->appendFile($this->autorefresh->autoRefreshRewriter('/ad-min/assets/js/libs/ckeditor/ckeditor.js', 'text/javascript'));
         $this->view->headScript()->appendFile($this->autorefresh->autoRefreshRewriter('/ad-min/assets/js/core/libraries/color-picker/js/bootstrap-colorpicker.js', 'text/javascript'));
         $this->view->headLink()->appendStylesheet($this->autorefresh->autoRefreshRewriter("/ad-min/assets/css/bootstrap-datetimepicker.min.css"));
         $this->view->headScript()->appendFile($this->autorefresh->autoRefreshRewriter('/ad-min/assets/js/plugins/pickers/bootstrap-datetimepicker.min.js', 'text/javascript'));
         $this->loadJs('combo-product');
-        // $this->isLoggedIn();
-        // $this->hasViewPermission();
         // $this->loadJs(array('combo-product'));
     }
 
@@ -43,11 +43,12 @@ class Admin_ComboProductController extends FrontBaseAction {
     	// get post card information if there is postcard'id available
     	if( empty( $this->post_data ['id'] ) == false ) {
     	    $id = intval($this->post_data ['id']);
-    	    $info = $models->fetchComboProductById( $id );
+    	    $info = $models->fetchComboById( $id );
     	    if( empty( $info ) == true ) {
     	        $this->_redirect( '/'.$this->module.'/'.$this->controller );
     	    }
     	}
+      
     	// check request is POST or GET
     	if( $this->request->isPost() ) {
     	    if( empty($data['title']) == TRUE ){
@@ -97,7 +98,7 @@ class Admin_ComboProductController extends FrontBaseAction {
                     }
                 }
 
-    		    $dataInsert['status'] = STATUS_ACTIVE;
+    		    $dataInsert['status'] = $data['status'];
     		    $rs=$models->saveComboProduct( $dataInsert, $id );
 
 
@@ -130,17 +131,7 @@ class Admin_ComboProductController extends FrontBaseAction {
                                 if (!empty($comboDetail)) {
                                     $pro['combo_id'] = $comboDetail['combo_id'];
                                 }
-                                $mdComboDetail->saveComboDetail($pro, $_POST['combo_detail_id'][$key]);
-    
-                                // $list_combo_detail = $mdComboDetail->getAllComboDetailIdsByComboId($info['id']);
-                                // if (!empty($_POST['combo_id_delete']) && !empty($list_combo_detail)) {
-                                //     foreach ($_POST['combo_id_delete'] as $keyd => $valued ) {
-                                //         if (in_array($valued, $list_combo_detail)) {
-                                //             $mdComboDetail->deleteComboDetail($valued);
-                                //         }
-                                //         break;
-                                //     }         
-                                // }                            
+                                $mdComboDetail->saveComboDetail($pro, $_POST['combo_detail_id'][$key]);                   
                             }else {
                                 if(!empty($_POST['id'])){
                                     $pro['combo_id'] = $_POST['id'];

@@ -98,22 +98,37 @@ pages = $.extend(pages, {
     		$grid  = $('.grid').masonry({});
     		setTimeout(function(){ $grid.masonry() }, 600);
     	},
-    	string_to_slug: function (str) {
-    		  str = str.replace(/^\s+|\s+$/g, ''); // trim
-    		  str = str.toLowerCase();
-    		  // remove accents, swap ñ for n, etc
-    		  var from = "ảãạẵẳặằắăậẫẩầấâàáäâẹẽẻệễểềếêèéëêìíïîỉĩịợỡởờớơộỗồốôõỏọòóöôựữửừứưũủụùúüûñç·/_,:;";
-    		  var to   = "aaaaaaaaaaaaaaaaaaaeeeeeeeeeeeeeiiiiiiioooooooooooooooooouuuuuuuuuuuuunc------";
-    		  for (var i=0, l=from.length ; i<l ; i++) {
-    		    str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
-    		  }
+    // 	string_to_slug: function (str) {
+    // 		  str = str.replace(/^\s+|\s+$/g, ''); // trim
+    // 		  str = str.toLowerCase();
+    // 		  // remove accents, swap ñ for n, etc
+    // 		  var from = "ảãạẵẳặằắăậẫẩầấâàáäâẹẽẻệễểềếêèéëêìíïîỉĩịợỡởờớơộỗồốôõỏọòóöôựữửừứưũủụùúüûñç·/_,:;";
+    // 		  var to   = "aaaaaaaaaaaaaaaaaaaeeeeeeeeeeeeeiiiiiiioooooooooooooooooouuuuuuuuuuuuunc------";
+    // 		  for (var i=0, l=from.length ; i<l ; i++) {
+    // 		    str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+    // 		  }
 
-    		  str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
-    		    .replace(/\s+/g, '-') // collapse whitespace and replace by -
-    		    .replace(/-+/g, '-'); // collapse dashes
+    // 		  str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+    // 		    .replace(/\s+/g, '-') // collapse whitespace and replace by -
+    // 		    .replace(/-+/g, '-'); // collapse dashes
 
-    		  return str;
-    	},
+    // 		  return str;
+    // 	},
+        string_to_slug: function (str) {
+			str = str.replace(/^\s+|\s+$/g, ''); // trim
+			str = str.toLowerCase();
+		  
+			// remove accents, swap ñ for n, etc
+			var from = "ảãạẵẳặằắăậẫẩầấâàáäâẹẽẻệễểềếêèéëêìíïîỉĩịợỡởờớơộỗồốôõỏọòóöôựữửừứưũủụùúüûñç·/_,:;";
+			var to = "aaaaaaaaaaaaaaaaaaaeeeeeeeeeeeeeiiiiiiioooooooooooooooooouuuuuuuuuuuuunc------";
+			for (var i = 0, l = from.length; i < l; i++) {
+			  str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+			}
+		  
+			str = str.replace(/\s/g, '-');
+			str = str.replace(/đ/g, 'd'); // replace whitespace with dash
+			return str;
+		},
     	executeSearchForm: function(formId, tableId) {
         	var t = $('#' + tableId).DataTable();
         	$("#" + formId + " [item-type=search]").each(function(){

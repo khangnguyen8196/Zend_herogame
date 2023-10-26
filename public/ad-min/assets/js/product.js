@@ -226,12 +226,12 @@ pages = $.extend(pages, {
 				html += 		'</div>';
 				html += 		'<div class="form-group">';
 				html += 			'<label class="control-label col-lg-2">Ảnh Loại Sản Phẩm</label>';
-				html += 			'<button type="button"  class="btn btn-primary add-img-variant" data-variant-id="' + index + '" style="margin-right: 11px;"><span aria-hidden="true"></span> + Thêm Ảnh</button>';
+				// html += 			'<button type="button"  class="btn btn-primary add-img-variant" data-variant-id="' + index + '" style="margin-right: 11px;"><span aria-hidden="true"></span> + Thêm Ảnh</button>';
 				html += 			'<div class="col-lg-8 list-file-variant-img" id="newVariantImg_' + index + '" style="margin-left: -10px;">';
 				html += 				'<div class="form-group file-item">';
 				html += 					'<div class="col-lg-7">';
 				html +=                         '<input type="hidden"  name = "variant_image_id[]" value="0">',
-				html += 						'<input type="file" class="file-styled form-control" name="url_image['+ index +'][]" data-variant-id="' + index + '" accept="image/*"/>';
+				html += 						'<input type="file" class="file-styled form-control" name="url_image['+ index +'][]" data-variant-id="' + index + '" accept="image/*" multiple="multiple"/>';
 				html += 					'</div>';
 				html += 					'<div class="col-lg-2">';
 				html += 						'<button type="button"  class="btn btn-alert remove" style="margin-right: 11px;">x</button>';
@@ -249,7 +249,7 @@ pages = $.extend(pages, {
 				$('#newVariantImg_' + variant_id).append(
 				'<div class="form-group file-item-variant">' +
 				'<div class="col-lg-7">' +
-				'<input type="file" class="file-styled form-control" name="url_image[' + variant_id + '][]" data-variant-id="' + variant_id + '" accept="image/*" />' +
+				'<input type="file" class="file-styled form-control" name="url_image[' + variant_id + '][]" data-variant-id="' + variant_id + '" accept="image/*" multiple="multiple" />' +
 				'</div>' +
 				'<div class="col-lg-2">' +
 				'<button type="button"  class="btn btn-alert remove-variant-img" style="margin-right: 11px;">x</button>' +
@@ -260,7 +260,8 @@ pages = $.extend(pages, {
 			// delete img variant
 			$(document).on('click', '.remove-item-variant-img', function() {
 				var variant_id = $('.list-delete-variant-img').data('variation-id');
-        		var val = $(this).attr('data-remove-variant-img');
+        // 		var val = $(this).attr('data-remove-variant-img');
+                var val = $(this).attr('data-id');
         		$('#delete-variant-img_'+variant_id).append('<input type="hidden" name="url_image_delete[]" value="'+val+'">');
         		$(this).parents('.img-item-variant').remove();
         	});
@@ -274,35 +275,45 @@ pages = $.extend(pages, {
 			});
 
 	  	 	// remove row
-			$(document).on('click', '#removeVariant', function() {
-				var variantId = $(this).data('id');
-				deleteVariant(variantId);
-			});
-			function deleteVariant(variantId) {
-				bootbox.confirm('Bạn Có Muốn Xóa Loại Này', function(result) {
-					if (result) {
-						$.ajax({
-							url: '/admin/product-variant/delete',
-							type: 'GET',
-							data: {id: variantId},
-							beforeSend: function () {
+			// $(document).on('click', '#removeVariant', function() {
+			// 	var variantId = $(this).data('id');
+			// 	deleteVariant(variantId);
+			// });
+			//test 
+			$(document).on('click', '.removeVariant', function() {	
+        		var val = $(this).attr('data-id');
+				var confirmation = confirm('Bạn có chắc chắn muốn xóa loại này?');
+				if(confirmation){
+					$('#delete-variant_input_'+val).append('<input type="hidden" name="variant_delete[]" value="'+val+'">');
+        			$(this).closest('.inputFormRowVariant').remove();
+				}
+        	});
+			//
+			// function deleteVariant(variantId) {
+			// 	bootbox.confirm('Bạn Có Muốn Xóa Loại Này', function(result) {
+			// 		if (result) {
+			// 			$.ajax({
+			// 				url: '/admin/product-variant/delete',
+			// 				type: 'GET',
+			// 				data: {id: variantId},
+			// 				beforeSend: function () {
 								
-							},
-							success: function (data) {
-								if (data.Code > 0) {
-									bootbox.alert('Xóa Thành Công');
-									$('.inputFormRowVariant').find('input[value="' + variantId + '"]').closest('.inputFormRowVariant').remove();
-								} else {
-									bootbox.alert('Xóa Thất Bại');
-								}
-							},
-							error: function (data) {
+			// 				},
+			// 				success: function (data) {
+			// 					if (data.Code > 0) {
+			// 						bootbox.alert('Xóa Thành Công');
+			// 						$('.inputFormRowVariant').find('input[value="' + variantId + '"]').closest('.inputFormRowVariant').remove();
+			// 					} else {
+			// 						bootbox.alert('Xóa Thất Bại');
+			// 					}
+			// 				},
+			// 				error: function (data) {
 								
-							}
-						});
-					}
-				});
-			} 
+			// 				}
+			// 			});
+			// 		}
+			// 	});
+			// } 
 			
 			function checkVariantStatus() {
 				$('.inputFormRowVariant').each(function() {

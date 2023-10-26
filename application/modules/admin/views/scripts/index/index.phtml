@@ -104,6 +104,15 @@
             </div>
         </div>
     <?php } ?>
+    <?php if (UtilAuth::hasPrivilege('combo-product', ACTION_VIEW) == true || UtilAuth::hasPrivilege('combo-product', ACTION_ADD) == true || UtilAuth::hasPrivilege('combo-product', ACTION_EDIT) == true) { ?>
+        <div class="col-md-3 margin-bottom">
+            <div class="col-xs-12">
+                <button class="btn bg-pink-300 btn-float btn-float-lg btn-block" onclick="window.location = '/admin/combo-product'" type="button">
+                    <span>&nbsp;</span><i class="icon-cube"></i> <span>Combo</span>
+                </button>
+            </div>
+        </div>
+    <?php } ?>
     <?php if (UtilAuth::hasPrivilege('permission', ACTION_VIEW) == true || UtilAuth::hasPrivilege('permission', ACTION_ADD) == true || UtilAuth::hasPrivilege('permission', ACTION_EDIT) == true) { ?>
         <div class="col-md-3 margin-bottom">
             <div class="col-xs-12">

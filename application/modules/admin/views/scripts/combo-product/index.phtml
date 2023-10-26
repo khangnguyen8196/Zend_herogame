@@ -11,8 +11,8 @@
     <div class="breadcrumb-line">
         <ul class="breadcrumb">
             <li><a href="/admin/index/"><i class="icon-home2 position-left"></i> Trang Chủ</a></li>
-            <li><a href="/admin/setting/">Combo sản phẩm</a></li>
-            <li class="active">Danh Sách Combo Sản Phẩmt</li>
+            <li><a href="/admin/combo-product/">Combo sản phẩm</a></li>
+            <li class="active">Danh Sách Combo Sản Phẩm</li>
         </ul>
     </div>
 </div>
@@ -23,14 +23,14 @@
         <div class="panel-heading">
             <h4 class="panel-title">Danh Sách Combo Sản Phẩm</h4>
         </div>
-        <table id="comboProductTable" class="table datatable-pagination">
+        <table id="comboProductTable" class="table  datatable-sorting">
         <thead>
                 <tr>
                     <th width="50px">#</th>
                     <th width="">Tên Combo Sản Phẩm</th>
                     <th width="">Hình ảnh</th>
                     <th width="">Giá Combo Sản Phẩm </th>
-                    <th width="">Trạng Thái </th>
+                    <th><?php echo $this->translate('status')?></th>
                     <th class="text-center" width="200px"><?php echo $this->translate('action') ?></th>
                 </tr>
             </thead>

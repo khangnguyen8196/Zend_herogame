@@ -50,6 +50,17 @@ class ComboProduct extends Zend_Db_Table_Abstract {
         $result = $result->toArray();
         return $result;
     }
+    public function fetchComboById( $id ) {
+    	$db     = $this->getAdapter();
+    	$where[] = $db->quoteInto( "id = ?", $id, Zend_Db::INT_TYPE );
+    	$where[] = $db->quoteInto( "status <> ?", STATUS_DELETE );
+    	$result = $this->fetchRow( $where );
+    	if ( empty( $result ) == true ) {
+    		return array();
+    	}
+    	$result = $result->toArray();
+    	return $result;
+    }
     
     
     /**
@@ -108,7 +119,7 @@ class ComboProduct extends Zend_Db_Table_Abstract {
     public function getAllComboProduct($product_id) {
         $db = $this->getAdapter();
         $select = $db->select()
-            ->from(array('cp' => 'combo_product'), array('cp.*'))
+            ->from(array('cp' => 'combo_product'), array('cp.*','cbd.price'))
             ->join(array('cbd' => 'combo_detail'), 'cp.id = cbd.combo_id', array())
             ->where('cbd.product_id IN (?)', $product_id)
             ->where('cp.status = ?', STATUS_ACTIVE)
@@ -122,22 +133,15 @@ class ComboProduct extends Zend_Db_Table_Abstract {
     	$select = $this->getAdapter()->select();
     	if( isset( $data['count_only'] ) == true && $data['count_only'] == 1 ) {
     		$select = $select->from( $this->_name, array( "cnt" => new Zend_Db_Expr("COUNT(1)") ) );
+            $select = $select->where("combo_product.status <> ?", STATUS_DELETE );
     	} else {
     		  $select = $select->from($this->_name);
     	}
-        $commonObj = new My_Controller_Action_Helper_Common();
         $select = $select->where("combo_product.status <> ?", STATUS_DELETE);
+        $commonObj = new My_Controller_Action_Helper_Common();
         //search by name
-        if (empty($data["title"]) == false) {
-            $data["title"] = $commonObj->quoteLike($data["title"]);
-            $select = $select->where("title like ?", "%" . $data["title"] . "%");
-        }
-        if (empty($data['status']) == false) {
-            $select->where('combo_product.status =?', $data['status']);
-        }
-        
         if ( empty($data['search-key']) == false ){
-        	$select->where( "title like '%".$data['search-key']."%' ");
+        	$select->where( "title like '%".$data['search-key']."%'");
         }
         //check count only purpose
         if( empty( $data['count_only'] ) == true || $data['count_only'] != 1 ) {

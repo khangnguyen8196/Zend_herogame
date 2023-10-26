@@ -107,16 +107,16 @@
                         <input type="hidden" name="product_id[<?php echo $key ?>]" value="<?php echo $item['product_id']; ?>">
                         <input type="hidden" name="variant_status[<?php echo $key ?>]" value="<?php echo $item['status']; ?>">
                         <div class="input-group-append">
-                            <button id="removeVariant" type="button" data-id="<?php echo $item['id'] ?>" class="btn btn-danger">Remove</button>
+                            <button id="removeVariant" type="button" data-id="<?php echo $item['id'] ?>" class="btn btn-danger removeVariant">Remove</button>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-lg-2">Ảnh Loại Sản Phẩm</label>
-                        <button type="button" class="btn btn-primary add-img-variant" data-variant-id="<?php echo $item['id'] ?>"  style="margin-right: 11px;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Thêm Ảnh</button>
+                        <!-- <button type="button" class="btn btn-primary add-img-variant" data-variant-id="<?php echo $item['id'] ?>"  style="margin-right: 11px;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Thêm Ảnh</button> -->
                         <div class="col-lg-8 list-file-variant-img" id="newVariantImg_<?php echo $item['id'] ?>" style="margin-left: -10px;">
                             <div class="form-group file-item-variant">
                                 <div class="col-lg-7">
-                                    <input type="file" class="file-styled form-control" name="url_image[<?php echo $item['id'] ?>][]" data-variant-id="<?php echo $item['id'] ?>" accept="image/*"/>
+                                    <input type="file" class="file-styled form-control" name="url_image[<?php echo $item['id'] ?>][]" data-variant-id="<?php echo $item['id'] ?>" accept="image/*" multiple="multiple"/>
                                 </div>
                                 <div class="col-lg-2">
                                     <button type="button"  class="btn btn-alert remove-variant-img" style="margin-right: 11px;">x</button>
@@ -129,18 +129,19 @@
                                 <div class="list-image">
                                     <?php
                                         foreach ($this->listVariantImg[$item['id']] as $i => $value) {
+                                        
                                     ?>
                                             <div class="col-lg-2 col-sm-4 parent img-item-variant">
                                                 <div class="thumbnail">
                                                     <div class="thumb">
-                                                        <img class="img-media img-thumbnail-item" style="height: 100px" src="<?php echo '/upload/images/' . $value; ?>" alt="">
+                                                        <img class="img-media img-thumbnail-item" style="height: 100px" src="<?php echo '/upload/images/' . $value['url']; ?>" alt="">
                                                         <div class="caption-overflow">
                                                             <span>
-                                                                <a class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5 container-image" href="<?php echo '/upload/images/' . $value; ?>" data-popup="lightbox">
+                                                                <a class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5 container-image" href="<?php echo '/upload/images/' . $value['url']; ?>" data-popup="lightbox">
                                                                     <i class="icon-plus3"></i>
                                                                 </a>
                                                                 <a  class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5">
-                                                                    <i class="icon-cross2 remove-item-variant-img" data-url-image="<?php echo $value ?>" data-remove-variant-img="<?php echo $value?>"></i>
+                                                                    <i class="icon-cross2 remove-item-variant-img" data-id="<?php echo $value['id'] ?>" data-url-image="<?php echo $value['url'] ?>" data-remove-variant-img="<?php echo $value['url']?>"></i>
                                                                 </a>
                                                             </span>
                                                         </div>
@@ -154,7 +155,8 @@
                             </div>
                         <?php } ?>
                     <div class="hidden list-delete-variant-img" id ="delete-variant-img_<?php echo $item['id'] ?>" data-variation-id="<?php echo $item['id'] ?>"><?php echo $item['id'] ?></div>
-                </div>   
+                </div>  
+                <div class="hidden delete-variant-product" id ="delete-variant_input_<?php echo $item['id'] ?>" ><?php echo $item['id'] ?></div> 
             <?php } ?>
                 <div id="newRow"></div>
                     <button id="addRow" type="button" class="btn btn-info" style="left: 83%;margin-bottom:20px;">+ Thêm Loại</button>
@@ -177,16 +179,16 @@
                     </div>
                     <input type="hidden"  name = "variant_id[]" value="0">
                     <div class="input-group-append">
-                        <button id="removeRow" type="button" class="btn btn-danger">Remove</button>
+                        <!-- <button id="removeRow" type="button" class="btn btn-danger">Remove</button> -->
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-lg-2">Ảnh Loại Sản Phẩm</label>
-                    <button type="button" class="btn btn-primary add-img-variant" data-variant-id="0"  style="margin-right: 11px;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Thêm Ảnh</button>
+                    <!-- <button type="button" class="btn btn-primary add-img-variant" data-variant-id="0"  style="margin-right: 11px;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Thêm Ảnh</button> -->
                     <div class="col-lg-8 list-file-variant-img" id="newVariantImg_0" style="margin-left: -10px;">
                         <div class="form-group file-item-variant">
                             <div class="col-lg-7">
-                                <input type="file" class="file-styled form-control" name="url_image[0][]" data-variant-id="0" accept="image/*"/>
+                                <input type="file" class="file-styled form-control" name="url_image[0][]" data-variant-id="0" accept="image/*" multiple="multiple"/>
                             </div>
                             <div class="col-lg-2">
                                 <button type="button"  class="btn btn-alert remove-variant-img" style="margin-right: 11px;">x</button>

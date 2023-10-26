@@ -62,12 +62,12 @@
                     <?php } ?>
                 </li>
             <?php } ?>
-            <li>
-                <label>Chia sẻ:</label>
-                <div class="share">
-                    <div class="sharethis-inline-share-buttons"></div>
-                </div>
-            </li>
+            <!--<li>-->
+            <!--    <label>Chia sẻ:</label>-->
+            <!--    <div class="share">-->
+            <!--        <div class="sharethis-inline-share-buttons"></div>-->
+            <!--    </div>-->
+            <!--</li>-->
         </ul>
     </div>
 
@@ -116,111 +116,97 @@
         <?php echo $this->render('/san-pham/_purchase.phtml') ?>
     <?php } ?>
 
-    <?php if( empty($this->color_list) == false && is_array($this->color_list) ){ ?>
-        <?php if( (count($this->color_list) > 1 ) || ( count($this->color_list) == 1 && empty($this->color_list[0]['id']) == false && $this->color_list[0]['id'] != 1 )){ ?>
-            <div class="intro color-box options" data-value="Màu">
-                <p class="color-label">
-                    <label>Chọn màu:</label>
-                    <span id="selected_color" ><?php echo !empty($this->color_list[0]['color_name']) ? $this->color_list[0]['color_name']:''?></span>
-                </p>
-                <ul class="color-list">
-                    <?php foreach( $this->color_list as $key => $color ){?>
-                        <?php 
-                            $active = '';
-                            if($key == 0 ){
-                                $active = 'active';
-                            }
-                        ?>
-                        <li class="color-items" data-id="<?php echo $color['id']?>">
-                            <a class="<?php echo $active ?>" data-id="<?php echo $color['id']?>" title="<?php echo $color['color_name']?>"><?php echo $color['color_name']?></a>
-                        </li>
-                    <?php }?>
-                </ul>
-            </div>
-        <?php } ?>
-    <?php } ?>
-
     <?php if(empty($this->list_combo_product)==false  ){?>
         <div class="combo-product" data-vc-id ="<?php echo $this->list_variant[0]['id'] ?>" >
+            <?php $counter = 0; ?>
             <?php foreach($this->list_combo_product as $combo_product ) {?>
-                <ul>
-                <strong class="name" style="line-height: 1.5;font-size: 1.25rem;display: block;padding-top:10px;text-align: center;"><?php echo $combo_product['title']?><br/></strong>
-                    <div class="combo">
-                        <?php 
-                            foreach ($this->list_combo_detail as $combo_id => $combo_detail) {?>
-                            <ul>
-                            <?php if($combo_product['combo_id'] == $combo_id) {?>
-                                <?php  $totalPrice = 0;
-                                    foreach ($combo_detail as $product){?>
-                                        <li>
-                                            <?php
-                                                $productUrl = "/" . $product["url_product"];
-                                                $productImgUrl = "";
-                                                if (empty($product["image"]) == false) {
-                                                    $productImgUrl = "/upload/images" . $product["image"];
-                                                }
-                                                $price = $product['price_sales'];
-                                                $totalPrice += $price; 
-                                                ?>
-                                            <a href="<?php echo $productUrl ?>" title="<?php echo $product['title'] ?>">
-                                                <?php echo $this->partial('/shared/_lazy_image.phtml', array(
-                                                    'ratio' => '1x1',
-                                                    'css' => 'photo',
-                                                    'url' => $productImgUrl,
-                                                    )) ?>
-                                            </a>
-                                        </li>   
-                                        <img class="bt-plus" src="//c3-ebgames.eb-cdn.com.au/1.154.0/images/svg/plus.svg" alt="+">
-                            <?php }?>
-                            <?php } ?>
-                            </ul>
-                        <?php }?>
-                        <div class="combo-info">
-                            <strong class="price-total">Tổng giá tiền: <?php echo number_format($totalPrice) . '&#8363'  ?><br/></strong>
-                            <strong class="price-a">Giá Combo Sale: <?php echo number_format($combo_product['total_discount']) . '&#8363'  ?><br/></strong> 
-                        </div>
-                    </div>
-                    <?php if ($combo_product['total_discount'] > 0 && $this->status != STATUS_IN_OUT_STOCK) { ?>
-                        <a class="btn cart cart_btn_combo my_btn" href="<?php echo $this->cart?>"
-                        qty="1"
-                        cid="<?php echo $combo_product['combo_id']?>" 
-                        >
-                        <i class="fa fa-cart-plus"></i> ADD All
-                        </a>
-                        <?php }else{ ?>
-                        <a class="btn btn-danger my_btn" href="tel:+84906221218">
-                            Tạm hết hàng
-                        </a>
-                    <?php } ?>
-                    <div class="more-detail" style="margin-left:20px">
-                        <div class="bt-divider" track="product-fbt-accordion-auto" style="cursor: pointer;padding:8px">
-                            <span class="more-expand" style="display: inline;" data-combo-id ="<?php echo $combo_product['combo_id'] ?>">Xem chi tiết &nbsp;&#x25BC;</span>
-                            <span class="more-collapse" style="display: none;" data-combo-id ="<?php echo $combo_product['combo_id'] ?>">Ẩn chi tiết &nbsp;&#x25B2;</span>
-                            <span class="icon icon-chervon-down" style="transition: transform 250ms ease-in-out 0s; transform: rotate(0deg);" data-combo-id ="<?php echo $combo_product['combo_id'] ?>"></span>
-                        </div>
-                        <?php foreach ($this->list_combo_detail as $combo_id => $combo_detail) { ?>
-                            <?php if($combo_product['combo_id'] == $combo_id) {?>
-                                <ul class="info-detail" style="display:none;" data-combo-id ="<?php echo $combo_product['combo_id'] ?>">
-                                    <?php foreach($combo_detail as $product){?>
-                                    <li style="border-top:1px solid gray; margin-right:20px">
-                                        <?php
-                                        $productUrl = "/" . $product["url_product"];        
-                                        ?>
-                                        <div class="meta">
-                                            <a href="<?php echo $productUrl ?>" style="color:black;text-decoration: none;" title="<?php echo $product['title'] ?>">
-                                                <span class="name" style="color:black;text-decoration: none;">Sản phẩm: <?php echo $product['title']?><br/></span>
-                                            </a>
-                                            <span class="price-a">Giá:<?php echo number_format($product['price']) . '&#8363'  ?><br/></span>
-                                            <span class="price-a">Giá sales:<?php echo number_format($product['price_sales']) . '&#8363'  ?><br/></span>
-                                        </div>
-                                    </li>
-                                    <?php }?>
-                                </ul>
+                 <!-- Chỉ hiển thị 2 combo ban đầu -->
+                    <ul>
+                        <strong class="name" style="line-height: 1.5;font-size: 1.25rem;display: block;padding-top:10px;text-align: center;"><?php echo $combo_product['title']?><br/></strong>
+                        <div class="combo">
+                            <?php 
+                                foreach ($this->list_combo_detail as $combo_id => $combo_detail) {?>
+                                <ul>
+                                <?php if($combo_product['combo_id'] == $combo_id) {?>
+                                    <?php  $totalPrice = 0;
+                                        foreach ($combo_detail as $product){?>
+                                            <li>
+                                                <?php
+                                                    $productUrl = "/" . $product["url_product"];
+                                                    $productImgUrl = "";
+                                                    if (empty($product["image"]) == false) {
+                                                        $productImgUrl = "/upload/images" . $product["image"];
+                                                    }
+                                                    $price = $product['price_sales'];
+                                                    $totalPrice += $price; 
+                                                    ?>
+                                                <a href="<?php echo $productUrl ?>" title="<?php echo $product['title'] ?>">
+                                                    <?php echo $this->partial('/shared/_lazy_image.phtml', array(
+                                                        'ratio' => '1x1',
+                                                        'css' => 'photo',
+                                                        'url' => $productImgUrl,
+                                                        )) ?>
+                                                </a>
+                                            </li>   
+                                            <img class="bt-plus" src="//c3-ebgames.eb-cdn.com.au/1.154.0/images/svg/plus.svg" alt="+">
                                 <?php }?>
+                                <?php } ?>
+                                </ul>
+                            <?php }?>
+                            <div class="combo-info">
+                                <strong class="price-total">Tổng giá tiền: <?php echo number_format($totalPrice) . '&#8363'  ?><br/></strong>
+                                <strong class="price-a">Giá Combo Sale: <?php echo number_format($combo_product['total_discount']) . '&#8363'  ?><br/></strong> 
+                            </div>
+                        </div>
+                        <?php if ($combo_product['total_discount'] > 0 && $this->status != STATUS_IN_OUT_STOCK) { ?>
+                            <a class="btn cart cart_btn_combo my_btn" href="<?php echo $this->cart?>"
+                            qty="1"
+                            cid="<?php echo $combo_product['combo_id']?>" 
+                            >
+                            <i class="fa fa-cart-plus"></i> ADD All
+                            </a>
+                            <?php }else{ ?>
+                            <a class="btn btn-danger my_btn" href="tel:+84906221218">
+                                Tạm hết hàng
+                            </a>
                         <?php } ?>
-                    </div>
-                </ul>   
+                        <div class="more-detail" style="margin-left:20px">
+                            <div class="bt-divider" track="product-fbt-accordion-auto" style="cursor: pointer;padding:8px">
+                                <span class="more-expand" style="display: inline;" data-combo-id ="<?php echo $combo_product['combo_id'] ?>">Xem chi tiết &nbsp;&#x25BC;</span>
+                                <span class="more-collapse" style="display: none;" data-combo-id ="<?php echo $combo_product['combo_id'] ?>">Ẩn chi tiết &nbsp;&#x25B2;</span>
+                                <span class="icon icon-chervon-down" style="transition: transform 250ms ease-in-out 0s; transform: rotate(0deg);" data-combo-id ="<?php echo $combo_product['combo_id'] ?>"></span>
+                            </div>
+                            <?php foreach ($this->list_combo_detail as $combo_id => $combo_detail) { ?>
+                                <?php if($combo_product['combo_id'] == $combo_id) {?>
+                                    <ul class="info-detail" style="display:none;" data-combo-id ="<?php echo $combo_product['combo_id'] ?>">
+                                        <?php foreach($combo_detail as $product){?>
+                                        <li style="border-top:1px solid gray; margin-right:20px">
+                                            <?php
+                                            $productUrl = "/" . $product["url_product"];        
+                                            ?>
+                                            <div class="meta">
+                                                <a href="<?php echo $productUrl ?>" style="color:black;text-decoration: none;" title="<?php echo $product['title'] ?>">
+                                                    <span class="name" style="color:black;text-decoration: none;">Sản phẩm: <?php echo $product['title']?><br/></span>
+                                                </a>
+                                                <span class="price-a">Giá:<?php echo number_format($product['price']) . '&#8363'  ?><br/></span>
+                                                <span class="price-a">Giá sales:<?php echo number_format($product['price_sales']) . '&#8363'  ?><br/></span>
+                                            </div>
+                                        </li>
+                                        <?php }?>
+                                    </ul>
+                                    <?php }?>
+                            <?php } ?>
+                        </div>
+                    </ul>
+                
+                <?php $counter++; ?>
            <?php }?>
+           <div class="show-hide" style="text-align: center;margin-bottom: 10px;">
+               <?php if (count($this->list_combo_product) > 2) { ?> <!-- Kiểm tra xem có nhiều hơn 2 combo hay không -->
+                    <button id="show-combo" class="combo-button">Xem thêm Combo</button>
+                    <button id="hide-combo" class="combo-button" style="display: none;">Thu gọn</button>
+                <?php } ?>
+           </div>
         </div>
     <?php }?>
     <div class="guide">
@@ -261,6 +247,17 @@
 </script>
 
 <style>
+    #show-combo, #hide-combo {
+    background: blue;
+    border-radius: 3px;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    cursor: pointer;
+    }
+    .combo-button:hover {
+        opacity: 0.8;
+    }
     .hidden {
         opacity: 0;
     }

@@ -7,3 +7,31 @@
 <?php if(isset($this->description)) {
     echo "<div class='data-description'>$this->description</div>";
 }?>
+
+<style>
+
+@media screen and (max-width: 767px){
+    .data-description div a img {
+        width: 100% !important;
+    }
+    .data-description div span img {
+          width: 100% !important;
+    }
+    .data-description div img {
+          width: 100% !important;
+    }
+}
+
+@media screen and (max-width: 480px){
+    .data-description div a img {
+         width: 100% !important;
+    }
+     .data-description div span img {
+          width: 100% !important;
+    }
+    .data-description div img {
+          width: 100% !important;
+    }
+    
+}
+</style>

@@ -40,7 +40,7 @@ class Site_IndexController extends FrontEndAction {
         $productGroupByCategory = array();
         if (empty($res) == false) {
             foreach ($res as $key => $value) {
-                $productGroupByCategory[$value ["category_name"]] [] = Commons::_buildProductData($value);
+                $productGroupByCategory[$value ['id_category']][$value['category_name']][] = Commons::_buildProductData($value);
             }
         }
         return $productGroupByCategory;

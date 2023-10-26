@@ -12,17 +12,16 @@ if ($banActiveIndex < 0 || $banActiveIndex >= count($this->data)) {
     <?php if (empty($this->data) == false) { ?>
         <?php
         foreach ($this->data as $key => $banner) {
-            // echo '<pre>';print_r($banner['width']);exit;
             $banCss = ($key == $banActiveIndex) ? 'active' : '';
             if(isset($banner['photo'])) {
                 $banOutside = (isset($banner['outside']) && $banner['outside']) ? 'target="_blank" rel="noopener noreferrer nofollow"' : '';
-                ?>
+            ?>
             <a class="banner-photo <?php echo $banCss ?>" href="<?php echo $banner['url'] ?>" <?php echo $banOutside ?>>
                 <?php echo $this->partial('/shared/_lazy_image.phtml', array(
                     'url' => $banner['photo'],
                     'width' => $banner['width'],
-                    'height' => $banner['height'],
-                    )) ?>
+                    'height' => $banner['height']
+                )) ?>
             </a>
             <?php } else {
                 $videoid = str_replace('https://www.youtube.com/embed/', '', $banner['video']);
@@ -30,30 +29,17 @@ if ($banActiveIndex < 0 || $banActiveIndex >= count($this->data)) {
                 $videoid = str_replace('https://www.youtube.com/watch?v=', '', $videoid);
                 $ytvideo = 'https://www.youtube.com/watch?v=' . $videoid;
                 $ytthumb = 'https://img.youtube.com/vi/' . $videoid . '/maxresdefault.jpg';
-                ?>
+            ?>
             <a class="banner-video <?php echo $banCss ?>" href="<?php echo $ytvideo ?>">
                 <i class="fa fa-youtube-play"></i>
                 <?php echo $this->partial('/shared/_lazy_image.phtml', array(
                     'url' => $ytthumb,
                     'width' => $banner['width'],
-                    'height' => $banner['height'],
-                    )) ?>
+                    'height' => $banner['height']
+                )) ?>
             </a>
             <?php } ?>
         <?php } ?>
     <?php } ?>
 </div>
-
-<style>
-    span.title {
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        font-size: 14px;
-    }
-</style>
-
-
 

@@ -230,7 +230,27 @@ pages = $.extend(pages, {
                   $(".more-expand[data-combo-id='" + comboId + "']").show();
                   $(".info-detail[data-combo-id='" + comboId + "']").hide();
                 });
-              });     
+            });
+            
+            $(document).ready(function () {
+                var btnShowMore = $('#show-combo');
+                var btnShowLess = $('#hide-combo');
+                var hiddenCombos = $('.combo-product>ul:gt(2)');
+                hiddenCombos.hide();
+
+
+                btnShowMore.on('click', function () {
+                    hiddenCombos.slideDown();
+                    btnShowMore.hide();
+                    btnShowLess.show();
+                });
+                btnShowLess.on('click', function () {
+                    hiddenCombos.slideUp();
+                    btnShowLess.hide();
+                    btnShowMore.show();
+                });
+        
+            });
         },
         /**
          * 

@@ -366,35 +366,45 @@ echo $this->partial('/shared/_banner_slider.phtml', array(
                 )
             ))
             ?>
-            <?php if (empty($this->productGroupByCategory) == false) { 
-                $i = 0;
-                $tabs = array();
-                foreach ($this->productGroupByCategory as $key => $value) {
-                    if( $i <= 1 ){
-                        $tabs[] = array(
-                                'title' => $key,
-                                'data' => $value
-                        );
-                        $i++;
+            <div class="category-group-home">
+                <?php if (empty($this->productGroupByCategory) == false && empty($this->listAllProductCategory) == false) { 
+                    foreach ($this->listAllProductCategory as $c => $category){
+                    
+                        foreach ($this->productGroupByCategory as $key => $value) {
+                            if($category['id'] == $key ){
+                            $i = 0;
+                            $tabs = array();
+                            foreach($value as $j => $item){
+                                    if( $i <= 1 ){
+                                        $tabs[] = array(
+                                                'title' => '<a class="category-url" href="danh-muc/'.$category['url_slug'].'">'.$j.'</a>',
+                                                'data' => $item
+                                        );
+                                        $i++;
+                                    }
+                                    if( $i == 1 ){
+                                        echo $this->partial('/shared/_quick_view.phtml', array(
+                                            'qdsp' => 'slide',
+                                            'dcol' => 4,
+                                            'tabs' => $tabs
+                                        ));
+                                        $tabs = array();
+                                        $i = 0;
+                                    }
+                                }
+                            }
+                            if( $i > 0 ){
+                                echo $this->partial('/shared/_quick_view.phtml', array(
+                                    'qdsp' => 'slide',
+                                    'dcol' => 4,
+                                    'tabs' => $tabs
+                                ));
+                            }   
+                        }
+                        
                     }
-                    if( $i == 1 ){
-                        echo $this->partial('/shared/_quick_view.phtml', array(
-                            'qdsp' => 'slide',
-                            'dcol' => 4,
-                            'tabs' => $tabs
-                        ));
-                        $tabs = array();
-                        $i = 0;
-                    }
-                }
-                if( $i > 0 ){
-                    echo $this->partial('/shared/_quick_view.phtml', array(
-                        'qdsp' => 'slide',
-                        'dcol' => 4,
-                        'tabs' => $tabs
-                    ));
-                }
-            } ?>
+                } ?>
+            </div>
         </section>
     </div>
 </div>
@@ -424,6 +434,17 @@ echo $this->partial('/shared/_banner_slider.phtml', array(
 
 
 <style>
+    .category-group-home .quick-view ul li .nav-link.active {
+        display: none;
+    }
+    .category-group-home .quick-view ul li .category-url {
+        display: block;
+        padding: 10px 20px;
+        color: white;
+        font-weight: bold;
+        background: #aa052d;
+        text-decoration: none;
+    }
     .slick-prev {
     width: 32px; 
     height: 32px; 

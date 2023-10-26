@@ -148,9 +148,8 @@ pages = $.extend(pages, {
 			});
 
 			$(document).on('click', '.remove-product-list', function() {	
-				var comboId = $(this).data('combo-id');
+				var comboId = $(this).data('combo-id');		  
         		var val = $(this).attr('data-remove');
-				console.log(val);  
         		$('#delete-product_input_'+comboId).append('<input type="hidden" name="combo_id_delete[]" value="'+val+'">');
         		$(this).parents('.file-item').remove();
 				var currentTotal = 0;

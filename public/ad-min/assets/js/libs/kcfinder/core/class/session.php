@@ -24,7 +24,7 @@ class session {
 
         // Start session if it is not already started
         if (!session_id())
-            session_start();
+            // session_start();
 
         $config = require($configFile);
 

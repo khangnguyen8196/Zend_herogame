@@ -30,9 +30,10 @@
          <?php
             if ($this->priceA > 0) {
             	echo $this->priceA;
-            } else {
-            	echo 'Liên Hệ';
-            } 
+            }
+            // else {
+            // 	echo 'Liên Hệ';
+            // } 
          ?>
          </span>
          <?php if (isset ( $this->priceB ) && $this->priceB != $this->priceA) { ?>
@@ -44,9 +45,13 @@
    <a class="btn cart cart_btn my_btn" href="<?php echo $this->cart?>" pid="<?php echo $this->id?>" qty="1">
   	   <i class="fa fa-cart-plus"></i> Thêm vào giỏ
    </a>
-   <?php }else{ ?>
+   <?php }elseif($this->priceA==0){ ?>
+   <a class="btn btn-danger my_btn" href="tel:+84906221218">
+    Liên hệ
+   </a>
+   <?php }else {?>
    <a class="btn btn-danger my_btn" href="tel:+84906221218">
     Tạm hết hàng
    </a>
-   <?php } ?>
+   <?php }?>
 </div>

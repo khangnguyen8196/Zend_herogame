@@ -95,6 +95,18 @@ class ProductVariant extends Zend_Db_Table_Abstract {
         $db = $this->getAdapter();
         return $db->lastInsertId();
     }
+
+    public function getAllVariantIdsByProductId($product_id) {
+        $select = $this->getAdapter()->select()
+        ->from(array('p' => 'product_variant'))
+        ->where('product_id= ?', $product_id);
+        $results = $this->getAdapter()->fetchAll($select);
+        $ids = array();
+        foreach ($results as $result) {
+            $ids[] = $result['id'];
+        }
+        return $ids;
+    }
     
     
 }

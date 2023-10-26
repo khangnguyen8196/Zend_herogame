@@ -104,6 +104,7 @@ class FrontEndAction extends Zend_Controller_Action {
 	    	$contentCategory = self::_getContentCateoryList($listAllProductCategory);
 	    	$menuProductCategory = self::_getMenuCategory($listAllProductCategory);
 	    	$this->view->menuCategory = $menuProductCategory;
+            $this->view->listAllProductCategory = $listAllProductCategory;
 	    	$this->view->listCategory = $contentCategory;
     	}
     	if( empty($data['new_post']) == false && $data['new_post'] == true ){
@@ -191,7 +192,7 @@ class FrontEndAction extends Zend_Controller_Action {
     	$banner = self::getBannerByType();
     	$list = array();
     	foreach ($banner as $key => $value) {
-    			if($value['type'] == BANNER_CHILD_LEFT_VERTICAL1 ){
+    			if($value['type'] == BANNER_CHILD_LEFT_VERTICAL3 ){
     				$width = 600;
     				$height =  1000;
     			}

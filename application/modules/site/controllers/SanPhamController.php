@@ -123,8 +123,9 @@ class Site_SanPhamController extends FrontEndAction {
         
         $color_list = Commons::getProductColor($productInfo['product_color']);
         $list_variant = $this->_variantMdl->getProductVariants($productInfo['id']);
-        $list_variant_img = $this->_variantImgMdl->getProductImages($productInfo['id']);
+        $list_variant_img = $this->_variantImgMdl->getProductImage($productInfo['id']);
        
+        
         $list_combo_product = $this->_comboDetailMdl->getComboByProductId($productInfo['id']);
         $list_combo_detail = array();
         foreach ($list_combo_product as $combo_product) {

@@ -124,10 +124,26 @@
 							value="<?php echo @$this->info['total_discount']?>" data-msg="Vui Lòng Nhập Giá Combo Sản Phẩm">
 						</div>
 					</div>
+					<div class="form-group">
+						<label class="control-label col-lg-2"><?php echo $this->translate('status') ?></label>
+						<div class="col-lg-4">
+							<select name="status" id="status" class="form-control">
+								<option value="<?php echo STATUS_ACTIVE ?>" <?php
+								if (@$this->info['status'] == STATUS_ACTIVE) {
+									echo 'selected';
+								}
+								?>><?php echo $this->translate('active') ?></option>
+								<option value="<?php echo STATUS_IN_ACTIVE ?>" <?php
+								if (@$this->info['status'] == STATUS_IN_ACTIVE) {
+									echo 'selected';
+								}
+								?>><?php echo $this->translate('in-active') ?></option>
+							</select>
+						</div>
+					</div>
 				</fieldset>
-				<input type="hidden" name="id" id="id" value="<?php echo @$this->id ?>" />
 				<div class="text-right">
-					<input type="hidden" name="isEdit" value="<?php echo $this->isEdit ?>" />
+					<input type="hidden" name="id" id="id" value="<?php echo @$this->id ?>" />
 					<a href="/admin/combo-product"><button type="button" class="btn btn-default cancel-btn"><?php echo $this->translate('cancel')?><i class="icon-arrow-right14 position-right"></i></button></a>
 					<button type="submit" class="btn btn-primary submit-btn"><?php echo $this->translate('submit')?> <i class="fa fa-plus" aria-hidden="true"></i></button>
 				</div>

@@ -67,10 +67,15 @@ class VariantImage extends Zend_Db_Table_Abstract {
      * @param  [type] $id [description]
      * @return [type]     [description]
      */
-    public function deleteVariantImage( $id ) {
-        $where[] = $this->getAdapter()->quoteInto( "id = ?", $id, Zend_Db::INT_TYPE );
-        return $this->update( array('status' => STATUS_DELETE ), $where );
+    // public function deleteVariantImage( $id ) {
+    //     $where[] = $this->getAdapter()->quoteInto( "id = ?", $id, Zend_Db::INT_TYPE );
+    //     return $this->update( array('status' => STATUS_DELETE ), $where );
+    // }
+    public function deleteVariantImage($id){
+    $where[] = $this->getAdapter()->quoteInto("id = ?", $id, Zend_Db::INT_TYPE);
+    return $this->delete($where);
     }
+
 
 
     
@@ -134,42 +139,45 @@ class VariantImage extends Zend_Db_Table_Abstract {
         return true;
     }
     
-    
-    
-    
-    // public function getProductImages($product_id) {
-    //     $select = $this->getAdapter()->select()
-    //         ->from(array('vi' => 'variant_image'), array('product_variant_id', 'images' => new Zend_Db_Expr('GROUP_CONCAT(vi.url_image SEPARATOR ",")')))
-    //         ->join(array('pv' => 'product_variant'), 'vi.product_variant_id = pv.id', array())
-    //         ->where('pv.product_id = ?', $product_id)
-    //         ->group('vi.product_variant_id');
-        
-    //     $rows = $this->getAdapter()->fetchAll($select);
-    
-    //     $result = array();
-    //     foreach ($rows as $row) {
-    //         $result[$row['product_variant_id']] = explode(',', $row['images']);
-    //     }
-    
-    //     return $result;
-    // }
-
     public function getProductImages($product_id) {
-        $select = $this->getAdapter()->select()
-            ->from(array('vi' => 'variant_image'), array('product_variant_id', 'url_image'))
-            ->join(array('pv' => 'product_variant'), 'vi.product_variant_id = pv.id', array())
-            ->where('pv.product_id = ?', $product_id)
-            ->order('vi.id ASC');
+        $select = $this->getAdapter()->select();
+        $select = $select->from(array('vi' => 'variant_image'), array('id','product_variant_id', 'url_image'))
+            ->join(array('pv' => 'product_variant'), 'vi.product_variant_id = pv.id', array());
+        $select = $select->where('pv.product_id = ?', $product_id);
+        $select = $select->where('vi.status <> ?', STATUS_DELETE);
+        $select = $select->order('vi.id ASC');
             
         $rows = $this->getAdapter()->fetchAll($select);
         
         $result = array();
         foreach ($rows as $row) {
-            $result[$row['product_variant_id']][] = $row['url_image'];
+            $result[$row['product_variant_id']][] =[
+                'url'=>$row['url_image'],
+                'id'=>$row['id']
+                ] ;
         }
         
         return $result;
     }
     
-  
+    public function getProductImage($product_id) {
+        $select = $this->getAdapter()->select();
+        $select = $select->from(array('vi' => 'variant_image'), array('id','product_variant_id', 'url_image'))
+            ->join(array('pv' => 'product_variant'), 'vi.product_variant_id = pv.id', array());
+        $select = $select->where('pv.product_id = ?', $product_id);
+        $select = $select->where('vi.status <> ?', STATUS_DELETE);
+        $select = $select->order('vi.id ASC');
+            
+        $rows = $this->getAdapter()->fetchAll($select);
+        
+        $result = array();
+        foreach ($rows as $row) {
+            $result[$row['product_variant_id']][] =$row['url_image'];
+        }
+        
+        return $result;
+    }
+    
+    
+
 }

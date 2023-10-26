@@ -38,7 +38,6 @@
         		
         	}
                 $quancao = Commons::getSettingByKey($this->setting, 'BANNER_QUAN_CAO');
-               
                 if( empty($quancao) == false){
                     ?>
                         <script>
@@ -53,9 +52,11 @@
                             }
                             .fancybox-wrap.fancybox-desktop.fancybox-type-html.fancybox-opened .fancybox-skin .fancybox-outer .fancybox-inner a img {
                                 position: absolute;
-                                top: 50%;
-                                left: 50%;
-                                transform: translate(-50%, -50%) scale(0.3);
+                                /*top: 50%;*/
+                                /*left: 50%;*/
+                                /*transform: translate(-50%, -50%) scale(0.3);*/
+                                width: 550px;
+                                height: 460px;
                             }
                             @media screen and (max-width: 1024px){
                                 .fancybox-wrap.fancybox-desktop.fancybox-type-html.fancybox-opened .fancybox-skin .fancybox-outer .fancybox-inner {
@@ -150,8 +151,8 @@
             <?php echo $this->render('/shared/_footer.phtml'); ?>
         </div>
         <?php echo $this->headScript(); ?>
-        <?php echo $this->render('/partials/_chat_fb.phtml'); ?>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js" integrity="sha512-XtmMtDEcNz2j7ekrtHvOVR4iwwaD6o/FUJe6+Zq+HgcCsk3kj4uSQQR8weQ2QVj1o0Pk6PwYLohm206ZzNfubg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <?php echo $this->render('/partials/_chat_fb.phtml'); ?>
          <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-88846233-1"></script>
         <script>
