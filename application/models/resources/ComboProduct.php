@@ -82,6 +82,9 @@ class ComboProduct extends Zend_Db_Table_Abstract {
         if (isset($data['total_price']) == true) {
             $datain['total_price'] = $data['total_price'];
         }
+        if (isset($data['price_discount']) == true) {
+            $datain['price_discount'] = $data['price_discount'];
+        }
         if (isset($data['status']) == true) {
             $datain['status'] = $data['status'];
         }

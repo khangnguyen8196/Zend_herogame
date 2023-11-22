@@ -50,6 +50,16 @@ $(document).ready(function() {
 	  arrows: false,
 	  responsive: [
 		{
+			breakpoint: 931,
+			settings: {
+			  touchMove: true,
+			  slidesToShow: 4,
+			  slidesToScroll: 4,
+			  infinite: true,
+			  dots: true
+			}
+		  },
+		{
 		  breakpoint: 767,
 		  settings: {
 			touchMove: true,
@@ -75,16 +85,6 @@ $(document).ready(function() {
 
 $(document).ready(function() {
 	var slidesShow = 6;
-// 	$('.banner-yt-pc').on('init reInit beforeChange', function(event, slick, currentSlide, nextSlide) {
-// 		var $clonedSlides = $(slick.$slider).find('.slick-cloned .banner-video');
-		
-// 		$clonedSlides.each(function(index) {
-// 		  var $originalSlide = $(slick.$slides).eq((index - slidesShow));
-// 		  var $originalImage = $originalSlide.find('.imgh.r0x0');
-// 		  var dataLazyUrl = $originalImage.data('lazy');
-// 		  $(this).find('.imgh.r0x0').css('background-image', 'url("' + dataLazyUrl + '")');
-// 		});
-// 	});
 	$('.banner-yt-pc').slick({
 		dots: false,
 		arrows: true,
@@ -102,16 +102,6 @@ $(document).ready(function() {
 
 $(document).ready(function() {
 	var slidesShow = 2;
-// 	$('.banner-yt').on('init reInit beforeChange', function(event, slick, currentSlide, nextSlide) {
-// 		var $clonedSlides = $(slick.$slider).find('.slick-cloned .banner-video');
-		
-// 		$clonedSlides.each(function(index) {
-// 		  var $originalSlide = $(slick.$slides).eq((index - slidesShow));
-// 		  var $originalImage = $originalSlide.find('.imgh.r0x0');
-// 		  var dataLazyUrl = $originalImage.data('lazy');
-// 		  $(this).find('.imgh.r0x0').css('background-image', 'url("' + dataLazyUrl + '")');
-// 		});
-// 	});
   	$('.banner-yt').slick({
     dots: false,
     touchMove: true,
@@ -120,13 +110,43 @@ $(document).ready(function() {
     infinite: true,
     arrows: true,
     swipe:true,
-// 	swipeToSlide: true,
-// 	touchMove:true,
 	speed:300,
 	easing: 'easeInOutQuad',
     appendDots: $('.custom-dots'),
 	prevArrow: '<button class="slick-prev slick-arrow" aria-label="Previous" type="button"></button>',
   	nextArrow: '<button class="slick-next slick-arrow" aria-label="Next" type="button"></button>',
+	responsive: [
+	{
+		breakpoint: 933,
+		settings: {
+			touchMove: true,
+			slidesToShow: 4,
+			slidesToScroll: 4,
+			infinite: true,
+			dots: true
+		}
+		},
+	{
+		breakpoint: 767,
+		settings: {
+		touchMove: true,
+		slidesToShow: 4,
+		slidesToScroll: 4,
+		infinite: true,
+		dots: true
+		}
+	},
+	{
+		breakpoint: 480,
+		settings: {
+		touchMove: true,
+		slidesToShow: 2,
+		slidesToScroll: 2,
+		infinite: true,
+		dots: true
+		}
+	}
+	]
   });
 });
 

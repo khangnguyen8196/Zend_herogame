@@ -1,0 +1,42 @@
+<!-- Page header -->
+<div class="page-header">
+    <div class="page-header-content">
+        <div class="page-title">
+            <h3><i class="icon-cog3 position-left"></i> <span class="text-semibold">Danh Sách vận chuyển</h3>
+        </div>
+        <div class="heading-elements">
+            <a href="/admin/<?php echo $this->controller ?>/detail" class="btn btn-labeled btn-labeled-right bg-blue heading-btn">Add <b><i class="fa fa-plus" aria-hidden="true"></i></b></a>
+        </div>
+    </div>
+    <div class="breadcrumb-line">
+        <ul class="breadcrumb">
+            <li><a href="/admin/index/"><i class="icon-home2 position-left"></i> Trang Chủ</a></li>
+            <li><a href="/admin/shipping-rates/">Shipping</a></li>
+            <li class="active">Danh Sách vận chuyển</li>
+        </ul>
+    </div>
+</div>
+<!-- /page header -->
+<div class="content">
+    <!-- Default ordering -->
+    <div class="panel panel-flat">
+        <div class="panel-heading">
+            <h4 class="panel-title">Danh Sách vận chuyển</h4>
+        </div>
+        <table id="shippingRatesTable" class="table  datatable-sorting">
+        <thead>
+                <tr>
+                    <th width="50px">#</th>
+                    <th width="">Province</th>
+                    <th width="">District</th>
+                    <th width="">Wards </th>
+                    <th width="">Fee Ship </th>
+                    <th><?php echo $this->translate('status')?></th>
+                    <th class="text-center" width="200px"><?php echo $this->translate('action') ?></th>
+                </tr>
+            </thead>
+		</table>
+        
+    </div>
+    <!-- /default ordering -->
+</div>

@@ -140,7 +140,12 @@ class Admin_OrderController extends FrontBaseAction {
                 			'status' => $data['status'],
                 			'name' => $data['name'],
                 			'address' => $data['address'],
-                			'place' => $data['place'],
+                            // 'cod' => $data['cod'],
+                            // 'ma_province' => $data['province'],
+                            // 'ma_district' => $data['district'],
+                            // 'ma_wards' => $data['wards'],
+                            // 'fee_ship' => $data['fee_ship'],
+                			// 'place' => $data['place'],
                 			'phone' => $data['phone'],
                 			'email' => $data['email'],
                             'note' => $data['note'],
@@ -285,8 +290,32 @@ class Admin_OrderController extends FrontBaseAction {
                 }
             }
         }
+        // $listCombo = array();
+        // if (!empty($listOrderDetail)) {
+        //     foreach ($listOrderDetail as $key => $value) {
+        //         if (!empty($value['combo_id']) && $value['combo_id'] != 0) {
+        //             $listProducts = $orderDetailModel->getProductByComboIdproduct($id,$value['combo_id']);
+        //             if (!empty($listProducts)) {
+        //                 foreach ($listProducts as $product) {
+        //                     $listCombo[$value['combo_id']][] = $product;
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+       
+        if($info['ma_province']){
+            $mdlDistrict = new District();
+            $listDistrict =  $mdlDistrict->getListDistrictByMatp($info['ma_province']);
+            $mdlWards = new Wards();
+            $listWards =  $mdlWards->getListWardsByMatp($info['ma_district']);
+            $mdlProvince = new Province();
+            $listProvince =  $mdlProvince->getAllProvince();
+            $this->view->listProvince = $listProvince;
+            $this->view->listDistrict = $listDistrict;
+            $this->view->listWards = $listWards;
+        }
         $this->view->listCombo = $listCombo;
-
         $productColor = new ProductColor();
         $listColor = $productColor->fetchAllColor();
         $this->view->color = $listColor;
@@ -467,6 +496,41 @@ class Admin_OrderController extends FrontBaseAction {
         $tpl = $this->view->render('/order/_tpl-mail.phtml');
         if( empty($orderInfo['email']) == false ){
             UtilEmail::sendMail(DEFAULT_EMAIL, $orderInfo['email'], 'Herogame hủy đơn hàng', $tpl );
+        }
+    }
+
+    public function selectAction(){
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(); 
+
+        $request = $this->getRequest();
+
+        if ($request->isPost()) {
+            $data = $request->getPost();
+            $action = $data['action'];
+            $ma_id = $data['ma_id'];
+
+            $output = '';
+
+            if ($action == 'province') {
+                $mdlDistrict = new District;
+                $selectDistrict = $mdlDistrict->getAllDistrictByMatp($ma_id);
+                $output .= '<option>Chọn quận huyện</option>';
+                foreach ($selectDistrict as $key => $value) {
+                    $output .= '<option value="' . $value['maqh'] . '">' . $value['name_district'] . '</option>';
+                }
+            }
+            else {
+                $mdlWards = new Wards;
+                $selectWards = $mdlWards->getAllWardsByMatp($ma_id);
+                $output .= '<option>Chọn phường xã</option>';
+                foreach ($selectWards as $key => $value) {
+                    $output .= '<option value="' . $value['xaid'] . '">' . $value['name_wards'] . '</option>';
+                }
+            }
+            $this->getResponse()
+                ->setHeader('Content-Type', 'text/html')
+                ->setBody($output);
         }
     }
 }

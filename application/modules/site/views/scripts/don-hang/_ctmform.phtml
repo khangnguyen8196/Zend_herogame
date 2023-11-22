@@ -1,4 +1,5 @@
 <div class="ctm-form">
+    <span id="feeShipErrors" style="display: block;color: #dc2535;margin-left: 10px;padding-bottom: 10px"></span>
     <div id="firstAddress">
         <label class="form-group has-float-label">
             <input name="cfa_email" class="form-control" type="email" placeholder="email@abc.com"
@@ -17,7 +18,7 @@
         </label>
 
         <label class="form-group has-float-label">
-            <input name="cfa_phone" id="cfa_phone" class="form-control" type="tel" placeholder="Nhập số điện thoại"
+            <input name="cfa_phone" id="cfa_phone" class="form-control" type="tel" maxlength="10" placeholder="Nhập số điện thoại"
             data-rule-required="true"
             data-rule-digits="true"
             data-msg-required="Vui lòng nhập số điện thoại"
@@ -31,19 +32,95 @@
                 data-msg-required="Vui lòng nhập địa chỉ" />
             <span>Địa chỉ</span>
         </label>
-        <label class="form-group has-float-label">
+        <!-- <label class="form-group has-float-label">
             <input name="cfa_place" class="form-control" type="text" placeholder="Nhập Tỉnh Hoặc Thành Phố"
                 data-rule-required="true"
                 data-msg-required="Vui lòng nhập tỉnh hoặc thành phố" />
             <span>Tỉnh/Thành Phố</span>
-        </label>
+        </label> -->
 
+        <!-- <form  class="form-horizontal mt-2" id="shippingRatesDetailForm" method="post" enctype="multipart/form-data"> -->
+            <label class="form-group has-float-label">
+                <select style ="color: #9090909c" name="province" id="province" class="form-control choose province"  data-rule-required="true"
+                data-msg-required="Vui lòng chọn tỉnh thành">
+                    <option  value=''>Chọn tỉnh thành phố</option>
+                    <?php
+                    if (empty($this->listProvince) == false) {
+                        foreach ($this->listProvince as $key => $value) {
+                    ?>
+                            <option  
+                                <?php
+                                if ($value['matp'] == @$this->info['fee_matp']) {
+                                echo 'selected';
+                                }?>
+                                value="<?php echo $value['matp'] ?>"
+                                >
+                                <?php echo $value['name_province'] ?>
+                            </option>
+                        <?php
+                        }
+                    } 
+                    ?>
+                </select>
+                <span id="provinceError" style="color: red;"></span>
+            </label>
+            <label class="form-group has-float-label">
+                <select style ="color: #9090909c" name="district" id="district" class="form-control choose district" data-rule-required="true"
+                data-msg-required="Vui lòng chọn quận huyện">
+                    <option value=''>Chọn quận huyện</option>
+                    <?php
+                    if (empty($this->listDistrict) == false) {
+                        foreach ($this->listDistrict as $key => $value) {
+                    ?>
+                            <option  
+                                <?php
+                                if ($value['maqh'] == @$this->info['fee_maqh']) {
+                                echo 'selected';
+                                }?>
+                                value="<?php echo $value['maqh'] ?>"
+                                >
+                                <?php echo $value['name_district'] ?>
+                            </option>
+                        <?php
+                        }
+                    } 
+                    ?>
+                </select>
+                <span id="districtError" style="color: red;"></span>
+            </label>
+                    
+            <label class="form-group has-float-label">
+                <select style ="color: #9090909c" name="wards" id="wards" class="form-control choose wards" data-rule-required="true"
+                data-msg-required="Vui lòng chọn xã phường">
+                    <option value=''>Chọn phường xã</option>
+                    <?php
+                    if (empty($this->listWards) == false) {
+                        foreach ($this->listWards as $key => $value) {
+                    ?>
+                            <option  
+                                <?php
+                                if ($value['xaid'] == @$this->info['fee_xaid']) {
+                                echo 'selected';
+                                }?>
+                                value="<?php echo $value['xaid'] ?>"
+                                >
+                                <?php echo $value['name_wards'] ?>
+                            </option>
+                        <?php
+                        }
+                    } 
+                    ?>
+                </select>
+                <span id="wardsError" style="color: red;"></span>
+            </label>
+            <!-- <button type="button" class="btn-primary btn-lg submit-fee-ship">Tính phí vận chuyển</button>
+        </form> -->
     </div>
     <label class="form-group has-float-label">
         <textarea class="form-control" name="note" placeholder="Ghi chú thêm về thời gian giao hàng, địa chỉ,..."></textarea>
         <span>Ghi chú</span>
     </label>
-    
-
-    <button class="btn btn-block btn-primary btn-lg" type="submit">Đặt hàng</button>    
+    <input name="fee_ship" class="form-control" id="fee_shipping_order" value='' type="hidden" />
+    <input name="fee_cod" class="form-control" id="fee_cod_order" value='' type="hidden" />
+    <button class="btn btn-block btn-primary btn-lg" id="submit-btn-pay" type="submit">Đặt hàng</button>    
 </div>

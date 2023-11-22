@@ -6,6 +6,7 @@
             <?php echo $this->partial('/shared/_breadcrumbs.phtml',array('data'=> array('child' => array('name' => 'Thanh Toán')))) ?>
         </div>
     </div>
+    <span id="feeShipError" style="color: red;"></span>
     <form id="checkoutForm" class="row" novalidate method="post" action="/don-hang/ket-qua">
         <div class="col-md-4 col-12 right-gutter">
             <?php echo $this->partial('/shared/_data_header.phtml', array(
@@ -24,7 +25,10 @@
             <?php echo $this->partial('/shared/_data_header.phtml', array(
                 'title' => 'Thông tin mua hàng'
             )) ?>
-            <?php echo $this->partial('/don-hang/_ctmform.phtml') ?>
+            <?php echo $this->partial('/don-hang/_ctmform.phtml', array(
+                'listProvince'=>$this->listProvince
+            )) ?>
         </div>
     </form>
 </div>
+

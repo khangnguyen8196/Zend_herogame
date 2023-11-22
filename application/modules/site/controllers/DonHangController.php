@@ -3,6 +3,7 @@
 /**
  * Main page
  */
+
 class Site_DonHangController extends FrontEndAction {
 
     protected $_categoryMdl = "";
@@ -90,6 +91,7 @@ class Site_DonHangController extends FrontEndAction {
 
     public function datHangAction() {
         $this->view->headTitle()->append('Đặt hàng');
+        $mdlProvince = new Province();
         $userId = -1;
         if( empty($this->customer_info) == true ){
 //            $this->_redirect("/");
@@ -105,6 +107,8 @@ class Site_DonHangController extends FrontEndAction {
         $totalMoney = 0;
         
         $cart_list_full_info = self::getProductsFullInfo($cart_list, $totalMoney);
+        $listProvince =  $mdlProvince->getAllProvince();
+        $this->view->listProvince = $listProvince;
         $this->view->cart_list = $cart_list_full_info;
         $this->view->total_money = $totalMoney;
         // echo '<pre>';print_r($cart_list_full_info);exit;
@@ -115,6 +119,34 @@ class Site_DonHangController extends FrontEndAction {
         if( empty($this->post_data['t']) == false && empty($this->post_data['code']) == false ){
             $promotionCode = new PromotionCode();
             // check session
+            $province = $this->post_data['province'];
+            $district = $this->post_data['district'];
+            $wards = $this->post_data['wards'];
+            $fee_cod_pro = $this->post_data['fee_cod'];
+            if($province){
+                $mdlShippingRates = new ShippingRates;
+                $fee_ships = $mdlShippingRates->getFeeShip($province, $district,$wards);
+                if($fee_ships){
+                    $fee_ship =  $fee_ships['fee_ship'];
+                }else{
+                    $mdlSetting = new Setting;
+                    $fee_ship_default =$mdlSetting->fetchSettingByKey('fee_ship_default');
+                    if($fee_ship_default){
+                        $fee_ship = $fee_ship_default['value'];
+                    }else{
+                        $fee_ship = 40000;
+                    }
+                }
+            }else {
+                $fee_ship = 0;
+            }
+            if($fee_cod_pro == 2){
+                $mdlSetting = new Setting;
+                $fee_cods =$mdlSetting->fetchSettingByKey('fee_cod');
+                $fee_cod = $fee_cods['value'];
+            }else{
+                $fee_cod = 0;
+            }
             $t = $this->post_data["t"];
             $cart_list = UtilSession::get($t . "_CART_LIST");
             UtilSession::set($t . "_PROMOTION", array() );
@@ -205,7 +237,17 @@ class Site_DonHangController extends FrontEndAction {
                         if( $cacl > $promoInfo['max_price']){
                             $cacl = $promoInfo['max_price'];
                         }
-                        $rs = array('t'=> $t, 'cTotal' => $totalMoney,'cacl' => $cacl, 'caclText' => number_format($cacl), 'aTotal'=> $totalMoney - $cacl, 'aTotalText' => number_format($totalMoney - $cacl) );
+                        if($fee_ship && $fee_cod){
+                            $rs = array('t'=> $t, 'cTotal' => $totalMoney,'cacl' => $cacl, 'caclText' => number_format($cacl), 'aTotal'=> $totalMoney - $cacl + $fee_ship + $fee_cod, 'aTotalText' => number_format($totalMoney - $cacl + $fee_ship +$fee_cod) );
+                        }elseif($fee_ship){
+                            $rs = array('t'=> $t, 'cTotal' => $totalMoney,'cacl' => $cacl, 'caclText' => number_format($cacl), 'aTotal'=> $totalMoney - $cacl + $fee_ship, 'aTotalText' => number_format($totalMoney - $cacl + $fee_ship) );
+                        }elseif($fee_cod){
+                            $rs = array('t'=> $t, 'cTotal' => $totalMoney,'cacl' => $cacl, 'caclText' => number_format($cacl), 'aTotal'=> $totalMoney - $cacl + $fee_cod, 'aTotalText' => number_format($totalMoney - $cacl + $fee_cod) );
+
+                        }else{
+                            $rs = array('t'=> $t, 'cTotal' => $totalMoney,'cacl' => $cacl, 'caclText' => number_format($cacl), 'aTotal'=> $totalMoney - $cacl, 'aTotalText' => number_format($totalMoney - $cacl) );
+                        }
+                        
                         $this->ajaxResponse(CODE_SUCCESS, 'Sử Dụng Mã Giảm Giá Thành Công!', $rs);
                     }
                 } else {
@@ -222,6 +264,34 @@ class Site_DonHangController extends FrontEndAction {
         if( empty($this->post_data['t']) == false && empty($this->post_data['percent']) == false ){
             // check session
             $t = $this->post_data["t"];
+            $province = $this->post_data['province'];
+            $district = $this->post_data['district'];
+            $wards = $this->post_data['wards'];
+            $fee_cod_dis = $this->post_data['fee_cod'];
+            if($province){
+                $mdlShippingRates = new ShippingRates;
+                $fee_ships = $mdlShippingRates->getFeeShip($province, $district,$wards);
+                if($fee_ships){
+                    $fee_ship =  $fee_ships['fee_ship'];
+                }else{
+                    $mdlSetting = new Setting;
+                    $fee_ship_default =$mdlSetting->fetchSettingByKey('fee_ship_default');
+                    if($fee_ship_default){
+                        $fee_ship = $fee_ship_default['value'];
+                    }else{
+                        $fee_ship = 40000;
+                    }
+                }
+            }else {
+                $fee_ship = 0;
+            }
+            if($fee_cod_dis == 2){
+                $mdlSetting = new Setting;
+                $fee_cods =$mdlSetting->fetchSettingByKey('fee_cod');
+                $fee_cod = $fee_cods['value'];
+            }else{
+                $fee_cod = 0;
+            }
             $cart_list = UtilSession::get($t . "_CART_LIST");
             if( empty($cart_list) == false ){
                 $scoreDiscount = $this->post_data['percent'];
@@ -318,10 +388,27 @@ class Site_DonHangController extends FrontEndAction {
                             $totalMoney = $totalMoney - $discount;
                         }
                     }
-                    $this->ajaxResponse(CODE_SUCCESS, 
+                    if($fee_ship && $fee_cod ){
+                        $this->ajaxResponse(CODE_SUCCESS, 
                         'Sử Dụng Chiết Khấu: '.number_format($scoreDiscount).' Điểm', 
                         array('t'=> $t, 'cTotal' => $total, 'discount' => $discount, 'discountText' => number_format($discount), 
-                        'aTotal'=> $totalMoney, 'aTotalText' => number_format($totalMoney) ));
+                        'aTotal'=> $totalMoney+$fee_ship+$fee_cod, 'aTotalText' => number_format($totalMoney+$fee_ship+$fee_cod) ));
+                    }if($fee_ship){
+                        $this->ajaxResponse(CODE_SUCCESS, 
+                        'Sử Dụng Chiết Khấu: '.number_format($scoreDiscount).' Điểm', 
+                        array('t'=> $t, 'cTotal' => $total, 'discount' => $discount, 'discountText' => number_format($discount), 
+                        'aTotal'=> $totalMoney+$fee_ship, 'aTotalText' => number_format($totalMoney+$fee_ship) ));
+                    }elseif($fee_cod){
+                        $this->ajaxResponse(CODE_SUCCESS, 
+                        'Sử Dụng Chiết Khấu: '.number_format($scoreDiscount).' Điểm', 
+                        array('t'=> $t, 'cTotal' => $total, 'discount' => $discount, 'discountText' => number_format($discount), 
+                        'aTotal'=> $totalMoney+$fee_cod, 'aTotalText' => number_format($totalMoney+$fee_cod) ));
+                    }else{
+                        $this->ajaxResponse(CODE_SUCCESS, 
+                            'Sử Dụng Chiết Khấu: '.number_format($scoreDiscount).' Điểm', 
+                            array('t'=> $t, 'cTotal' => $total, 'discount' => $discount, 'discountText' => number_format($discount), 
+                            'aTotal'=> $totalMoney, 'aTotalText' => number_format($totalMoney) ));
+                    }
                 } else {
                     $this->ajaxResponse(CODE_HAS_ERROR, 'Tài Khoản Không Tồn Tại');
                 }
@@ -348,7 +435,7 @@ class Site_DonHangController extends FrontEndAction {
         $scoreDiscount = 0;
         $dataOrder = array(
             'address' => $data['cfa_address'],
-            'place' => $data['cfa_place'],
+            // 'place' => $data['cfa_place'],
             'name' => $data['cfa_name'],
             'user_id' => $userIdMine,
             'phone' => $data['cfa_phone'],
@@ -356,9 +443,16 @@ class Site_DonHangController extends FrontEndAction {
             'created_date' => date("Y-m-d H:i:s"),
             'updated_date' => date("Y-m-d H:i:s"),
             'payment_method' => $data['pm'],
+            'cod' => $data['cod'],
             'status' => 1,
             'is_pay' => 0,
             'note' => $data['note'],
+            'fee_ship' => $data['fee_ship'],
+            'fee_cod' => ($data['cod'] == 2) ? $data['fee_cod'] : 0 ,
+            'ma_province' => $data['province'],
+            'ma_district' => $data['district'],
+            'ma_wards' => $data['wards'],
+
         );
         $errors = array();
         $orderDetail = array();
@@ -378,6 +472,7 @@ class Site_DonHangController extends FrontEndAction {
         $mdlVariant = new ProductVariant();
         $productMdl = new Product();
         $mdlCombo = new ComboProduct();
+        $mdlComboDetail= new ComboDetail();
         if (empty($cart_list) == false && is_array($cart_list)) {
                 if(empty($cart_list['products'])==false){
                     foreach ($cart_list['products'] as $p_id => $value) {
@@ -419,6 +514,17 @@ class Site_DonHangController extends FrontEndAction {
                 if(!empty($cart_list['combos'])) {
                     foreach($cart_list['combos'] as $c_id => $value) {
                         $combo_info = $mdlCombo->fetchComboProductById($c_id);
+                        // $list_product_by_combo_id =$mdlComboDetail->getProductByComboId($c_id);
+                        // if($list_product_by_combo_id){
+                        //     $detailItems = array();
+                        //     foreach ($list_product_by_combo_id as $product){
+                        //         $detailItem = array('id_order' =>'','product_id_cb' => $product['product_id'], 'price' => $product['price_sales'], 'number' => $value['qty'],'product_variant' => '', 'combo_id'=> '', 'cb_id_product'=> $c_id);
+                        //         $detailItems[] = $detailItem;
+                        //     }
+                        //     foreach($detailItems as $detailItem){
+                        //         $orderDetail[] = $detailItem;
+                        //     }
+                        // }
                         
                         $combo_detail_list = $value['products'];
                         if(empty($combo_info)) {
@@ -429,7 +535,6 @@ class Site_DonHangController extends FrontEndAction {
                         $listItem = array('name' => $combo_info['title'],'price' => $combo_info["total_discount"], 'number'=> $value['qty'], 'img' => $combo_info['image_cb'],'comb_id'  => $combo_info['id'] );
                         $listProductItem[] = $listItem;
                         $orderDetail[] = $detailItem;
-
                         $combo_product = array();
                         $combo_product['id'] = $combo_info['id']; 
                         $combo_product['title'] = $combo_info['title'];
@@ -454,7 +559,18 @@ class Site_DonHangController extends FrontEndAction {
             } else {
             $this->_redirect("/don-hang/gio-hang");
         }
-        $total = $totalMoney;
+        $totalMoneyCurrent = $totalMoney;
+        $fee_ship = $data['fee_ship'];
+        $fee_cod = ($data['cod'] == 2) ? $data['fee_cod'] : 0; 
+        if($fee_ship && $fee_cod ){
+            $total = $totalMoney + $fee_ship +  $fee_cod;
+        }elseif($fee_ship){
+            $total = $totalMoney + $fee_ship;
+        }elseif($fee_cod){
+            $total = $totalMoney + $fee_cod;
+        }else{
+            $total = $totalMoney ;
+        }
         if( @$data['checkPromotion'] == 'true'){
             $promotionCode = new PromotionCode();
             $promoInfo = $promotionCode->fetchpromotionByCode($data['promotionCode']);
@@ -480,6 +596,7 @@ class Site_DonHangController extends FrontEndAction {
                     }
                     $totalMoney = $totalMoney - $cacl;
                     $dataOrder['promotion_code'] = $data['promotionCode'];
+                    $dataOrder['promotion_price'] = $cacl;
                 }
             }
         } else if( @$data['checkdisCount'] == 'true' && $this->customer_info == true ){
@@ -508,7 +625,7 @@ class Site_DonHangController extends FrontEndAction {
                         $discount = ( $totalMoney * $this->_min_percent_discount_over_price )/100;
                         $totalMoney = $totalMoney - $discount;
                     } else {
-                        $totalMoney = $totalMoney - $discount;
+                        $totalMoney = $totalMoney - $discount;   
                     }
                 }
                 
@@ -516,7 +633,16 @@ class Site_DonHangController extends FrontEndAction {
             }
             
         }
-        $dataOrder['total'] = $totalMoney;
+        if($fee_ship && $fee_cod){
+            $dataOrder['total'] = $totalMoney+$fee_ship +$fee_cod;
+        }elseif($fee_ship){
+            $dataOrder['total'] = $totalMoney+$fee_ship;
+        }elseif($fee_cod){
+            $dataOrder['total'] = $totalMoney+$fee_cod;
+        }else{
+            $dataOrder['total'] = $totalMoney;
+        }
+
         if( $this->customer_info == true ){
             $dataOrder['score'] =  floor($totalMoney/$this->_exchange_rate_money_to_score); 
         } else {
@@ -553,7 +679,7 @@ class Site_DonHangController extends FrontEndAction {
                 if( $devi == 0 ){
                     $devi = $dataOrder['discount'];
                 }
-                $this->sendMailTemplate( $listProductItem, $dataOrder, $total, $devi );
+                $this->sendMailTemplate( $listProductItem, $dataOrder, $totalMoneyCurrent, $devi, $fee_ship, $fee_cod  );
             } else {
                 $this->view->status = 0;
                 $this->view->error = $errors;
@@ -596,11 +722,13 @@ class Site_DonHangController extends FrontEndAction {
             $this->_redirect("/");
         }
     }
-    public function sendMailTemplate( $listProduct, $orderInfo, $total, $devi ){
+    public function sendMailTemplate( $listProduct, $orderInfo, $totalMoneyCurrent, $devi, $fee_ship, $fee_cod  ){
         $this->view->listProduct = $listProduct;
         $this->view->orderInfo = $orderInfo;
-        $this->view->totalBeforedev = $total;
+        $this->view->totalBeforedev = $totalMoneyCurrent;
         $this->view->devi = $devi;
+        $this->view->fee_ship = $fee_ship;
+        $this->view->fee_cod = $fee_cod;
         $tpl = $this->view->render('/don-hang/_tpl-mail.phtml');
         if( empty($orderInfo['email']) == false ){
             UtilEmail::sendMail(DEFAULT_EMAIL, $orderInfo['email'], 'Herogame xác nhận đơn hàng', $tpl );
@@ -1042,11 +1170,102 @@ class Site_DonHangController extends FrontEndAction {
         UtilSession::set($t . "_CART_LIST", $cart_list);
     
         $this->ajaxResponse(CODE_SUCCESS);
+    } 
+
+    public function selectAction(){
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(); 
+
+        $request = $this->getRequest();
+
+        if ($request->isPost()) {
+            $data = $request->getPost();
+            $action = $data['action'];
+            $ma_id = $data['ma_id'];
+
+            $output = '';
+
+            if ($action == 'province') {
+                $mdlDistrict = new District;
+                $selectDistrict = $mdlDistrict->getAllDistrictByMatp($ma_id);
+                $output .= '<option>Chọn quận huyện</option>';
+                foreach ($selectDistrict as $key => $value) {
+                    $output .= '<option value="' . $value['maqh'] . '">' . $value['name_district'] . '</option>';
+                }
+            }
+            else {
+                $mdlWards = new Wards;
+                $selectWards = $mdlWards->getAllWardsByMatp($ma_id);
+                $output .= '<option>Chọn phường xã</option>';
+                foreach ($selectWards as $key => $value) {
+                    $output .= '<option value="' . $value['xaid'] . '">' . $value['name_wards'] . '</option>';
+                }
+            }
+            $this->getResponse()
+                ->setHeader('Content-Type', 'text/html')
+                ->setBody($output);
+        }
     }
+
+    public function feeShipAction(){
+        $this->isAjax();
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(); 
     
+        $request = $this->getRequest();
     
+        if ($request->isPost()) {
+            $data = $request->getPost();
+            $province = $data['province'];
+            $district = $data['district'];
+            $wards = $data['wards'];
+            $result = '';
+            if ($data['province']) {
+                $mdlShippingRates = new ShippingRates;
+                $fee_ships = $mdlShippingRates->getFeeShip($province, $district,$wards);
+                if (!empty($fee_ships)) {
+                    $sessionHelper = new My_Controller_Action_Helper_Session();
+                    $sessionHelper->unsetSession('fee_ship');
+                    $sessionHelper->setSession('fee_ship', $fee_ships['fee_ship']);
+                    $result .= $fee_ships['fee_ship'] . ' ';
+                } else {
+                    $mdlSetting = new Setting;
+                    $fee_ship_default =$mdlSetting->fetchSettingByKey('fee_ship_default');
+                    if($fee_ship_default){
+                        $result = $fee_ship_default['value'];
+                    }else{
+                        $result = 40000;
+                    }
+                    $sessionHelper = new My_Controller_Action_Helper_Session();
+                    $sessionHelper->unsetSession('fee_ship');
+                    $sessionHelper->setSession('fee_ship', $result);
+                }
+            }
+            $this ->getResponse()
+                  ->setHeader('Content-Type', 'application/json') 
+                  ->setBody(json_encode(['fee_ship' => $result]));
+        }
+    }
+
+    public function feeCodAction(){
+        $this->isAjax();
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(); 
     
+        $request = $this->getRequest();
     
-    
-    
+        if ($request->isPost()) {
+            $data = $request->getPost();
+            $fee_cod = $data['fee_cod'];
+            $result = '';
+            if ($fee_cod) {
+                $mdlSetting = new Setting;
+                $fee_cod =$mdlSetting->fetchSettingByKey('fee_cod');
+                $result = $fee_cod['value'];
+            }
+            $this ->getResponse()
+                  ->setHeader('Content-Type', 'application/json') 
+                  ->setBody(json_encode(['fee_cod' => $result]));
+        }
+    }
 }

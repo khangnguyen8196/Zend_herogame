@@ -158,6 +158,20 @@
                         </li>
                     <?php } ?>
 
+                    <?php
+                    if (UtilAuth::hasPrivilege('shipping-rates', ACTION_VIEW) == true ) {
+                        ?>
+                        <!-- Statistics management -->
+                        <li class="<?php echo ($this->module == 'admin' && $this->controller == "shipping-rates") ? "active" : "" ?>">
+                            <a href="#"><i class="icon-cube"></i> <span>Phí vận chuyển</span></a>
+                            <ul>
+                                <?php if (UtilAuth::hasPrivilege('shipping-rates', ACTION_VIEW) == true) { ?>
+                                    <li class="<?php echo ($this->module == 'admin' && $this->controller == "shipping-rates" && $this->action == "index" ) ? "active" : "" ?>"><a href="/admin/shipping-rates/index">Phí vận chuyển</a></li>
+                                <?php } ?>
+                            </ul>
+                        </li>
+                    <?php } ?>
+
                     <?php if (UtilAuth::hasPrivilege('permission', ACTION_VIEW) == true || UtilAuth::hasPrivilege('permission', ACTION_ADD) == true || UtilAuth::hasPrivilege('permission', ACTION_EDIT) == true) { ?>
                         <!-- Permission management -->
                         <li class="<?php echo ($this->module == 'admin' && $this->controller == "permission") ? "active" : "" ?>">

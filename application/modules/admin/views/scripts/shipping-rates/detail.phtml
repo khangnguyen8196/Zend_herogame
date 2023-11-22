@@ -1,0 +1,166 @@
+<div class="page-header">
+	<div class="page-header-content">
+		<div class="page-title">
+			<h4><i class="icon-cog3 position-left"></i> <span class="text-semibold">Phí vận chuyển</span></h4>
+		</div>
+	</div>
+	<div class="breadcrumb-line">
+		<ul class="breadcrumb">
+			<li><a href="/"><i class="icon-home2 position-left"></i> <?php echo $this->translate('home')?></a></li>
+			<li><a href="/admin/shipping-rates">Danh sách phí vận chuyển</a></li>
+			<li class="active">Chi tiết</li>
+		</ul>
+		<!-- tree -->
+	</div>
+</div>
+<div class="content">
+	<div class="panel panel-flat">
+		<div class="panel-heading">
+			<h5 class="panel-title">Chi Tiết</h5>
+		</div>
+		<div class="panel-body">
+			<div class="alert alert-danger alert-styled-left <?php if( empty($this->error) == true) { echo 'hidden';}?>">
+				<button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
+				<?php
+					if( empty($this->error) == false ){
+						foreach ($this->error as $key => $value ){
+							echo $value.'<br/>';
+						}
+					}
+				?>
+			</div>
+			<span id="checkDataExistError" style="color: red;"></span>
+			<form  class="form-horizontal" id="shippingRatesDetailForm" method="post" enctype="multipart/form-data">
+				<fieldset class="content-group">
+					<legend class="text-bold"></legend>
+					<?php if(empty($this->info['fee_id'])==false){ ?>
+						<div class="form-group">
+							<label class="control-label col-lg-2">Chọn tỉnh thành phố </label>
+							<div class="col-lg-10">
+								<input name="province" id="province" class="form-control choose province" value ="<?php echo $this->info['fee_matp'] ?>" type="hidden">
+								<select class="form-control" disabled>
+									<option value=''>Chọn tỉnh thành phố</option>
+									<?php
+									if (empty($this->listProvince) == false) {
+										foreach ($this->listProvince as $key => $value) {
+									?>
+											<option  
+												<?php
+												if ($value['matp'] == @$this->info['fee_matp']) {
+												echo 'selected';
+												}?>
+												value="<?php echo $value['matp'] ?>"
+												>
+												<?php echo $value['name_province'] ?>
+											</option>
+										<?php
+										}
+									} 
+									?>
+								</select>
+								<span id="provinceError" style="color: red;"></span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-lg-2">Chọn quận huyện </label>
+							<div class="col-lg-10">
+								<input name="district" id="district" class="form-control choose district" value ="<?php echo $this->info['fee_maqh'] ?>" type="hidden">
+								<select class="form-control" disabled>
+									<option value=''>Chọn quận huyện</option>
+									<?php
+									if (empty($this->listDistrict) == false) {
+										foreach ($this->listDistrict as $key => $value) {
+									?>
+											<option  
+												<?php
+												if ($value['maqh'] == @$this->info['fee_maqh']) {
+												echo 'selected';
+												}?>
+												value="<?php echo $value['maqh'] ?>"
+												>
+												<?php echo $value['name_district'] ?>
+											</option>
+										<?php
+										}
+									} 
+									?>
+								</select>
+								<span id="districtError" style="color: red;"></span>
+							</div>
+						</div>
+					<?php }else{?>
+						<div class="form-group">
+							<label class="control-label col-lg-2">Chọn tỉnh thành phố </label>
+							<div class="col-lg-10">
+								<select name="province" id="province" class="form-control choose province">
+									<option value=''>Chọn tỉnh thành phố</option>
+									<?php
+									if (empty($this->listProvince) == false) {
+										foreach ($this->listProvince as $key => $value) {
+									?>
+											<option  
+												<?php
+												if ($value['matp'] == @$this->info['fee_matp']) {
+												echo 'selected';
+												}?>
+												value="<?php echo $value['matp'] ?>"
+												>
+												<?php echo $value['name_province'] ?>
+											</option>
+										<?php
+										}
+									} 
+									?>
+								</select>
+								<span id="provinceError" style="color: red;"></span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-lg-2">Chọn quận huyện </label>
+							<div class="col-lg-10">
+								<select name="district" id="district" class="form-control choose district">
+									<option value=''>Chọn quận huyện</option>
+									<?php
+									if (empty($this->listDistrict) == false) {
+										foreach ($this->listDistrict as $key => $value) {
+									?>
+											<option  
+												<?php
+												if ($value['maqh'] == @$this->info['fee_maqh']) {
+												echo 'selected';
+												}?>
+												value="<?php echo $value['maqh'] ?>"
+												>
+												<?php echo $value['name_district'] ?>
+											</option>
+										<?php
+										}
+									} 
+									?>
+								</select>
+								<span id="districtError" style="color: red;"></span>
+							</div>
+						</div>
+					<?php } ?>
+					<div class="form-group">
+						<label class="control-label col-lg-2">Tiền ship </label>
+						<div class="col-lg-10">
+							<input type="text" class="form-control" name="fee_ship" id="fee_ship" value = "<?php echo @$this->info['fee_ship']?>">
+							<span id="feeShipError" style="color: red;"></span>
+						</div>
+					</div>
+				</div>
+				</fieldset>
+				<div class="text-right">
+					<input type="hidden" name="fee_id" id="fee_id" value="<?php echo @$this->fee_id ?>" />
+					<a href="/admin/shipping-rates"><button type="button" class="btn btn-default cancel-btn"><?php echo $this->translate('cancel')?><i class="icon-arrow-right14 position-right"></i></button></a>
+					<button type="submit" id="save-shipping" class="btn btn-primary submit-btn"><?php echo $this->translate('submit')?> <i class="fa fa-plus" aria-hidden="true"></i></button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+
+

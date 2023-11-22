@@ -42,64 +42,71 @@ pages = $.extend(pages, {
 
 
 			$(document).on('click', '#listProductTable input[type="checkbox"]', function() {
-			var inputId = $('#modalProductList').data('input-id');
-			var rowData = $("#listProductTable").DataTable().row($(this).parents('tr')).data();
-			var productId = rowData.id;
-			var productImage = rowData.image;
-			var productName = rowData.title;
-			var productPrice = rowData.price_sales;
-			if (selectedProductId[inputId] === productId) {
-				// product already selected for this input
-				return;
-			}
-			if (Object.values(selectedProductId).indexOf(productId) > -1) {
-				// product already selected for another input
-				alert('Sản phẩm đã tồn tại. Vui lòng chọn sản phẩm khác.');
-				return;
-			}
-			var existingCheckbox = selectedCheckboxes[inputId];
-			if (existingCheckbox) {
-				existingCheckbox.prop('checked', false);
-			}
-			selectedCheckboxes[inputId] = $(this);
-			selectedProducts[inputId] = productName;
-			selectedProductId[inputId] = rowData.id;
-			selectedProductImage[inputId] = rowData.image;
-			selectedProductPrice[inputId] = rowData.price_sales;
-			$('.product-name-input[data-input-id="' + inputId + '"]').val(productName);
-			$('.product-id-input[data-input-id="' + inputId + '"]').val(productId);
-			$image=$('.product-image').attr('src', '/upload/images' + productImage);
-			$('.product-price-input[data-input-id="' + inputId + '"]').val(productPrice);
+				var inputId = $('#modalProductList').data('input-id');
+				var rowData = $("#listProductTable").DataTable().row($(this).parents('tr')).data();
+				var productId = rowData.id;
+				var productImage = rowData.image;
+				var productName = rowData.title;
+				var productPrice = rowData.price_sales;
+				if (selectedProductId[inputId] === productId) {
+					// product already selected for this input
+					return;
+				}
+				if (Object.values(selectedProductId).indexOf(productId) > -1) {
+					// product already selected for another input
+					alert('Sản phẩm đã tồn tại. Vui lòng chọn sản phẩm khác.');
+					return;
+				}
+				var existingCheckbox = selectedCheckboxes[inputId];
+				if (existingCheckbox) {
+					existingCheckbox.prop('checked', false);
+				}
+				selectedCheckboxes[inputId] = $(this);
+				selectedProducts[inputId] = productName;
+				selectedProductId[inputId] = rowData.id;
+				selectedProductImage[inputId] = rowData.image;
+				selectedProductPrice[inputId] = rowData.price_sales;
+				$('.product-name-input[data-input-id="' + inputId + '"]').val(productName);
+				$('.product-id-input[data-input-id="' + inputId + '"]').val(productId);
+				$image=$('.product-image').attr('src', '/upload/images' + productImage);
+				$('.product-price-input[data-input-id="' + inputId + '"]').val(productPrice);
 
-			var currentTotal = 0;
+				var currentTotal = 0;
+				var totalDiscount =0;
+				$('.product-price-input').each(function() {
+					currentTotal += parseFloat($(this).val());
+				});
 
-			$('.product-price-input').each(function() {
-				currentTotal += parseFloat($(this).val());
-			});
-
-  			$('.total-price').val(currentTotal);
+  				$('.total-price').val(currentTotal);
+				  var priceDiscount = $('#price_discount').val();
+				  if (priceDiscount) {
+					  totalDiscount = currentTotal - priceDiscount;
+				  } else {
+					  totalDiscount = currentTotal;
+				  }
+				  $('.total-discount').val(totalDiscount);
 			});
 
 			$("#selectProduct").submit(function(e) {
-			e.preventDefault();
-			var inputId = $('#modalProductList').data('input-id');
-			var productName = selectedProducts[inputId];
-			var productId =selectedProductId[inputId];
+				e.preventDefault();
+				var inputId = $('#modalProductList').data('input-id');
+				var productName = selectedProducts[inputId];
+				var productId =selectedProductId[inputId];
 
-			$('.product-name-input[data-input-id="' + inputId + '"]').val(productName);
-			$('.product-id-input[data-input-id="' + inputId + '"]').val(productId);
-			$.ajax({
-				type: "POST",
-				url: $(this).attr('action'),
-				data: $(this).serialize(),
-				success: function(data) {
-				// Do something with response data
-				},
-				error: function(jqXHR, textStatus, errorThrown) {
-				// Handle error
-				}
-			});
-			$("#modalProductList").modal("hide");
+				$('.product-name-input[data-input-id="' + inputId + '"]').val(productName);
+				$('.product-id-input[data-input-id="' + inputId + '"]').val(productId);
+				$.ajax({
+					type: "POST",
+					url: $(this).attr('action'),
+					data: $(this).serialize(),
+					success: function(data) {
+					// Do something with response data
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+					// Handle error
+					}
+				});
+				$("#modalProductList").modal("hide");
 			});
 
 			$(document).on('click', '.remove-product', function() {
@@ -112,16 +119,21 @@ pages = $.extend(pages, {
 				delete selectedCheckboxes[inputId];
 				$(this).parents('.file-item').remove();
 				var currentTotal = 0;
-
 				$('.product-price-input').each(function() {
 					if ($(this).val() !== '') {
 					currentTotal += parseFloat($(this).val());
 					}
 				});
-
 				$('.total-price').val(currentTotal);
+				var priceDiscount = parseFloat($('#price_discount').val());
+				if (!isNaN(priceDiscount) && priceDiscount !== '' && !isNaN(currentTotal)) {
+					var totalDiscount = currentTotal - priceDiscount;
+					$('.total-discount').val(totalDiscount);
+				} else {
+					var totalDiscount = currentTotal;
+					$('.total-discount').val(totalDiscount);
+				}
 			});
-
 			// $(document).on('click', '.remove-product', function() {
 			// 	$(this).parents('.file-item').remove();
 			// });
@@ -160,8 +172,31 @@ pages = $.extend(pages, {
 				});
 
 				$('.total-price').val(currentTotal);
+				var priceDiscount = parseFloat($('#price_discount').val());
+				if (!isNaN(priceDiscount) && priceDiscount !== '' && !isNaN(currentTotal)) {
+					var totalDiscount = currentTotal - priceDiscount;
+					$('.total-discount').val(totalDiscount);
+				} else {
+					var totalDiscount = currentTotal;
+					$('.total-discount').val(totalDiscount);
+				}
         	});
 
+			var priceDiscount = parseFloat($('#price_discount').val());
+			var totalPrice = parseFloat($('#total_price').val());
+
+			$("#price_discount, #total_price").on('change', function () {
+				priceDiscount = parseFloat($('#price_discount').val());
+				totalPrice = parseFloat($('#total_price').val());
+
+				if (!isNaN(priceDiscount) && priceDiscount !== '' && !isNaN(totalPrice)) {
+					var totalDiscount = totalPrice - priceDiscount;
+					$('.total-discount').val(totalDiscount);
+				} else if (isNaN(priceDiscount) || priceDiscount === '') {
+					var totalDiscount = totalPrice;
+					$('.total-discount').val(totalDiscount);
+				}
+			});
         },
         initDatatable: function(){
         	var me = this;
@@ -172,6 +207,7 @@ pages = $.extend(pages, {
 	    	                 { "data": "image" },
 	    	                 { "data": "id_category" },
 	    	                 { "data": "price" },
+							 { "data": "price_sales" },
 	    	                 { "data": "status" },
 	    	];
 	        var columnDefs = [
@@ -209,6 +245,18 @@ pages = $.extend(pages, {
   							"orderable": true,
   							"data": "price"
 						},
+						{
+                        	"render": function ( data, type, row ) {
+                        		if( pages.core.isDefined(data)){
+                        			return Number(data).toLocaleString();
+                        		} else {
+                        			return '-';
+                        		}
+                        	},
+                        	"targets": 6,
+  							"orderable": true,
+  							"data": "price_sales"
+						},
 				
 	                     {
 	  							"render": function (data, type, row) {
@@ -221,7 +269,7 @@ pages = $.extend(pages, {
 	  		                        return label;
 	  		                    },
 	  		                    orderable: true,
-	  		                    targets: 6
+	  		                    targets: 7
 	  					},
 	  					 {
 	                    	 "render": function (data, type, row) {

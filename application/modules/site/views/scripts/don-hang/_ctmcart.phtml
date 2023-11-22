@@ -35,8 +35,23 @@
 	        <?php } ?>
         </div>
     </div>
-
     <div class="code-form">
+        <span style="color:red">Nếu đơn hàng có máy game (* bắt buộc chọn Có máy game).</span>     
+        <div class="check-cod" style="border-bottom: 1px solid #cbcbcb;margin-bottom: 1rem;">
+            <div class="no-cod" role="tab">
+                <label class="custom-control custom-radio" data-toggle="collapse">
+                    <input checked type="radio" name="cod" value="1" id="no-cod" style="margin-right: 1rem" />
+                    <span class="custom-control-description">Không máy game</span>
+                </label>
+            </div>
+            <div class="has-cod" role="tab">
+                <label class="custom-control custom-radio" data-toggle="collapse" >
+                    <input  type="radio" name="cod" id="has-cod" value ="2" style="margin-right: 1rem" />
+                    <span class="custom-control-description">Có máy game</span>
+                    <span style="color:red" class="custom-control-description">&nbsp;(*)</span>
+                </label>
+            </div>
+        </div>
         <div class="form-group">
             <label>Mã giảm giá</label>
             <input name="promotionCode" id="promotionCode" class="form-control" type="text" />
@@ -69,15 +84,61 @@
         </div>
     </div>
 
-    <div class="cart-total">
+    <div class="fee-shipping">
+    <?php
+        $sessionHelper = new My_Controller_Action_Helper_Session();
+        $fee_ship = $sessionHelper->getSession('fee_ship');
+    ?>
         <div class="line">
-            <label>Tổng cộng</label>
-            <span class="price" id="totalPrice" data-total="<?php echo number_format($this->total)?>"><?php echo number_format($this->total) . '&#8363' ?></span>
+            <label>Phí vận chuyển:</label>
+            <span class="price hidden" id="fee-ship">
+                <?php
+                if ($fee_ship !== null) {
+                    echo number_format($fee_ship).'&#8363';
+                } 
+                ?>
+            </span>
+            <input type="hidden" id ="fee-ship-last" value = "0">
         </div>
     </div>
 
+    <div class="fee-cod" style="display:none">
+        <div class="line">
+            <label>Phí COD:</label>
+            <span class="price" id="fee-cod"></span>
+            <input type="hidden" id ="fee-cod-last" value = "0">
+        </div>
+    </div>
+    <div class="cart-total">
+        <div class="line">
+            <label>Tổng cộng</label>
+            <input type="hidden" id ="currTotalPrice" value = "<?php echo $this->total ?>">
+            <span class="price " id="totalPrice" data-total="<?php echo number_format($this->total)?>">
+            <?php 
+                echo  number_format($this->total). '&#8363';
+             ?></span>
+             
+        </div>
+    </div>
     <a href="/don-hang/gio-hang" class="btn-block">
         <i class="fa fa-angle-left"></i>
         <span>Quay lại giỏ hàng</span>
     </a>
 </div>
+
+<style>
+    .hidden {
+            visibility: hidden;
+    }
+    .fee-shipping,.fee-cod  {
+        margin-bottom: 1rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid #cbcbcb;
+    }
+    .fee-shipping .line .price, .fee-cod .line .price {
+        float: right;
+        font-weight: bold;
+        font-size: 1.25rem;
+        color: #dc2535;
+    }
+</style>

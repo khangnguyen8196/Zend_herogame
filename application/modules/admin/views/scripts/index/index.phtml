@@ -113,6 +113,15 @@
             </div>
         </div>
     <?php } ?>
+    <?php if (UtilAuth::hasPrivilege('shipping-rates', ACTION_VIEW) == true || UtilAuth::hasPrivilege('shipping-rates', ACTION_ADD) == true || UtilAuth::hasPrivilege('shipping-rates', ACTION_EDIT) == true) { ?>
+        <div class="col-md-3 margin-bottom">
+            <div class="col-xs-12">
+                <button class="btn bg-pink-300 btn-float btn-float-lg btn-block" onclick="window.location = '/admin/shipping-rates'" type="button">
+                    <span>&nbsp;</span><i class="icon-cube"></i> <span>Phí vận chuyển</span>
+                </button>
+            </div>
+        </div>
+    <?php } ?>
     <?php if (UtilAuth::hasPrivilege('permission', ACTION_VIEW) == true || UtilAuth::hasPrivilege('permission', ACTION_ADD) == true || UtilAuth::hasPrivilege('permission', ACTION_EDIT) == true) { ?>
         <div class="col-md-3 margin-bottom">
             <div class="col-xs-12">

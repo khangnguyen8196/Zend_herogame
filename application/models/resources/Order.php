@@ -185,15 +185,18 @@ class Order extends Zend_Db_Table_Abstract {
         }
         return $result;
     }
-  	public function fetchOrderByUser( $userId ) {
-    	$select = $this->getAdapter()->select();
+  
+    public function fetchOrderByUser($userId) {
+        $select = $this->getAdapter()->select();
         $select = $select->from(array("order" => $this->_name));
-        //search by name
-        $select = $select->where( "user_id = ?",$userId);
+        $select = $select->where("user_id = ?", $userId);
+        $select = $select->order("created_date DESC"); // Sắp xếp theo created_date giảm dần
         $result = $this->getAdapter()->fetchAll($select);
+    
         if (empty($result) == true) {
             return array();
         }
         return $result;
     }
+    
 }

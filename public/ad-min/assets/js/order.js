@@ -125,6 +125,27 @@ pages = $.extend(pages, {
         			}
             	}
             });
+			$(document).on('change', '.choose', function() {
+                var action = $(this).attr('id');
+				console.log(action);
+                var ma_id = $(this).val();
+                var result = '';
+                if(action =='province'){
+                    result ='district';
+                }else if(action =='district'){
+                    result = 'wards';
+                }
+                $.ajax({
+                    url: '/admin/order/select',
+                    type: 'POST',
+                    data: {action: action,ma_id:ma_id},
+                    success: function (data) {
+                        $('#'+result).html(data);
+                    },
+                    error: function (data) {
+                    }
+                });
+            });
             function formatRepoUser (r) {
 	        	if (r.loading) return r.text;
 	        	var m = '<div>'+r.title+' ( '+r.first_name+' '+ r.last_name+' email:'+r.email+')</div>';	

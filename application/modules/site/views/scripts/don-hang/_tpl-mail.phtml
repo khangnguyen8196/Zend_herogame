@@ -159,12 +159,29 @@
 															<tr>
 																<td
 																	valign="top" align="right"
-																	style="border-collapse: collapse; padding-top: 10px; padding-right: 10px; color: #646464; width: 80%">Thành
-																	tiền:</td>
+																	style="border-collapse: collapse; padding-top: 10px; padding-right: 10px; color: #646464; width: 80%">Tạm tính:
+																</td>
 																<td
-																	
 																	valign="top" align="right"
 																	style="border-collapse: collapse; padding-top: 10px; padding-right: 10px; color: #292929; min-width: 140px"><?php echo number_format($this->totalBeforedev) . ' VNĐ' ?></td>
+															</tr>
+															<tr>
+																<td
+																	valign="top" align="right"
+																	style="border-collapse: collapse; padding-top: 10px; padding-right: 10px; color: #646464; width: 80%">Phí vận chuyển:
+																</td>
+																<td
+																	valign="top" align="right"
+																	style="border-collapse: collapse; padding-top: 10px; padding-right: 10px; color: #292929; min-width: 140px"><?php echo number_format($this->fee_ship) . ' VNĐ' ?></td>
+															</tr>
+															<tr>
+																<td
+																	valign="top" align="right"
+																	style="border-collapse: collapse; padding-top: 10px; padding-right: 10px; color: #646464; width: 80%">Phí COD:
+																</td>
+																<td
+																	valign="top" align="right"
+																	style="border-collapse: collapse; padding-top: 10px; padding-right: 10px; color: #292929; min-width: 140px"><?php echo number_format($this->fee_cod) . ' VNĐ' ?></td>
 															</tr>
 															<tr>
 																<td

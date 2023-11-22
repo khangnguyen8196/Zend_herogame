@@ -104,5 +104,13 @@ class ComboDetail extends Zend_Db_Table_Abstract {
             ->where('cd.status = ?', STATUS_ACTIVE)
             ->where('cb.status = ?', STATUS_ACTIVE);
         return $this->getAdapter()->fetchAll($select);        
-    } 
+    }
+
+    public function updateComboDetail($data, $product_id) {
+        if (!empty($product_id)) {
+            $where = $this->getAdapter()->quoteInto("product_id = ?", $product_id, Zend_Db::INT_TYPE);
+            return $this->update($data, $where);
+        }
+        return false;
+    }
 }

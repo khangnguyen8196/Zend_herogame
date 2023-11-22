@@ -212,6 +212,28 @@ class Admin_ProductController extends FrontBaseAction {
                 /*if( empty($data["image_color"]) == false){
                     $data["image_color"] = implode(',', $data["image_color"]);
                 }*/ 
+                $listCombo = $modelCombo->getAllComboProduct($id);
+                if ($listCombo) {
+                    foreach ($listCombo as $key => $combo) {
+                        if($data['price_sales'] == 0 ){
+                            $combo['total_price'] = $combo['total_price'] - $combo['price'] + $data['price'];
+                            $combo['total_discount'] = $combo['total_price'] - $combo['price_discount'];
+                            $combo['price'] = $data['price'];
+                        }else{
+                            $combo['total_price'] = $combo['total_price'] - $combo['price'] + $data['price_sales'];
+                            $combo['total_discount'] = $combo['total_price'] - $combo['price_discount'];
+                            $combo['price'] = $data['price_sales'];
+                        }
+                        $mdComboDetail->updateComboDetail(["price" => $combo['price']],$id);
+                        $modelCombo->saveComboProduct(
+                            [
+                                "total_price" => $combo['total_price'],
+                                "total_discount" =>  $combo['total_discount'],
+
+                    
+                        ], $combo['id'] );
+                    }
+                }
                 $rs = $model->saveProduct($data, $id);
                 
                 
@@ -352,6 +374,7 @@ class Admin_ProductController extends FrontBaseAction {
                             }                                                                    
                         }   
                     }
+
                 }
                 if ($id > 0) {
                     if ($rs >= 0) {

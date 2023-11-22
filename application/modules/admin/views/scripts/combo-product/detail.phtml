@@ -114,14 +114,29 @@
 						<label class="control-label col-lg-2">Tổng  giá sản phẩm</label>
 						<div class="col-lg-6">
 						<input type="text"class="form-control total-price"  name="total_price" id="total_price"  placeholder="Tổng giá sản phẩm" 
-						value="<?php echo @$this->info['total_price']?>" data-msg="Tổng giá sản phẩm">
+						value="<?php echo @$this->info['total_price']?>" data-msg="Tổng giá sản phẩm" readonly>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-lg-2">Giá giảm</label>
+						<div class="col-lg-6">
+						<input type="number"class="form-control price-discount"  name="price_discount" id="price_discount" min="0"  placeholder="Giá giảm" 
+						value="<?php 
+						if($this->info['price_discount']){
+							echo @$this->info['price_discount'];
+						}else {
+							echo 0;
+						}
+						?>" 
+						data-msg="Giá giảm" pattern="[0-9+]+"
+						>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="control-label col-lg-2">Giá Combo Sản Phẩm</label>
 						<div class="col-lg-6">
-							<input type="text"  name="total_discount" id="total_discount"  placeholder="Giá Combo Sản Phẩm" class="form-control" 
-							value="<?php echo @$this->info['total_discount']?>" data-msg="Vui Lòng Nhập Giá Combo Sản Phẩm">
+							<input type="text" class="form-control total-discount"  name="total_discount" id="total_discount"  placeholder="Giá Combo Sản Phẩm"  
+							value="<?php echo @$this->info['total_discount']?>" data-msg="Vui Lòng Nhập Giá Combo Sản Phẩm" readonly>
 						</div>
 					</div>
 					<div class="form-group">
@@ -172,6 +187,7 @@
 							<th width="8%">Hình Ảnh</th>
 							<th width="8%">Danh Mục</th>
 							<th>Giá</th>
+							<th>Giá sales</th>
 							<th><?php echo $this->translate('status')?></th>
 						</tr>
 					</thead>

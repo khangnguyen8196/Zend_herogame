@@ -71,6 +71,7 @@ class Admin_ComboProductController extends FrontBaseAction {
     		    $dataInsert['title'] = $data['title'];
     		    $dataInsert['total_discount'] = $data['total_discount'];
                 $dataInsert['total_price'] = $data['total_price'];
+                $dataInsert['price_discount'] = $data['price_discount'];
                 $dataUpdated = $this->getUpdated();
                 $dataInsert = array_merge($data, $dataUpdated);
                 $dataCreated = $this->getCreated();
@@ -110,19 +111,18 @@ class Admin_ComboProductController extends FrontBaseAction {
                         foreach ($_POST['combo_id_delete'] as $valued) {
                             if (in_array($valued, $list_combo_detail)) {
                                 $mdComboDetail->deleteComboDetail($valued);
-                                $deleted = true; // Đánh dấu đã xoá combo_detail
+                                $deleted = true; 
                             }
                         }
                     }
-                }
-                if (!$deleted) {
-                    if( !empty($_POST['product_id'])){
+                }elseif (!empty($_POST['product_id'])){
+                    if (!$deleted) {
                         foreach($_POST['product_id'] as $key => $value){
                             $product= $mdProduct->fetchProductById($value);
                             $pro = [
                                 'product_id' => $value,
                                 'combo_id' => $rs,
-                                'price' => $product['price'],
+                                'price' => $product['price_sales'],
                                 'status' => STATUS_ACTIVE,
                                 'product_title' =>$product['title'],
                             ];
@@ -141,6 +141,42 @@ class Admin_ComboProductController extends FrontBaseAction {
                                 }
                                 
                             }
+                        }
+                    }
+                }elseif(!empty($_POST['product_id']) && ($_POST['product_id']) ) {
+                    $list_combo_detail = $mdComboDetail->getAllComboDetailIdsByComboId($info['id']);
+                    if (!empty($list_combo_detail)) {
+                        foreach ($_POST['combo_id_delete'] as $valued) {
+                            if (in_array($valued, $list_combo_detail)) {
+                                $mdComboDetail->deleteComboDetail($valued);
+                                $deleted = true; 
+                            }
+                        }
+                    }
+
+                    foreach($_POST['product_id'] as $key => $value){
+                        $product= $mdProduct->fetchProductById($value);
+                        $pro = [
+                            'product_id' => $value,
+                            'combo_id' => $rs,
+                            'price' => $product['price_sales'],
+                            'status' => STATUS_ACTIVE,
+                            'product_title' =>$product['title'],
+                        ];
+                        if ($_POST['combo_detail_id'][$key] > 0) {
+                            $comboDetail = $mdComboDetail->fetchComboDetailById($_POST['combo_detail_id'][$key]);
+                            if (!empty($comboDetail)) {
+                                $pro['combo_id'] = $comboDetail['combo_id'];
+                            }
+                            $mdComboDetail->saveComboDetail($pro, $_POST['combo_detail_id'][$key]);                   
+                        }else {
+                            if(!empty($_POST['id'])){
+                                $pro['combo_id'] = $_POST['id'];
+                                $mdComboDetail->saveComboDetail($pro);
+                            }else {
+                                $mdComboDetail->saveComboDetail($pro);
+                            }
+                            
                         }
                     }
                 }
@@ -165,6 +201,7 @@ class Admin_ComboProductController extends FrontBaseAction {
             $listComboDetail = $mdComboDetail->getComboDetailById($info['id']);
             $this->view->listComboDetail = $listComboDetail;
         }
+        
     	$this->view->id = $id; 
     	$this->view->info = $info;
     	$this->view->error = $error;

@@ -188,8 +188,13 @@
                                                 <a href="<?php echo $productUrl ?>" style="color:black;text-decoration: none;" title="<?php echo $product['title'] ?>">
                                                     <span class="name" style="color:black;text-decoration: none;">Sản phẩm: <?php echo $product['title']?><br/></span>
                                                 </a>
-                                                <span class="price-a">Giá:<?php echo number_format($product['price']) . '&#8363'  ?><br/></span>
-                                                <span class="price-a">Giá sales:<?php echo number_format($product['price_sales']) . '&#8363'  ?><br/></span>
+                                                <?php
+                                                    if($product['price'] >= $product['price_sales'] && $product['price_sales'] != ''  ) { ?>
+                                                        <span class="price-a">Giá:<?php echo number_format($product['price_sales']) . '&#8363'  ?><br/></span>
+                                                    <?php } 
+                                                    else {?>
+                                                        <span class="price-a">Giá:<?php echo number_format($product['price']) . '&#8363'  ?><br/></span>
+                                                   <?php  } ?>
                                             </div>
                                         </li>
                                         <?php }?>

@@ -234,7 +234,15 @@
                         </li>
                         <li>
                             Khuyến mãi
-                            <strong> - <?php echo number_format($totalMoney - $this->order['total']) . '&#8363' ?></strong>
+                            <strong> - <?php echo number_format($this->order['promotion_price']) . '&#8363' ?></strong>
+                        </li>
+                        <li>
+                            Phí vận chuyển
+                            <strong> + <?php echo number_format($this->order['fee_ship']) . '&#8363' ?></strong>
+                        </li>
+                        <li>
+                           Phí COD
+                            <strong> + <?php echo number_format($this->order['fee_cod']) . '&#8363' ?></strong>
                         </li>
                         <?php
                             $system_discount = 0;

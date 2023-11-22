@@ -100,12 +100,97 @@
 								<textarea rows="3" placeholder="Địa Chỉ" name="address" id="address" class="form-control" data-msg="Vui lòng nhập địa chỉ"><?php echo @$this->info['address'] ?></textarea>
 						</div>
 					</div>
-					<div class="form-group">
-                        <label class="control-label col-lg-2">Tỉnh/Thành Phố</label>
-                        <div class="col-lg-10">
-                                <textarea rows="3" placeholder="Địa Chỉ" name="place" id="place" class="form-control" data-msg="Vui lòng nhập tỉnh/thành phố"><?php echo @$this->info['place'] ?></textarea>
-                        </div>
-                    </div>
+					<?php
+					if(empty($this->info['place']) == false){?>
+						<div class="form-group">
+							<label class="control-label col-lg-2">Tỉnh/Thành Phố</label>
+							<div class="col-lg-10">
+									<textarea rows="3" placeholder="Địa Chỉ" name="place" id="place" class="form-control" data-msg="Vui lòng nhập tỉnh/thành phố"><?php echo @$this->info['place'] ?></textarea>
+							</div>
+						</div>
+				    <?php }?>
+
+					<?php
+						if(empty($this->info['ma_province']) == false){?>
+							<div class="form-group">
+							<label class="control-label col-lg-2">Tỉnh thành phố </label>
+							<div class="col-lg-10">
+								<select name="province" id="province" class="form-control choose province" disabled >
+									<option value=''>Chọn tỉnh thành phố</option>
+									<?php
+									if (empty($this->listProvince) == false) {
+										foreach ($this->listProvince as $key => $value) {
+									?>
+											<option  
+												<?php
+												if ($value['matp'] == @$this->info['ma_province']) {
+												echo 'selected';
+												}?>
+												value="<?php echo $value['matp'] ?>"
+												>
+												<?php echo $value['name_province'] ?>
+											</option>
+										<?php
+										}
+									} 
+									?>
+								</select>
+								<span id="provinceError" style="color: red;"></span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-lg-2"> </label>
+							<div class="col-lg-10">
+								<select name="district" id="district" class="form-control choose district" disabled >
+									<option value=''>Chọn quận huyện</option>
+									<?php
+									if (empty($this->listDistrict) == false) {
+										foreach ($this->listDistrict as $key => $value) {
+									?>
+											<option  
+												<?php
+												if ($value['maqh'] == @$this->info['ma_district']) {
+												echo 'selected';
+												}?>
+												value="<?php echo $value['maqh'] ?>"
+												>
+												<?php echo $value['name_district'] ?>
+											</option>
+										<?php
+										}
+									} 
+									?>
+								</select>
+								<span id="districtError" style="color: red;"></span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-lg-2"> </label>
+							<div class="col-lg-10">
+								<select name="wards" id="wards" class="form-control choose wards" disabled>
+									<option value=''>Chọn phường xã</option>
+									<?php
+									if (empty($this->listWards) == false) {
+										foreach ($this->listWards as $key => $value) {
+									?>
+											<option  
+												<?php
+												if ($value['xaid'] == @$this->info['ma_wards']) {
+												echo 'selected';
+												}?>
+												value="<?php echo $value['xaid'] ?>"
+												>
+												<?php echo $value['name_wards'] ?>
+											</option>
+										<?php
+										}
+									} 
+									?>
+								</select>
+								<span id="wardsError" style="color: red;"></span>
+							</div>
+						</div>
+				    <?php }?>
 					<div class="form-group">
 						<label class="control-label col-lg-2">Điện Thoại</label>
 						<div class="col-lg-10">
@@ -147,7 +232,7 @@
 							</select>
 						</div>
 					</div>
-                                        <div class="form-group">
+                    <div class="form-group">
 						<label class="control-label col-lg-2">Phương Thức Thanh Toán</label>
 						<div class="col-lg-4">
 							<select name="payment_method" id="payment_method" class="form-control">
@@ -157,46 +242,86 @@
 							</select>
 						</div>
 					</div>
-                                        <div class="form-group">
+					<?php
+						if(empty($this->info['cod']) == false){?>
+						<div class="form-group">
+							<label class="control-label col-lg-2">Check COD</label>
+							<div class="col-lg-4">
+								<select name="cod" id="cod" class="form-control" disabled >
+									<option value="1" <?php if( @$this->info['cod'] == 1 ){ echo 'selected'; }?>>Không có máy game</option>
+									<option value="2" <?php if( @$this->info['cod'] == 2 ){ echo 'selected'; }?>>Có máy game</option>
+								</select>
+							</div>
+						</div>
+					<?php }?>
+					
+                    <div class="form-group">
 						<label class="control-label col-lg-2">Ghi Chú</label>
 						<div class="col-lg-10">
                                                     <textarea rows="3" placeholder="Ghi Chú" name="note" id="note" class="form-control"><?php echo @$this->info['note'] ?></textarea>
 						</div>
 					</div>
-                                        <div class="form-group">
-                                            <label class="control-label col-lg-2">Giảm Giá</label>
-                                            <div class="col-lg-10">
-                                                <input type="number" name="admin_discount" id="admin_discount" placeholder="Vui Lòng Nhập Số Tiền Muốn Giảm" class="form-control" value="<?php echo @$this->info['admin_discount'] ?>">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-						<label class="control-label col-lg-2">Lý Do:</label>
+					<div class="form-group">
+						<label class="control-label col-lg-2">Giảm Giá</label>
 						<div class="col-lg-10">
-                                                    <textarea rows="3" placeholder="Lý Do Hủy Đơn Hàng Hay Giảm Giá" name="reject_reason" id="reject_reason" class="form-control"><?php echo @$this->info['reject_reason'] ?></textarea>
+							<input type="number" name="admin_discount" id="admin_discount" placeholder="Vui Lòng Nhập Số Tiền Muốn Giảm" class="form-control" value="<?php echo @$this->info['admin_discount'] ?>">
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="control-label col-lg-2">Thành Tiền</label>
-						<div class="col-lg-4">
-							<span style="color: red; font-size: 30px" id="total_show"><?php if( empty($this->id) == false ){ 
+						<label class="control-label col-lg-2">Lý Do:</label>
+						<div class="col-lg-10">
+                            <textarea rows="3" placeholder="Lý Do Hủy Đơn Hàng Hay Giảm Giá" name="reject_reason" id="reject_reason" class="form-control"><?php echo @$this->info['reject_reason'] ?></textarea>
+						</div>
+					</div>
+					<div class="form-group2" style ="display: flex;
+													justify-content: space-between;
+													align-items: center;
+													margin-right: 20px;
+													margin-left: -10px;">
+						<label class="control-label col-lg-1">Tạm tính</label>
+						<div class="col-2">
+							<span style="color: red; font-size: 20px" id="total_show"><?php if( empty($this->id) == false ){ 
 								echo number_format($this->info['total_before_sale']);} else { echo '0';}?></span> VNĐ
 							<input type="hidden" name="total" id="total_hide" value="0">
 						</div>
-						<label class="control-label col-lg-2">Giảm Còn</label>
-						<div class="col-lg-4">
+						<label class="control-label col-lg-1">Phí vận chuyển</label>
+						<div class="col-2">
+							<span style="color: red; font-size: 20px" id="total_show"><?php if( empty($this->id) == false ){ 
+								echo number_format(+ $this->info['fee_ship']);} else { echo '0';}?></span> VNĐ
+							<input type="hidden" name="fee_ship" id="fee_ship_hide" value="0">
+						</div>
+						<?php if(empty($this->info['cod'])==false){?>	
+							<label class="control-label col-lg-1">Phí COD</label>
+							<div class="col-2">
+								<span style="color: red; font-size: 20px" id="total_show"><?php if( empty($this->id) == false ){ 
+									echo number_format(+ $this->info['fee_cod']);} else { echo '0';}?></span> VNĐ
+								<input type="hidden" name="fee_ship" id="fee_ship_hide" value="0">
+							</div>
+						<?php } ?>
+
+						<?php if(empty($this->info['promotion_price'])==false){?>	
+							<label class="control-label col-lg-1">Khuyến mãi</label>
+							<div class="col-2">
+								<span style="color: red; font-size: 20px" id="total_show"><?php if( empty($this->id) == false ){ 
+									echo number_format(- $this->info['promotion_price']);} else { echo '0';}?></span> VNĐ
+								<input type="hidden" name="promotion_price" id="promotion_price_hide" value="0">
+							</div>
+						<?php } ?>
+						
+						<label class="control-label col-lg-1">Thành tiền</label>
+						<div class="col-2">
 							<?php 
 								$total = 0;
-                                                                
-                                                                if( empty($this->info['total']) == false ){
-                                                                    $total = $this->info['total'];
-                                                                }
-                                                                $not_discount = $total;
+                                    if( empty($this->info['total']) == false ){
+                                        $total = $this->info['total'];
+                                    }
+                                         $not_discount = $total;
 								if( empty($this->info['admin_discount']) == false ){
 									$total = $total - $this->info['admin_discount'];
 								}
 								
 							?>
-							<span style="color: green; font-size: 30px" id="total_show_down"><?php if( empty($this->id) == false ){ echo number_format($total);} else { echo '0';}?></span> VNĐ
+							<span style="color: green; font-size: 20px" id="total_show_down"><?php if( empty($this->id) == false ){ echo number_format($total);} else { echo '0';}?></span> VNĐ
 							<input type="hidden" name="total_down" id="total_hide_down" value="<?php echo $not_discount?>">
 						</div>
 					</div>
@@ -243,7 +368,7 @@
 					                    <th>Tên sản phẩm</th>
 					                    <th width="10%">Màu</th>
 					                    <th>Giá</th>
-					                    <th>Giá Sell</th>
+					                    <!-- <th>Giá Sell</th> -->
 					                    <th>Số lượng</th>
 					                    <?php if( empty($this->id) == true ){ ?>
 					                    	<th>Hành động</th>
@@ -283,25 +408,29 @@
 					            				</td>
 												<td>
 					            					<?php
-					            					if( empty($value['p_variant_price']) == false ){
-														echo number_format($value['p_variant_price']);
+					            					if( empty($value['p_variant_price_sales']) == false ){
+														echo number_format($value['p_variant_price_sales']);
 					            					} elseif(!empty($value['combo_id']) && $value['combo_id'] != 0){
 														if(!empty($this->listCombo)){
 															$total_price =0;
 															foreach($this->listCombo[$value['combo_id']] as $comboDetail){
 																$price = $comboDetail['price'];
                                     							$total_price += $price; 
-															}
-															echo number_format($total_price);
 														}
+															// echo number_format($total_price);
+														echo number_format($value['p_sale']);
+															
+														}
+														// echo number_format($value['price']);
 													}else{
-														echo number_format($value['p_price']);
+														// echo number_format($value['p_price']);
+														echo number_format($value['p_sale']);
 													}
 					            					
 					            					?>
 					            				</td>
-					            				
-					            				<td><?php echo number_format($value['price'])?></td>
+					            				<!-- <td><?php echo number_format($value['price'])?></td> -->
+					            				<!-- <td><?php echo number_format($value['p_sale'])?></td> -->
 					            				<td><?php echo $value['number']?></td>
 					            			</tr>
 											<?php 
@@ -314,7 +443,7 @@
 																<td style="border-top:none !important"><img width="40px" height="40px" src="/upload/images/<?php echo $comboDetail['image']?>" /></td>
 																<td style="border-top:none !important"><?php echo $comboDetail['title'] ?></td>
 																<td style="border-top:none !important"><?php echo 'Mặc Định';?></td>
-																<td style="border-top:none !important"><?php echo number_format($comboDetail['price'])?></td>
+																<!-- <td style="border-top:none !important"><?php echo number_format($comboDetail['price'])?></td> -->
 																<td style="border-top:none !important"><?php echo number_format($comboDetail['price_sales'])?></td>
 																<td style="border-top:none !important"><?php echo $value['number']?></td>
 															</tr>

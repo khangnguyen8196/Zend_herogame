@@ -37,13 +37,24 @@ pages = $.extend(pages, {
                 e.preventDefault();
                 pages.donhang.checkOrder();
             });
+
             $("#btnPromotion").click(function(){
                 var value = $("#promotionCode").val();
-                me.checkAndGetPromotion(value);
+                var province = $('.province').val().trim();
+                var district = $('.district').val().trim();
+                var wards = $('.wards').val().trim();
+                var fee_cod = $('input[name="cod"]:checked').val().trim();
+                var totalPrice = $('#totalPrice').text();
+                me.checkAndGetPromotion(value, province, district, wards, fee_cod, totalPrice);
             });
             $("#btnDisCount").click(function(){
                 var value = $("#discount").val();
-                me.checkAndGetDiscount(value);
+                // var value = $("#promotionCode").val();
+                var province = $('.province').val().trim();
+                var district = $('.district').val().trim();
+                var wards = $('.wards').val().trim();
+                var fee_cod = $('input[name="cod"]:checked').val().trim();
+                me.checkAndGetDiscount(value, province, district, wards, fee_cod);
             });
             $("#discount").maskNumber({integer: true});
             $(".cancel-order").click(function(){
@@ -75,6 +86,172 @@ pages = $.extend(pages, {
                     e.preventDefault();
                 }
             });
+
+            $(document).on('change', '.choose', function() {
+                var action = $(this).attr('id');
+                var ma_id = $(this).val();
+                var result = '';
+                if(action =='province'){
+                    result ='district';
+                }else if(action =='district'){
+                    result = 'wards';
+                }
+                $.ajax({
+                    url: '/site/don-hang/select',
+                    type: 'POST',
+                    data: {action: action,ma_id:ma_id},
+                    success: function (data) {
+                        $('#'+result).html(data);
+                    },
+                    error: function (data) {
+                    }
+                });
+            });
+            
+            $(document).on('change','.province', function(){
+                if($('#province').val() != ''){
+                    $('select#province').css('color','black')
+                }else{
+                    $('select#province').css('color','#9090909c')
+                }
+            });
+
+            $(document).on('change','.district', function(){
+                if($('#district').val() != ''){
+                    $('select#district').css('color','black')
+                }else{
+                    $('select#district').css('color','#9090909c')
+                }
+            });
+
+            $(document).on('change','.wards', function(){
+                if($('#wards').val() != ''){
+                    $('select#wards').css('color','black')
+                }else{
+                    $('select#wards').css('color','#9090909c')
+                }
+                var province = $('.province').val().trim();
+                var district = $('.district').val().trim();
+                var wards = $('.wards').val().trim();
+                var token = $.cookie("token");
+                var timestamp = new Date().getTime();
+                var totalPrice = parseFloat($('#currTotalPrice').val());
+                var khuyenmai = $('#priceDiscount').text();
+                var khuyenmai = khuyenmai.replace(/,/g, '');
+                var feeCod = $('#fee-cod').text();
+                var feeCod = (feeCod.replace(/,/g, ''));
+                if(feeCod != 0){
+                    feeCod = parseFloat(feeCod);
+                }else{
+                    feeCod = 0;
+                }
+                $.ajax({
+                    url: '/site/don-hang/fee-ship?timestamp=' + timestamp,
+                    type: 'POST',
+                    data: {province: province, district:district,wards:wards, token:token },
+                    success: function (data) {
+                        var total = 0;
+                        if(data){
+                            if(data.fee_ship >0){
+                                $('#fee-ship').html(numberFormat(data.fee_ship)+ '&#8363');
+                            }else {
+                                $('#fee-ship').html('Free-ship');
+                            }
+                            var fee = parseFloat(data.fee_ship);
+                            $('#fee-ship').removeClass('hidden');
+                            if(khuyenmai == 0 || khuyenmai ==''){
+                                total = numberFormat(fee +totalPrice+feeCod)+ '&#8363';
+                                $('#totalPrice').html(total);
+                                $('#fee-ship-last').val(fee);
+                            }else {
+                                total = numberFormat(totalPrice - khuyenmai + fee +feeCod)+'&#8363';
+                                $('#totalPrice').html(total);
+                                $('#fee-ship-last').val(fee);
+                            }
+
+                            $("#fee_shipping_order").val(fee);
+                        }
+                    },
+                    error: function (data) {
+                    }
+                });
+                
+            })
+
+            $(document).on('click','#has-cod',function(){
+                var fee_cod = $('#has-cod').val();
+                var timestamp = new Date().getTime();
+                if(fee_cod){
+                    $.ajax({
+                        url: '/site/don-hang/fee-cod?timestamp=' + timestamp,
+                        type: 'POST',
+                        data: {fee_cod: fee_cod},
+                        success: function (data) {
+                            var khuyenmai = $('#priceDiscount').text();
+                            var khuyenmai = khuyenmai.replace(/,/g, '');
+                            var total = 0;
+                            if(data){
+                                var feeShip=  parseFloat($('#fee-ship-last').val());
+                                var totalPrice = parseFloat($('#currTotalPrice').val());
+                                var feeCod = parseFloat(data.fee_cod);
+                                $('#fee-cod-last').val(feeCod)
+                                $('.fee-cod').css('display','block');
+                                $('#fee-cod').html(numberFormat(feeCod)+ '&#8363');
+                                if(khuyenmai == 0 || khuyenmai ==''){
+                                        total = numberFormat(totalPrice+feeCod+feeShip)+ '&#8363';
+                                        $('#totalPrice').html(total);
+                                }
+                                else{
+                                    total = numberFormat(totalPrice+feeCod+feeShip -khuyenmai)+ '&#8363';
+                                    $('#totalPrice').html(total);
+                                }
+                                $('#fee_cod_order').val(feeCod)
+                            }
+                        },
+                        error: function (data) {
+                        }
+                    });
+                }else{
+                    $('#fee-cod').html('')
+
+                }
+                
+            })
+
+            $(document).on('click','#no-cod',function(){
+                $('#fee-cod').html('');
+                $('.fee-cod').css('display','none');
+                var fee_code = $('#fee-cod-last').val() ;
+                var totalPresent = $('#totalPrice').text();
+                var totalPresent = totalPresent.replace(/[,đ₫]/g, '');
+                var total = numberFormat(totalPresent - fee_code)+ '&#8363';
+                $('#totalPrice').html(total);
+                $('#fee_cod_order').val(0);
+            })
+
+            function numberFormat (number, decimals, decPoint, thousandsSep) {
+                number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
+                var n = !isFinite(+number) ? 0 : +number;
+                var prec = !isFinite(+decimals) ? 0 : Math.abs(decimals);
+                var sep = (typeof thousandsSep === 'undefined') ? ',' : thousandsSep;
+                var dec = (typeof decPoint === 'undefined') ? '.' : decPoint;
+                var s = '';
+            
+                var toFixedFix = function (n, prec) {
+                    var k = Math.pow(10, prec);
+                    return '' + (Math.round(n * k) / k)
+                };
+            
+                s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+                if (s[0].length > 3) {
+                    s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+                }
+                if ((s[1] || '').length < prec) {
+                    s[1] = s[1] || '';
+                    s[1] += new Array(prec - s[1].length + 1).join('0');
+                }
+                return s.join(dec);
+            }
             
         },
         rejectOrder: function(code){
@@ -105,7 +282,7 @@ pages = $.extend(pages, {
                     }
                 });
         },
-        checkAndGetDiscount: function( percent ){
+        checkAndGetDiscount: function( percent, province, district, wards, fee_cod ){
             var me = this;
             if( percent != undefined && percent != ""){
                 var token = $.cookie("token");
@@ -117,7 +294,7 @@ pages = $.extend(pages, {
                 $.ajax({
                     url: "/don-hang/check-discount",
                     type: 'POST',
-                    data: { percent: percent, t: token},
+                    data: { percent: percent, t: token, province:province, district:district,wards:wards, fee_cod:fee_cod},
                     beforeSend: function () {
                         $("#btnDisCount").hide();
                         $(".loading_discount").show();
@@ -144,7 +321,7 @@ pages = $.extend(pages, {
                 });
             }
         },
-        checkAndGetPromotion: function( code ){
+        checkAndGetPromotion: function( code, province, district, wards,fee_cod, totalPrice ){
             var me = this;
             if( code != undefined && code != ""){
                 var token = $.cookie("token");
@@ -156,7 +333,7 @@ pages = $.extend(pages, {
                 $.ajax({
                     url: "/don-hang/check-promotion",
                     type: 'POST',
-                    data: {code: code, t: token},
+                    data: {code: code, t: token , province:province, district:district,wards:wards, fee_cod:fee_cod},
                     beforeSend: function () {
                         $("#btnPromotion").hide();
                         $(".loading_promotion").show();
@@ -172,7 +349,9 @@ pages = $.extend(pages, {
                             $("#checkPromotion").val(true);
                             $(".error-promotion").removeClass('error').addClass('text-success');
                             $("#totalPrice").text(data.Data.aTotalText);
-                        } 
+                        }else{
+                            $("#totalPrice").html(totalPrice);
+                        }
                     },
                     error: function () {
                         $(".error-promotion").text('Lỗi Xảy Ra Vui Lòng Thực Hiện Lại');
@@ -337,6 +516,6 @@ pages = $.extend(pages, {
             //     	$(".loader").removeClass('is-active');
             //     }
             // });
-        }
+        },  
     }
 });

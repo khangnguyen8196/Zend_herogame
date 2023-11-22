@@ -55,3 +55,44 @@
    </a>
    <?php }?>
 </div>
+<style>
+   ul.slider .product-item .detail .price .price-a {
+      font-weight: bold;
+      color: #dc2535;
+   }
+
+   ul.slider .product-item .detail .price .price-b {
+      font-size: 1.2rem;
+      margin-left: 0.2rem;
+      text-decoration: line-through;
+   }
+
+   @media screen and (max-width: 480px) {
+      ul.slider .product-item .detail .price .price-a {
+         font-size: 1rem;
+      }
+
+      ul.slider .product-item .detail .price .price-b {
+         font-size: 0.8rem;
+      }
+   }
+
+   @media screen and (min-width: 481px) and (max-width: 768px) {
+      ul.slider .product-item .detail .price .price-a{
+         font-size: 1.1rem;
+      }
+      ul.slider .product-item .detail .price .price-b {
+         font-size: 1rem;
+      }
+   }
+
+   @media screen and (min-width: 769px) {
+      ul.slider .product-item .detail .price .price-a{
+         font-size: 1.3rem;
+      }
+      ul.slider .product-item .detail .price .price-b {
+         font-size: 1.2rem;
+      }
+   }
+
+</style>

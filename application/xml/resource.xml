@@ -146,4 +146,12 @@
             <delete permission_name="Delete" module_name="site" action_name="delete" />
         </permissions>
     </combo-product>
+    <shipping-rates>
+       <permissions>
+            <view permission_name="View" module_name="site" action_name="view" />
+            <edit permission_name="Edit" module_name="site" action_name="edit"/>
+            <add  permission_name="Add" module_name="site" action_name="add"/>
+            <delete permission_name="Delete" module_name="site" action_name="delete" />
+        </permissions>
+    </shipping-rates>
 </root> 
