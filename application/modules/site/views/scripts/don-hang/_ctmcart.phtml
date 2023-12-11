@@ -36,22 +36,23 @@
         </div>
     </div>
     <div class="code-form">
-        <span style="color:red">Nếu đơn hàng có máy game (* bắt buộc chọn Có máy game).</span>     
+        <span class="message-game hiddens" style="color:red">Nếu đơn hàng có máy game (* bắt buộc chọn Có máy game).</span>     
         <div class="check-cod" style="border-bottom: 1px solid #cbcbcb;margin-bottom: 1rem;">
             <div class="no-cod" role="tab">
                 <label class="custom-control custom-radio" data-toggle="collapse">
-                    <input checked type="radio" name="cod" value="1" id="no-cod" style="margin-right: 1rem" />
-                    <span class="custom-control-description">Không máy game</span>
+                    <input type="radio" name="cod" value="1" id="no-cod" style="margin-right: 1rem" />
+                    <span class="custom-control-desc">Không máy game</span>
                 </label>
             </div>
-            <div class="has-cod" role="tab">
+            <div class="has-cod hiddens" role="tab">
                 <label class="custom-control custom-radio" data-toggle="collapse" >
-                    <input  type="radio" name="cod" id="has-cod" value ="2" style="margin-right: 1rem" />
-                    <span class="custom-control-description">Có máy game</span>
-                    <span style="color:red" class="custom-control-description">&nbsp;(*)</span>
+                    <input type="radio" name="cod" id="has-cod" value ="2" style="margin-right: 1rem" />
+                    <span class="custom-control-description-check">Có máy game</span>
+                    <span style="color:red" class="custom-control-descrip">&nbsp;(*)</span>
                 </label>
             </div>
         </div>
+        <input type="hidden" id ="checked-value" value = "<?php echo $this->checkedValue ?>">
         <div class="form-group">
             <label>Mã giảm giá</label>
             <input name="promotionCode" id="promotionCode" class="form-control" type="text" />
@@ -72,7 +73,6 @@
             </div>
         <?php } ?>
     </div>
-
     <div class="subtotal-list">
         <div class="line">
             <label>Tạm tính:</label>
@@ -83,7 +83,6 @@
             <span class="price text-success">- <?php echo '<span id="priceDiscount">'.number_format(0).'</span>' . '&#8363' ?></span>
         </div>
     </div>
-
     <div class="fee-shipping">
     <?php
         $sessionHelper = new My_Controller_Action_Helper_Session();
@@ -102,7 +101,7 @@
         </div>
     </div>
 
-    <div class="fee-cod" style="display:none">
+    <div class="fee-cod" style="display:block">
         <div class="line">
             <label>Phí COD:</label>
             <span class="price" id="fee-cod"></span>
@@ -125,10 +124,18 @@
         <span>Quay lại giỏ hàng</span>
     </a>
 </div>
+<div id="popup">
+    <h2 style = "color:black">Thông báo</h2>
+    <p style = "color:red">Nếu đơn hàng có máy game (* bắt buộc chọn Có máy game).</p>
+    <button id="closePopup">Đóng</button>
+</div>
 
 <style>
     .hidden {
             visibility: hidden;
+    }
+    .hiddens {
+        display: none;
     }
     .fee-shipping,.fee-cod  {
         margin-bottom: 1rem;
@@ -141,4 +148,31 @@
         font-size: 1.25rem;
         color: #dc2535;
     }
+
+    #popup h2 {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+    }
+
+    #popup {
+        display: none;
+        position: fixed;
+        top: 20%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 20px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        z-index: 9999;
+    }
+    @media (max-width: 480px) {
+        #popup {
+            top:100px;
+            width: 100%;
+            left: 0;
+            transform: translate(0, 0);
+        }
+    }
+
 </style>

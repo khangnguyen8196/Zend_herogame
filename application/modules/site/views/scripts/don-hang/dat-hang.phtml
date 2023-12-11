@@ -13,7 +13,7 @@
                 'title' => 'Đơn hàng ('.count($this->cart_list).' sản phẩm)'
             )) ?>
             <?php echo $this->partial('/don-hang/_ctmcart.phtml', array('cart_list'=> $this->cart_list, 
-                'total' => $this->total_money, 'customer' => $this->user)) ?>
+                'total' => $this->total_money, 'customer' => $this->user, 'checkedValue'=> $this->checkedValue)) ?>
         </div>
         <div class="col-md-4 col-12 both-gutter">
             <?php echo $this->partial('/shared/_data_header.phtml', array(

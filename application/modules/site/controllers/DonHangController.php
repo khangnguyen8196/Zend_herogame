@@ -108,10 +108,17 @@ class Site_DonHangController extends FrontEndAction {
         
         $cart_list_full_info = self::getProductsFullInfo($cart_list, $totalMoney);
         $listProvince =  $mdlProvince->getAllProvince();
+        $mdlSetting = new Setting;
+        $checked =$mdlSetting->fetchSettingByKey('checked');
+        if($checked){
+            $checkedValue = $checked['value'];
+        }else{
+            $checkedValue = '';
+        }
         $this->view->listProvince = $listProvince;
         $this->view->cart_list = $cart_list_full_info;
         $this->view->total_money = $totalMoney;
-        // echo '<pre>';print_r($cart_list_full_info);exit;
+        $this->view->checkedValue = $checkedValue;
     }
     
     public function checkPromotionAction(){
@@ -123,29 +130,34 @@ class Site_DonHangController extends FrontEndAction {
             $district = $this->post_data['district'];
             $wards = $this->post_data['wards'];
             $fee_cod_pro = $this->post_data['fee_cod'];
-            if($province){
-                $mdlShippingRates = new ShippingRates;
-                $fee_ships = $mdlShippingRates->getFeeShip($province, $district,$wards);
-                if($fee_ships){
-                    $fee_ship =  $fee_ships['fee_ship'];
-                }else{
-                    $mdlSetting = new Setting;
-                    $fee_ship_default =$mdlSetting->fetchSettingByKey('fee_ship_default');
-                    if($fee_ship_default){
-                        $fee_ship = $fee_ship_default['value'];
-                    }else{
-                        $fee_ship = 40000;
-                    }
-                }
-            }else {
+            if ($fee_cod_pro == 2 && ($province == 1 || $province == 79)) {
                 $fee_ship = 0;
-            }
-            if($fee_cod_pro == 2){
-                $mdlSetting = new Setting;
-                $fee_cods =$mdlSetting->fetchSettingByKey('fee_cod');
-                $fee_cod = $fee_cods['value'];
-            }else{
                 $fee_cod = 0;
+            }else{
+                if($province){
+                    $mdlShippingRates = new ShippingRates;
+                    $fee_ships = $mdlShippingRates->getFeeShip($province, $district,$wards);
+                    if($fee_ships){
+                        $fee_ship =  $fee_ships['fee_ship'];
+                    }else{
+                        $mdlSetting = new Setting;
+                        $fee_ship_default =$mdlSetting->fetchSettingByKey('fee_ship_default');
+                        if($fee_ship_default){
+                            $fee_ship = $fee_ship_default['value'];
+                        }else{
+                            $fee_ship = 40000;
+                        }
+                    }
+                }else {
+                    $fee_ship = 0;
+                }
+                if($fee_cod_pro == 2){
+                    $mdlSetting = new Setting;
+                    $fee_cods =$mdlSetting->fetchSettingByKey('fee_cod');
+                    $fee_cod = $fee_cods['value'];
+                }else{
+                    $fee_cod = 0;
+                }
             }
             $t = $this->post_data["t"];
             $cart_list = UtilSession::get($t . "_CART_LIST");
@@ -268,29 +280,34 @@ class Site_DonHangController extends FrontEndAction {
             $district = $this->post_data['district'];
             $wards = $this->post_data['wards'];
             $fee_cod_dis = $this->post_data['fee_cod'];
-            if($province){
-                $mdlShippingRates = new ShippingRates;
-                $fee_ships = $mdlShippingRates->getFeeShip($province, $district,$wards);
-                if($fee_ships){
-                    $fee_ship =  $fee_ships['fee_ship'];
-                }else{
-                    $mdlSetting = new Setting;
-                    $fee_ship_default =$mdlSetting->fetchSettingByKey('fee_ship_default');
-                    if($fee_ship_default){
-                        $fee_ship = $fee_ship_default['value'];
-                    }else{
-                        $fee_ship = 40000;
-                    }
-                }
-            }else {
+            if ($fee_cod_dis == 2 && ($province == 1 || $province == 79)) {
                 $fee_ship = 0;
-            }
-            if($fee_cod_dis == 2){
-                $mdlSetting = new Setting;
-                $fee_cods =$mdlSetting->fetchSettingByKey('fee_cod');
-                $fee_cod = $fee_cods['value'];
-            }else{
                 $fee_cod = 0;
+            }else{
+                if($province){
+                    $mdlShippingRates = new ShippingRates;
+                    $fee_ships = $mdlShippingRates->getFeeShip($province, $district,$wards);
+                    if($fee_ships){
+                        $fee_ship =  $fee_ships['fee_ship'];
+                    }else{
+                        $mdlSetting = new Setting;
+                        $fee_ship_default =$mdlSetting->fetchSettingByKey('fee_ship_default');
+                        if($fee_ship_default){
+                            $fee_ship = $fee_ship_default['value'];
+                        }else{
+                            $fee_ship = 40000;
+                        }
+                    }
+                }else {
+                    $fee_ship = 0;
+                }
+                if($fee_cod_dis == 2){
+                    $mdlSetting = new Setting;
+                    $fee_cods =$mdlSetting->fetchSettingByKey('fee_cod');
+                    $fee_cod = $fee_cods['value'];
+                }else{
+                    $fee_cod = 0;
+                }
             }
             $cart_list = UtilSession::get($t . "_CART_LIST");
             if( empty($cart_list) == false ){
@@ -1210,41 +1227,73 @@ class Site_DonHangController extends FrontEndAction {
     public function feeShipAction(){
         $this->isAjax();
         $this->_helper->layout->disableLayout();
-        $this->_helper->viewRenderer->setNoRender(); 
-    
+        $this->_helper->viewRenderer->setNoRender();
+
         $request = $this->getRequest();
-    
-        if ($request->isPost()) {
-            $data = $request->getPost();
-            $province = $data['province'];
-            $district = $data['district'];
-            $wards = $data['wards'];
-            $result = '';
-            if ($data['province']) {
-                $mdlShippingRates = new ShippingRates;
-                $fee_ships = $mdlShippingRates->getFeeShip($province, $district,$wards);
-                if (!empty($fee_ships)) {
-                    $sessionHelper = new My_Controller_Action_Helper_Session();
-                    $sessionHelper->unsetSession('fee_ship');
-                    $sessionHelper->setSession('fee_ship', $fee_ships['fee_ship']);
-                    $result .= $fee_ships['fee_ship'] . ' ';
-                } else {
-                    $mdlSetting = new Setting;
-                    $fee_ship_default =$mdlSetting->fetchSettingByKey('fee_ship_default');
-                    if($fee_ship_default){
-                        $result = $fee_ship_default['value'];
-                    }else{
-                        $result = 40000;
-                    }
-                    $sessionHelper = new My_Controller_Action_Helper_Session();
-                    $sessionHelper->unsetSession('fee_ship');
-                    $sessionHelper->setSession('fee_ship', $result);
-                }
-            }
-            $this ->getResponse()
-                  ->setHeader('Content-Type', 'application/json') 
-                  ->setBody(json_encode(['fee_ship' => $result]));
+
+        if (!$request->isPost()) {
+            return;
         }
+
+        $data = $request->getPost();
+        $province = $data['province'];
+        $district = $data['district'];
+        $wards = $data['wards'];
+        $fee_cod = $data['phi_cod'];
+        $result = [];
+
+        if (!$province) {
+            return;
+        }
+
+        $mdlShippingRates = new ShippingRates;
+        $fee_ships = $mdlShippingRates->getFeeShip($province, $district, $wards);
+
+        if ($fee_cod && ($province == 1 || $province == 79)) {
+            $result = [0];
+        } elseif ($fee_cod) {
+            if (!empty($fee_ships) && isset($fee_ships['fee_ship'])) {
+                $sessionHelper = new My_Controller_Action_Helper_Session();
+                $sessionHelper->unsetSession('fee_ship');
+                $sessionHelper->setSession('fee_ship', $fee_ships['fee_ship']);
+
+                $mdlSetting = new Setting;
+                $fee_cod = $mdlSetting->fetchSettingByKey('fee_cod');
+                $result = [$fee_ships['fee_ship'], $fee_cod['value']];
+            } else {
+                $mdlSetting = new Setting;
+                $fee_ship_default = $mdlSetting->fetchSettingByKey('fee_ship_default');
+                $fee_cod = $mdlSetting->fetchSettingByKey('fee_cod');
+
+                $fee_ship_default = ($fee_ship_default && isset($fee_ship_default['value'])) ? $fee_ship_default['value'] : 40000;
+
+                $result = [$fee_ship_default, $fee_cod['value']];
+                $sessionHelper = new My_Controller_Action_Helper_Session();
+                $sessionHelper->unsetSession('fee_ship');
+                $sessionHelper->setSession('fee_ship', $fee_ship_default);
+            }
+        } else {
+            if (!empty($fee_ships) && isset($fee_ships['fee_ship'])) {
+                $sessionHelper = new My_Controller_Action_Helper_Session();
+                $sessionHelper->unsetSession('fee_ship');
+                $sessionHelper->setSession('fee_ship', $fee_ships['fee_ship']);
+                $mdlSetting = new Setting;
+                $result = [$fee_ships['fee_ship']];
+            } else {
+                $mdlSetting = new Setting;
+                $fee_ship_default = $mdlSetting->fetchSettingByKey('fee_ship_default');
+                $fee_ship_default = ($fee_ship_default && isset($fee_ship_default['value'])) ? $fee_ship_default['value'] : 40000;
+
+                $result = [$fee_ship_default];
+                $sessionHelper = new My_Controller_Action_Helper_Session();
+                $sessionHelper->unsetSession('fee_ship');
+                $sessionHelper->setSession('fee_ship', $fee_ship_default);
+            }
+        }
+
+        $this->getResponse()
+            ->setHeader('Content-Type', 'application/json')
+            ->setBody(json_encode(['data' => $result]));
     }
 
     public function feeCodAction(){
@@ -1257,15 +1306,20 @@ class Site_DonHangController extends FrontEndAction {
         if ($request->isPost()) {
             $data = $request->getPost();
             $fee_cod = $data['fee_cod'];
-            $result = '';
-            if ($fee_cod) {
+            $province = $data['province'];
+            $result = [];
+            if (($fee_cod && $province == 1) || ($fee_cod && $province == 79)) {
                 $mdlSetting = new Setting;
                 $fee_cod =$mdlSetting->fetchSettingByKey('fee_cod');
-                $result = $fee_cod['value'];
+                $result = [0];
+            }else{
+                $mdlSetting = new Setting;
+                $fee_cod =$mdlSetting->fetchSettingByKey('fee_cod');
+                $result = [$fee_cod['value']];
             }
             $this ->getResponse()
                   ->setHeader('Content-Type', 'application/json') 
-                  ->setBody(json_encode(['fee_cod' => $result]));
+                  ->setBody(json_encode(['data' => $result]));
         }
     }
 }

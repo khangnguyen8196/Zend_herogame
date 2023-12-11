@@ -86,7 +86,7 @@
 									placeholder="" class="form-control"
 									value="<?php echo $this->info['score'] ?>">
 							</div>
-							<label class="control-label col-lg-1">Điểm Trừ</label>
+							<label class="control-label col-lg-1">Giảm giá</label>
 							<div class="col-lg-2">
 								<input type="text" name="discount" id="discount" disabled="disabled"
 									placeholder="" class="form-control"
@@ -305,6 +305,13 @@
 								<span style="color: red; font-size: 20px" id="total_show"><?php if( empty($this->id) == false ){ 
 									echo number_format(- $this->info['promotion_price']);} else { echo '0';}?></span> VNĐ
 								<input type="hidden" name="promotion_price" id="promotion_price_hide" value="0">
+							</div>
+						<?php } else {?>
+							<label class="control-label col-lg-1">Khuyến mãi</label>
+							<div class="col-2">
+								<span style="color: red; font-size: 20px" id="total_show"><?php if( empty($this->id) == false ){ 
+									echo number_format(- $this->info['discount']);} else { echo '0';}?></span> VNĐ
+								<input type="hidden" name="discount" id="discount" value="0">
 							</div>
 						<?php } ?>
 						

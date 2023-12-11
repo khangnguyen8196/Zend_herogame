@@ -232,10 +232,19 @@
                             Tạm tính
                             <strong><?php echo number_format($totalMoney) . '&#8363' ?></strong>
                         </li>
-                        <li>
-                            Khuyến mãi
-                            <strong> - <?php echo number_format($this->order['promotion_price']) . '&#8363' ?></strong>
-                        </li>
+                        <?php
+                        if($this->order['promotion_price']){?>
+                            <li>
+                                Giảm giá
+                                <strong> - <?php echo number_format($this->order['promotion_price']) . '&#8363' ?></strong>
+                            </li>
+                        <?php }else{?>
+                            <li>
+                                Giảm giá
+                                <strong> - <?php echo number_format($this->order['discount']) . '&#8363' ?></strong>
+                            </li>
+                        <?php }?>
+                       
                         <li>
                             Phí vận chuyển
                             <strong> + <?php echo number_format($this->order['fee_ship']) . '&#8363' ?></strong>
