@@ -454,13 +454,15 @@ pages = $.extend(pages, {
 				},
                                 {
 				    "render": function (data, type, row) {
-				    	var d = row['created_date'];
-                                        d = new Date(d);
-                                        var date = d.getDate();
-                                        if( date < 10) {  date = '0'+date;}
-                                        var month = d.getMonth()+1;
-                                        if( month < 10) {  month = '0'+month;}
-				    	return date+'/'+month+'-'+d.getFullYear();
+						console.log(row.created_date);
+				    	// var d = row['created_date'];
+                        //                 d = new Date(d);
+                        //                 var date = d.getDate();
+                        //                 if( date < 10) {  date = '0'+date;}
+                        //                 var month = d.getMonth()+1;
+                        //                 if( month < 10) {  month = '0'+month;}
+				    	// return date+'/'+month+'-'+d.getFullYear();
+						return row.created_date;
 				    },
 				    "className": "text-center",
 				    "targets": 7,

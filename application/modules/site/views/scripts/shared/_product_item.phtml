@@ -28,12 +28,12 @@
       <div class="price">
          <span class="price-a">
          <?php
-            if ($this->priceA > 0) {
+            $now = date('Y-m-d H:i:s');
+            if($now < $this->count_down and $this->enable_promo ==1 and $this->priceC >0){
+               echo $this->priceC;
+            }elseif ($this->priceA > 0) {
             	echo $this->priceA;
             }
-            // else {
-            // 	echo 'Liên Hệ';
-            // } 
          ?>
          </span>
          <?php if (isset ( $this->priceB ) && $this->priceB != $this->priceA) { ?>
@@ -55,44 +55,4 @@
    </a>
    <?php }?>
 </div>
-<style>
-   ul.slider .product-item .detail .price .price-a {
-      font-weight: bold;
-      color: #dc2535;
-   }
-
-   ul.slider .product-item .detail .price .price-b {
-      font-size: 1.2rem;
-      margin-left: 0.2rem;
-      text-decoration: line-through;
-   }
-
-   @media screen and (max-width: 480px) {
-      ul.slider .product-item .detail .price .price-a {
-         font-size: 1rem;
-      }
-
-      ul.slider .product-item .detail .price .price-b {
-         font-size: 0.8rem;
-      }
-   }
-
-   @media screen and (min-width: 481px) and (max-width: 768px) {
-      ul.slider .product-item .detail .price .price-a{
-         font-size: 1.1rem;
-      }
-      ul.slider .product-item .detail .price .price-b {
-         font-size: 1rem;
-      }
-   }
-
-   @media screen and (min-width: 769px) {
-      ul.slider .product-item .detail .price .price-a{
-         font-size: 1.3rem;
-      }
-      ul.slider .product-item .detail .price .price-b {
-         font-size: 1.2rem;
-      }
-   }
-
 </style>

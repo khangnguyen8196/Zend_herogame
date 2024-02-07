@@ -2,21 +2,21 @@
     <span id="feeShipErrors" style="display: block;color: #dc2535;margin-left: 10px;padding-bottom: 10px"></span>
     <div id="firstAddress">
         <label class="form-group has-float-label">
-            <input name="cfa_email" class="form-control" type="email" placeholder="email@abc.com"
+            <input id ="cfa_email" name="cfa_email" class="form-control" type="email" placeholder="email@abc.com"
                 data-rule-required="true"
                 data-rule-email="true"
                 data-msg-required="Vui lòng nhập email"
                 data-msg-email="Vui lòng nhập email đúng định dạng" />
             <span>Email</span>
         </label>
-
+        <span id='errorEmail' style="margin-bottom: 10px;color: #dc2535;display: block;padding-top: 0.15rem;padding-left: 0.5rem;font-style: normal;"></span>
         <label class="form-group has-float-label">
-            <input name="cfa_name" class="form-control" type="text" placeholder="Nhập họ và tên"
+            <input id="cfa_name" name="cfa_name" class="form-control" type="text" placeholder="Nhập họ và tên"
                 data-rule-required="true"
                 data-msg-required="Vui lòng nhập họ tên" />
             <span>Họ và tên</span>
         </label>
-
+        <span id='errorFullName' style="margin-bottom: 10px;color: #dc2535;display: block;padding-top: 0.15rem;padding-left: 0.5rem;font-style: normal;"></span>
         <label class="form-group has-float-label">
             <input name="cfa_phone" id="cfa_phone" class="form-control" type="tel" maxlength="10" placeholder="Nhập số điện thoại"
             data-rule-required="true"
@@ -25,13 +25,14 @@
             data-msg-digits="Vui lòng nhập số điện thoại hợp lệ" />
             <span>Số điện thoại</span>
         </label>
-
+        <span id='errorPhone' style="margin-bottom: 10px;color: #dc2535;display: block;padding-top: 0.15rem;padding-left: 0.5rem;font-style: normal;"></span>
         <label class="form-group has-float-label">
-            <input name="cfa_address" class="form-control" type="text" placeholder="Nhập địa chỉ"
+            <input id ="cfa_address" name="cfa_address" class="form-control" type="text" placeholder="Nhập địa chỉ"
                 data-rule-required="true"
                 data-msg-required="Vui lòng nhập địa chỉ" />
             <span>Địa chỉ</span>
         </label>
+        <span id='errorAddress' style="margin-bottom: 10px;color: #dc2535;display: block;padding-top: 0.15rem;padding-left: 0.5rem;font-style: normal;"></span>
         <!-- <label class="form-group has-float-label">
             <input name="cfa_place" class="form-control" type="text" placeholder="Nhập Tỉnh Hoặc Thành Phố"
                 data-rule-required="true"
@@ -62,8 +63,8 @@
                     } 
                     ?>
                 </select>
-                <span id="provinceError" style="color: red;"></span>
             </label>
+            <span id="provinceError" style="margin-bottom: 10px;color: #dc2535;display: block;padding-top: 0.15rem;padding-left: 0.5rem;font-style: normal;"></span>
             <label class="form-group has-float-label">
                 <select style ="color: #9090909c" name="district" id="district" class="form-control choose district" data-rule-required="true"
                 data-msg-required="Vui lòng chọn quận huyện">
@@ -86,8 +87,8 @@
                     } 
                     ?>
                 </select>
-                <span id="districtError" style="color: red;"></span>
             </label>
+            <span id="districtError" style="margin-bottom: 10px;color: #dc2535;display: block;padding-top: 0.15rem;padding-left: 0.5rem;font-style: normal;"></span>
                     
             <label class="form-group has-float-label">
                 <select style ="color: #9090909c" name="wards" id="wards" class="form-control choose wards" data-rule-required="true"
@@ -111,8 +112,8 @@
                     } 
                     ?>
                 </select>
-                <span id="wardsError" style="color: red;"></span>
             </label>
+            <span id="wardsError" style="margin-bottom: 10px;color: #dc2535;display: block;padding-top: 0.15rem;padding-left: 0.5rem; font-style: normal;"></span>
             <!-- <button type="button" class="btn-primary btn-lg submit-fee-ship">Tính phí vận chuyển</button>
         </form> -->
     </div>

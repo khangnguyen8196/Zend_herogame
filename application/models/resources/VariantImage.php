@@ -37,6 +37,20 @@ class VariantImage extends Zend_Db_Table_Abstract {
     	$result = $result->toArray();
     	return $result;
     }
+    public function getAllImageIdsByVariantId($id) {
+        $db = $this->getAdapter();
+        $where = $db->quoteInto("product_variant_id = ?", $id, Zend_Db::INT_TYPE);
+        $result = $this->fetchAll($where, 'id')->toArray(); 
+    
+        if (empty($result)) {
+            return array();
+        }
+    
+        return array_column($result, 'id');
+    }
+    
+    
+    
     
     /**
      * Update/Add

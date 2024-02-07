@@ -22,7 +22,7 @@ return array(
 // GENERAL SETTINGS
 
     'disabled' => false,
-    'uploadURL' => "upload_resource",
+    'uploadURL' => "upload_new",
     'uploadDir' => "",
     'theme' => "default",
 
@@ -109,9 +109,9 @@ return array(
 // THE FOLLOWING SETTINGS CANNOT BE OVERRIDED WITH SESSION SETTINGS
 
     '_sessionVar' => "KCFINDER",
-    '_check4htaccess' => true,
+    '_check4htaccess' => false,
     '_normalizeFilenames' => false,
-    '_dropUploadMaxFilesize' => 10485760,
+    '_dropUploadMaxFilesize' => 1048576,
     //'_tinyMCEPath' => "/tiny_mce",
     //'_cssMinCmd' => "java -jar /path/to/yuicompressor.jar --type css {file}",
     //'_jsMinCmd' => "java -jar /path/to/yuicompressor.jar --type js {file}",

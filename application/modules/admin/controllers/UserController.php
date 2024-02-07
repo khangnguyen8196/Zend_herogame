@@ -40,12 +40,12 @@ class Admin_UserController extends FrontBaseAction {
 
         $columns = array(
             0 => "user_id",
-            1 => "user_name",
-            2 => "first_name",
-            3 => "last_name",
-            4 => "email",
-            5 => 'role_id',
-            6 => 'status',
+            1 => "phone_number",
+            2 => "fullname",
+            3 => "email",
+            4 => 'role_id',
+            5 => 'status',
+            6 => 'created_at'
         );
         //order function
         if (empty($this->post_data["order"]) == false) {

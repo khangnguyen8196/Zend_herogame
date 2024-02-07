@@ -69,6 +69,7 @@ class Site_PagesController extends FrontEndAction {
         );
     	$this->view->relative_post = $this->_getRelativePost( $info["relative_post"] );
 		$this->view->relative_product = $this->_getRelativeProduct($info["relative_product"]);
+		$this->view->order_with_product = $this->_getOrderWithProduct($info["order_with_product"]);
     	$this->_setMeta( $info );
     }
     
@@ -136,5 +137,22 @@ class Site_PagesController extends FrontEndAction {
             $relativeProduct = Commons::_buildProductResponse($relativeProduct);
         }
         return $relativeProduct;
+    }
+	private function _getOrderWithProduct($productIdList) {
+        $orderWithProduct = array();
+        if (empty($productIdList) == false) {
+            $productIdList = explode(",", $productIdList);
+            if (empty($productIdList) == false) {
+                foreach ($productIdList as $key => $value) {
+                    $productInfo = $this->_productMdl->fetchProductById($value);
+                    $orderWithProduct[$value] = $productInfo;
+                }
+            }
+        }
+        
+        if( empty($orderWithProduct) == false ){
+            $orderWithProduct = Commons::_buildProductResponse($orderWithProduct);
+        }
+        return $orderWithProduct;
     }
 }

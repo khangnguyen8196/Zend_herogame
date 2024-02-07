@@ -10,7 +10,8 @@
     <form id="checkoutForm" class="row" novalidate method="post" action="/don-hang/ket-qua">
         <div class="col-md-4 col-12 right-gutter">
             <?php echo $this->partial('/shared/_data_header.phtml', array(
-                'title' => 'Đơn hàng ('.count($this->cart_list).' sản phẩm)'
+                'title' => 'Đơn hàng ('.count($this->cart_list).' sản phẩm)',
+                'item_count'=>$this->item_count
             )) ?>
             <?php echo $this->partial('/don-hang/_ctmcart.phtml', array('cart_list'=> $this->cart_list, 
                 'total' => $this->total_money, 'customer' => $this->user, 'checkedValue'=> $this->checkedValue)) ?>

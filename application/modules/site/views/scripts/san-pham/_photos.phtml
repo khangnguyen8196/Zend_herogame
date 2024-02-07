@@ -44,42 +44,27 @@ if (empty($this->list_variant_img) == false) {
                 )
             ))
             ?>
+        <div>
+            <span id="click-left" class="btn-prev" >prev</span>
+        </div>
+        <div>
+            <span id="click-right" class="btn-next" >next</span>
+        </div>
             <a id="productGalleryButton" class="btn-gallery" href="#">
                 <i class="fa fa-television"></i>
                 <span>Click để xem gallery</span>
             </a>
         </div>
         <div id="productThumbPhotos" class="thumbs">
-            <?php if (empty($thumbs_color) == false) { ?>
-                <?php foreach ($thumbs_color as $key => $value) { ?>
-                    <?php $thumbClass = ($key == 0) ? 'active' : ''; ?>
-                    <?php $thumUrl = PHOTO_PATH . $value; ?>
-                    <a class="<?php //echo $thumbClass ?> image_thumbs color_<?php echo (empty($color_index) == true ) ? 1: $color_index[$key]?>" 
-                    data-image="<?php echo $thumUrl ?>"
-                    data-zoom-image="<?php echo $thumUrl ?>"
-                    <?php if(empty($color_index) == false && $color_index[$key] != $first_color_active){?> style="display: none;"<?php }?>
-                    >
-                        <?php
-                        echo $this->partial('/shared/_lazy_image.phtml', array(
-                            'ratio' => '1x1',
-                            'css' => 'photo',
-                            'url' => $thumUrl
-                        ));
-                        ?>
-                    </a>
-                <?php } ?>
-            <?php } ?>
-            <?php if (!empty($list_variant)) { ?>
-                <?php foreach ($list_variant as $variant) { ?>
-                    <?php $variant_images = $thumbs[$variant['id']]; ?>
-                    <?php if(empty($variant_images)==false){?>
-                        <?php foreach ($variant_images as $key => $value) { ?>
-                        <?php $thumbClass = ($variant['id'] == $list_variant[0]['id'] && $key == 0) ? 'active' : ''; ?>
-                        <?php $thumUrl = PHOTO_PATH . $value; ?> 
-                        <a class="<?php //echo $thumbClass ?> image_thumbs variant_<?php echo $variant['id'] ?>" 
+            <div class="no-variant thumbs">
+                <?php if (empty($thumbs_color) == false) { ?>
+                    <?php foreach ($thumbs_color as $key => $value) { ?>
+                        <?php $thumbClass = ($key == 0) ? 'active' : ''; ?>
+                        <?php $thumUrl = PHOTO_PATH . $value; ?>
+                        <a class="<?php //echo $thumbClass ?> image_thumbs color_<?php echo (empty($color_index) == true ) ? 1: $color_index[$key]?>" 
                         data-image="<?php echo $thumUrl ?>"
                         data-zoom-image="<?php echo $thumUrl ?>"
-                        <?php if($variant['id'] != $list_variant[0]['id']){?> style="display: none;"<?php }?>
+                        <?php if(empty($color_index) == false && $color_index[$key] != $first_color_active){?> style="display: none;"<?php }?>
                         >
                             <?php
                             echo $this->partial('/shared/_lazy_image.phtml', array(
@@ -90,7 +75,32 @@ if (empty($this->list_variant_img) == false) {
                             ?>
                         </a>
                     <?php } ?>
-                    <?php }?>
+                <?php } ?>
+            </div>
+            <?php if (!empty($list_variant)) { ?>
+                <?php foreach ($list_variant as $variant) { ?>
+                    <?php $variant_images = $thumbs[$variant['id']]; ?>
+                    <?php if(!empty($variant_images)) { ?>
+                        <div class="variant-wrapper variant-<?php echo $variant['id'] ?> thumbs">
+                            <?php foreach ($variant_images as $key => $value) { ?>
+                                <?php $thumbClass = ($variant['id'] == $list_variant[0]['id'] && $key == 0) ? 'active' : ''; ?>
+                                <?php $thumUrl = PHOTO_PATH . $value; ?> 
+                                <a data-variantid="<?php echo $variant['id'] ?>" class="<?php //echo $thumbClass ?> image_thumbs variant_<?php echo $variant['id'] ?>" 
+                                    data-image="<?php echo $thumUrl ?>"
+                                    data-zoom-image="<?php echo $thumUrl ?>"
+                                    <?php if($variant['id'] != $list_variant[0]['id']){?> style="display: none;"<?php }?>
+                                >
+                                    <?php
+                                    echo $this->partial('/shared/_lazy_image.phtml', array(
+                                        'ratio' => '1x1',
+                                        'css' => 'photo',
+                                        'url' => $thumUrl
+                                    ));
+                                    ?>
+                                </a>
+                            <?php } ?>
+                        </div>
+                    <?php } ?>
                 <?php } ?>
             <?php } ?>
         </div>
@@ -178,6 +188,38 @@ if (empty($this->list_variant_img) == false) {
 </div>
 
 <style>
+    .zoomWrapper{
+        position: relative;
+    }
+    #click-left {
+        position: absolute;
+        top: calc(50% - 32px);
+        outline: 0;
+        left: 16px;
+        width: 32px;
+        height: 32px;
+        text-indent: -9999px;
+        z-index: 9999;
+    }
+    .btn-prev{
+        left: 10px;
+        background: url(../img/bxslider/controls.png) no-repeat 0 -32px;
+    }
+    .btn-next{
+        right: 10px;
+        background: url(../img/bxslider/controls.png) no-repeat -43px -32px;
+    }
+    
+    #click-right {
+        position: absolute;
+        top: calc(50% - 32px);
+        right: 16px;
+        outline: 0;
+        width: 32px;
+        height: 32px;
+        text-indent: -9999px;
+        z-index: 9999;
+    }
     .custom-dots  {
         display: flex;
         margin: auto;

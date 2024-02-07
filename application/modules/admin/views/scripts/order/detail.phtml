@@ -415,8 +415,8 @@
 					            				</td>
 												<td>
 					            					<?php
-					            					if( empty($value['p_variant_price_sales']) == false ){
-														echo number_format($value['p_variant_price_sales']);
+					            					if( empty($value['product_variant']) == false ){
+														echo number_format($value['price']);
 					            					} elseif(!empty($value['combo_id']) && $value['combo_id'] != 0){
 														if(!empty($this->listCombo)){
 															$total_price =0;
@@ -431,7 +431,7 @@
 														// echo number_format($value['price']);
 													}else{
 														// echo number_format($value['p_price']);
-														echo number_format($value['p_sale']);
+														echo number_format($value['price']);
 													}
 					            					
 					            					?>

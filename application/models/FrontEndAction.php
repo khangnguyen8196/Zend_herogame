@@ -71,6 +71,10 @@ class FrontEndAction extends Zend_Controller_Action {
         $this->view->setting = $setting;
         $menu = $this->_getMenu();
         $this->view->menu = $menu;
+        $category = new Category();
+        $listAllProductCategory = $category->listAllCategoryHomePage(array('type' => CATEGORY_TYPE_PRODUCT));
+        $menuCategory = self::_getMenuCategory($listAllProductCategory);
+        $this->view->menuCategory = $menuCategory;
         //check permissions
         $this->view->hasViewPermission = UtilAuth::hasPrivilege($this->controller, ACTION_VIEW);
         $this->view->hasAddPermission = UtilAuth::hasPrivilege($this->controller, ACTION_ADD);
@@ -150,11 +154,36 @@ class FrontEndAction extends Zend_Controller_Action {
     						'caption' => @$value['description']
     				);
     			}
+                
     			$list['main'][] = $item;
-    		} else {
+    		}elseif($value['type'] == BANNER_MAIN_MOBILE ) {
+                $item = array();
+    			if( $value['is_video'] == 0 ){
+    				$item =  array(
+    						'width' => 800,
+    						'height' => 600,
+    						'outside' => 1, // Set if this banner link to another website or not. Value: True/False
+    						'url' => @$value['link'],
+    						'photo' => '/upload/images/full/' . $value['image'],
+    						'caption' => @$value['description']
+    				);
+    			} else {
+    				$item =  array(
+    						'width' => 800,
+    						'height' => 600,
+    						'video' => $value['video_url'],
+    						'caption' => @$value['description']
+    				);
+    			}
+    			$list['main_mobile'][] = $item;
+            } else {
     			$width = 168;
     			$height = 300;
     			if($value['type'] == BANNER_CHILD_HEADER ){
+    				$width = 1040;
+    				$height = 200;
+    			}
+                if($value['type'] == BANNER_CHILD_PRE_ORDER ){
     				$width = 1040;
     				$height = 200;
     			}
@@ -192,7 +221,15 @@ class FrontEndAction extends Zend_Controller_Action {
     	$banner = self::getBannerByType();
     	$list = array();
     	foreach ($banner as $key => $value) {
-    			if($value['type'] == BANNER_CHILD_LEFT_VERTICAL3 ){
+    			if($value['type'] == BANNER_CHILD_LEFT_VERTICAL1 ){
+    				$width = 600;
+    				$height =  1000;
+    			}
+                if($value['type'] == BANNER_CHILD_LEFT_VERTICAL2 ){
+    				$width = 600;
+    				$height =  1000;
+    			}
+                if($value['type'] == BANNER_CHILD_LEFT_VERTICAL3 ){
     				$width = 600;
     				$height =  1000;
     			}
@@ -582,8 +619,8 @@ class FrontEndAction extends Zend_Controller_Action {
             }
             if(!empty($cart_list['products'])) {
                 foreach ($cart_list['products'] as $p_id => $value) {
+                    $now = date('Y-m-d H:i:s');
                     $p_full_info = $productMdl->getProductInfoById($p_id);
-                    
                     if (empty($p_full_info)) {
                         continue;
                     }
@@ -592,23 +629,49 @@ class FrontEndAction extends Zend_Controller_Action {
                         foreach ($value['variant'] as $i=>$var) {
                             foreach ($variant_list as $variant) {
                                 if ($variant['id'] == $i) {
-                                    $p_full_info["qty"] = $var['qty'];
-                                    $p_full_info["variant_price_sales"] = $variant["variant_price_sales"];
-                                    $p_full_info["variant_name"] = $variant['variant_name'];
-                                    $p_full_info["variant_id"] = $variant['id'];
-                                    $p_full_info["total_money"] = $var['qty'] * $variant["variant_price_sales"];
-                                    $totalMoney += $p_full_info["total_money"];
-                                    $cart_list_full_info[] = $p_full_info;
+                                    if(($now < $p_full_info['count_time']) and ($p_full_info['enable_promo'] ==1)) {
+                                        $p_full_info["qty"] = $var['qty'];
+                                        $p_full_info["variant_price_flash_sale"] = $variant["variant_price_flash_sale"];
+                                        $p_full_info["variant_price_sales"] = $variant["variant_price_sales"];
+                                        $p_full_info["variant_name"] = $variant['variant_name'];
+                                        $p_full_info["variant_id"] = $variant['id'];
+                                        if($variant["variant_price_flash_sale"]){
+                                            $p_full_info["total_money"] = $var['qty'] * $variant["variant_price_flash_sale"];
+                                        }else{
+                                            $p_full_info["total_money"] = $var['qty'] * $variant["variant_price_sales"];
+                                        }
+                                        $totalMoney += $p_full_info["total_money"];
+                                        $cart_list_full_info[] = $p_full_info;
+                                    }
+                                    else{
+                                        $p_full_info["qty"] = $var['qty'];
+                                        $p_full_info["variant_price_sales"] = $variant["variant_price_sales"];
+                                        $p_full_info["variant_name"] = $variant['variant_name'];
+                                        $p_full_info["variant_id"] = $variant['id'];
+                                        $p_full_info["total_money"] = $var['qty'] * $variant["variant_price_sales"];
+                                        $totalMoney += $p_full_info["total_money"];
+                                        $cart_list_full_info[] = $p_full_info;
+                                    }
                                 }
                             }
                         }
                     } else {
-                        $p_full_info["qty"] = $value['qty'];
-                        $p_full_info["total_money"] = $value['qty'] * $p_full_info["price_sales"];
-                        $p_full_info["variant_name"] = '';
-                        $p_full_info["variant_id"] = '';
-                        $totalMoney += $p_full_info["total_money"];
-                        $cart_list_full_info[] = $p_full_info;
+                        if($now < $p_full_info['count_time'] and $p_full_info['enable_promo'] ==1) {
+                            $p_full_info["qty"] = $value['qty'];
+                            $p_full_info["total_money"] = $value['qty'] * $p_full_info["price_flash_sale"];
+                            $p_full_info["variant_name"] = '';
+                            $p_full_info["variant_id"] = '';
+                            $totalMoney += $p_full_info["total_money"];
+                            $cart_list_full_info[] = $p_full_info;
+                        }else {
+                            $p_full_info["qty"] = $value['qty'];
+                            $p_full_info["total_money"] = $value['qty'] * $p_full_info["price_sales"];
+                            $p_full_info["variant_name"] = '';
+                            $p_full_info["variant_id"] = '';
+                            $totalMoney += $p_full_info["total_money"];
+                            $cart_list_full_info[] = $p_full_info;
+                        }
+                        
                     }
                 }
             }       

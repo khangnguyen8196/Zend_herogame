@@ -89,6 +89,10 @@ class Site_TaiKhoanController extends FrontEndAction {
         }
         $param["gender"] = $this->post_data['uif_gender'];
         $mdlUser = new Users();
+        $existingUser = $mdlUser->fetchUserByParam(array('phone_number' => $param["phone_number"]));
+        if (!empty($existingUser) && $existingUser["user_id"] != $uId) {
+            $this->ajaxResponse(CODE_HAS_ERROR, "Số điện thoại đã tồn tại.");
+        }
         $response = $mdlUser->updateUser($param, $uId);
         if ($response == 1) {
             $uInfo = $mdlUser->getUserById($uId);

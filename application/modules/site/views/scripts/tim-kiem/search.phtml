@@ -1,6 +1,6 @@
 <?php $this->viewCssClass = 'product index list' ?>
 <div class="container">
-    <div class="search-result" style="font-size: 1.1rem; height: 2.7rem;line-height: 2.7rem; padding: 0 0.75rem; font-weight: bold; border-top-left-radius: inherit;border-top-right-radius: inherit;margin-top:1rem; text-align: center;color: blue;">
+    <div class="search-result" style="font-size: 1.1rem; height: 2.7rem;line-height: 2.7rem; padding: 0 0.75rem; font-weight: bold; border-top-left-radius: inherit;border-top-right-radius: inherit;margin-top:2rem; text-align: center;color: blue;">
         <?php if(empty($this->key)==false){
             echo '<i class="fa fa-search"></i> KẾT QUẢ TÌM KIẾM: '.$this->key .' '.count($this->productBySearch) .' items';
         } ?>
@@ -23,7 +23,7 @@
                         $res = Commons::_buildProductResponse($this->paginator);
                         echo $this->partial('/shared/_product_view.phtml', array(
                             'data' => $res,
-                            'dcol' => 5
+                            'dcol' => 4
                         ))
                     ?>
                     <!-- pagination -->

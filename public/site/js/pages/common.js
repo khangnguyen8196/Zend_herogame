@@ -292,7 +292,7 @@ pages = $.extend(pages, {
        			if( enable == '1' && endtime != '' ){
        			    endtime = endtime.replace(/-/g,'/');
    			    	if(  $('.product-info .count_down_container').length == 0 ){
-   						var html = '<label>Còn:</label><strong class="count_down_container" style="font-size: 1.8rem;color: #2cbb12;"><span class="days"></span><span class="hours"></span>:<span class="minutes"></span>:<span class="seconds"></span></strong>';
+   						var html = '<label class="flash-sale">Flash sales:</label><strong class="count_down_container"><span class="days"></span><span class="hours"></span>:<span class="minutes"></span>:<span class="seconds"></span></strong>';
    						$('.product-info').append(html);
    						var deadline = new Date( endtime );
    						pages.common.initClockDetailProduct( deadline);

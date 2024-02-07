@@ -5,26 +5,47 @@
     </div>
     <div class="intro">
         <ul>
-            <li class='product-info' attr-count-down="<?php echo $this->info['count_time']?>" attr-enable-promo="<?php echo $this->info['enable_promo']?>">
-            </li>
-        <?php if (count($this->list_variant) > 1) { ?>
-            
-            <li class="price-variant">
-                <label>Giá tiền:</label>
-                <strong class="price-a">
-                    <span id="selected_price_sales"><?php if($this->list_variant[0]['variant_price_sales'] > 0) {echo number_format($this->list_variant[0]['variant_price_sales']). '&#8363';} else { echo 'Liên hệ';}?></span>
-                </strong>
-                <strong  class="price-b <?php if ($this->list_variant[0]['variant_price'] == $this->list_variant[0]['variant_price_sales']) {echo 'hidden';} ?> " id="selected_price"><?php echo ($this->list_variant[0]['variant_price']). '&#8363' ?></strong>
-            </li>
-        <?php } else { ?>
-                <li class="product-info-price">
-                    <label>Giá tiền:</label>
-                    <strong class="price-a"><?php if ($this->info["price_sales"] > 0) { echo number_format($this->info["price_sales"]) . '&#8363';} else { echo 'Liên hệ';} ?></strong>
-                    <?php if ($this->info["price"] != $this->info["price_sales"]) { ?>
-                        <strong class="price-b"><?php echo number_format($this->info["price"]) . '&#8363' ?></strong>
-                    <?php } ?>
+            <?php $now = date('Y-m-d H:i:s');
+            if($now < $this->info['count_time'] && $this->info['enable_promo']==1){?>
+                <li class='product-info' attr-count-down="<?php echo $this->info['count_time']?>" attr-enable-promo="<?php echo $this->info['enable_promo']?>">
                 </li>
-        <?php } ?>
+                <?php if (count($this->list_variant) > 0 ) { ?>
+                    <li class="price-variant">
+                        <label>Giá tiền:</label>
+                        <strong class="price-a">
+                            <span id="selected_price_sales"><?php if($this->list_variant[0]['variant_price_flash_sale'] > 0) {echo number_format($this->list_variant[0]["variant_price_flash_sale"]). '&#8363';} else { echo number_format($this->list_variant[0]["variant_price_sales"]). '&#8363';}?></span>
+                        </strong>
+                        <strong  class="price-b <?php if ($this->list_variant[0]['variant_price'] == $this->list_variant[0]['variant_price_flash_sale']) {echo 'hidden';} ?> " id="selected_price"><?php echo ($this->list_variant[0]['variant_price']). '&#8363' ?></strong>
+                    </li>
+                <?php } else { ?>
+                        <li class="product-info-price">
+                            <label>Giá tiền:</label>
+                            <strong class="price-a"><?php if ($this->info["price_flash_sale"] > 0) { echo number_format($this->info["price_flash_sale"]) . '&#8363';} else { echo number_format($this->info["price_sales"]) . '&#8363';} ?></strong>
+                            <?php if ($this->info["price"] != $this->info["price_flash_sale"]) { ?>
+                                <strong class="price-b"><?php echo number_format($this->info["price"]) . '&#8363' ?></strong>
+                            <?php } ?>
+                        </li>
+                <?php } ?>
+           <?php }else{?>
+                <?php if (count($this->list_variant) > 0) { ?>
+                <li class="price-variant">
+                    <label>Giá tiền:</label>
+                    <strong class="price-a">
+                        <span id="selected_price_sales"><?php if($this->list_variant[0]['variant_price_sales'] > 0) {echo number_format($this->list_variant[0]['variant_price_sales']). '&#8363';} else { echo 'Liên hệ';}?></span>
+                    </strong>
+                    <strong  class="price-b <?php if ($this->list_variant[0]['variant_price'] == $this->list_variant[0]['variant_price_sales']) {echo 'hidden';} ?> " id="selected_price"><?php echo number_format($this->list_variant[0]['variant_price']). '&#8363' ?></strong>
+                </li>
+                <?php } else { ?>
+                        <li class="product-info-price">
+                            <label>Giá tiền:</label>
+                            <strong class="price-a"><?php if ($this->info["price_sales"] > 0) { echo number_format($this->info["price_sales"]) . '&#8363';} else { echo 'Liên hệ';} ?></strong>
+                            <?php if ($this->info["price"] != $this->info["price_sales"]) { ?>
+                                <strong class="price-b"><?php echo number_format($this->info["price"]) . '&#8363' ?></strong>
+                            <?php } ?>
+                        </li>
+                <?php } ?>
+            <?php }?>
+        
             <?php if (empty($this->info["product_note"]) == false) { ?>
                 <li>
                     <label>Tình trạng:</label>
@@ -36,6 +57,8 @@
                 <?php
                 $isOutOfOrder = false;
                 if( $this->info["status"] == STATUS_IN_OUT_STOCK ){
+                    $isOutOfOrder = true;
+                }elseif($this->info["status"] == -1){
                     $isOutOfOrder = true;
                 }
                 ?>
@@ -82,6 +105,7 @@
                         'variant_name' => $variant['variant_name'],
                         'variant_price' =>$variant['variant_price'],
                         'variant_price_sales'=>$variant['variant_price_sales'],
+                        'variant_price_flash_sale' => $variant['variant_price_flash_sale'],
                     );
                 }
             }
@@ -96,15 +120,22 @@
                     <?php foreach( $this->list_variant as $key => $variant ){?>
                         <input type="hidden" data-var0-id="<?php echo $this->list_variant[0]['id']?>">
                         <?php 
-                            if($variant['status'] == 1) { // Kiểm tra nếu status = 1 thì mới hiển thị variant
+                            if($variant['status'] == 1) { 
                                 $active = '';
                                 if($key == 0 ){
                                     $active = 'active';
                                 }
                         ?>
-                            <li class="variant-items" data-id = "<?php echo $variant['id']?>" data-price-sales = "<?php echo $variants[$variant['id']]['variant_price_sales'] ?>" data-price = "<?php echo $variants[$variant['id']]['variant_price'] ?>">
-                                <a class="<?php echo $active ?>" data-id="<?php echo $variant['id']?>" title="<?php echo $variant['variant_name']?>" data-price-sales = "<?php echo $variants[$variant['id']]['variant_price_sales'] ?>" data-price = "<?php echo $variants[$variant['id']]['variant_price'] ?>" ><?php echo $variant['variant_name']?></a>
-                            </li>
+                            <?php
+                                if($now < $this->info['count_time'] and $variants[$variant['id']]['variant_price_flash_sale']>0 and $this->info['enable_promo']==1) {?>
+                                    <li class="variant-items" data-id = "<?php echo $variant['id']?>" data-price-sales = "<?php echo $variants[$variant['id']]['variant_price_flash_sale'] ?>" data-price = "<?php echo $variants[$variant['id']]['variant_price'] ?>">
+                                        <a class="<?php echo $active ?>" data-id="<?php echo $variant['id']?>" title="<?php echo $variant['variant_name']?>" data-price-sales = "<?php echo $variants[$variant['id']]['variant_price_flash_sale'] ?>" data-price = "<?php echo $variants[$variant['id']]['variant_price'] ?>" ><?php echo $variant['variant_name']?></a>
+                                    </li>
+                            <?php }else {?>
+                                    <li class="variant-items" data-id = "<?php echo $variant['id']?>" data-price-sales = "<?php echo $variants[$variant['id']]['variant_price_sales'] ?>" data-price = "<?php echo $variants[$variant['id']]['variant_price'] ?>">
+                                        <a class="<?php echo $active ?>" data-id="<?php echo $variant['id']?>" title="<?php echo $variant['variant_name']?>" data-price-sales = "<?php echo $variants[$variant['id']]['variant_price_sales'] ?>" data-price = "<?php echo $variants[$variant['id']]['variant_price'] ?>" ><?php echo $variant['variant_name']?></a>
+                                    </li>
+                            <?php }?>
                         <?php } ?>
                     <?php }?>
                 </ul>
@@ -112,7 +143,7 @@
         <?php } ?>
     <?php } ?>
     <!-- end Phân Loại-->
-    <?php if( $this->info["price_sales"] > 0 && $this->info["status"] != STATUS_IN_OUT_STOCK ) { ?>
+    <?php if( $this->info["price_sales"] > 0 && $this->info["status"] == 1 ) { ?>
         <?php echo $this->render('/san-pham/_purchase.phtml') ?>
     <?php } ?>
 
@@ -252,6 +283,29 @@
 </script>
 
 <style>
+    li.product-info {
+        background: #ee4d2d;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        justify-items: center;
+        padding: 10px 0px !important;
+    }
+    strong.count_down_container {
+        font-size: 24px!important;
+        display: inline-block;
+        color: white!important;
+        margin-right: 10px;
+    }
+    label.flash-sale {
+        display: block;
+        margin: 0 10px;
+        padding: 0;
+        color: white;
+        font-size: 20px;
+        width: 8rem!important;
+        font-weight: 600;
+    }
     #show-combo, #hide-combo {
     background: blue;
     border-radius: 3px;

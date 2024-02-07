@@ -19,28 +19,28 @@ class Site_AuthController extends FrontEndAction {
     public function indexAction() {
         
     }
-
     private function authenCustommer($username, $password) {
         $retData = array();
         $authAdapter = new Zend_Auth_Adapter_DbTable(Zend_Db_Table::getDefaultAdapter());
         $authAdapter->setTableName('user');
-        $authAdapter->setIdentityColumn('user_name');
+        if (is_numeric($username)) {
+            $authAdapter->setIdentityColumn('phone_number');
+        } else {
+            $authAdapter->setIdentityColumn('email');
+        }
         $authAdapter->setCredentialColumn('password');
         $authAdapter->setCredentialTreatment('?');
         $authAdapter->setIdentity($username);
         $authAdapter->setCredential(( $password));
         $authAdapter->getDbSelect()->where('status = "1"');
-
         $auth = Zend_Auth::getInstance();
         $namespace = Zend_Auth_Storage_Session::NAMESPACE_DEFAULT;
         $auth->setStorage(new Zend_Auth_Storage_Session($namespace, 'CUSTOMER_LOGIN'));
 
         $retData['result'] = $auth->authenticate($authAdapter);
         $retData['data_auth'] = $authAdapter->getResultRowObject(null, 'password');
-
         return $retData;
-    }
-
+    } 
     public function dangNhapAction() {
         $this->isAjax();
         if (empty($this->customer_info) == false) {
@@ -49,7 +49,7 @@ class Site_AuthController extends FrontEndAction {
         $error = array();
         $data = $this->post_data;
         if (empty($data['sif_usr']) == true) {
-            $error[] = "Vui lòng nhập Tên Đăng nhập";
+            $error[] = "Vui lòng nhập Email hoặc SĐT";
         }
         if (empty($data['sif_pwd']) == true) {
             $error[] = "Vui lòng nhập Mật khẩu";
@@ -57,10 +57,14 @@ class Site_AuthController extends FrontEndAction {
         
         if (empty($error) == true) {
             $mdlUser = new Users();
-            $username = $data["sif_usr"];
+            $inputLogin = $data["sif_usr"];
             $password = $data["sif_pwd"];
             $encryptPassword = md5($password);
-            $uData = $mdlUser->fetchUserByParam(array('user_name' => $data["sif_usr"]));
+            // $uData = $mdlUser->fetchUserByParam(array('user_name' => $data["sif_usr"]));
+            $email = $mdlUser->fetchUserByParam(array('email' => $data["sif_usr"]));
+            $userByPhoneNumber = $mdlUser->fetchUserByParam(array('phone_number' => $data["sif_usr"]));
+            $uData = ($email) ? $email : $userByPhoneNumber;
+
             if (empty($uData["salt"]) == false) {
                 $salt = $uData["salt"];
                 $options = [
@@ -70,7 +74,7 @@ class Site_AuthController extends FrontEndAction {
             }
             // Authenticating user login information result
             // $password must be sha1 encrypt
-            $authResult = $this->authenCustommer($username, $encryptPassword);
+            $authResult = $this->authenCustommer($inputLogin, $encryptPassword);     
             
             // Check authenticate user info result
             if (empty($authResult['data_auth']) == false) {
@@ -86,7 +90,8 @@ class Site_AuthController extends FrontEndAction {
                     $this->ajaxResponse(CODE_SUCCESS, "", "/");
                 }
             } else {
-                $data = $mdlUser->fetchUserByParam(array('user_name' => $username));
+                // $data = $mdlUser->fetchUserByParam(array('user_name' => $username));
+                $data = ($email) ? $email : $userByPhoneNumber;
                 if (empty($data) == false) {
                     if ($data ["password"] == $encryptPassword) {
                         if ($data ["status"] == STATUS_IN_ACTIVE) {
@@ -145,7 +150,12 @@ class Site_AuthController extends FrontEndAction {
 		$email = $this->post_data ['fpf_email'];
 		
 		$mdlUser = new Users ();
-		$param ['user_name'] = $username;
+        if (is_numeric($username)) {
+            $param ['phone_number'] = $username;
+        } else {
+            $param ['user_name'] = $username;
+        }
+		
 		$param ['email'] = $email;
 		
 		$data = $mdlUser->fetchUserByParam ( $param );
@@ -239,8 +249,8 @@ class Site_AuthController extends FrontEndAction {
         $this->isAjax();
         $error = array();
         $success = 0;
-        $userName = $this->post_data['suf_usr']; // check user name
         $email = $this->post_data['suf_email']; // check email
+        $phoneNumber = $this->post_data['uif_phone'];
         $firstName = "";
         $lastName = "";
         $fullname = $this->post_data['suf_name'];
@@ -248,16 +258,21 @@ class Site_AuthController extends FrontEndAction {
         $rePassword = $this->post_data['suf_rpwd'];
         // check user name exists
         $user = new Users();
-        $checkName['user_name'] = $userName;
-        $rs = $user->fetchUserByParam($checkName);
-        if (empty($rs) == false) {
-            $error[] = 'Tài khoản đã tồn tại trong hệ thống.';
-        }
+      
         // check email
         $checkMail['email'] = $email;
         $rs = $user->fetchUserByParam($checkMail);
         if (empty($rs) == false) {
             $error[] = 'Email đã được sử dụng';
+        }
+
+        $checkPhone['phone_number'] = $phoneNumber;
+        if (strlen($checkPhone['phone_number']) < 10) {
+            $error[] = 'Vui lòng nhập số điện thoại ít nhất 10 số.';
+        }
+        $rs = $user->fetchUserByParam($checkPhone);
+        if (empty($rs) == false) {
+            $error[] = 'Số điện thoại đã được sử dụng';
         }
         if (strlen($password) < 6) {
             $error[] = 'Mật Khẩu có ít nhất 6 ký tự';
@@ -269,16 +284,15 @@ class Site_AuthController extends FrontEndAction {
 
         $param['first_name'] = $firstName;
         $param['last_name'] = $lastName;
+        $param['phone_number'] = $phoneNumber;
         $param['fullname'] = $fullname;
         $param['email'] = $email;
         $param['status'] = STATUS_ACTIVE;
         $param['created_at'] = date("Y-m-d H:i:s");
         $param['updated_at'] = date("Y-m-d H:i:s");
-        $param['created_by'] = $userName;
-        $param['updated_by'] = $userName;
+        $param['created_by'] = $fullname;
+        $param['updated_by'] = $fullname;
         $param['role_id'] = CUSTOMER;
-        $param['user_name'] = $userName;
-
         if (empty($error) == true) {
             $salt = base64_encode(mcrypt_create_iv(22, MCRYPT_DEV_URANDOM));
             $options = [

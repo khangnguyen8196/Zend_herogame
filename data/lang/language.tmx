@@ -248,6 +248,21 @@
 				<seg>Trạng thái</seg>
 			</tuv>
 		</tu>
+		<tu tuid='phone_number'>
+			<tuv xml:lang='vi'>
+				<seg>Số điện thoại</seg>
+			</tuv>
+		</tu>
+		<tu tuid='fullname'>
+			<tuv xml:lang='vi'>
+				<seg>Họ và tên</seg>
+			</tuv>
+		</tu>
+		<tu tuid='created_at'>
+			<tuv xml:lang='vi'>
+				<seg>Ngày đăng ký</seg>
+			</tuv>
+		</tu>
 		<tu tuid='action'>
 			<tuv xml:lang='vi'>
 				<seg>Hành động</seg>

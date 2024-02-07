@@ -202,6 +202,10 @@ pages = $.extend(pages, {
 				            label = 'Banner Con Giữa 4';
 				        } else if (row["type"] == 19) {
 				            label = 'Banner Con Phải 4';
+				        } else if (row["type"] == 20) {
+				            label = 'Banner Con Pre-order';
+				        }else if (row["type"] == 21) {
+				            label = 'Banner Chính mobile (800x600)';
 				        }
 				        return label;
 				    },

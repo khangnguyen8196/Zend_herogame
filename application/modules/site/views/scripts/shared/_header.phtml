@@ -20,18 +20,23 @@
 	<div class="ph-mid" <?php if( empty($backgroundheader) == false ){ ?>style="background-image:url(<?php echo $backgroundheader['value']?>)"<?php }?>>
         <div class="container">
             <div class="row">
-                <?php echo $this->partial('/shared/_logo.phtml', array('logo'=> $logo)) ?>
-                <?php echo $this->partial('/shared/_search.phtml') ?>
-                <div class="pull-right">
-                    <?php echo $this->partial('/shared/_vendor_logo.phtml', array('logo1' => @$vendor_logo1['value'], 'logo2' => @$vendor_logo2['value'] )) ?>
-                    <?php echo $this->render('/shared/_shopping_cart.phtml') ?>
+                <div class="header-top">
+                    <div class="logo-web">
+                        <?php echo $this->partial('/shared/_logo.phtml', array('logo'=> $logo)) ?>
+                    </div>
+                    <div class="pull-right-a">
+                        <?php echo $this->partial('/shared/_vendor_logo.phtml', array('logo1' => @$vendor_logo1['value'], 'logo2' => @$vendor_logo2['value'] )) ?>
+                        <?php echo $this->render('/shared/_shopping_cart.phtml') ?>
+                    </div>              
                 </div>
-                
+                <div class="tim-kiem">
+                    <?php echo $this->partial('/shared/_search.phtml') ?>
+                </div>
             </div>
         </div>
     </div>
     <div class="ph-bot">
-        <?php echo $this->partial('/shared/_mega_menu.phtml', array( 'menu' => $this->menu)); ?>
+        <?php echo $this->partial('/shared/_mega_menu.phtml', array( 'menu' => $this->menu, 'menuCategory'=>$this->menuCategory,)); ?>
     </div>
 </header>
 
@@ -40,14 +45,124 @@
         <a href="javascript:;" class="ph-btn ph-btn-menu">
             <i class="fa fa-bars"></i>
         </a>
-        <a href="javascript:;" class="ph-btn ph-btn-search">
-            <i class="fa fa-search"></i>
-        </a>
+        <div class="user-icon" id="userIcon" onclick="toggleUserList()">
+            <a href="javascript:;" data-toggle="modal" data-target="#signinModal"><i class="fa fa-user"></i></a>
+        </div>
+        <?php
+        if (!empty($this->customer_info)) { ?>
+            <div id="userList" class="user-list">
+                <ul class="infomation-user">
+                        <li class="user">
+                            Xin chào, <strong><?php echo trim($this->customer_info["fullname"]) ?></strong>
+                        </li>
+                        <li>
+                            <a href="/don-hang/lich-su-mua-hang">Danh sách Đơn Hàng</a>
+                        </li>
+                        <li>
+                            <a href="javascript:;" data-toggle="modal" id="userInfoBtn">Thông tin Tài Khoản</a>
+                        </li>
+                        <li>
+                            <a href="javascript:;" data-toggle="modal" data-target="#changePwdModal">Thay đổi Mật Khẩu</a>
+                        </li>
+                        <li>
+                            <a href="/auth/dang-xuat">Đăng Xuất</a>
+                        </li>
+                    </ul>
+            </div>
+        <?php } ?>
+        <div class="ph-btn ph-btn-search">
+            <a href="javascript:;">
+                <i class="fa fa-search"></i>
+            </a>
+        </div>
         <?php echo $this->partial('/shared/_logo.phtml', array('logo'=> $logo)) ?>
+        <a href="javascript:;"><?php echo $this->render('/shared/_shopping_cart.phtml') ?></a>
     </div>
     <div class="mode-2">
         <?php echo $this->partial('/shared/_search.phtml') ?>
     </div>
 </header>
 
-<?php echo $this->partial('/shared/_mobile_menu.phtml', array( 'menu' => $this->menu,'user' => $this->customer_info,'item_count'=>$this->item_count)); ?>
+<?php echo $this->partial('/shared/_mobile_menu.phtml', array( 'menu' => $this->menu,'menuCategory'=>$this->menuCategory,'user' => $this->customer_info,'item_count'=>$this->item_count)); ?>
+<style>
+    .pheader .ph-mid {
+        padding: 0;
+        background-color: transparent;
+        background-repeat: no-repeat;
+        background-image: url(style.css);
+        background-position: center center;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -ms-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    }
+    .pheader .ph-mid .search {
+        transform: translateY(-50%);
+        display: block;
+        z-index: 1090;
+        position: absolute;
+        top: 50%;
+        left: 9rem;
+    }
+    .header-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .pheader .ph-mid .logo {
+        float: none!important;
+        width: 8rem;
+        display: block;
+    }
+    .mode-1 {
+        position: relative;
+    }
+    .mode-1 span.text {
+        display: none;
+    }
+    .mode-1 .shopping-cart {
+        position: absolute;
+        top: 20px;
+        right: 2%;
+    }
+    .mode-1 .user-icon {
+        position: absolute;
+        top: 26px;
+        right: 26%;
+    }
+    i.fa.fa-user {
+        font-size: 1.5rem;
+        position: absolute;
+        right: 0%;
+    }
+    .pheader-mb .ph-btn-search {
+        right: 16%;
+    }
+    .user-list {
+        display: none;
+    }
+    .user-list.active {
+        display: block;
+        position: absolute;
+        top: 60px;
+        right: 0px;
+        background: white;
+        padding-top: 14px;
+        width: 200px;
+        border: 1px solid #ccc;
+    }
+    .infomation-user li{
+        color: black;
+        border-bottom:1px solid #ccc ;
+        padding: 2px 14px;
+    }
+    .infomation-user li a{
+        color: black;
+    }
+    @media (max-width: 1054px){
+        .search input {
+            min-width: 26em;
+        }
+    }
+</style>

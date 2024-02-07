@@ -24,10 +24,21 @@
 	            <div class="qty"><?php echo $value['qty'] ?></div>
 	            <div class="name"><?php echo $value['title'] ?><?php if(empty($value['variant_name']) == false){?></br>Màu: <?php echo isset($value['variant_name']) ?$value['variant_name'] :'Mặc Định' ?> <?php }?></div>
                 <div class="price">
-                    <?php if (empty($value['variant_name'])) {
-                        $price = $value['price_sales'];
-                    } else {
-                        $price = $value['variant_price_sales'];
+                    <?php 
+                    $now = date('Y-m-d H:i:s');
+                    if(($now < $value['count_time']) and($value['enable_promo']==1) ){
+                        if (empty($value['variant_name'])) {
+                            $price = $value['price_flash_sale'];
+                        }else {
+                            $price = ($value['variant_price_flash_sale']>0) ? $value['variant_price_flash_sale']:$value['variant_price_sales'];
+                        }
+                    
+                    }else{
+                        if (empty($value['variant_name'])) {
+                            $price = $value['price_sales'];
+                        } else {
+                            $price = $value['variant_price_sales'];
+                        }
                     }?>
                     <strong id="p_price" p_price="<?php echo $price ?>"><?php echo number_format($price) . '&#8363' ?></strong>
                 </div>

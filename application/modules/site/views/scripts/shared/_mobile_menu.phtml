@@ -7,68 +7,33 @@
             <li>
                 <a href="/">Trang chủ</a>
             </li>
-             <?php
+        </ul>
+        <?php
+            if( empty( $this->menuCategory) == false ){
+                echo $this->partial('/shared/_category_menu_mobile.phtml', array(
+                    'title' => 'Danh mục', 'data' => $this->menuCategory
+                ));
+            }
+        ?>
+        <ul>
+            <?php
             foreach ($this->menu as $key => $value) {
-                $flash = '/';
-                $url = parse_url($value['url']);
-                if ($url['scheme'] == 'http' || $url['scheme'] == 'https') {
-                    $flash = '';
-                }
+                if (empty($value['child']) == true) {
                     ?>
                     <li>
-                        <a href="<?php echo $flash . $value['url'] ?>"><?php echo $value['name'] ?>
-                        <?php if( empty($value['child']) == false && count($value['child']) > 0 ){ ?><i class="fa fa-caret-down"><?php } ?></i></a>
-                        <?php if( empty($value['child']) == false && count($value['child']) > 0 ){ 
-                            ?><ul><?php
-                            foreach ($value['child'] as $key_c => $value_c ){
-                                ?>
-                                    <li>
-                                        <a href="<?php echo $value_c['url']?>"><?php echo  $value_c['name']?></a>
-                                    </li>
-                                <?php
+                        <?php
+                            $flash = '/';
+                            $url = parse_url($value['url']);
+                            if ($url['scheme'] == 'http' || $url['scheme'] == 'https') {
+                                $flash = '';
                             }
-                            ?></ul><?php
-                        } ?>
+                        ?>
+                        <a href="<?php echo $flash . $value['url'] ?>"><?php echo $value['name'] ?></a>
                     </li>
                     <?php
                 } 
+            }
             ?>
-        </ul>
-
-        <ul>
-            <li>
-                <?php
-                    $item_count = 0;
-                    if (isset($this->item_count) && $this->item_count > 0) {
-                        $item_count = $this->item_count;
-                    }
-                ?>
-                <a href="/don-hang/gio-hang">Giỏ hàng <span id="cart_item_count_mobile">(<?php echo $item_count?>)</span></a>
-            </li>
-            <?php if ( empty($this->user) == false ) { ?>
-            <li class="user">
-                Xin chào, <strong><?php echo trim($this->user["fullname"]) ?></strong>
-            </li>
-            <li>
-                <a href="/don-hang/lich-su-mua-hang">Danh sách Đơn Hàng</a>
-            </li>
-            <li>
-                <a href="javascript:;" data-toggle="modal" id="userInfoBtn">Thông tin Tài Khoản</a>
-            </li>
-            <li>
-                <a href="javascript:;" data-toggle="modal" data-target="#changePwdModal">Thay đổi Mật Khẩu</a>
-            </li>
-            <li>
-                <a href="/auth/dang-xuat">Đăng Xuất</a>
-            </li>
-            <?php } else { ?>
-            <li>
-                <a href="javascript:;" data-toggle="modal" data-target="#signinModal">Đăng nhập</a>
-            </li>
-            <li>
-                <a href="javascript:;" data-toggle="modal" data-target="#signupModal">Đăng ký</a>
-            </li>
-            <?php } ?>
         </ul>
     </nav>
     <div class="overlay"></div>

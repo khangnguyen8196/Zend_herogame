@@ -52,12 +52,12 @@ class Users extends Zend_Db_Table_Abstract {
             $select = $select->where("user.role_id like '" . $likeExp1 . "'  OR user.role_id like '" . $likeExp2 . "' OR user.role_id like '" . $likeExp3 . "' OR user.role_id = '" . $equalExp . "'");
         }
         if ( empty($data['search-key']) == false ){
-        	$select = $select->where("user_name like ?", "%" . $data["search-key"] . "%")
+        	$select = $select->where("phone_number like ?", "%" . $data["search-key"] . "%")
         	->orWhere("user.created_by like ?", "%" . $data["search-key"] . "%")
         	->orWhere("user.updated_by like ?", "%" . $data["search-key"] . "%")
-                ->orWhere("first_name like ?", "%" . $data["search-key"] . "%")
-                ->orWhere("email like ?", "%" . $data["search-key"] . "%")
-                ->orWhere("last_name like ?", "%" . $data["search-key"] . "%");
+            // ->orWhere("first_name like ?", "%" . $data["search-key"] . "%")
+            ->orWhere("email like ?", "%" . $data["search-key"] . "%")
+            ->orWhere("fullname like ?", "%" . $data["search-key"] . "%");
         }
         //check count only purpose
         if (empty($data['count_only']) == true || $data['count_only'] != 1) {

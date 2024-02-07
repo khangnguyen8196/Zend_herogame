@@ -167,6 +167,7 @@ class Category extends Zend_Db_Table_Abstract {
                 $select = $select->where("$key = ?", $value);
             }
         }
+        $select = $select->order('priority ASC');
         $result = $this->getAdapter()->fetchAll($select);
         return $result;
     }

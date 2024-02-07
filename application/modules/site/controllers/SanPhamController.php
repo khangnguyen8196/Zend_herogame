@@ -142,6 +142,7 @@ class Site_SanPhamController extends FrontEndAction {
         
         $this->_setMeta( $productInfo );
         $this->view->info = $productInfo;
+        $this->view->order_with_product = $this->_getOrderWithProduct($productInfo["order_with_product"]);
         $this->view->relative_product = $this->_getRelativeProduct($productInfo["relative_product"]);
 
     }
@@ -167,5 +168,22 @@ class Site_SanPhamController extends FrontEndAction {
             $relativeProduct = Commons::_buildProductResponse($relativeProduct);
         }
         return $relativeProduct;
+    }
+    private function _getOrderWithProduct($productIdList) {
+        $orderWithProduct = array();
+        if (empty($productIdList) == false) {
+            $productIdList = explode(",", $productIdList);
+            if (empty($productIdList) == false) {
+                foreach ($productIdList as $key => $value) {
+                    $productInfo = $this->_productMdl->fetchProductById($value);
+                    $orderWithProduct[$value] = $productInfo;
+                }
+            }
+        }
+        
+        if( empty($orderWithProduct) == false ){
+            $orderWithProduct = Commons::_buildProductResponse($orderWithProduct);
+        }
+        return $orderWithProduct;
     }
 }

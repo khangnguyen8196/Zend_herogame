@@ -478,24 +478,38 @@ class Commons {
 	public static function _buildProductData($value) {
 		$titleText = '';
 		$bcolor = '';
-		if ($value ["new_product"]) {
+		$now = date('Y-m-d H:i:s');
+		if ($value ["is_promotion"]) {
+			if($value ["enable_promo"]==1 and $now < $value["count_time"] and $value['price_flash_sale']>0){
+				$titleText = 100 - round ( ($value ["price_flash_sale"] / $value ["price"]) * 100 );
+				if ($titleText > 0) {
+					$titleText = '-' . $titleText;
+				} else if ($titleText == 0) {
+					$titleText = "";
+				}
+				if (empty ( $titleText ) == false) {
+					$titleText = $titleText . "%";
+					$bcolor = '#ff9601';
+				}
+			}else{
+				$titleText = 100 - round ( ($value ["price_sales"] / $value ["price"]) * 100 );
+				if ($titleText > 0) {
+					$titleText = '-' . $titleText;
+				} else if ($titleText == 0) {
+					$titleText = "";
+				}
+				if (empty ( $titleText ) == false) {
+					$titleText = $titleText . "%";
+					$bcolor = '#ff9601';
+				}
+			}
+		}elseif($value ["new_product"]) {
 			$titleText = 'Mới';
 			$bcolor = '#66b800';
-		} elseif ($value ["best_sell"]) {
+		}elseif ($value ["best_sell"]) {
 			$titleText = 'Pre-Order';
 			$bcolor = '#cc2600';
-		} elseif ($value ["is_promotion"]) {
-			$titleText = 100 - round ( ($value ["price_sales"] / $value ["price"]) * 100 );
-			if ($titleText > 0) {
-				$titleText = '-' . $titleText;
-			} else if ($titleText == 0) {
-				$titleText = "";
-			}
-			if (empty ( $titleText ) == false) {
-				$titleText = $titleText . "%";
-				$bcolor = '#ff9601';
-			}
-		}
+		} 
 		if ($value ["status"] == 2) {
 			$titleText = 'Tạm hết hàng';
 			$bcolor = '#000';
@@ -526,6 +540,7 @@ class Commons {
 		$product ["name"] = $value ["title"];
 		$product ["priceA"] = number_format ( $value ["price_sales"] ) . '&#8363';
 		$product ["priceB"] = number_format ( $value ["price"] ) . '&#8363';
+		$product ["priceC"] = number_format ( $value ["price_flash_sale"] ) . '&#8363';
 		// $product["url"] = "/san-pham/chi-tiet/name/" . $value["url_product"];
 		$product ["url"] = "/" . $value ["url_product"];
 		$product ["photo"] = '';
@@ -630,6 +645,9 @@ class Commons {
 				break;
 			case 2 :
 				$txt = "Tạm Hết Hàng";
+				break;
+			case -1 :
+				$txt = "Sản phẩm ngừng kinh doanh";
 				break;
 			default :
 				$txt = "Còn Hàng";

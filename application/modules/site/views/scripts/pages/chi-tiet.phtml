@@ -24,9 +24,8 @@
     </div>
     <div class="row">
         <aside class="col-md-2 hidden-md-down no-gutter">
-            <?php echo $this->render("/shared/_left-aside.phtml")?>
+            <?php echo $this->render("/shared/_left-aside-post.phtml")?>
         </aside>
-
         <section class="col-md-10 col-12 both-gutter">
             <div class="post-detail">
                 <header>
@@ -48,6 +47,7 @@
                     </div>
                 </header>
                 <?php if( empty( $this->relative_post ) == false ){ ?>
+                    <h3>Bài viết liên quan</h3>
                 	<ul class="related">
                 		<?php foreach ( $this->relative_post as $relative ) { ?>
 		                    <li>
@@ -62,11 +62,13 @@
                         <?php echo $this->info['content'] ?>  
                     </div>
                 </div>
+                <div class="sp-lien-quan">
                 <?php
                 if (empty($this->relative_product) == false) {
                     echo $this->partial('/shared/_quick_view.phtml', array(
                         'qdsp' => 'slider',
                         'custom_class' => 'product-relative',
+                        'dcol' => 4,
                         'tabs' => array(
                             array(
                                 'title' => 'Sản phẩm liên quan',
@@ -76,6 +78,7 @@
                     ));
                 }
                 ?>
+                </div>
                 <footer>
                     <?php echo $this->partial('/shared/_data_comment.phtml') ?>
                 </footer>
@@ -83,3 +86,9 @@
         </section>
 	</div>
 </div>
+<style>
+   .sp-lien-quan ul.nav.nav-tabs {
+        display: block!important;
+        text-align: center!important;
+    }
+</style>

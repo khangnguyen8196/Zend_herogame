@@ -8,8 +8,8 @@
         $banActiveIndex = 0;
     }
 ?>
-<div class="banner-slider" data-index="<?php echo $banActiveIndex ?>" data-speed="<?php echo $banSpeed ?>" data-duration="<?php echo $banDuration ?>" data-hover="<?php echo $banHover ?>">
-    <ul class="banner-runner">
+<div class="banner-slider-mobile" data-index="<?php echo $banActiveIndex ?>" data-speed="<?php echo $banSpeed ?>" data-duration="<?php echo $banDuration ?>" data-hover="<?php echo $banHover ?>">
+    <ul class="banner-runner-mobile">
         <?php foreach ($this->data as $key => $banner) { ?>
         <li class="slider-qc">
             <?php if(isset($banner['photo'])) {
@@ -40,7 +40,7 @@
         </li>
         <?php } ?>
     </ul>
-    <div class="banner-pager">
+    <!-- <div class="banner-pager">
         <div class="container no-gutter">
             <div class="row">
                 <?php foreach ($this->data as $key => $banner) { ?>
@@ -50,5 +50,5 @@
                 <?php } ?>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>

@@ -16,13 +16,15 @@
     </div>
     <div class="row">
         <aside class="col-md-2 col-12 no-gutter">
-            <?php
-            if (empty($this->menuCategory) == false) {
-                echo $this->partial('/shared/_category_menu.phtml', array(
-                    'title' => 'Danh mục', 'data' => $this->menuCategory
-                ));
-            }
-            ?>
+            <div class="menu-pc hidden-mobile">
+                <?php
+                    if( empty( $this->menuCategory) == false ){
+                        echo $this->partial('/shared/_category_menu.phtml', array(
+                            'title' => 'Danh mục', 'data' => $this->menuCategory
+                        ));
+                    }
+                ?>
+            </div>
             <div class="hidden-md-down">
                 <?php
                 if (empty($this->newestPost) == false) {
@@ -80,21 +82,56 @@
                     </div>
                 </div>
             </div>
-            
+            <div class="sp-lien-quan">
+                <?php
+                if (empty($this->order_with_product) == false) {
+                    echo $this->partial('/shared/_quick_view.phtml', array(
+                        'qdsp' => 'slider',
+                        'dcol' => 4,
+                        'custom_class' => 'product-with',
+                        'tabs' => array(
+                            array(
+                                'title' => 'Thường mua cùng',
+                                'data' => $this->order_with_product
+                            )
+                        )
+                    ));
+                }
+                ?>
+            </div>
+            <div class="sp-lien-quan">
             <?php
             if (empty($this->relative_product) == false) {
                 echo $this->partial('/shared/_quick_view.phtml', array(
                     'qdsp' => 'slider',
                     'custom_class' => 'product-relative',
+                    'dcol' => 4,
                     'tabs' => array(
                         array(
-                            'title' => 'Sản phẩm liên quan',
+                            'title' => 'Có thể bạn thích',
                             'data' => $this->relative_product
                         )
                     )
                 ));
             }
             ?>
+            </div>
         </section>
     </div>
 </div>
+<style>
+    @media screen and (min-width: 768px){
+        .hidden-mobile{
+            display: block;
+        }
+    }
+    @media screen and (max-width: 767px){
+        .hidden-mobile{
+            display: none;
+        }
+    }
+    .sp-lien-quan ul.nav.nav-tabs {
+        display: block!important;
+        text-align: center!important;
+    }
+</style>

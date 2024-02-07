@@ -5,37 +5,38 @@
                 <a href="/<?php echo $data['url']?>"><?php echo $data['name']?></a>
                 <div class="mega-drop">
                     <div class="wrapper">
-                        <img src="/site/img/menu/menu_3_1_brick.svg" class="line-art brick">
+                        <!-- <img src="/site/img/menu/menu_3_1_brick.svg" class="line-art brick">
                         <img src="/site/img/menu/menu_3_2_bobomb.svg" class="line-art line-art-sway bobomb">
-                        <img src="/site/img/menu/menu_3_3_bowser.svg" class="line-art line-art-grow bowser">
-                        <div class="main-tiles">
-                            <?php if( empty($data['child']) == false ) { ?>
-                            <a class="tile" href="<?php echo @$data['child'][0]['url']?>">
-                            	<?php
-                            		$url = '';
-                            		if( empty($data['child'][0]['image']) == false ){
-                            			$url = PHOTO_PATH.$data['child'][0]['image'];
-                            		}
-                            	?>
-                                <?php echo $this->partial('/shared/_lazy_image.phtml', array(
-                                    'css' => 'photo',
-                                    'url' => $url,
-                                )) ?>
-                                <div class="title"><?php echo  @$data['child'][0]['name']?></div>
-                                <div class="title-sub"><?php echo  @$data['child'][0]['description']?></div>
-                            </a>
-                            <?php 
-                            	unset($data['child'][0]);
-							} ?>
-                        </div>
-                        <div class="small-tiles">
+                        <img src="/site/img/menu/menu_3_3_bowser.svg" class="line-art line-art-grow bowser"> -->
+                        <div class="small-tiles-test">
+							<div class="main-tiles-test">
+								<?php if( empty($data['child']) == false ) { ?>
+								<a class="tile-test" href="<?php echo @$data['child'][0]['url']?>">
+									<?php
+										$url = '';
+										if( empty($data['child'][0]['image']) == false ){
+											$url = PHOTO_PATH.$data['child'][0]['image'];
+										}
+									?>
+									<?php echo $this->partial('/shared/_lazy_image.phtml', array(
+										'css' => 'photo',
+										'url' => $url,
+									)) ?>
+									<p class="title-test"><?php echo  @$data['child'][0]['name']?></p>
+									<!-- <div class="title-sub"><?php echo  @$data['child'][0]['description']?></div> -->
+								</a>
+								<?php 
+									unset($data['child'][0]);
+								} ?>
+							</div>
                             <?php if( empty($data['child']) == false ){ 
                         		$i = 0;
                         	?>
                         		<?php foreach ( $data['child'] as $key => $value) { 
                         			$i++;
                         		?>
-		                            <a class="tile" href="<?php echo $value['url']?>">
+								<div class="test-sub-menu">
+		                            <a class="tile-test" href="<?php echo $value['url']?>">
 		                            	<?php
 		                            		$url = '';
 		                            		if( empty($value['image']) == false ){
@@ -46,8 +47,9 @@
 		                                    'css' => 'photo',
 		                                    'url' => $url,
 		                                )) ?>
-		                                <div class="title"><?php echo  $value['name']?></div>
+		                                <p class="title-test"><?php echo  $value['name']?></p>
 		                            </a>
+								</div>
                             	<?php 
                             	if( $i == 6) break;
                         		}
@@ -56,3 +58,83 @@
                     </div>
                 </div>
             </li>
+<style>
+.main-tiles-test {
+	display: block;
+	transition: transform 0.3s ease-in-out;
+}
+.main-tiles-test:hover {
+	transform: translateY(-20px);
+}
+.main-tiles-test .imgh.r0x0.photo {
+	 background-size: contain!important;
+}
+.test-sub-menu {
+	transition: transform 0.3s ease-in-out;
+}
+.test-sub-menu:hover {
+	transform: translateY(-20px);
+}
+.test-sub-menu .imgh.r0x0.photo {
+	background-size: contain!important;
+}
+.small-tiles-test {
+	display: flex;
+	-webkit-box-pack: center;
+	justify-content: center;
+	gap: 1.75rem;
+	padding-left: 1rem;
+	padding-right: 1rem;
+	max-width: 1440px;
+	min-width: calc(1025px - 2rem);
+	margin: 0px auto;
+}
+.test-sub-menu {
+	display: flex;
+	flex-direction: column;
+	justify-self: center;
+	min-width: 7.5rem;
+}
+a.tile-test {
+	display: block;
+	text-align: center;
+	width: 120px;
+}
+a.tile-test:hover {
+	color: rgb(230, 0, 18);
+	transition: all 200ms ease-in-out 0s;
+}
+a.tile-test .imgh.r0x0.photo {
+	display: flex;
+	-webkit-box-align: center;
+	align-items: center;
+	-webkit-box-pack: center;
+	justify-content: center;
+	width: 100%;
+	height: 6.25rem;
+	border: 1px solid rgb(218, 218, 218);
+	border-radius: 10px!important;
+	margin-bottom: 0.5rem;
+	background-color: white;
+	transition-property: background-color, border-color;
+	transition-duration: 200ms;
+}
+.title-test{
+	font-size: 0.875rem;
+	color: white;
+}
+.mega-menu nav ul li.mega-3ds .mega-drop {
+	background: #ce181e;
+}
+.mega-drop {
+	width: 100%;
+	height: 15rem;
+	padding: 4rem 0;
+	overflow: hidden;
+	display: none;
+	z-index: -1;
+	position: absolute;
+	top: 2.5rem;
+	left: 0;
+}
+</style>

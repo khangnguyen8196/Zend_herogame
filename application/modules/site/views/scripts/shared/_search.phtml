@@ -5,7 +5,7 @@
 <form id="form-search" action="<?php echo $this->url(array('module' => 'site', 'controller' => 'tim-kiem', 'action' => 'search'), 'default', true) ?>" method="get">
     <i class="fa fa-search"></i>
     <i class="fa fa-times"></i>
-    <input id="searchV" name="keyword" type="search" class="searchV" value="<?php echo $_GET['keyword'] ?>" placeholder="Nhập từ khóa cần tìm..." />
+    <input id="searchV" name="keyword" type="search" class="searchV" value="<?php echo htmlspecialchars(isset($_GET['keyword']) ? $_GET['keyword'] : ''); ?>" placeholder="Nhập từ khóa cần tìm..." />
 </form>
 </div>
 

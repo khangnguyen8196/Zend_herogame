@@ -88,23 +88,23 @@ pages = $.extend(pages, {
 	                }
 	                $(".submit-btn").submit();
 	            });
-        		$.each($('.rich-editor'),function(){
-        			var id = $(this).attr('id');
-        			var h = $(this).attr('data-height');
-        			 CKEDITOR.replace( id, {
-          		       height: h,
-          		       width: '100%',
-   					   'image_previewText': '  ',
-   					   'allowedContent': true,
-   					   'enterMode' : CKEDITOR.ENTER_BR,
-   					   
-   					 filebrowserBrowseUrl : '/ad-min/assets/js/libs//kcfinder/browse.php?opener=ckeditor&type=files',
-   					 filebrowserImageBrowseUrl : '/ad-min/assets/js/libs//kcfinder/browse.php?opener=ckeditor&type=images',
-   					 filebrowserUploadUrl : '/ad-min/assets/js/libs//kcfinder/upload.php?opener=ckeditor&type=files',
-   					 filebrowserImageUploadUrl : '/ad-min/assets/js/libs//kcfinder/upload.php?opener=ckeditor&type=images',
-   					 filebrowserFlashUploadUrl : '/ad-min/assets/js/libs//kcfinder/upload.php?opener=ckeditor&type=flash',
-          		    });
-        		});
+        		$.each($('.rich-editor'), function () {
+					var id = $(this).attr('id');
+					var h = $(this).attr('data-height');
+					CKEDITOR.replace(id, {
+						height: h,
+						width: '100%',
+						'image_previewText': '  ',
+						'allowedContent': true,
+						'enterMode': CKEDITOR.ENTER_BR,
+				
+						filebrowserBrowseUrl: '/ad-min/assets/js/libs/kcfinder/browse.php?opener=ckeditor&type=files',
+						filebrowserImageBrowseUrl: '/ad-min/assets/js/libs/kcfinder/browse.php?opener=ckeditor&type=images',
+						filebrowserUploadUrl: '/ad-min/assets/js/libs/kcfinder/upload.php?opener=ckeditor&type=files',
+						filebrowserImageUploadUrl: '/ad-min/assets/js/libs/kcfinder/upload.php?opener=ckeditor&type=images',
+						filebrowserFlashUploadUrl: '/ad-min/assets/js/libs/kcfinder/upload.php?opener=ckeditor&type=flash'
+					});
+				});				
         		//
         		$(document).on('change', '#url', {}, function ( ) {
         			var value = $(this).val();
@@ -202,7 +202,7 @@ pages = $.extend(pages, {
             });
 
 			// add row
-			var index = 1;
+			var index = 0;
 			$("#addRow").click(function () {
 				var html = '';
 				html += 	'<div class="inputFormRow" >';
@@ -231,7 +231,7 @@ pages = $.extend(pages, {
 				html += 				'<div class="form-group file-item">';
 				html += 					'<div class="col-lg-7">';
 				html +=                         '<input type="hidden"  name = "variant_image_id[]" value="0">',
-				html += 						'<input type="file" class="file-styled form-control" name="url_image['+ index +'][]" data-variant-id="' + index + '" accept="image/*" multiple="multiple"/>';
+				html += 						'<input type="file" class="file-styled form-control image_variant_error" name="url_image['+ (index + 1) +'][]" data-variant-id="' + index + '" accept="image/*" multiple="multiple"/>';
 				html += 					'</div>';
 				html += 					'<div class="col-lg-2">';
 				html += 						'<button type="button"  class="btn btn-alert remove" style="margin-right: 11px;">x</button>';
@@ -274,12 +274,7 @@ pages = $.extend(pages, {
 				$(this).closest('.inputFormRow').remove();
 			});
 
-	  	 	// remove row
-			// $(document).on('click', '#removeVariant', function() {
-			// 	var variantId = $(this).data('id');
-			// 	deleteVariant(variantId);
-			// });
-			//test 
+	  	 	
 			$(document).on('click', '.removeVariant', function() {	
         		var val = $(this).attr('data-id');
 				var confirmation = confirm('Bạn có chắc chắn muốn xóa loại này?');
@@ -288,32 +283,29 @@ pages = $.extend(pages, {
         			$(this).closest('.inputFormRowVariant').remove();
 				}
         	});
-			//
-			// function deleteVariant(variantId) {
-			// 	bootbox.confirm('Bạn Có Muốn Xóa Loại Này', function(result) {
-			// 		if (result) {
-			// 			$.ajax({
-			// 				url: '/admin/product-variant/delete',
-			// 				type: 'GET',
-			// 				data: {id: variantId},
-			// 				beforeSend: function () {
-								
-			// 				},
-			// 				success: function (data) {
-			// 					if (data.Code > 0) {
-			// 						bootbox.alert('Xóa Thành Công');
-			// 						$('.inputFormRowVariant').find('input[value="' + variantId + '"]').closest('.inputFormRowVariant').remove();
-			// 					} else {
-			// 						bootbox.alert('Xóa Thất Bại');
-			// 					}
-			// 				},
-			// 				error: function (data) {
-								
-			// 				}
-			// 			});
-			// 		}
-			// 	});
-			// } 
+			
+			$(document).on('change', '.image_variant_error', function() {
+				checkFileSizes(this);
+			});
+		
+			function checkFileSizes(input) {
+				const files = input.files;
+				const maxSize = 1048576;
+				let invalidFiles = [];
+		
+				for (let i = 0; i < files.length; i++) {
+					const fileSize = files[i].size;
+					if (fileSize > maxSize) {
+						invalidFiles.push(files[i].name); // Lưu tên của tệp tin không hợp lệ
+					}
+				}
+		
+				if (invalidFiles.length > 0) {
+					alert("Các tệp tin sau có kích thước vượt quá 1MB:\n" + invalidFiles.join("\n"));
+					$(input).val(''); // Sử dụng jQuery để xóa lựa chọn của người dùng
+				}
+			}
+			
 			
 			function checkVariantStatus() {
 				$('.inputFormRowVariant').each(function() {
@@ -359,6 +351,7 @@ pages = $.extend(pages, {
             if (currAction  == "detail") {
                 pages.product.getListProduct();
                 pages.product.getListCombo();
+				pages.product.getListWithProduct();
             }
         },
         showMedia: function () {
@@ -574,7 +567,30 @@ pages = $.extend(pages, {
                     if (data.Code > 0 && data.Data != "") {
                         $("#relative_product").html(data.Data);
                         $('#relative_product').select2({
-                            placeholder: "Những sản phẩm liên quan...",
+                            placeholder: "Sản phẩm có thể bạn thích...",
+                            minimumResultsForSearch: "-1",
+                            width: '100%',
+                        });
+                    }
+                },
+                error: function (data) {
+
+                }
+            });
+        },
+		getListWithProduct: function () {
+            $.ajax({
+                'url': '/admin/product/get-list-with-product',
+                'type': 'GET',
+                'data': {id: $("#id").val(), selectOrderWithProduct : $("#selected_order_with_product").val()},
+                beforeSend: function () {
+
+                },
+                success: function (data) {
+                    if (data.Code > 0 && data.Data != "") {
+                        $("#order_with_product").html(data.Data);
+                        $('#order_with_product').select2({
+                            placeholder: "Những sản phẩm thường mua cùng...",
                             minimumResultsForSearch: "-1",
                             width: '100%',
                         });

@@ -19,12 +19,12 @@
 								$short = substr($this->top['title'],0,$pos).'...';
 							}
 						?>
-						<span class="title" title="<?php echo $this->top['title'] ?>">
+						<span class="title" style="font-size:0.8rem" title="<?php echo $this->top['title'] ?>">
 							<?php echo $short; ?>
 						</span>
 					</div>
 				</a>
-			<li>
+			</li>
 		<?php } ?>
 		</ul>
 		<ul class="post-menu-list">
@@ -47,7 +47,7 @@
 											$shorts = substr($post['title'],0,$pos).'...';
 										}
 									?>
-									<span class="title" title="<?php echo $post['title'] ?>">
+									<span class="title" style="font-size:0.8rem" title="<?php echo $post['title'] ?>">
 										<?php echo $shorts; ?>
 									</span>
 								</div>
@@ -62,4 +62,9 @@
 		</div>
 	</div>
 </div>
-
+<style>
+	.post-menu ul li:last-of-type>a {
+		font-weight: bold;
+		text-align: left!important;
+	}
+</style>

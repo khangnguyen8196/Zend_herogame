@@ -1,8 +1,5 @@
-<div class="side-box category-menu" >
-	<?php if( empty($this->title) == false ){ ?>
-    	<header style="background:red;border-top-left-radius: 10px;border-top-right-radius: 10px;"><?php echo $this->title ?></header>
-    <?php } ?>
-    <ul>    
+
+    <ul class="category-menu-mobile">    
         <?php if (empty($this->data[0]) == false && is_array($this->data[0])) { ?>
             <?php foreach ($this->data[0] as $key0 => $value0) { ?>
                 <li class="item-<?php echo $key0+1?>">
@@ -10,22 +7,22 @@
                     	<span class="icon">
                     		<?php if( empty($value0['icon']) == false && empty($value0['icon_hover']) == false ) { ?>
 			                    <img class="state-1" src="<?php echo PHOTO_PATH.$value0['icon'];?>" width="24" height="24" />
-			                    <img class="state-2" src="<?php echo PHOTO_PATH.$value0['icon_hover'];?>" width="24" height="24" />
+			                    <!-- <img class="state-2" src="<?php echo PHOTO_PATH.$value0['icon_hover'];?>" width="24" height="24" /> -->
 		                    <?php }?>
 		                </span>
                         <span> <?php echo $value0['name'] ?></span>
-                        <i class="fa fa-caret-right"></i>
+                        <i class="fa fa-caret-down"></i>
                     </a>
-                    <ul>
+                    <ul class="category-menu-mobile">
                         <?php if (empty($this->data[1]) == false && is_array($this->data[1])) { ?>
                             <?php foreach ($this->data[1] as $key1 => $value1) { ?>
                                 <?php if ($value1['parent_category'] == $value0['id']) { ?>
-                                    <li class="item-<?php echo $key0+1?>">
+                                    <li class="item-<?php echo $key0+1?>" style="position: relative">
                                         <a href="/danh-muc/<?php echo $value1['url_slug'] ?>">
                                             <span> <?php echo $value1['name'] ?></span>
-                                            <i class="fa fa-caret-right"></i>
+                                            <i class="fa fa-caret-down"></i>
                                         </a>
-                                        <ul>
+                                        <ul class="category-menu-mobile">
                                             <?php if (empty($this->data[2]) == false && is_array($this->data[2])) { ?>
                                                 <?php foreach ($this->data[2] as $key2 => $value2) { ?>
                                                     <?php if ($value2['parent_category'] == $value1['id']) { ?>
@@ -47,4 +44,4 @@
             <?php } ?>
         <?php } ?>
     </ul>
-</div>
+

@@ -50,13 +50,37 @@ pages = $.extend(pages, {
                 }
             });
 
-            $(document).on('click','#submit-btn-pay',function(e){
+            $(document).on('click', '#submit-btn-pay', function (e) {
+                var validationFields = [
+                    { field: '#cfa_email', errorField: '#errorEmail', message: 'Vui lòng nhập email' },
+                    { field: '#cfa_name', errorField: '#errorFullName', message: 'Vui lòng nhập họ tên' },
+                    { field: '#cfa_phone', errorField: '#errorPhone', message: 'Vui lòng nhập số điện thoại' },
+                    { field: '#cfa_address', errorField: '#errorAddress', message: 'Vui lòng nhập địa chỉ' },
+                    { field: '#province', errorField: '#provinceError', message: 'Chọn tỉnh thành phố' },
+                    { field: '#district', errorField: '#districtError', message: 'Vui lòng chọn quận huyện' },
+                    { field: '#wards', errorField: '#wardsError', message: 'Vui lòng chọn xã phường' }
+                ];
+            
+                validationFields.forEach(function (item) {
+                    var value = $(item.field).val();
+                    if (value === '' || (item.field === '#district' && value === 'Chọn quận huyện') || (item.field === '#wards' && value === 'Chọn phường xã')) {
+                        e.preventDefault();
+                        $(item.errorField).text(item.message);
+                    } else {
+                        $(item.errorField).text('');
+                    }
+                });
+                $phone = $('#cfa_phone').val();
+                if ($phone.length < 10) {
+                    e.preventDefault();
+                    $('#errorPhone').text('Số điện thoại không hợp lệ, phải đủ 10 số.')
+                }
                 var isChecked = $('input[name="cod"]:checked').length > 0;
                 if (!isChecked) {
                     $('#popup').show();
                     e.preventDefault();
-                }  
-            })
+                }
+            });            
 
             $('#closePopup').click(function(e) {
                 $('#popup').hide();
@@ -407,6 +431,21 @@ pages = $.extend(pages, {
                 }
 
             })
+
+            $(document).ready(function() {
+                checkWindowSize();
+            });
+            function checkWindowSize() {
+                var windowWidth = $(window).width();
+                if (windowWidth <= 768) {
+                    $('.cart-list.mobile').show();
+                    $('.cart-list.pc').remove();
+                } else {
+                    $('.cart-list.mobile').remove();
+                    $('.cart-list.pc').show();
+                }
+            }
+            
             function numberFormat (number, decimals, decPoint, thousandsSep) {
                 number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
                 var n = !isFinite(+number) ? 0 : +number;

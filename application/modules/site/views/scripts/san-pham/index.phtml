@@ -14,14 +14,14 @@
     <div class="row">
         <aside class="col-md-2 col-12 no-gutter">
             <?php
-            echo $this->partial('/shared/_sf_inputrange.phtml', array(
-                'title' => 'Lọc theo giá',
-                'name' => 'attribute[19]',
-                'min' => Commons::getMinProductPrice(),
-                'max' => Commons::getMaxProductPrice(),
-                'step' => 1000,
-                'unit' => '₫'
-            ))
+            // echo $this->partial('/shared/_sf_inputrange.phtml', array(
+            //     'title' => 'Lọc theo giá',
+            //     'name' => 'attribute[19]',
+            //     'min' => Commons::getMinProductPrice(),
+            //     'max' => Commons::getMaxProductPrice(),
+            //     'step' => 1000,
+            //     'unit' => '₫'
+            // ))
             ?>
             <div class="banner-mobile">
                 <?php
@@ -128,7 +128,7 @@
 
             echo $this->partial('/shared/_product_view.phtml', array(
                 'data' => $res,
-                'dcol' => 5
+                'dcol' => 4
             ))
             ?>
             <!-- pagination -->

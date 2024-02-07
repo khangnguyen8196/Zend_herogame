@@ -1,543 +1,644 @@
-<?php $this->viewCssClass = 'home index' ?>
-
-<?php
-echo $this->partial('/shared/_banner_slider.phtml', array(
-    'bhov' => true,
-    'data' => $this->banner['main']
-))
-?>
-
-<div class="container">
-    <div class="row post-home">
+    <?php $this->viewCssClass = 'home index' ?>
+    <div class="container-fluid slide-pc">
     <?php
-        if( empty($this->newestPost) == false ){
-            $top = $this->newestPost[0];
-            unset($this->newestPost[0]);
-            echo $this->partial('/shared/_post_menu_home.phtml', array(
-                    'title' => 'Tin tức mới',
-                    'top' => $top,
-                    'data' => $this->newestPost
-            ));
-        }
+    echo $this->partial('/shared/_banner_slider.phtml', array(
+        'bhov' => true,
+        'data' => $this->banner['main']
+    ))
     ?>
     </div>
-    
-    <div class="row less-gutter hidden-md-down">
-        <div style="display: flex; align-items: center;">
-            <img src="/site/img/youtube-short.jpg" alt="youtube" width="80" height="50">
-            <a href="https://www.youtube.com/@herogamevn/shorts" style="margin-left: 20px;" target="_blank">Xem tất cả</a>
-        </div>
-        <div class="banner-yt-pc col-12">
-        <?php 
-            $slides = array();
-            if (empty($this->banner['child_' . BANNER_CHILD_LEFT]) == false) { 
-           
-                $slides[] = array(
-                        'bhov' => true,
-                        'data' => $this->banner['child_' . BANNER_CHILD_LEFT]
-                );
-               
-            }
-            if (empty($this->banner['child_' . BANNER_CHILD_MID]) == false) {
-               
-                $slides[] = array(
-                        'bhov' => true,
-                        'data' => $this->banner['child_' . BANNER_CHILD_MID]
-                );
-               
-            } 
-            if (empty($this->banner['child_' . BANNER_CHILD_RIGHT]) == false) { 
-               
-                $slides[] = array(
-                        'bhov' => true,
-                        'data' => $this->banner['child_' . BANNER_CHILD_RIGHT]
-                );
-               
-            }
-            if (empty($this->banner['child_' . BANNER_CHILD_LEFT_2]) == false) { 
-                
-                  
-                $slides[] = array(
-                        'bhov' => true,
-                        'data' => $this->banner['child_' . BANNER_CHILD_LEFT_2]
-                );
-                
-             } 
-             if (empty($this->banner['child_' . BANNER_CHILD_MID_2]) == false) { 
-               
-                $slides[] = array(
-                        'bhov' => true,
-                        'data' => $this->banner['child_' . BANNER_CHILD_MID_2]
-                );
-                 
-             }
-             if (empty($this->banner['child_' . BANNER_CHILD_RIGHT_2]) == false) { 
-            
-                $slides[] = array(
-                        'bhov' => true,
-                        'data' => $this->banner['child_' . BANNER_CHILD_RIGHT_2]
-                );
-            
-            } 
-            if (empty($this->banner['child_' . BANNER_CHILD_LEFT_3]) == false) { 
-              
-                $slides[] = array(
-                        'bhov' => true,
-                        'data' => $this->banner['child_' . BANNER_CHILD_LEFT_3]
-                );
-                
-            } 
-             if (empty($this->banner['child_' . BANNER_CHILD_MID_3]) == false) { 
-                
-                $slides[] = array(
-                        'bhov' => true,
-                        'data' => $this->banner['child_' . BANNER_CHILD_MID_3]
-                );
-                 
-             } 
-             if (empty($this->banner['child_' . BANNER_CHILD_RIGHT_3]) == false) { 
-                
-                $slides[] = array(
-                        'bhov' => true,
-                        'data' => $this->banner['child_' . BANNER_CHILD_RIGHT_3]
-                );
-          
-            }
-             if (empty($this->banner['child_' . BANNER_CHILD_LEFT_4]) == false) { 
-                
-                $slides[] = array(
-                        'bhov' => true,
-                        'data' => $this->banner['child_' . BANNER_CHILD_LEFT_4]
-                );
-                
-            } 
-             if (empty($this->banner['child_' . BANNER_CHILD_MID_4]) == false) { 
-                
-                $slides[] = array(
-                        'bhov' => true,
-                        'data' => $this->banner['child_' . BANNER_CHILD_MID_4]
-                );
-               
-            }
-             if (empty($this->banner['child_' . BANNER_CHILD_RIGHT_4]) == false) { 
-                
-                $slides[] = array(
-                        'bhov' => true,
-                        'data' => $this->banner['child_' . BANNER_CHILD_RIGHT_4]
-                );
-            
-             } 
-            shuffle($slides); // Xáo trộn thứ tự của các slide
-
-            foreach ($slides as $slide) {
-                echo '<div class="col-4">';
-                echo $this->partial('/shared/_banner_slider_vertical.phtml', $slide);
-                echo '<span style="font-weight: bold; color: black;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;overflow: hidden;text-overflow: ellipsis;font-size: 14px;">' . $slide['data'][0]['title'] . '</span>';
-                echo '</div>';
-            }
-        ?>
-        </div>
-        <div class="custom-dots-pc"></div>
+    <div class="container-fluid slide-mobile ">
+    <?php
+    if(empty($this->banner['main_mobile']) == false){
+        echo $this->partial('/shared/_banner_slider_mobile.phtml', array(
+            'bhov' => true,
+            'data' => $this->banner['main_mobile']
+        ));
+    }else{
+        echo $this->partial('/shared/_banner_slider.phtml', array(
+            'bhov' => true,
+            'data' => $this->banner['main']
+        ));
+    }
+    ?>
     </div>
 
-    <div class="row less-gutter mobile">
-        <div style="display: flex; align-items: center;">
-            <img src="/site/img/youtube-short.jpg" alt="youtube" width="50" height="50">
-            <a href="https://www.youtube.com/@herogamevn/shorts" style="margin-left: 20px;" target="_blank">Xem tất cả</a>
-        </div>
-        <div class="banner-yt touch-scroll">
-        <?php 
-            $slides = array();
-            if (empty($this->banner['child_' . BANNER_CHILD_LEFT]) == false) { 
-           
-                $slides[] = array(
-                        'bhov' => true,
-                        'data' => $this->banner['child_' . BANNER_CHILD_LEFT]
-                );
-                
-               
-            }
-            if (empty($this->banner['child_' . BANNER_CHILD_MID]) == false) {
-               
-                $slides[] = array(
-                        'bhov' => true,
-                        'data' => $this->banner['child_' . BANNER_CHILD_MID]
-                );
-               
-            } 
-            if (empty($this->banner['child_' . BANNER_CHILD_RIGHT]) == false) { 
-               
-                $slides[] = array(
-                        'bhov' => true,
-                        'data' => $this->banner['child_' . BANNER_CHILD_RIGHT]
-                );
-               
-            }
-            if (empty($this->banner['child_' . BANNER_CHILD_LEFT_2]) == false) { 
-                
-                  
-                $slides[] = array(
-                        'bhov' => true,
-                        'data' => $this->banner['child_' . BANNER_CHILD_LEFT_2]
-                );
-                
-             } 
-             if (empty($this->banner['child_' . BANNER_CHILD_MID_2]) == false) { 
-               
-                $slides[] = array(
-                        'bhov' => true,
-                        'data' => $this->banner['child_' . BANNER_CHILD_MID_2]
-                );
-                 
-             }
-             if (empty($this->banner['child_' . BANNER_CHILD_RIGHT_2]) == false) { 
-            
-                $slides[] = array(
-                        'bhov' => true,
-                        'data' => $this->banner['child_' . BANNER_CHILD_RIGHT_2]
-                );
-            
-            } 
-            if (empty($this->banner['child_' . BANNER_CHILD_LEFT_3]) == false) { 
-              
-                $slides[] = array(
-                        'bhov' => true,
-                        'data' => $this->banner['child_' . BANNER_CHILD_LEFT_3]
-                );
-                
-            } 
-             if (empty($this->banner['child_' . BANNER_CHILD_MID_3]) == false) { 
-                
-                $slides[] = array(
-                        'bhov' => true,
-                        'data' => $this->banner['child_' . BANNER_CHILD_MID_3]
-                );
-                 
-             } 
-             if (empty($this->banner['child_' . BANNER_CHILD_RIGHT_3]) == false) { 
-                
-                $slides[] = array(
-                        'bhov' => true,
-                        'data' => $this->banner['child_' . BANNER_CHILD_RIGHT_3]
-                );
-          
-            }
-             if (empty($this->banner['child_' . BANNER_CHILD_LEFT_4]) == false) { 
-                
-                $slides[] = array(
-                        'bhov' => true,
-                        'data' => $this->banner['child_' . BANNER_CHILD_LEFT_4]
-                );
-                
-            } 
-             if (empty($this->banner['child_' . BANNER_CHILD_MID_4]) == false) { 
-                
-                $slides[] = array(
-                        'bhov' => true,
-                        'data' => $this->banner['child_' . BANNER_CHILD_MID_4]
-                );
-               
-            }
-             if (empty($this->banner['child_' . BANNER_CHILD_RIGHT_4]) == false) { 
-                
-                $slides[] = array(
-                        'bhov' => true,
-                        'data' => $this->banner['child_' . BANNER_CHILD_RIGHT_4]
-                );
-            
-             } 
-            shuffle($slides); // Xáo trộn thứ tự của các slide
-
-            foreach ($slides as $slide) {
-                echo '<div class="col-4">';
-                echo $this->partial('/shared/_banner_slider_vertical.phtml', $slide);
-                echo '<span style="font-weight: bold; color: black;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;overflow: hidden;text-overflow: ellipsis;font-size: 14px;">' . $slide['data'][0]['title'] . '</span>';
-                echo '</div>';
-            }
-        ?>
-        </div>
-        <div class="custom-dots"></div>
-    </div>
-    <div class="row">
-        <!-- Left menu-->
-        <aside class="col-md-2 no-gutter">
+    <div class="container">
+        <div class="product-new">
             <?php
-	            if( empty( $this->menuCategory) == false ){
-		            echo $this->partial('/shared/_category_menu.phtml', array(
-		                'title' => 'Danh mục', 'data' => $this->menuCategory
-		            ));
-	            }
-            ?>
-            <div class="hidden-md-down">
-	            <?php
-		            if( empty($this->productBestSell) == false ){
-			            echo $this->partial('/shared/_product_menu.phtml', array(
-			                'title' => 'Pre-Order',
-			                'data' => $this->productBestSell
-			            ));
-		            }
-	            ?>
-	
-	            <?php
-		            if( empty($this->newProducts) == false ){
-			            echo $this->partial('/shared/_product_menu.phtml', array(
-			                'title' => 'Mới cập nhật',
-			                'data' => $this->newProducts
-			            ));
-		            }
-	            ?><!--newestPost-->	            
-			</div>
-            <div class="banner hidden-md-down">
-                    <?php if (empty($this->banner_vertical['child_' . BANNER_CHILD_LEFT_VERTICAL1]) == false) { ?>
-                        <div class="col-12" style="padding:0px">
-                            <?php
-                            echo $this->partial('/shared/_banner_rotator.phtml', array(
-                                'bhov' => true,
-                                'data' => $this->banner_vertical['child_' . BANNER_CHILD_LEFT_VERTICAL1]
-                            ))
-                            ?>
-                        </div>
-                    <?php } ?>
-            </div>
-            <div class="banner hidden-md-down">
-                    <?php if (empty($this->banner_vertical['child_' . BANNER_CHILD_LEFT_VERTICAL2]) == false) { ?>
-                        <div class="col-12" style="padding:0px">
-                            <?php
-                            echo $this->partial('/shared/_banner_rotator.phtml', array(
-                                'bhov' => true,
-                                'data' => $this->banner_vertical['child_' . BANNER_CHILD_LEFT_VERTICAL2]
-                            ))
-                            ?>
-                        </div>
-                    <?php } ?>
-            </div>
-            <div class="banner hidden-md-down">
-                    <?php if (empty($this->banner_vertical['child_' . BANNER_CHILD_LEFT_VERTICAL3]) == false) { ?>
-                        <div class="col-12" style="padding:0px">
-                            <?php
-                            echo $this->partial('/shared/_banner_rotator.phtml', array(
-                                'bhov' => true,
-                                'data' => $this->banner_vertical['child_' . BANNER_CHILD_LEFT_VERTICAL3]
-                            ))
-                            ?>
-                        </div>
-                    <?php } ?>
-            </div>
-            
-        </aside>
-        <!-- Left menu -->
-        <!-- Content -->
-        <section class="col-md-10 col-12 left-gutter">
-            <!-- get list category -->
-            <?php
-            if (empty($this->listCategory) == false) {
                 echo $this->partial('/shared/_quick_view.phtml', array(
-                    'qtyp' => 'category',
-                	'qcss' => 'list-game-mc',
+                    'qdsp' => 'slide',
+                    'dcol' => 4,
                     'tabs' => array(
                         array(
-                            'title' => 'Chọn Máy Chơi Game',
-                            'data' => $this->listCategory
-                        )
-                    ),
-                	'dcol' => 3,
-                	'headerCss' => 'hidden'	
+                            'title' => 'Hàng Mới Về',
+                            'data' => $this->contentProductGroup["new_arrival"]
+                        ),
+                    )
+                ))
+            ?>
+        </div>
+        <div class="row post-home">
+        <?php
+            if( empty($this->newestPost) == false ){
+                $top = $this->newestPost[0];
+                unset($this->newestPost[0]);
+                echo $this->partial('/shared/_post_menu_home.phtml', array(
+                        'title' => 'Tin tức mới',
+                        'top' => $top,
+                        'data' => $this->newestPost
                 ));
             }
-            ?>
-            <!-- end get list category -->
-            <?php
-            echo $this->partial('/shared/_quick_view.phtml', array(
-                'qdsp' => 'slider',
-            	'dcol' => 4,
-                'tabs' => array(
-                    array(
-                        'title' => 'Pre-Order',
-                        'data' => $this->contentProductGroup["best_sell"]
-                    ),
-                    array(
-                        'title' => 'Hàng Mới Về',
-                        'data' => $this->contentProductGroup["new_arrival"]
-                    ),
-                    array(
-                        'title' => 'Hot deal',
-                        'data' => $this->contentProductGroup["promotion"]
-                    )
-                )
-            ))
-            ?>
-            <div class="category-group-home">
-                <?php if (empty($this->productGroupByCategory) == false && empty($this->listAllProductCategory) == false) { 
-                    foreach ($this->listAllProductCategory as $c => $category){
-                    
-                        foreach ($this->productGroupByCategory as $key => $value) {
-                            if($category['id'] == $key ){
-                            $i = 0;
-                            $tabs = array();
-                            foreach($value as $j => $item){
-                                    if( $i <= 1 ){
-                                        $tabs[] = array(
-                                                'title' => '<a class="category-url" href="danh-muc/'.$category['url_slug'].'">'.$j.'</a>',
-                                                'data' => $item
-                                        );
-                                        $i++;
-                                    }
-                                    if( $i == 1 ){
-                                        echo $this->partial('/shared/_quick_view.phtml', array(
-                                            'qdsp' => 'slide',
-                                            'dcol' => 4,
-                                            'tabs' => $tabs
-                                        ));
-                                        $tabs = array();
-                                        $i = 0;
-                                    }
-                                }
-                            }
-                            if( $i > 0 ){
-                                echo $this->partial('/shared/_quick_view.phtml', array(
-                                    'qdsp' => 'slide',
-                                    'dcol' => 4,
-                                    'tabs' => $tabs
-                                ));
-                            }   
-                        }
-                        
-                    }
-                } ?>
+        ?>
+        </div>
+        
+        <div class="row less-gutter hidden-md-down">
+            <div style="display: flex; align-items: center;">
+                <img src="/site/img/youtube-short.jpg" alt="youtube" width="80" height="50">
+                <a href="https://www.youtube.com/@herogamevn/shorts" style="margin-left: 20px;" target="_blank">Xem tất cả</a>
             </div>
-        </section>
+            <div class="banner-yt-pc col-12">
+            <?php 
+                $slides = array();
+                if (empty($this->banner['child_' . BANNER_CHILD_LEFT]) == false) { 
+            
+                    $slides[] = array(
+                            'bhov' => true,
+                            'data' => $this->banner['child_' . BANNER_CHILD_LEFT]
+                    );
+                
+                }
+                if (empty($this->banner['child_' . BANNER_CHILD_MID]) == false) {
+                
+                    $slides[] = array(
+                            'bhov' => true,
+                            'data' => $this->banner['child_' . BANNER_CHILD_MID]
+                    );
+                
+                } 
+                if (empty($this->banner['child_' . BANNER_CHILD_RIGHT]) == false) { 
+                
+                    $slides[] = array(
+                            'bhov' => true,
+                            'data' => $this->banner['child_' . BANNER_CHILD_RIGHT]
+                    );
+                
+                }
+                if (empty($this->banner['child_' . BANNER_CHILD_LEFT_2]) == false) { 
+                    
+                    
+                    $slides[] = array(
+                            'bhov' => true,
+                            'data' => $this->banner['child_' . BANNER_CHILD_LEFT_2]
+                    );
+                    
+                } 
+                if (empty($this->banner['child_' . BANNER_CHILD_MID_2]) == false) { 
+                
+                    $slides[] = array(
+                            'bhov' => true,
+                            'data' => $this->banner['child_' . BANNER_CHILD_MID_2]
+                    );
+                    
+                }
+                if (empty($this->banner['child_' . BANNER_CHILD_RIGHT_2]) == false) { 
+                
+                    $slides[] = array(
+                            'bhov' => true,
+                            'data' => $this->banner['child_' . BANNER_CHILD_RIGHT_2]
+                    );
+                
+                } 
+                if (empty($this->banner['child_' . BANNER_CHILD_LEFT_3]) == false) { 
+                
+                    $slides[] = array(
+                            'bhov' => true,
+                            'data' => $this->banner['child_' . BANNER_CHILD_LEFT_3]
+                    );
+                    
+                } 
+                if (empty($this->banner['child_' . BANNER_CHILD_MID_3]) == false) { 
+                    
+                    $slides[] = array(
+                            'bhov' => true,
+                            'data' => $this->banner['child_' . BANNER_CHILD_MID_3]
+                    );
+                    
+                } 
+                if (empty($this->banner['child_' . BANNER_CHILD_RIGHT_3]) == false) { 
+                    
+                    $slides[] = array(
+                            'bhov' => true,
+                            'data' => $this->banner['child_' . BANNER_CHILD_RIGHT_3]
+                    );
+            
+                }
+                if (empty($this->banner['child_' . BANNER_CHILD_LEFT_4]) == false) { 
+                    
+                    $slides[] = array(
+                            'bhov' => true,
+                            'data' => $this->banner['child_' . BANNER_CHILD_LEFT_4]
+                    );
+                    
+                } 
+                if (empty($this->banner['child_' . BANNER_CHILD_MID_4]) == false) { 
+                    
+                    $slides[] = array(
+                            'bhov' => true,
+                            'data' => $this->banner['child_' . BANNER_CHILD_MID_4]
+                    );
+                
+                }
+                if (empty($this->banner['child_' . BANNER_CHILD_RIGHT_4]) == false) { 
+                    
+                    $slides[] = array(
+                            'bhov' => true,
+                            'data' => $this->banner['child_' . BANNER_CHILD_RIGHT_4]
+                    );
+                
+                } 
+                shuffle($slides); // Xáo trộn thứ tự của các slide
+
+                foreach ($slides as $slide) {
+                    echo '<div class="col-4">';
+                    echo $this->partial('/shared/_banner_slider_vertical.phtml', $slide);
+                    echo '<span style="font-weight: bold; color: black;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;overflow: hidden;text-overflow: ellipsis;font-size: 14px;">' . $slide['data'][0]['title'] . '</span>';
+                    echo '</div>';
+                }
+            ?>
+            </div>
+            <div class="custom-dots-pc"></div>
+        </div>
+
+        <div class="row less-gutter mobile">
+            <div style="display: flex; align-items: center;">
+                <img src="/site/img/youtube-short.jpg" alt="youtube" width="50" height="50">
+                <a href="https://www.youtube.com/@herogamevn/shorts" style="margin-left: 20px;" target="_blank">Xem tất cả</a>
+            </div>
+            <div class="banner-yt touch-scroll">
+            <?php 
+                $slides = array();
+                if (empty($this->banner['child_' . BANNER_CHILD_LEFT]) == false) { 
+            
+                    $slides[] = array(
+                            'bhov' => true,
+                            'data' => $this->banner['child_' . BANNER_CHILD_LEFT]
+                    );
+                    
+                
+                }
+                if (empty($this->banner['child_' . BANNER_CHILD_MID]) == false) {
+                
+                    $slides[] = array(
+                            'bhov' => true,
+                            'data' => $this->banner['child_' . BANNER_CHILD_MID]
+                    );
+                
+                } 
+                if (empty($this->banner['child_' . BANNER_CHILD_RIGHT]) == false) { 
+                
+                    $slides[] = array(
+                            'bhov' => true,
+                            'data' => $this->banner['child_' . BANNER_CHILD_RIGHT]
+                    );
+                
+                }
+                if (empty($this->banner['child_' . BANNER_CHILD_LEFT_2]) == false) { 
+                    
+                    
+                    $slides[] = array(
+                            'bhov' => true,
+                            'data' => $this->banner['child_' . BANNER_CHILD_LEFT_2]
+                    );
+                    
+                } 
+                if (empty($this->banner['child_' . BANNER_CHILD_MID_2]) == false) { 
+                
+                    $slides[] = array(
+                            'bhov' => true,
+                            'data' => $this->banner['child_' . BANNER_CHILD_MID_2]
+                    );
+                    
+                }
+                if (empty($this->banner['child_' . BANNER_CHILD_RIGHT_2]) == false) { 
+                
+                    $slides[] = array(
+                            'bhov' => true,
+                            'data' => $this->banner['child_' . BANNER_CHILD_RIGHT_2]
+                    );
+                
+                } 
+                if (empty($this->banner['child_' . BANNER_CHILD_LEFT_3]) == false) { 
+                
+                    $slides[] = array(
+                            'bhov' => true,
+                            'data' => $this->banner['child_' . BANNER_CHILD_LEFT_3]
+                    );
+                    
+                } 
+                if (empty($this->banner['child_' . BANNER_CHILD_MID_3]) == false) { 
+                    
+                    $slides[] = array(
+                            'bhov' => true,
+                            'data' => $this->banner['child_' . BANNER_CHILD_MID_3]
+                    );
+                    
+                } 
+                if (empty($this->banner['child_' . BANNER_CHILD_RIGHT_3]) == false) { 
+                    
+                    $slides[] = array(
+                            'bhov' => true,
+                            'data' => $this->banner['child_' . BANNER_CHILD_RIGHT_3]
+                    );
+            
+                }
+                if (empty($this->banner['child_' . BANNER_CHILD_LEFT_4]) == false) { 
+                    
+                    $slides[] = array(
+                            'bhov' => true,
+                            'data' => $this->banner['child_' . BANNER_CHILD_LEFT_4]
+                    );
+                    
+                } 
+                if (empty($this->banner['child_' . BANNER_CHILD_MID_4]) == false) { 
+                    
+                    $slides[] = array(
+                            'bhov' => true,
+                            'data' => $this->banner['child_' . BANNER_CHILD_MID_4]
+                    );
+                
+                }
+                if (empty($this->banner['child_' . BANNER_CHILD_RIGHT_4]) == false) { 
+                    
+                    $slides[] = array(
+                            'bhov' => true,
+                            'data' => $this->banner['child_' . BANNER_CHILD_RIGHT_4]
+                    );
+                
+                } 
+                shuffle($slides); // Xáo trộn thứ tự của các slide
+
+                foreach ($slides as $slide) {
+                    echo '<div class="col-4">';
+                    echo $this->partial('/shared/_banner_slider_vertical.phtml', $slide);
+                    echo '<span style="font-weight: bold; color: black;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;overflow: hidden;text-overflow: ellipsis;font-size: 14px;">' . $slide['data'][0]['title'] . '</span>';
+                    echo '</div>';
+                }
+            ?>
+            </div>
+            <div class="custom-dots"></div>
+        </div>
+        <div class="row">
+            <!-- Left menu-->
+            <aside class="col-md-2 no-gutter">
+                <div class="menu-pc hidden-mobile">
+                <?php
+                    if( empty( $this->menuCategory) == false ){
+                        echo $this->partial('/shared/_category_menu.phtml', array(
+                            'title' => 'Danh mục', 'data' => $this->menuCategory
+                        ));
+                    }
+                ?>
+                </div>
+                <div class="hidden-md-down">
+                    <?php
+                        // if( empty($this->productBestSell) == false ){
+                        //     echo $this->partial('/shared/_product_menu.phtml', array(
+                        //         'title' => 'Pre-Order',
+                        //         'data' => $this->productBestSell
+                        //     ));
+                        // }
+                    ?>
+        
+                    <?php
+                        // if( empty($this->newProducts) == false ){
+                        //     echo $this->partial('/shared/_product_menu.phtml', array(
+                        //         'title' => 'Mới cập nhật',
+                        //         'data' => $this->newProducts
+                        //     ));
+                        // }
+                    ?><!--newestPost-->	            
+                </div>
+                <div class="banner hidden-md-down">
+                        <?php if (empty($this->banner_vertical['child_' . BANNER_CHILD_LEFT_VERTICAL1]) == false) { ?>
+                            <div class="col-12" style="margin-top:10px;padding:10px; border:1px solid #ccc; border-radius:10px">
+                                <?php
+                                echo $this->partial('/shared/_banner_rotator.phtml', array(
+                                    'bhov' => true,
+                                    'data' => $this->banner_vertical['child_' . BANNER_CHILD_LEFT_VERTICAL1]
+                                ))
+                                ?>
+                            </div>
+                        <?php } ?>
+                </div>
+                <div class="banner hidden-md-down">
+                        <?php if (empty($this->banner_vertical['child_' . BANNER_CHILD_LEFT_VERTICAL2]) == false) { ?>
+                            <div class="col-12" style="margin-top:10px;padding:10px; border:1px solid #ccc; border-radius:10px">
+                                <?php
+                                echo $this->partial('/shared/_banner_rotator.phtml', array(
+                                    'bhov' => true,
+                                    'data' => $this->banner_vertical['child_' . BANNER_CHILD_LEFT_VERTICAL2]
+                                ))
+                                ?>
+                            </div>
+                        <?php } ?>
+                </div>
+                <div class="banner hidden-md-down">
+                        <?php if (empty($this->banner_vertical['child_' . BANNER_CHILD_LEFT_VERTICAL3]) == false) { ?>
+                            <div class="col-12" style="margin-top:10px;padding:10px; border:1px solid #ccc; border-radius:10px">
+                                <?php
+                                echo $this->partial('/shared/_banner_rotator.phtml', array(
+                                    'bhov' => true,
+                                    'data' => $this->banner_vertical['child_' . BANNER_CHILD_LEFT_VERTICAL3]
+                                ))
+                                ?>
+                            </div>
+                        <?php } ?>
+                </div>
+                
+            </aside>
+            <!-- Left menu -->
+            <!-- Content -->
+            <section class="col-md-10 col-12 left-gutter">
+                <!-- get list category -->
+                <div class="play-game-new">
+                <?php
+                if (empty($this->listCategory) == false) {
+                    echo $this->partial('/shared/_quick_view.phtml', array(
+                        'qtyp' => 'category',
+                        'qcss' => 'list-game-mc',
+                        'tabs' => array(
+                            array(
+                                'title' => 'Chọn Máy Chơi Game',
+                                'data' => $this->listCategory
+                            )
+                        ),
+                        'dcol' => 3,
+                        'headerCss' => 'hidden'	
+                    ));
+                }
+                ?>
+                </div>
+                <!-- end get list category -->
+                <?php
+                echo $this->partial('/shared/_quick_view.phtml', array(
+                    'qdsp' => 'slide',
+                    'dcol' => 4,
+                    'tabs' => array(
+                        array(
+                            'title' => 'Pre-Order',
+                            'data' => $this->contentProductGroup["best_sell"]
+                        ),
+                        array(
+                            'title' => 'Hot deal',
+                            'data' => $this->contentProductGroup["promotion"]
+                        )
+                    )
+                ))
+                ?>
+                <?php if (empty($this->banner['child_' . BANNER_CHILD_PRE_ORDER]) == false) { ?>
+                    <div class="col-12 banner-category" style="padding:0px">
+                        <?php
+                        echo $this->partial('/shared/_banner_rotator.phtml', array(
+                            'bhov' => true,
+                            'data' => $this->banner['child_' . BANNER_CHILD_PRE_ORDER]
+                        ))
+                        ?>
+                    </div>
+                <?php } ?>
+                <div class="category-group-home">
+                    <?php if (empty($this->productGroupByCategory) == false && empty($this->listAllProductCategory) == false) { 
+                        foreach ($this->listAllProductCategory as $c => $category){
+                        
+                            foreach ($this->productGroupByCategory as $key => $value) {
+                                if($category['id'] == $key ){
+                                    $i = 0;
+                                    $tabs = array();
+                                    foreach($value as $j => $item){
+                                        if( $i <= 1 ){
+                                            $tabs[] = array(
+                                                    'title' => '<a class="category-url" href="danh-muc/'.$category['url_slug'].'">'.$j.'</a>',
+                                                    'data' => $item
+                                            );
+                                            $i++;
+                                        }
+                                        if( $i == 1 ){
+                                            echo $this->partial('/shared/_quick_view.phtml', array(
+                                                'qdsp' => 'slide',
+                                                'dcol' => 4,
+                                                'tabs' => $tabs
+                                            ));
+                                            $tabs = array();
+                                            $i = 0;
+                                        }
+                                    }
+                                    if (empty($this->banner['child_' . BANNER_CHILD_HEADER]) == false) { 
+                                        $banners = $this->banner['child_' . BANNER_CHILD_HEADER];
+                                        $matchedBanners = [];
+                                        $fallbackBanners = [];
+                                        
+                                        foreach ($banners as $key => $banner) {
+                                            if (!empty($banner['id_category']) && $banner['id_category'] == $category['id']) {
+                                                $matchedBanners[] = $banner;
+                                            } else if (empty($banner['id_category'])) {
+                                                $fallbackBanners[] = $banner;
+                                            }
+                                        }
+                                        if (!empty($matchedBanners)) { ?>
+                                            <div class="col-12 banner-category">
+                                                <?php
+                                                echo $this->partial('/shared/_banner_rotator.phtml', array(
+                                                    'bhov' => true,
+                                                    'data' => $matchedBanners
+                                                ));
+                                                ?>
+                                            </div>
+                                        <?php } else if (!empty($fallbackBanners)) { ?>
+                                            <div class="col-12 banner-category">
+                                                <?php
+                                                echo $this->partial('/shared/_banner_rotator.phtml', array(
+                                                    'bhov' => true,
+                                                    'data' => $fallbackBanners
+                                                ));
+                                                ?>
+                                            </div>
+                                        <?php }
+                                    }
+                                    
+                                }
+                                if( $i > 0 ){
+                                    echo $this->partial('/shared/_quick_view.phtml', array(
+                                        'qdsp' => 'slide',
+                                        'dcol' => 4,
+                                        'tabs' => $tabs
+                                    ));
+                                }
+                            
+                            }
+                            
+                        }
+                    } ?>
+                </div>
+            </section>
+        </div>
     </div>
-</div>
-<?php 
-	$footer_video = Commons::getSettingByKey($this->setting, 'footer_youtube_video');
-	$footer_background = Commons::getSettingByKey($this->setting, 'footer_backgound_mage');
-	$banner_f_top = array();
-    
-	if( empty($this->banner['child_' . BANNER_CHILD_FOOTER_TOP]) == false ){
-		$banner_f_top = $this->banner['child_' . BANNER_CHILD_FOOTER_TOP];
-	};
-	$banner_f_bot = array();
-	if( empty($this->banner['child_' . BANNER_CHILD_FOOTER_BOT]) == false ){
-		$banner_f_bot = $this->banner['child_' . BANNER_CHILD_FOOTER_BOT];
-	};
-?>
-<?php echo $this->partial('/shared/_video_view.phtml', array(
-    'burl' => $footer_background['value'],
-    'vurl' => $footer_video['value'],
-    'bcf1' => array(
-        'data' => $banner_f_top
-    ),
-    'bcf2' => array(
-        'data' => $banner_f_bot
-    ),
-)) ?>
+    <?php 
+        $footer_video = Commons::getSettingByKey($this->setting, 'footer_youtube_video');
+        $footer_background = Commons::getSettingByKey($this->setting, 'footer_backgound_mage');
+        $banner_f_top = array();
+        
+        if( empty($this->banner['child_' . BANNER_CHILD_FOOTER_TOP]) == false ){
+            $banner_f_top = $this->banner['child_' . BANNER_CHILD_FOOTER_TOP];
+        };
+        $banner_f_bot = array();
+        if( empty($this->banner['child_' . BANNER_CHILD_FOOTER_BOT]) == false ){
+            $banner_f_bot = $this->banner['child_' . BANNER_CHILD_FOOTER_BOT];
+        };
+    ?>
+    <?php echo $this->partial('/shared/_video_view.phtml', array(
+        'burl' => $footer_background['value'],
+        'vurl' => $footer_video['value'],
+        'bcf1' => array(
+            'data' => $banner_f_top
+        ),
+        'bcf2' => array(
+            'data' => $banner_f_bot
+        ),
+    )) ?>
 
 
-<style>
-    .category-group-home .quick-view ul li .nav-link.active {
-        display: none;
-    }
-    .category-group-home .quick-view ul li .category-url {
-        display: block;
-        padding: 10px 20px;
-        color: white;
-        font-weight: bold;
-        background: #aa052d;
-        text-decoration: none;
-    }
-    .slick-prev {
-    width: 32px; 
-    height: 32px; 
-    overflow: hidden;
-    Position:absolute;
-    top:50%;
-    opacity: 1;
-    left:15px;
-    background: url(../img/bxslider/controls.png) no-repeat 0px -32px;
-    margin-top:-16px;
-    outline:none !important;
-    text-indent:-9999px;
-    z-index:99999;
-    border: none !important; 
-    background-color: transparent !important;
-    }
-    .slick-next {
-    width: 32px; 
-    height: 32px; 
-    overflow: hidden;
-    Position:absolute;
-    top:50%;
-    opacity: 1;
-    background: url(../img/bxslider/controls.png) no-repeat -43px -32px;
-    right: 15px;
-    margin-top:-16px;
-    outline:none !important;
-    text-indent:-9999px;
-    z-index:99999;
-    border: none !important; 
-    background-color: transparent !important;
-    }
-
-    .row.less-gutter .banner-yt-pc {
-        display: block;
-        /* flex-wrap: nowrap; */
-    }
-
-    .row.less-gutter .banner-yt-pc .banner-rotator .banner-video .imgh.r0x0 {
-        border-radius: 10px;
-    }
-    .row.less-gutter .custom-dots-pc  {
-        margin: auto;
-    }
-    .row.less-gutter .custom-dots-pc .slick-dots {
-        margin: auto;
-        display: flex;
-        margin: auto;
-        align-items: center;
-    }
-    .row.less-gutter .custom-dots-pc .slick-dots li  {
-        display: block;
-        width: 10px;
-        height: 10px;
-        background: gray;
-        border-radius: 50%;
-        margin: 3px;
-    }
-    .row.less-gutter .custom-dots-pc .slick-dots li button {
-        display: none;
-    }
-    .row.less-gutter .custom-dots-pc .slick-dots li.slick-active{
-        background-color: black;
-    }
-    .row.less-gutter.mobile {
-        display: none;
-    }
-    @media screen and (max-width: 933px){
-        .row.less-gutter.mobile {
-           display: block;
+    <style>
+        .container-fluid.slide-mobile {
+            padding: 0;
+            overflow: auto;
+            margin-top:10px;
         }
-        .row.less-gutter.mobile .banner-yt {
+        .container-fluid.slide-mobile ul li.slider-qc.slick-slide {
+            margin: 0 3px;
+            border-radius: 24px;
+            overflow: auto;
+        }
+        @media screen and (min-width: 768px){
+            .hidden-mobile{
+                display: block;
+            }
+            .slide-pc{
+                display: block;
+            }
+            .slide-mobile{
+                display: none;
+            }
+        }
+        @media screen and (max-width: 767px){
+            .hidden-mobile{
+                display: none;
+            }
+            .slide-pc{
+                display: none;
+            }
+            .slide-mobile{
+                display: block;
+            }
+            .play-game-new .grid.grid-2 li {
+                width: calc((100% - 9rem * 1) / 2);
+            }
+            .play-game-new .grid.grid-2 li:nth-of-type(2n) {
+            margin-right: 1rem;
+            }
+            .play-game-new .grid.grid-2 li:nth-of-type(3n) {
+            margin-right: 0;
+            }
+            .play-game-new ul.grid .category-item .detail .name a {
+                display: flex;
+                height: 2.4rem;
+                overflow: hidden;
+                font-size: 9px;
+            }
+        }
+
+        .banner-rotator {
+            margin-top: 0;
+            margin-bottom: 0;
+            transition: transform 0.3s ease-in-out;
+        }
+        .banner-rotator:hover {
+            transform: translateY(-20px);
+        }
+        
+        .banner-category {
+            margin: 35px 0px;
+        }
+
+        .banner-rotator .banner-photo .imgh {
+            border-radius: 20px;
+        }
+
+        .col-12.banner-category {
+            padding-right: 0!important;
+            padding-left: 0!important;
+        }
+        .category-group-home .quick-view ul li .nav-link.active {
+            display: none;
+        }
+        .category-group-home .quick-view ul li .category-url {
+            display: block;
+            padding: 10px 20px;
+            color: white;
+            font-weight: bold;
+            background: #aa052d;
+            text-decoration: none;
+        }
+        .slick-prev {
+        width: 32px; 
+        height: 32px; 
+        overflow: hidden;
+        Position:absolute;
+        top:50%;
+        opacity: 1;
+        left:15px;
+        background: url(../img/bxslider/controls.png) no-repeat 0px -32px;
+        margin-top:-16px;
+        outline:none !important;
+        text-indent:-9999px;
+        z-index:9999;
+        border: none !important; 
+        background-color: transparent !important;
+        }
+        .slick-next {
+        width: 32px; 
+        height: 32px; 
+        overflow: hidden;
+        Position:absolute;
+        top:50%;
+        opacity: 1;
+        background: url(../img/bxslider/controls.png) no-repeat -43px -32px;
+        right: 15px;
+        margin-top:-16px;
+        outline:none !important;
+        text-indent:-9999px;
+        z-index:9999;
+        border: none !important; 
+        background-color: transparent !important;
+        }
+
+        .row.less-gutter .banner-yt-pc {
             display: block;
             /* flex-wrap: nowrap; */
         }
-        
-        .row.less-gutter.mobile .banner-yt .banner-rotator .banner-video .imgh.r0x0 {
+
+        .row.less-gutter .banner-yt-pc .banner-rotator .banner-video .imgh.r0x0 {
             border-radius: 10px;
         }
-        .banner-rotator {
-           display: block;
+        .row.less-gutter .custom-dots-pc  {
+            margin: auto;
         }
-        .row.less-gutter.mobile .custom-dots {
+        .row.less-gutter .custom-dots-pc .slick-dots {
+            margin: auto;
             display: flex;
-            margin-top: 10px;
+            margin: auto;
             align-items: center;
         }
-        .row.less-gutter.mobile .custom-dots .slick-dots {
-             display: flex;
-             margin: auto;
-             align-items: center;
-        }
-        .row.less-gutter.mobile .custom-dots .slick-dots li  {
+        .row.less-gutter .custom-dots-pc .slick-dots li  {
             display: block;
             width: 10px;
             height: 10px;
@@ -545,17 +646,59 @@ echo $this->partial('/shared/_banner_slider.phtml', array(
             border-radius: 50%;
             margin: 3px;
         }
-        .row.less-gutter.mobile .custom-dots .slick-dots li button {
+        .row.less-gutter .custom-dots-pc .slick-dots li button {
             display: none;
         }
-        .row.less-gutter.mobile .custom-dots .slick-dots li.slick-active{
+        .row.less-gutter .custom-dots-pc .slick-dots li.slick-active{
             background-color: black;
         }
-        .touch-scroll {
-            touch-action: pan-y;
+        .row.less-gutter.mobile {
+            display: none;
         }
+        @media screen and (max-width: 933px){
+            .row.less-gutter.mobile {
+            display: block;
+            }
+            .row.less-gutter.mobile .banner-yt {
+                display: block;
+                /* flex-wrap: nowrap; */
+            }
+            
+            .row.less-gutter.mobile .banner-yt .banner-rotator .banner-video .imgh.r0x0 {
+                border-radius: 10px;
+            }
+            .banner-rotator {
+            display: block;
+            }
+            .row.less-gutter.mobile .custom-dots {
+                display: flex;
+                margin-top: 10px;
+                align-items: center;
+            }
+            .row.less-gutter.mobile .custom-dots .slick-dots {
+                display: flex;
+                margin: auto;
+                align-items: center;
+            }
+            .row.less-gutter.mobile .custom-dots .slick-dots li  {
+                display: block;
+                width: 10px;
+                height: 10px;
+                background: gray;
+                border-radius: 50%;
+                margin: 3px;
+            }
+            .row.less-gutter.mobile .custom-dots .slick-dots li button {
+                display: none;
+            }
+            .row.less-gutter.mobile .custom-dots .slick-dots li.slick-active{
+                background-color: black;
+            }
+            .touch-scroll {
+                touch-action: pan-y;
+            }
 
-    }
-</style>
+        }
+    </style>
 
 

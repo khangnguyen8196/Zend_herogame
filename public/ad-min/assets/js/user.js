@@ -10,12 +10,12 @@ pages = $.extend(pages, {
         init: function () {
             var aoColumns = [
                 {"data": "user_id"},
-                {"data": "user_name"},
-                {"data": "first_name"},
-                {"data": "last_name"},
+                {"data": "phone_number"},
+                {"data": "fullname"},
                 {"data": "email"},
                 {"data": "role_id"},
                 {"data": "status"},
+                {"data": "created_at"},
                 {"data": "Action_Table"}
             ];
             var columnDefs = [
@@ -46,7 +46,7 @@ pages = $.extend(pages, {
                         return action;
                     },
                     orderable: true,
-                    targets: 5
+                    targets: 4
                 },
                 {
                     "render": function (data, type, row) {
@@ -57,6 +57,14 @@ pages = $.extend(pages, {
                              label = '<span class="label label-default">Inactive</span>';
                         }
                         return label;
+                    },
+                    orderable: true,
+                    targets: 5
+                },
+                {
+                    "render": function (data, type, row) {
+                       
+                        return row.created_at;
                     },
                     orderable: true,
                     targets: 6

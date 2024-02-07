@@ -6,6 +6,18 @@
 	    white-space: -o-pre-wrap;   /* Opera 7 */    
 	    word-wrap: break-word;      /* IE */
 	}
+    .data-description p img {
+        width: calc(100% + 3rem)!important;
+        margin-left:-1.5rem;
+    }
+    .category-menu-mobile i.fa {
+        position: absolute;
+        right: 1rem;
+        font-size: 1.5rem;
+    }
+    i.fa.fa-search {
+        font-size: 1.5rem!important;
+    }
 }
 /* Dấu Gạch Nhăn Cách Trang Footer*/
 @media (min-width: 575px){
@@ -23,6 +35,16 @@
 .product-item-view .piv-top .photos .photo {
 	background-size: contain;
 }
+ul .product-item {
+    border-radius: 10px !important;
+    border: 1px solid #f1f1f1 !important;
+}
+li .product-item {
+    transition: transform 0.3s ease-in-out;
+}
+li .product-item:hover {
+    transform: translateY(-10px);
+}
 ul.grid .product-item:hover .avatar, 
 ul.grid .product-item:hover .detail, 
 ul.slider .product-item:hover .avatar, ul.slider .product-item:hover .detail{
@@ -35,7 +57,7 @@ ul.slider .product-item:hover .avatar, ul.slider .product-item:hover .detail{
 .my_btn{
     border-top: 1px solid transparent;
     width: 100%;
-    border-radius: 0;
+    /* border-radius: 0; */
 }
 .cart_btn{
     border-top: 1px solid #1a9af5;
@@ -69,7 +91,7 @@ ul.slider .product-item .btn.cart:hover {
 }
 @media (min-width: 576px){
     .home ul.grid .product-item{
-        min-height: 28rem;
+        min-height: 24rem;
     } 
     .product .product-view li{
         min-height: 25.5rem;

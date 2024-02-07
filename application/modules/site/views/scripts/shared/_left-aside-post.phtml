@@ -1,12 +1,3 @@
-<div class="menu-pc hidden-mobile">
-    <?php
-        if( empty( $this->menuCategory) == false ){
-            echo $this->partial('/shared/_category_menu.phtml', array(
-                'title' => 'Danh mục', 'data' => $this->menuCategory
-            ));
-        }
-    ?>
-</div>
 <?php
 if (isset($this->listCategoryPost) && empty($this->listCategoryPost) == false) {
     echo $this->partial('/pages/_category.phtml', array(

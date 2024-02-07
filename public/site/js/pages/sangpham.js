@@ -109,6 +109,88 @@ pages = $.extend(pages, {
                 pages.sanpham.addToCart();
             });
 
+            $(document).ready(function() {
+                if ($('li.variant-items a.active').length > 0) {
+                    $('#productThumbPhotos a.image_thumbs:first').addClass('active');
+                }
+            });
+
+            $(document).ready(function() {
+                var currentIndex = $('.no-variant a.active').index();
+                var totalImages = $('.no-variant a').length;
+            
+                function handleRightClick() {
+                    currentIndex = (currentIndex + 1) % totalImages;
+                    $('.no-variant a:eq(' + currentIndex + ')').trigger('click');
+                }
+            
+                function handleLeftClick() {
+                    currentIndex = (currentIndex - 1 + totalImages) % totalImages;
+                    $('.no-variant a:eq(' + currentIndex + ')').trigger('click');
+                }
+                $('#click-right').click(function(e) {
+                    handleRightClick();
+                });
+            
+                $('#click-left').click(function(e) {
+                    handleLeftClick();
+                });
+            });
+
+            $(document).ready(function() {
+                var variantId = $('.variant-wrapper a.active').attr('data-variantid');
+                var currentIndex = $('.variant-'+variantId+' a.active').index();
+                var totalImages = $('.variant-'+variantId+' a').length;
+            
+                function handleRightClick() {
+                    currentIndex = (currentIndex + 1) % totalImages;
+                    $('.variant-'+variantId+' a:eq(' + currentIndex + ')').trigger('click');
+                }
+            
+                function handleLeftClick() {
+                    currentIndex = (currentIndex - 1 + totalImages) % totalImages;
+                    $('.variant-'+variantId+' a:eq(' + currentIndex + ')').trigger('click');
+                }
+                $('#click-right').click(function(e) {
+                    handleRightClick();
+                });
+            
+                $('#click-left').click(function(e) {
+                    handleLeftClick();
+                });
+            });
+
+            var currentVariantId;
+            $(document).on("click", ".variant-items", {}, function (e) {
+                var variant_id = $(this).attr("data-id");
+                if (variant_id !== currentVariantId) {
+                    $('#click-right').off('click');
+                    $('#click-left').off('click');
+                    currentVariantId = variant_id;
+                    console.log(currentVariantId);
+                    var currentIndex = $('.variant-' + currentVariantId + ' a.active').index();
+                    var totalImages = $('.variant-' + currentVariantId + ' a').length;
+
+                    function handleRightClick() {
+                        $('.variant-' + currentVariantId + ' a:eq(' + currentIndex + ')').trigger('click');
+                        currentIndex = (currentIndex + 1) % totalImages;
+                    }
+
+                    function handleLeftClick() {
+                        $('.variant-' + currentVariantId + ' a:eq(' + currentIndex + ')').trigger('click');
+                        currentIndex = (currentIndex - 1 + totalImages) % totalImages;
+                    }
+
+                    // Gán lại sự kiện click
+                    $('#click-right').click(function (e) {
+                        handleRightClick();
+                    });
+
+                    $('#click-left').click(function (e) {
+                        handleLeftClick();
+                    });
+                }
+            });
             // Phân loại sản phẩm
             $(document).on("click", ".variant-items", {}, function (e) {
                 e.preventDefault();
@@ -116,7 +198,6 @@ pages = $.extend(pages, {
                 var variant_id = $(this).attr("data-id");
                 var variant0Id = $("input[data-var0-id]").data("var0-id");
                 var vcId = $('.combo-product').data('vc-id');
-                console.log(variant_id);
                 if (isNaN(variant_id) == false) {
                     $(this).children("a").addClass("active");
                     $("#selected_variant").text($(this).text());
@@ -169,7 +250,7 @@ pages = $.extend(pages, {
                 }
             });
             function formatNumber(number) {
-                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); // định dạng số với dấu phẩy phân cách hàng nghìn
+                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); // định dạng số với dấu phẩy phân cách hàng nghìn
             }
             //
             // check is mobile

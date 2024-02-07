@@ -43,12 +43,16 @@ class ProductVariant extends Zend_Db_Table_Abstract {
      * @param array $data
      * @return boolean
      */
-    public function saveVariant( $data, $id  ) {
+    public function saveVariant( $data  ) {
+    		return $this->insert( $data );
+    }
+    
+    public function updateVariant( $data, $id  ) {
     	if ( empty( $id ) == false )  {
-    		$where[] = $this->getAdapter()->quoteInto( "id = ?", $id, Zend_Db::INT_TYPE );
+    		$where= $this->getAdapter()->quoteInto( "id = ?", $id, Zend_Db::INT_TYPE );
     		return $this->update( $data, $where );
     	} else {
-    		return $this->insert( $data );
+    		return false;
     	}
     }
 
@@ -58,8 +62,10 @@ class ProductVariant extends Zend_Db_Table_Abstract {
      * @return [type]     [description]
      */
     public function deleteVariant( $id ) {
-        $where[] = $this->getAdapter()->quoteInto( "id = ?", $id, Zend_Db::INT_TYPE );
-        return $this->update( array('status' => STATUS_DELETE ), $where );
+        $where = $this->getAdapter()->quoteInto('id = ?', $id);
+        return $this->delete($where);
+        // $where[] = $this->getAdapter()->quoteInto( "id = ?", $id, Zend_Db::INT_TYPE );
+        // return $this->update( array('status' => STATUS_DELETE ), $where );
     }
 
     /**

@@ -11,10 +11,10 @@
                     </div>
                     <div class="modal-body">
                         <label class="form-group has-float-label">
-                            <input name="sif_usr" class="form-control" type="text" placeholder="Nhập Tài Khoản"
+                            <input name="sif_usr" class="form-control" type="text" placeholder="Email hoặc SĐT"
                                    data-rule-required="true"
-                                   data-msg-required="Vui lòng nhập Tài Khoản" />
-                            <span>Tài Khoản</span>
+                                   data-msg-required="Vui lòng nhập Email hoặc SĐT" />
+                            <span>Email hoặc SĐT</span>
                         </label>
 
                         <label class="form-group has-float-label">
@@ -30,9 +30,9 @@
                                data-toggle="modal"
                                data-target="#forgotPwdModal">Bạn quên Mật Khẩu?</a>
                         </div>
-                        <div class="form-group mb-0" id="recaptcha_signin"> </div>
+                        <!-- <div class="form-group mb-0" id="recaptcha_signin"> </div> -->
                         <div class="alert alert-danger mb-0 mt-3" role="alert" style="display:none" id="signin_failed">
-                            <strong>Đăng nhập thất bại</strong> Tài Khoản hoặc Mật Khẩu không đúng.
+                            <strong>Đăng nhập thất bại</strong> Email/SĐT hoặc Mật Khẩu không đúng.
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -40,7 +40,7 @@
                                 data-dismiss="modal"
                                 data-toggle="modal"
                                 data-target="#signupModal">Đăng Ký</button>
-                        <button type="submit" class="btn btn-primary w-25" id="login-btn" disabled="disabled" >Đăng Nhập</button>
+                        <button type="submit" class="btn btn-primary w-25" id="login-btn"  >Đăng Nhập</button>
                     </div>
                 </form>
             </div>
@@ -59,11 +59,14 @@
                         </a>
                     </div>
                     <div class="modal-body">
-                        <label class="form-group has-float-label">
-                            <input name="suf_usr" class="form-control" type="text" placeholder="Nhập Tài Khoản"
-                                   data-rule-required="true"
-                                   data-msg-required="Vui lòng nhập Tài Khoản" />
-                            <span>Tài Khoản</span>
+                        <label class="form-group has-float-label mt-4">
+                            <input name="uif_phone" class="form-control" type="tel" id="uif_phone" maxlength="10"
+                                value="<?php echo $this->customer_info["phone_number"] ?>"
+                                placeholder="Nhập số điện thoại"
+                                data-rule-digits="true"
+                                data-msg-digits="Vui lòng nhập số điện thoại hợp lệ"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
+                            <span>Số điện thoại</span>
                         </label>
 
                         <label class="form-group has-float-label">
@@ -74,7 +77,7 @@
                                    data-msg-email="Vui lòng nhập Email đúng định dạng" />
                             <span>Email</span>
                         </label>
-
+                        
                         <label class="form-group has-float-label">
                             <input name="suf_name" class="form-control" type="text" placeholder="Nhập Họ và Tên"
                                    data-rule-required="true"
@@ -89,7 +92,6 @@
                                    data-msg-required="Vui lòng nhập Mật Khẩu" />
                             <span>Mật Khẩu</span>
                         </label>
-
                         <label class="form-group has-float-label">
                             <input name="suf_rpwd" class="form-control" type="password" placeholder=""
                                    minlength="6"
@@ -99,22 +101,16 @@
                                    data-msg-equalto="Mật khẩu xác nhận chưa trùng khớp" />
                             <span>Xác nhận Mật Khẩu</span>
                         </label>
-
-                        <div class="form-group mt-4">
-                            <label class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox"
-                                       name="suf_accept"
-                                       data-rule-required="true"
-                                       data-msg-required="" />
-                                <span class="custom-control-indicator"></span>
-                                <span class="custom-control-description">
-                                    Tôi đã đọc và đồng ý các
-                                    <a class="text-uppercase" href="#">Điều khoản thỏa thuận</a>
-                                </span>
-                            </label>
+                        <div class="note" style="margin-left:20px">
+                            <span><strong> Được gì khi đăng ký thành viên tại HEROGAME ?</strong>
+                            </span><br>
+                            <span>- Tích lũy điểm lên thành viên Vip giảm giá các đơn hàng sau</span><br>
+                            <span>- Theo dõi lịch sử đơn hàng nhanh nhất </span><br>
+                            <span>- Cập nhập thông tin mới nhất từ Herogame</span><br>  
                         </div>
 
-                        <div class="form-group mb-0" id="recaptcha_signup"> </div>
+                        
+
 
                         <div class="alert alert-danger mb-0 mt-3" role="alert" style="display:none" id="signup_failed">
                             <strong>Đăng ký thất bại.</strong> Vui lòng kiểm tra thông tin.
@@ -128,7 +124,7 @@
                                 data-dismiss="modal"
                                 data-toggle="modal"
                                 data-target="#signinModal">Đăng Nhập</button>
-                        <button type="submit" class="btn btn-primary w-25" id="signup_btn" disabled="disabled">Đăng Ký</button>
+                        <button type="submit" class="btn btn-primary w-25" id="signup_btn" >Đăng Ký</button>
                     </div>
                 </form>
             </div>
@@ -149,7 +145,7 @@
                     </div>
                     <div class="modal-body">
                         <label class="form-group has-float-label">
-                            <input name="fpf_usr" class="form-control" type="text" placeholder="Nhập Tài Khoản"
+                            <input name="fpf_usr" class="form-control" type="text" placeholder="Nhập Tài Khoản / SĐT đã đăng ký"
                                    data-rule-required="true"
                                    data-msg-required="Vui lòng nhập Tài Khoản" />
                             <span>Tài Khoản</span>
@@ -173,7 +169,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary w-25" id="confirm_forgot" disabled="disabled">Xác nhận</button>
+                        <button type="submit" class="btn btn-primary w-25" id="confirm_forgot">Xác nhận</button>
                     </div>
                 </form>
             </div>

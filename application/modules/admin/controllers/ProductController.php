@@ -76,7 +76,7 @@ class Admin_ProductController extends FrontBaseAction {
                     $error[] = 'Url Này Đã Tồn Tại';
                 }
             }
-            if( empty($data['variant_name'])==false) {
+            if( isset($data['variant_name']) && empty($data['variant_name']) == false) {
                 foreach($data['variant_name'] as $key =>$variant){
                     if(empty($data['variant_name'][$key])){
                         $error[] = ' Tên Loại không được rỗng';
@@ -95,7 +95,6 @@ class Admin_ProductController extends FrontBaseAction {
          
             // add data vi first
             if (empty($error) == true) {
-                //
                 if (is_numeric($data['priority']) == false) {
                     $data['priority'] = 0;
                 }
@@ -110,10 +109,13 @@ class Admin_ProductController extends FrontBaseAction {
                     $data['price_sales'] = $data['price'];
                 }
                 //
+                if($id==0){
+                    $dataCreated = $this->getCreated();
+                    $data = array_merge($data, $dataCreated);
+                }
                 $dataUpdated = $this->getUpdated();
                 $data = array_merge($data, $dataUpdated);
-                $dataCreated = $this->getCreated();
-                $data = array_merge($data, $dataCreated);
+
                 //
                 $public_path = UPLOAD_PATH;
                 if (empty($_FILES['image_product']) == false && $_FILES['image_product']['tmp_name']) {
@@ -202,13 +204,22 @@ class Admin_ProductController extends FrontBaseAction {
 
                 }
                    
-
+                
                 if( empty($data["relative_product"]) == false){
                     $data["relative_product"] = implode(',', $data["relative_product"]);
+                }else{
+                    $data["relative_product"]='';
+                }
+
+                if( empty($data["order_with_product"]) == false){
+                    $data["order_with_product"] = implode(',', $data["order_with_product"]);
+                }else{
+                    $data["order_with_product"]='';
                 }
                 if( empty($data["product_color"]) == false){
                     $data["product_color"] = implode(',', $data["product_color"]);
                 }
+                
                 /*if( empty($data["image_color"]) == false){
                     $data["image_color"] = implode(',', $data["image_color"]);
                 }*/ 
@@ -238,23 +249,131 @@ class Admin_ProductController extends FrontBaseAction {
                 
                 
                 $product_id = isset($_POST['id']) ? $_POST['id'] : $rs;
-
-                $deleted = false;
-                if (!empty($_POST['variant_delete'])) {
-                    $list_variant_product = $modelVariant->getAllVariantIdsByProductId($info['id']);
-                    if (!empty($list_variant_product)) {
-                        foreach ($_POST['variant_delete'] as $valued) {
-                            if (in_array($valued, $list_variant_product)) {
+                $variant_id = isset($_POST['variant_id']) ? $_POST['variant_id'] : '';
+                $new_variant_ids = array();
+                $edit =FALSE;
+                if (isset($variant_id) && isset($product_id) && $id !=0) {
+                    $deletedVariantIds = $_POST['variant_delete'];
+                    $newVariantIds = array_filter($_POST['variant_id'], function ($var_id) {
+                        return $var_id == 0;
+                    });
+                    $variantIdOlds = array_filter($_POST['variant_id'], function ($var_id) use ($deletedVariantIds) {
+                        return isset($deletedVariantIds) ? (!in_array($var_id, $deletedVariantIds) && $var_id != 0) : ($var_id != 0);
+                    });
+                    $countDel = count($_POST['variant_delete']);
+                    $listVariant = $modelVariant->getProductVariants($product_id);
+                    if($listVariant){
+                        $countVarianat = count($listVariant) - $countDel;
+                    }
+                    $countFirst = count($newVariantIds);
+                    if (!empty($deletedVariantIds)) {
+                        foreach ($deletedVariantIds as $valued) {
+                            $existingVariant = $modelVariant->fetchVariantById($valued);
+                            if ($existingVariant) {
                                 $modelVariant->deleteVariant($valued);
-                                $deleted = true;
                             }
+                            $listImgId = $modelVariantImg->getAllImageIdsByVariantId($valued);
+                            self::deleteImages($listImgId, $modelVariantImg, $public_path);
                         }
                     }
-                }
-                if (!$deleted) {
-                    $new_variant_ids = array();
-                    if( !empty($_POST['variant_name'])){
-                        foreach($_POST['variant_name'] as $key => $variation){
+                    if (!empty($newVariantIds) && $deletedVariantIds) {
+                        $newVariantIds = array_values($newVariantIds);
+                        foreach ($newVariantIds as $i => $new_var_id) {
+                            $index = $i + $countVarianat;
+                            if (isset($_POST['variant_name'][$index], $_POST['variant_price'][$index], $_POST['variant_price_sales'][$index])) {
+                                $data_variant = [
+                                    'variant_name' => $_POST['variant_name'][$index],
+                                    'variant_price' => $_POST['variant_price'][$index],
+                                    'variant_price_sales' => $_POST['variant_price_sales'][$index],
+                                    'product_id' => $product_id,
+                                    'status' => STATUS_ACTIVE
+                                ];
+                                $result = $modelVariant->saveVariant($data_variant);
+                            }
+                            $new_variant_ids[] = $result;
+                            self::uploadVariantImages($new_variant_ids,$countFirst,$edit,$public_path);
+                        }
+                        if (!empty($_POST['url_image_delete'])) {
+                            self::deleteImages($_POST['url_image_delete'], $modelVariantImg, $public_path);
+                        }
+                    }else{
+                        foreach ($newVariantIds as $i => $new_var_id) {
+                            if (isset($_POST['variant_name'][$i], $_POST['variant_price'][$i], $_POST['variant_price_sales'][$i])) {
+                                $data_variant = [
+                                    'variant_name' => $_POST['variant_name'][$i],
+                                    'variant_price' => $_POST['variant_price'][$i],
+                                    'variant_price_sales' => $_POST['variant_price_sales'][$i],
+                                    'product_id' => $product_id,
+                                    'status' => STATUS_ACTIVE
+                                ];
+                                $result = $modelVariant->saveVariant($data_variant);
+                            }
+                            $new_variant_ids[] = $result;
+                            self::uploadVariantImages($new_variant_ids,$countFirst,$edit,$public_path);
+                        }
+                    }
+                    if (!empty($variantIdOlds) && $deletedVariantIds) {
+                        if(($variantIdOlds[0])){
+                            foreach ($variantIdOlds as $key => $var_id_old) {
+                                    $index = $key ;
+                                if (isset($_POST['variant_name'][$index], $_POST['variant_price'][$index], $_POST['variant_price_sales'][$index])) {
+                                    $data_variant = [
+                                        'variant_name' => $_POST['variant_name'][$index],
+                                        'variant_price' => $_POST['variant_price'][$index],
+                                        'variant_price_sales' => $_POST['variant_price_sales'][$index],
+                                        'product_id' => $product_id,
+                                    ];
+                                    $result = $modelVariant->updateVariant($data_variant, $var_id_old);
+                                }
+                                $new_variant_ids[] = $var_id_old;
+                                self::uploadVariantImages($new_variant_ids,0,$edit=TRUE,$public_path);
+                            }
+                        }else{
+                            $variantIdOlds = array_values($variantIdOlds);
+                            foreach ($variantIdOlds as $key => $var_id_old) {
+                                if (isset($_POST['variant_name'][$key], $_POST['variant_price'][$key], $_POST['variant_price_sales'][$key])) {
+                                    $data_variant = [
+                                        'variant_name' => $_POST['variant_name'][$key],
+                                        'variant_price' => $_POST['variant_price'][$key],
+                                        'variant_price_sales' => $_POST['variant_price_sales'][$key],
+                                        'product_id' => $product_id,
+                                    ];
+                                    $result = $modelVariant->updateVariant($data_variant, $var_id_old);
+                                }
+                                $new_variant_ids[] = $var_id_old;
+                                self::uploadVariantImages($new_variant_ids,0,$edit=TRUE,$public_path);
+                            }
+                        }
+                        if (isset($variantIdOlds)) {
+                            self::updateProductVariant0($model, $product_id, $_POST['variant_price'][0], $_POST['variant_price_sales'][0]);
+                        }
+                        if (!empty($_POST['url_image_delete'])) {
+                            self::deleteImages($_POST['url_image_delete'], $modelVariantImg, $public_path);
+                        }
+                    }else{
+                        foreach ($variantIdOlds as $key => $var_id_old) {
+                            if (isset($_POST['variant_name'][$key], $_POST['variant_price'][$key], $_POST['variant_price_sales'][$key])) {
+                                $data_variant = [
+                                    'variant_name' => $_POST['variant_name'][$key],
+                                    'variant_price' => $_POST['variant_price'][$key],
+                                    'variant_price_sales' => $_POST['variant_price_sales'][$key],
+                                    'product_id' => $product_id,
+                                ];
+                                $result = $modelVariant->updateVariant($data_variant, $var_id_old);
+                            }
+                            $new_variant_ids[] = $var_id_old;
+                            self::uploadVariantImages($new_variant_ids,0,$edit=TRUE,$public_path);
+                        }
+                        if (!empty($_POST['url_image_delete'])) {
+                            self::deleteImages($_POST['url_image_delete'], $modelVariantImg, $public_path);
+                        }
+                        if (isset($variantIdOlds[0])) {
+                            self::updateProductVariant0($model, $product_id, $_POST['variant_price'][0], $_POST['variant_price_sales'][0]);
+                        }
+                    }
+                }else{
+                    if (!empty($_POST['variant_name'])) {
+                        foreach ($_POST['variant_name'] as $key => $variation) {
                             $var = [
                                 'variant_name' => $variation,
                                 'variant_price' => $_POST['variant_price'][$key],
@@ -262,120 +381,13 @@ class Admin_ProductController extends FrontBaseAction {
                                 'product_id' => $rs,
                                 'status' => STATUS_ACTIVE
                             ];
-                            if ($_POST['variant_id'][$key] > 0) {
-                                $variant = $modelVariant->fetchVariantById($_POST['variant_id'][$key]);
-                                if (!empty($variant)) {
-                                    $var['product_id'] = $variant['product_id'];
-                                    $var['status'] = isset($_POST['variant_status'][$key])&& $_POST['variant_status'][$key] == 0 ? 0 : STATUS_ACTIVE;
-                                }
-                                $modelVariant->saveVariant($var, $_POST['variant_id'][$key]);
-                                //delete  images variant
-                                if (!empty($_POST['url_image_delete'])) {
-                                    foreach ($_POST['url_image_delete'] as $keyd => $valued ) {
-                                        $image= $modelVariantImg->fetchVariantImageById($valued);
-                                        if($image){
-                                            $modelVariantImg->deleteVariantImage($valued);
-                                            $full = $public_path . '/images/' . $image['url_image'];
-                                            if (file_exists($full)) {
-                                                unlink($full);
-                                            }
-                                        }
-                                         
-                                    }         
-                                }
-    
-                                // 
-                                $variants = $modelVariant->getProductVariants($product_id);
-                                foreach ($variants as  $variant) {
-                                    $variant_id = $variant['id'];
-                                    $variant_images = array();
-                                    if (!empty($_FILES['url_image']) && $_FILES['url_image']['tmp_name']) {
-                                        $nowdir = 'img_' . date('d_m_Y');
-                                        foreach ($_FILES['url_image']['name'][$variant_id] as $j => $name) {
-                                            if (!empty($name)) {
-                                                $ext = pathinfo($name, PATHINFO_EXTENSION);
-                                                $fileName = pathinfo($name, PATHINFO_FILENAME);
-                                                $fileName = str_replace(' ', '-', $fileName);
-                                                $newname = $fileName . '_' . rand(0, 1000000) . '_' . uniqid('', true) . '.' . $ext;
-                                                Commons::makedirs($public_path . '/images/' . $nowdir);
-                                                if (move_uploaded_file($_FILES['url_image']['tmp_name'][$variant_id][$j], $public_path . '/images/' . $nowdir . '/' . $newname)) {
-                                                    $variant_images[] = array(
-                                                        'product_variant_id' => $variant_id,
-                                                        'url_image' => $nowdir . '/' . $newname,
-                                                        'status' => STATUS_ACTIVE
-                                                    );
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (!empty($variant_images)) {
-                                        $modelVariantImg->saveVariantImage($variant_images);
-                                    }
-                                }
-                            } else {
-                                if (!empty($product_id)) {
-                                    $var['product_id'] = $product_id;
-                                    $variant_id = $modelVariant->saveVariant($var);
-                                    $new_variant_ids[] =$variant_id; 
-                                    $variant_images = array();
-                                    if (!empty($_FILES['url_image']) && $_FILES['url_image']['tmp_name']) {
-                                        $nowdir = 'img_' . date('d_m_Y');
-                                        foreach ($new_variant_ids as $key => $variant_id) {
-                                            foreach ($_FILES['url_image']['name'][$key] as $j => $name) {
-                                                if (!empty($name[$key])) {
-                                                    $ext = pathinfo($name, PATHINFO_EXTENSION);
-                                                    $fileName = pathinfo($name, PATHINFO_FILENAME);
-                                                    $fileName = str_replace(' ', '-', $fileName);
-                                                    $newname = $fileName . '_' . rand(0, 1000000) . '_' . uniqid('', true) . '.' . $ext;
-                                                    Commons::makedirs($public_path . '/images/' . $nowdir);
-                                                    if (move_uploaded_file($_FILES['url_image']['tmp_name'][$key][$j], $public_path . '/images/' . $nowdir . '/' . $newname)) {
-                                                        $variant_images[] = array(
-                                                            'product_variant_id' => $variant_id,
-                                                            'url_image' => $nowdir . '/' . $newname,
-                                                            'status' => STATUS_ACTIVE
-                                                        );
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (!empty($variant_images)) {
-                                        $modelVariantImg->saveVariantImage($variant_images);
-                                    }
-                                } else {
-                                    $variant_id = $modelVariant->saveVariant($var);
-                                }
-                                $new_variant_ids[] = $variant_id;
-                                $variant_images = array();
-                                if (!empty($_FILES['url_image']) && $_FILES['url_image']['tmp_name']) {
-                                    $nowdir = 'img_' . date('d_m_Y');
-                                    foreach ($new_variant_ids as $key => $variant_id) {
-                                        foreach ($_FILES['url_image']['name'][$key] as $j => $name) {
-                                            if (!empty($name[$key])) {
-                                                $ext = pathinfo($name, PATHINFO_EXTENSION);
-                                                $fileName = pathinfo($name, PATHINFO_FILENAME);
-                                                $fileName = str_replace(' ', '-', $fileName);
-                                                $newname = $fileName . '_' . rand(0, 1000000) . '_' . uniqid('', true) . '.' . $ext;
-                                                Commons::makedirs($public_path . '/images/' . $nowdir);
-                                                if (move_uploaded_file($_FILES['url_image']['tmp_name'][$key][$j], $public_path . '/images/' . $nowdir . '/' . $newname)) {
-                                                    $variant_images[] = array(
-                                                        'product_variant_id' => $variant_id,
-                                                        'url_image' => $nowdir . '/' . $newname,
-                                                        'status' => STATUS_ACTIVE
-                                                    );
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                if (!empty($variant_images)) {
-                                    $modelVariantImg->saveVariantImage($variant_images);
-                                }
-                            }                                                                    
-                        }   
-                    }
-
+                            $id_variant = $modelVariant->saveVariant($var);
+                            $new_variant_ids[] = $id_variant;
+                            self::uploadVariantImages($new_variant_ids,0,$edit, $public_path);
+                        }
+                    } 
                 }
+                                   
                 if ($id > 0) {
                     if ($rs >= 0) {
                         $this->_redirect('/admin/' . $this->controller);
@@ -412,8 +424,6 @@ class Admin_ProductController extends FrontBaseAction {
 
             $listVariantImg = $modelVariantImg->getProductImages($info['id']);
             $this->view->listVariantImg = $listVariantImg;
-            // echo"<pre>";print_r( $listVariantImg);exit;
-
             $listCombo = $modelCombo->getAllComboProduct($info['id']);
             $this->view->listCombo = $listCombo;
         }
@@ -424,6 +434,71 @@ class Admin_ProductController extends FrontBaseAction {
         $this->view->error = $error;
         $this->view->id = $id;
     }
+
+    function uploadVariantImages($new_variant_ids,$count,$edit,$public_path){
+        $modelVariantImg = new VariantImage();
+        $nowdir = 'img_' . date('d_m_Y');
+        $variant_images = array();
+        foreach ($new_variant_ids as $key => $variant_id) {
+
+            if($edit == FALSE){
+                if($count!=0){
+                        $index = $key + 1;  
+                }
+                else{
+                    $index = $key + $count;
+                }
+            }elseif($edit == TRUE){
+                $index = $variant_id;
+            }
+            foreach ($_FILES['url_image']['name'][$index] as $j => $name) {
+                $ext = pathinfo($name, PATHINFO_EXTENSION);
+                $fileName = pathinfo($name, PATHINFO_FILENAME);
+                $fileName = str_replace(' ', '-', $fileName);
+                $newname = $fileName . '_' . rand(0, 1000000) . '_' . uniqid('', true) . '.' . $ext;
+                Commons::makedirs($public_path . '/images/' . $nowdir);
+
+                if (move_uploaded_file($_FILES['url_image']['tmp_name'][$index][$j], $public_path . '/images/' . $nowdir . '/' . $newname)) {
+                    $variant_images[] = array(
+                        'product_variant_id' => $variant_id,
+                        'url_image' => $nowdir . '/' . $newname,
+                        'status' => STATUS_ACTIVE
+                    );
+                }
+                
+            }
+        }
+        if (!empty($variant_images)) {
+            $modelVariantImg->saveVariantImage($variant_images);
+        }
+    }
+
+    function deleteImages($imageIds, $modelVariantImg, $public_path) {
+        foreach ($imageIds as $valued) {
+            if ($image = $modelVariantImg->fetchVariantImageById($valued)) {
+                $modelVariantImg->deleteVariantImage($valued);
+                $full = $public_path . '/images/' . $image['url_image'];
+                if (file_exists($full)) unlink($full);
+            }
+        }
+    }
+
+    function updateProductVariant0($model, $product_id, $variantPrice, $variantPriceSales) {
+        if (isset($product_id)) {
+            $product = $model->getProductInfoById($product_id);
+            $product['price'] = $variantPrice;
+            $product['price_sales'] = $variantPriceSales;
+    
+            $updateData = [
+                'price' => $product['price'],
+                'price_sales' => $product['price_sales'],
+            ];
+    
+            $model->updateProduct($updateData, $product_id);
+        }
+    }
+    
+    // Example usage  
     public function mediaAction() {
         $this->_helper->layout->disableLayout(true);
         $this->loadJs('post');
@@ -534,6 +609,37 @@ class Admin_ProductController extends FrontBaseAction {
         $selectedRelativeProduct = array();
         if( empty($this->post_data["selectRelativeProduct"]) == false){
             $selectedRelativeProduct = explode(',', $this->post_data["selectRelativeProduct"]);
+        }
+        $this->view->selectedRelativeProduct = $selectedRelativeProduct;
+        $this->view->productMapping = $productMapping;
+        $html = $this->view->render("/product/_relative-product.phtml");
+        $this->ajaxResponse(CODE_SUCCESS, '', $html);
+    }
+    public function getListWithProductAction() {
+        $this->isAjax();
+        $categoryRearrange = array();
+        $categoryMdl = new Category();
+        $params["type_of_category"] = 1;
+        $listCategory = $categoryMdl->listAllCategory($params);
+        if (empty($listCategory) == false) {
+            foreach ($listCategory as $value) {
+                $categoryRearrange[$value["id"]] = $value["name"];
+            }
+        }
+        $productMdl = new Product();
+        $productList = $productMdl->fetchAllProduct();
+        $productMapping = array();
+        if (empty($productList) == false && empty($categoryRearrange) == false) {
+            foreach ($productList as $value) {
+                if (empty($this->post_data["id"]) == false && $this->post_data["id"] == $value["id"]) {
+                    continue;
+                }
+                $productMapping[$categoryRearrange[$value["id_category"]]][] = $value;
+            }
+        }
+        $selectedRelativeProduct = array();
+        if( empty($this->post_data["selectOrderWithProduct"]) == false){
+            $selectedRelativeProduct = explode(',', $this->post_data["selectOrderWithProduct"]);
         }
         $this->view->selectedRelativeProduct = $selectedRelativeProduct;
         $this->view->productMapping = $productMapping;

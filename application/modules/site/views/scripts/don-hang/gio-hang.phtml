@@ -14,7 +14,203 @@
                 $isEmptyCart = false;
             }
             ?>
-            <div class="cart-list <?php echo ($isEmptyCart == true ) ? "empty":""?>">
+
+            <div class="cart-list mobile   <?php echo ($isEmptyCart == true) ? "empty" : ""; ?>">
+                <div class="cart-title" style="text-align:center;font-size:1.5rem;font-weight:600;">Giỏ hàng của bạn</div>
+                <?php
+                    $item_count = 0;
+                    if (isset($this->item_count) && $this->item_count > 0) {
+                        $item_count = $this->item_count;
+                    }
+                ?>
+                <div class="cart-title" style="text-align: center;font-size: 1.2rem;font-weight: 500;padding: 8px;background: #ccc;margin-bottom: 10px;border-radius: 15px;">Bạn đang có <strong><?php echo $item_count?> sản phẩm</strong> trong giỏ hàng</div>
+                <?php if ($isEmptyCart == true) { ?>
+                    <div class="empty-cart-message">
+                        <p>Giỏ hàng của bạn đang trống!</p>
+                    </div>
+                <?php } else { ?>
+                    <div class="cart-body">
+                        <?php if (!empty($this->cart_list)) { ?>
+                            <?php foreach ($this->cart_list as $key => $value) { ?>
+                                <div class="cart-item" style="margin-bottom: 5px;border-bottom: 1px solid #ccc;">
+                                    <div class="item">
+                                        <div class="item-left">
+                                            <?php if (!empty($value['id_combo'])) { ?>
+                                                <div class="item photo">
+                                                    <?php
+                                                    $photo = "";
+                                                    if (!empty($value["image_cb"])) {
+                                                        $photo = PHOTO_PATH . $value["image_cb"];
+                                                    }
+                                                    echo $this->partial('/shared/_lazy_image.phtml', array(
+                                                        'ratio' => '1x1',
+                                                        'css' => 'photo',
+                                                        'url' => $photo
+                                                    ))
+                                                    ?>
+                                                </div>
+                                            <?php } else { ?>
+                                                <div class="item photo">
+                                                    <?php
+                                                    $photo = "";
+                                                    if (!empty($value["image"])) {
+                                                        $photo = PHOTO_PATH . $value["image"];
+                                                    }
+                                                    echo $this->partial('/shared/_lazy_image.phtml', array(
+                                                        'ratio' => '1x1',
+                                                        'css' => 'photo',
+                                                        'url' => $photo
+                                                    ))
+                                                    ?>
+                                                </div>
+                                            <?php } ?>
+                                            <div class="item-type" style ="text-align:center">
+                                                <strong>
+                                                    <?php
+                                                    if (empty($value['variant_name'])) {
+                                                        echo "Mặc Định";
+                                                    } else {
+                                                        echo $value['variant_name'];
+                                                    }
+                                                    ?>
+                                                </strong>
+                                            </div>
+                                        </div>
+                                        <div class="item-right">
+                                            <div class="item-top" style ="display:flex">
+                                                <?php
+                                                if(empty($value['id_combo'])==false){?>
+                                                    <div class="item-title" style ="width:100%; font-size:20px">
+                                                        <a class="name" href="/<?php echo $value["url_product"] ?>">
+                                                            <strong><?php echo $value['title'] ?></strong>
+                                                        </a>
+                                                    </div>
+                                                <?php }else {?>
+                                                    <div class="item-title" style ="width:100%;font-size: 20px">
+                                                        <a class="name" href="/<?php echo $value["url_product"] ?>">
+                                                            <strong><?php echo $value['title'] ?></strong>
+                                                        </a>
+                                                    </div>
+                                                <?php }?>
+                                            </div>
+                                            <div class="item-bottom" style="display: flex;justify-content: space-between;justify-items: center;align-items: center;">
+                                                <div class="item-price">
+                                                    <div class="item-price-a">
+                                                        <?php
+                                                        $now = date('Y-m-d H:i:s');
+                                                        if (($now < $value['count_time']) and ($value['enable_promo'] == 1)) {
+                                                            if (empty($value['variant_name'])) {
+                                                                $price = $value['price_flash_sale'];
+                                                            } else {
+                                                                $price = (!empty($value['variant_price_flash_sale'])) ? $value['variant_price_flash_sale'] : $value['variant_price_sales'];
+                                                            }
+                                                        } else {
+                                                            if (empty($value['variant_name'])) {
+                                                                $price = $value['price_sales'];
+                                                            } else {
+                                                                $price = $value['variant_price_sales'];
+                                                            }
+                                                        }
+                                                        ?>
+                                                        <span id="p_price" p_price="<?php echo $price ?>"><?php echo number_format($price) . '&#8363' ?></strong>
+                                                    </div>
+                                                </div>
+                                                <span>x</span>
+                                                <?php if (!empty($value['id_combo'])) { ?>
+                                                    <div class="item-quantity">
+                                                        <input class="form-control qty cb_qty" type="tel" maxlength="3" pid="<?php echo $value['id_combo'] ?>" variantid="<?php echo $value['variant_id'] ?>" value="<?php echo $value['qty'] ?>" oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
+                                                        <button type="button" class="btn btn-primary btn-update update_cb" title="Cập nhật">
+                                                            <i class="fa fa-check"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-danger btn-remove remove_pr" title="Loại bỏ" pid="<?php echo $value['id_combo'] ?>" variantid="<?php echo $value['variant_id'] ?>">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                <?php } else { ?>
+                                                    <div class="item-quantity">
+                                                        <input class="form-control qty pr_qty" type="tel" maxlength="3" pid="<?php echo $value['id'] ?>" variantid="<?php echo $value['variant_id'] ?>" value="<?php echo $value['qty'] ?>" oninput="this.value = this.value.replace(/[^0-9]/g, '');" />
+                                                        <button type="button" class="btn btn-primary btn-update update_pr" title="Cập nhật">
+                                                            <i class="fa fa-check"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-danger btn-remove remove_pr" title="Loại bỏ" pid="<?php echo $value['id'] ?>" variantid="<?php echo $value['variant_id'] ?>">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                <?php } ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="combo-item" style="margin-left:2rem">
+                                        <?php if (!empty($value['products'])) { ?>
+                                            <?php foreach ($value['products'] as $i => $item) { ?>
+                                                <div class="cart-item-sub">
+                                                    <div class="combo-item-top">
+                                                        <div class="combo-item-left">
+                                                            <div class="item photo">
+                                                                <?php
+                                                                $photo = "";
+                                                                if (!empty($item["image"])) {
+                                                                    $photo = PHOTO_PATH . $item["image"];
+                                                                }
+                                                                echo $this->partial('/shared/_lazy_image.phtml', array(
+                                                                    'ratio' => '1x1',
+                                                                    'css' => 'photo',
+                                                                    'url' => $photo
+                                                                ))
+                                                                ?>
+                                                            </div>
+                                                        </div>
+                                                        <div class="combo-item-right">
+                                                            <div class="item-title" style="font-size: 20px">
+                                                                <a class="name" href="/<?php echo $item["url_product"] ?>">
+                                                                    <strong><?php echo $item['title'] ?></strong>
+                                                                </a>
+                                                            </div>
+                                                            <div class="combo-item-center" style="display: flex;justify-content: space-between;justify-items: center;align-items: center;">
+                                                                <div class="combo-item-price" >
+                                                                    <div class="item-price-a">
+                                                                        <?php if (empty($item['variant_name'])) {
+                                                                            $price = $item['price_sales'];
+                                                                        } else {
+                                                                            $price = $item['variant_price_sales'];
+                                                                        } ?>
+                                                                        <span id="p_price" p_price="<?php echo $price ?>"><?php echo number_format($price) . '&#8363' ?></strong>
+                                                                    </div>
+                                                                </div>
+                                                                <span>x</span>
+                                                                <div class="item-quantity">
+                                                                    <input style="background:white;border:none;" class="form-control qty cb_qty" type="tel" maxlength="3" pid="<?php echo $item['id'] ?>" variantid="<?php echo $item['variant_id'] ?>" value="<?php echo $item['qty'] ?>" disabled />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="combo-item-total-price" style="display:flex;justify-content: space-between;justify-items: center;align-items: center;margin: 10px 0px">
+                                                        <!-- <div class="item" colspan="7">Thành tiền</div>
+                                                        <strong id="total_money"><?php echo number_format($item['total_money']) . '&#8363' ?></strong> -->
+                                                    </div>
+                                                </div>
+                                            <?php } ?>
+                                        <?php } ?>
+                                    </div>
+                                    <div class="item-price-total" style="display:flex;justify-content: space-between;justify-items: center;align-items: center;margin-right: 10px 0">
+                                        <div class="item" colspan="7">Thành tiền</div>
+                                        <strong id="total_money"><?php echo number_format($value['total_money']) . '&#8363' ?></strong>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                        <?php } ?>
+                        <div class="cart-item-total-price" style="display: flex;justify-content: space-between;justify-items: center;align-items: center;">
+                            <div class="item" colspan="7" style="font-weight:600;font-size:1.5rem">Tổng cộng</div>
+                            <div class="item text-right">
+                                <strong class="total"><?php echo number_format($this->total_money) . '&#8363' ?></strong>
+                            </div>
+                        </div>
+                    </div>
+                <?php } ?>
+            </div>
+
+
+            <div class="cart-list pc <?php echo ($isEmptyCart == true ) ? "empty":""?>">
                 <table class="table">
                     <?php if ($isEmptyCart == true) { ?>
                         <tbody>
@@ -121,10 +317,21 @@
                                     <?php }?>
                                     
                                     <td class="text-right">
-                                        <?php if (empty($value['variant_name'])) {
-                                            $price = $value['price_sales'];
-                                        } else {
-                                            $price = $value['variant_price_sales'];
+                                        <?php 
+                                        $now = date('Y-m-d H:i:s');
+                                        if(($now < $value['count_time']) and($value['enable_promo']==1) ){
+                                            if (empty($value['variant_name'])) {
+                                                $price = $value['price_flash_sale'];
+                                            }else {
+                                                $price = ($value['variant_price_flash_sale']>0) ? $value['variant_price_flash_sale']:$value['variant_price_sales'];
+                                            }
+                                     
+                                        }else{
+                                            if (empty($value['variant_name'])) {
+                                                $price = $value['price_sales'];
+                                            } else {
+                                                $price = $value['variant_price_sales'];
+                                            }
                                         }?>
                                         <strong id="p_price" p_price="<?php echo $price ?>"><?php echo number_format($price) . '&#8363' ?></strong>
                                     </td>
@@ -225,3 +432,60 @@
         </div>
     </div>
 </div>
+<style>
+    @media screen and (min-width: 767px){
+        .cart-list.mobile{
+            display: none;
+        }
+    }
+    @media screen and (max-width: 767px){
+        .item{
+            display: flex;
+        }
+        .item-left{
+            width: 25%;
+        }
+        .item-right{
+            width: 75%;
+            margin-left: 10px
+        }
+        .cart-list.pc{
+            display: none;
+        }
+        .cart-list.mobile .cart-item .item.photo {
+            width: 100%;
+        }
+        .combo-item-left {
+            width: 25%;
+        }
+        .combo-item-right{
+            width: 75%;
+            margin-left: 10px
+        }
+        body.order.cart .cart-list .qty {
+            width: 3rem;
+            padding: 5px 0;
+            text-align: center;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .btn {
+            border: 0 none;
+            outline: 0 none;
+            cursor: pointer;
+            font-weight: bold;
+            padding: 5px 1rem;
+            text-transform: uppercase;
+        }
+        .combo-item-top{
+            display: flex;
+        }
+        .name {
+            display: -webkit-box;
+            overflow: hidden;
+            -webkit-line-clamp: 2; /* Số dòng muốn hiển thị */
+            -webkit-box-orient: vertical;
+        }
+    }
+</style>

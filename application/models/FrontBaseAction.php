@@ -230,7 +230,7 @@ class FrontBaseAction extends Zend_Controller_Action {
     public function getCreated() {
         $now = date("Y-m-d H:i:s");
         $login = UtilAuth::getLoginInfo();
-        return array('created_at' => $now,'updated_at' => $now, 'created_by' => $login['user_name']);
+        return array('created_at' => $now, 'created_by' => $login['user_name']);
     }
 
 }

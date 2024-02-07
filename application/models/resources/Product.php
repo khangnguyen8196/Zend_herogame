@@ -196,6 +196,9 @@ class Product extends Zend_Db_Table_Abstract {
         if (isset($data['price_sales']) == true) {
             $datain['price_sales'] = $data['price_sales'];
         }
+        if (isset($data['price_flash_sale']) == true) {
+            $datain['price_flash_sale'] = $data['price_flash_sale'];
+        }
         if (isset($data['tag']) == true) {
             $datain['tag'] = $data['tag'];
         }
@@ -211,16 +214,16 @@ class Product extends Zend_Db_Table_Abstract {
         if (isset($data['url_menu']) == true) {
             $datain['url_menu'] = $data['url_menu'];
         }
-        if (isset($data['created_at']) == true) {
-            $datain['created_date'] = $data['created_at'];
-        }
         if (isset($data['id_category']) == true) {
             $datain['id_category'] = $data['id_category'];
         }
         // if (isset($data['combo_id']) == true) {
-        //     $datain['combo_id'] = $data['combo_id'];
-        // }
-        if (isset($data['combo_id']) == true) {
+            //     $datain['combo_id'] = $data['combo_id'];
+            // }
+        if (isset($data['created_at']) == true) {
+            $datain['created_date'] = $data['created_at'];
+        }
+            if (isset($data['combo_id']) == true) {
             $datain['combo_id'] = implode(',',$data['combo_id']);
         }
         if (isset($data['updated_at']) == true) {
@@ -261,6 +264,9 @@ class Product extends Zend_Db_Table_Abstract {
         }
         if (isset($data['relative_product']) == true) {
             $datain['relative_product'] = $data['relative_product'];
+        }
+        if (isset($data['order_with_product']) == true) {
+            $datain['order_with_product'] = $data['order_with_product'];
         }
         if (isset($data['product_color']) == true) {
             $datain['product_color'] = $data['product_color'];
@@ -499,4 +505,12 @@ class Product extends Zend_Db_Table_Abstract {
             ->order('id ASC');
         return $this->getAdapter()->fetchAll($select);
     }
+
+    // public function updateProductById($data, $product_id) {
+    //     if (!empty($product_id)) {
+    //         $where = $this->getAdapter()->quoteInto("product_id = ?", $product_id, Zend_Db::INT_TYPE);
+    //         return $this->update($data, $where);
+    //     }
+    //     return false;
+    // }
 }
