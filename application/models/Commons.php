@@ -480,8 +480,8 @@ class Commons {
 		$bcolor = '';
 		$now = date('Y-m-d H:i:s');
 		if ($value ["is_promotion"]) {
-			if($value ["enable_promo"]==1 and $now < $value["count_time"] and $value['price_flash_sale']>0){
-				$titleText = 100 - round ( ($value ["price_flash_sale"] / $value ["price"]) * 100 );
+			if($value ["status_flash_sale"]==1 and $now >= $value["count_time_start"] and $now <= $value["count_time_end"] and $value['price_flash_sale']>0){
+				$titleText = $value['percent_flash_sale'];
 				if ($titleText > 0) {
 					$titleText = '-' . $titleText;
 				} else if ($titleText == 0) {
@@ -503,6 +503,17 @@ class Commons {
 					$bcolor = '#ff9601';
 				}
 			}
+		}elseif($value ["status_flash_sale"]==1 and $now >= $value["count_time_start"] and $now <= $value["count_time_end"] and $value['price_flash_sale']>0){
+			$titleText = $value['percent_flash_sale'];
+				if ($titleText > 0) {
+					$titleText = '-' . $titleText;
+				} else if ($titleText == 0) {
+					$titleText = "";
+				}
+				if (empty ( $titleText ) == false) {
+					$titleText = $titleText . "%";
+					$bcolor = '#ff9601';
+				}
 		}elseif($value ["new_product"]) {
 			$titleText = 'Mới';
 			$bcolor = '#66b800';
@@ -521,6 +532,11 @@ class Commons {
 				'tcolor' => '#ffffff',
 				'bcolor' => $bcolor 
 		);
+		$product ["percent_flash_sale"] = array (
+			'text' => $titleText,
+			'tcolor' => '#ffffff',
+			'bcolor' => $bcolor 
+	);
 		
 		$shortDes = '';
 		if (empty ( $value ["notice_message"] ) == false) {
@@ -548,8 +564,9 @@ class Commons {
 			$product ["photo"] = "/upload/images" . $value ["image"];
 		}
 		$product ["specs"] = $value ["description"];
-		$product ["count_down"] = $value ["count_time"];
-		$product ["enable_promo"] = $value ["enable_promo"];
+		$product ["count_down"] = $value ["count_time_end"];
+		$product ["count_time_start"] = $value ["count_time_start"];
+		$product ["status_flash_sale"] = $value ["status_flash_sale"];
 		return $product;
 	}	
 	/**

@@ -18,6 +18,7 @@ class Product extends Zend_Db_Table_Abstract {
         if (isset($data['count_only']) == true && $data['count_only'] == 1) {
             $select = $select->from($this->_name, array("cnt" => new Zend_Db_Expr("COUNT(1)")));
             $select = $select->where("product.status <> ?", STATUS_DELETE);
+            // $select = $select->where("product.price <> ?", 0);
         } else {
             $select = $select->from($this->_name)
                     ->columns(array('product.created_date' => new Zend_Db_Expr("DATE_FORMAT(product.created_date,'%Y-%m-%d %H:%i:%s')")))
@@ -27,6 +28,7 @@ class Product extends Zend_Db_Table_Abstract {
         $commonObj = new My_Controller_Action_Helper_Common();
         //search by name
         $select = $select->where("product.status <> ?", STATUS_DELETE);
+        // $select = $select->where("product.price <> ?", 0);
 
         if (empty($data["title"]) == false) {
             $data["title"] = $commonObj->quoteLike($data["title"]);
@@ -42,7 +44,8 @@ class Product extends Zend_Db_Table_Abstract {
         }
         if (empty($data['search-key']) == false) {
             $select->where("product.title like '%" . $data['search-key'] . "%' or c.name like '%" . $data['search-key'] . "%'
-        			 or product.updated_by like '%" . $data['search-key'] . "%'");
+        			 or product.updated_by like '%" . $data['search-key'] . "%' or product.id like '%" . $data['search-key'] . "%'");
+            
         }
         if (empty($data['name_category']) == false) {
             $select->where('category.name =?', $data['name_category']);
@@ -349,13 +352,51 @@ class Product extends Zend_Db_Table_Abstract {
      * @return type
      */
     public function getProducts($params = array()) {
+        $currentTime = date('Y-m-d H:i:s');
+        $selectSub = $this->getAdapter()->select();
+        $selectSub->from('flash_sale_product', array(
+                       'product_id',
+                       'price_flash_sale',
+                       'percent_flash_sale',
+                       'flash_sale_id'
+                   ))
+                   ->join('flash_sale', 'flash_sale_product.flash_sale_id = flash_sale.flash_sale_id', array(
+                       'count_time_start',
+                       'count_time_end',
+                       'status'
+                   ));
+        
+        $selectSub->where('flash_sale.status = 1')
+                ->where('count_time_end > ?', $currentTime) 
+                ->order('flash_sale.count_time_start ASC');
+        
+                 
         $select = $this->getAdapter()->select();
-        $select = $select->from($this->_name)
-                ->columns(array('product.created_date' => new Zend_Db_Expr("DATE_FORMAT(product.created_date,'%Y-%m-%d %H:%i:%s')")))
-                ->columns(array('product.updated_date' => new Zend_Db_Expr("DATE_FORMAT(product.updated_date,'%Y-%m-%d %H:%i:%s')")));
+        $select->from('product')
+            ->columns(array(
+                'product.created_date' => new Zend_Db_Expr("DATE_FORMAT(product.created_date,'%Y-%m-%d %H:%i:%s')"),
+                'product.updated_date' => new Zend_Db_Expr("DATE_FORMAT(product.updated_date,'%Y-%m-%d %H:%i:%s')"),
+            ))
+            ->joinLeft(array('c' => 'category'), 'c.id = product.id_category', array(
+                'category_name' => 'c.name',
+                'c_priority' => 'c.priority'
+            ))
+            ->joinLeft(array('fsp' => $selectSub), 'fsp.product_id = product.id', array(
+                'price_flash_sale' => 'fsp.price_flash_sale',
+                'percent_flash_sale' => 'fsp.percent_flash_sale',
+                'flash_sale_id' => 'fsp.flash_sale_id',
+                'count_time_start' => 'fsp.count_time_start',
+                'count_time_end' => 'fsp.count_time_end',
+                'status_flash_sale'=> 'fsp.status'
+            ))
+            ->group('product.id');
 
-        $select = $select->joinLeft( array('c' => 'category'), 'c.id = product.id_category', array( 'category_name' => 'c.name', 'c_priority' => 'c.priority' ));
 
+
+
+
+
+        
         if (empty($params["best_sell"]) == false && $params["best_sell"] == 1) {
             $select = $select->where("product.best_sell =? ", $params["best_sell"]);
         }
@@ -427,11 +468,37 @@ class Product extends Zend_Db_Table_Abstract {
      * @return type
      */
     public function search($key,$params = array()) {
+        $currentTime = date('Y-m-d H:i:s');
+        $selectSub = $this->getAdapter()->select();
+        $selectSub->from('flash_sale_product', array(
+                       'product_id',
+                       'price_flash_sale',
+                       'percent_flash_sale',
+                       'flash_sale_id'
+                   ))
+                   ->join('flash_sale', 'flash_sale_product.flash_sale_id = flash_sale.flash_sale_id', array(
+                       'count_time_start',
+                       'count_time_end',
+                       'status'
+                   ));
+        
+        $selectSub->where('flash_sale.status = 1')
+        ->where('count_time_end > ?', $currentTime) 
+        ->order('flash_sale.count_time_start ASC');
         $select = $this->getAdapter()->select();
         $select = $select->from($this->_name)
                 ->columns(array('product.created_date' => new Zend_Db_Expr("DATE_FORMAT(product.created_date,'%Y-%m-%d %H:%i:%s')")))
                 ->columns(array('product.updated_date' => new Zend_Db_Expr("DATE_FORMAT(product.updated_date,'%Y-%m-%d %H:%i:%s')")));
-        $select = $select->joinLeft(array('c' => 'category'), 'c.id = product.id_category', array('category_name' => 'c.name'));
+        $select = $select->joinLeft(array('c' => 'category'), 'c.id = product.id_category', array('category_name' => 'c.name'))
+        ->joinLeft(array('fsp' => $selectSub), 'fsp.product_id = product.id', array(
+            'price_flash_sale' => 'fsp.price_flash_sale',
+            'percent_flash_sale' => 'fsp.percent_flash_sale',
+            'flash_sale_id' => 'fsp.flash_sale_id',
+            'count_time_start' => 'fsp.count_time_start',
+            'count_time_end' => 'fsp.count_time_end',
+            'status_flash_sale'=> 'fsp.status'
+        ))
+        ->group('product.id');
         //get only active product
         $select = $select->where("product.status <> ?", STATUS_DELETE);
         $select = $select->where("product.status <> ?", STATUS_IN_ACTIVE);
@@ -513,4 +580,65 @@ class Product extends Zend_Db_Table_Abstract {
     //     }
     //     return false;
     // }
+
+    public function getAllProduct($data = array()) {
+        $select = $this->getAdapter()->select();
+        if (isset($data['count_only']) == true && $data['count_only'] == 1) {
+            $select = $select->from($this->_name, array("cnt" => new Zend_Db_Expr("COUNT(1)")));
+            $select = $select->where("product.status <> ?", STATUS_DELETE);
+            $select = $select->where("product.price <> ?", 0);
+        } else {
+            $select = $select->from($this->_name)
+                    ->columns(array('product.created_date' => new Zend_Db_Expr("DATE_FORMAT(product.created_date,'%Y-%m-%d %H:%i:%s')")))
+                    ->columns(array('product.updated_date' => new Zend_Db_Expr("DATE_FORMAT(product.updated_date,'%Y-%m-%d %H:%i:%s')")));
+        }
+        $select = $select->joinLeft(array('c' => 'category'), 'c.id = product.id_category', array('category_name' => 'c.name'));
+        $commonObj = new My_Controller_Action_Helper_Common();
+        //search by name
+        $select = $select->where("product.status <> ?", STATUS_DELETE);
+        $select = $select->where("product.price <> ?", 0);
+
+        if (empty($data["title"]) == false) {
+            $data["title"] = $commonObj->quoteLike($data["title"]);
+            $select = $select->where("product.title like ?", "%" . $data["title"] . "%");
+        }
+        if (empty($data["created_date"]) == false) {
+            $data["created_date"] = $commonObj->quoteLike($data["created_date"]);
+            $select = $select->where("DATE(product.created_date) =?", $data["created_date"]);
+        }
+        if (empty($data["updated_date"]) == false) {
+            $data["updated_date"] = $commonObj->quoteLike($data["updated_date"]);
+            $select = $select->where("DATE(product.updated_date) =?", $data["updated_date"]);
+        }
+        if (empty($data['search-key']) == false) {
+            $select->where("product.title like '%" . $data['search-key'] . "%' or c.name like '%" . $data['search-key'] . "%'
+        			 or product.updated_by like '%" . $data['search-key'] . "%' or product.id like '%" . $data['search-key'] . "%'");
+            
+        }
+        if (empty($data['name_category']) == false) {
+            $select->where('category.name =?', $data['name_category']);
+        }
+        if (empty($data['status']) == false) {
+            $select->where('product.status =?', $data['status']);
+        }
+        if (empty($data['id_category']) == false) {
+        	$select->where('id_category =?', $data['id_category']);
+        }
+        //check count only purpose
+        if (empty($data['count_only']) == true || $data['count_only'] != 1) {
+            if (empty($data["order"]) == false) {
+                $order = $data["order"]["column"] . " " . $data["order"]["dir"];
+                $select = $select->order($order);
+            }
+            $start = ( empty($data['start']) == false ) ? $data['start'] : 0;
+            $length = ( empty($data['length']) == false ) ? $data['length'] : 0;
+            $select = $select->limit($length, $start);
+        }
+        $result = $this->getAdapter()->fetchAll($select);
+        if (empty($data['count_only']) == false && $data['count_only'] == 1) {
+            return $result[0]['cnt'];
+        }
+        $result = $this->getAdapter()->fetchAll($select);
+        return $result;
+    }
 }

@@ -98,7 +98,7 @@
                                                     <div class="item-price-a">
                                                         <?php
                                                         $now = date('Y-m-d H:i:s');
-                                                        if (($now < $value['count_time']) and ($value['enable_promo'] == 1)) {
+                                                        if(($now <= $value['count_time_end']  && $now >= $value['count_time_start']) and($value['flash_sale_status']==1) ){
                                                             if (empty($value['variant_name'])) {
                                                                 $price = $value['price_flash_sale'];
                                                             } else {
@@ -319,7 +319,7 @@
                                     <td class="text-right">
                                         <?php 
                                         $now = date('Y-m-d H:i:s');
-                                        if(($now < $value['count_time']) and($value['enable_promo']==1) ){
+                                        if(($now <= $value['count_time_end']  && $now >= $value['count_time_start']) and($value['flash_sale_status']==1) ){
                                             if (empty($value['variant_name'])) {
                                                 $price = $value['price_flash_sale'];
                                             }else {

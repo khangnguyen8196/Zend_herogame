@@ -33,6 +33,8 @@ class Admin_ProductController extends FrontBaseAction {
         $listCategory = $modelCategory->listAllCategory();
         $modelCombo = new ComboProduct();
         $mdComboDetail = new ComboDetail();
+        $mdFlashSaleProductVariant = new FlashSaleProductVariant();
+        $mdFlashSaleProduct = new FlashSaleProduct();
         $info = array();
         $error = array();
         //
@@ -223,6 +225,14 @@ class Admin_ProductController extends FrontBaseAction {
                 /*if( empty($data["image_color"]) == false){
                     $data["image_color"] = implode(',', $data["image_color"]);
                 }*/ 
+
+                // $listFlashSaleProductVariant = $mdFlashSaleProductVariant->getAllFlashSaleProductVariantBy($id);
+                // foreach($listFlashSaleProductVariant as  $flashSaleProductVariant){
+                //     echo '<pre>';
+                //     print_r($listFlashSaleProductVariant);
+                //     exit;
+                // }
+                
                 $listCombo = $modelCombo->getAllComboProduct($id);
                 if ($listCombo) {
                     foreach ($listCombo as $key => $combo) {
@@ -260,6 +270,7 @@ class Admin_ProductController extends FrontBaseAction {
                     $variantIdOlds = array_filter($_POST['variant_id'], function ($var_id) use ($deletedVariantIds) {
                         return isset($deletedVariantIds) ? (!in_array($var_id, $deletedVariantIds) && $var_id != 0) : ($var_id != 0);
                     });
+                    
                     $countDel = count($_POST['variant_delete']);
                     $listVariant = $modelVariant->getProductVariants($product_id);
                     if($listVariant){
@@ -271,6 +282,7 @@ class Admin_ProductController extends FrontBaseAction {
                             $existingVariant = $modelVariant->fetchVariantById($valued);
                             if ($existingVariant) {
                                 $modelVariant->deleteVariant($valued);
+                                $mdFlashSaleProductVariant->deleteFlashProductVariant($product_id,$valued);
                             }
                             $listImgId = $modelVariantImg->getAllImageIdsByVariantId($valued);
                             self::deleteImages($listImgId, $modelVariantImg, $public_path);
@@ -289,6 +301,21 @@ class Admin_ProductController extends FrontBaseAction {
                                     'status' => STATUS_ACTIVE
                                 ];
                                 $result = $modelVariant->saveVariant($data_variant);
+                                $listProFlashSale = $mdFlashSaleProduct->getProductFlashSaleByProductId($id);
+                                if($listProFlashSale){
+                                    foreach ($listProFlashSale as $ind => $pro){
+                                        $data_var = [
+                                            'variant_price_flash_sale' => $_POST['variant_price'][$i] - ($_POST['variant_price'][$i]*$pro['percent_flash_sale']/100),
+                                            'variant_price' => $_POST['variant_price'][$i],
+                                            'variant_price_sales' => $_POST['variant_price_sales'][$i],
+                                            'product_id' => $product_id,
+                                            'percent_flash_sale' => $pro['percent_flash_sale'],
+                                            'flash_sale_id' => $pro['flash_sale_id'],
+                                            'variant_id' =>$result,
+                                        ];
+                                        $mdFlashSaleProductVariant->saveFlashSaleProductVariant($data_var);
+                                    }
+                                }
                             }
                             $new_variant_ids[] = $result;
                             self::uploadVariantImages($new_variant_ids,$countFirst,$edit,$public_path);
@@ -307,6 +334,21 @@ class Admin_ProductController extends FrontBaseAction {
                                     'status' => STATUS_ACTIVE
                                 ];
                                 $result = $modelVariant->saveVariant($data_variant);
+                                $listProFlashSale = $mdFlashSaleProduct->getProductFlashSaleByProductId($id);
+                                if($listProFlashSale){
+                                    foreach ($listProFlashSale as $ind => $pro){
+                                        $data_var = [
+                                            'variant_price_flash_sale' => $_POST['variant_price'][$i] - ($_POST['variant_price'][$i]*$pro['percent_flash_sale']/100),
+                                            'variant_price' => $_POST['variant_price'][$i],
+                                            'variant_price_sales' => $_POST['variant_price_sales'][$i],
+                                            'product_id' => $product_id,
+                                            'percent_flash_sale' => $pro['percent_flash_sale'],
+                                            'flash_sale_id' => $pro['flash_sale_id'],
+                                            'variant_id' =>$result,
+                                        ];
+                                        $mdFlashSaleProductVariant->saveFlashSaleProductVariant($data_var);
+                                    }
+                                }
                             }
                             $new_variant_ids[] = $result;
                             self::uploadVariantImages($new_variant_ids,$countFirst,$edit,$public_path);
@@ -368,7 +410,7 @@ class Admin_ProductController extends FrontBaseAction {
                             self::deleteImages($_POST['url_image_delete'], $modelVariantImg, $public_path);
                         }
                         if (isset($variantIdOlds[0])) {
-                            self::updateProductVariant0($model, $product_id, $_POST['variant_price'][0], $_POST['variant_price_sales'][0]);
+                            self::updateProductVariant0($model, $product_id, $_POST['variant_price'][0], $_POST['variant_price_sales'][0]);                      
                         }
                     }
                 }else{
@@ -484,6 +526,8 @@ class Admin_ProductController extends FrontBaseAction {
     }
 
     function updateProductVariant0($model, $product_id, $variantPrice, $variantPriceSales) {
+        $modelCombo = new ComboProduct();
+        $mdComboDetail = new ComboDetail();
         if (isset($product_id)) {
             $product = $model->getProductInfoById($product_id);
             $product['price'] = $variantPrice;
@@ -495,6 +539,59 @@ class Admin_ProductController extends FrontBaseAction {
             ];
     
             $model->updateProduct($updateData, $product_id);
+            $listCombo = $modelCombo->getAllComboProduct($product_id);
+            if ($listCombo) {
+                foreach ($listCombo as $key => $combo) {
+                    if($variantPriceSales == 0 ){
+                        $combo['total_price'] = $combo['total_price'] - $combo['price'] + $variantPrice;
+                        $combo['total_discount'] = $combo['total_price'] - $combo['price_discount'];
+                        $combo['price'] = $variantPrice;
+                    }else{
+                        $combo['total_price'] = $combo['total_price'] - $combo['price'] + $variantPriceSales;
+                        $combo['total_discount'] = $combo['total_price'] - $combo['price_discount'];
+                        $combo['price'] = $variantPriceSales;
+                    }
+                    $mdComboDetail->updateComboDetail(["price" => $combo['price']],$product_id);
+                    $modelCombo->saveComboProduct(
+                        [
+                            "total_price" => $combo['total_price'],
+                            "total_discount" =>  $combo['total_discount'],
+
+                
+                    ], $combo['id'] );
+                }
+            }
+            self::updateProductFlashSale($product_id, $_POST['variant_price'][0], $_POST['variant_price_sales'][0]);
+        }
+    }
+
+    function updateProductFlashSale($product_id, $price, $priceSales){
+        $mdFlashSaleProduct = new FlashSaleProduct();
+        $modelFlashSaleProductVariant = new FlashSaleProductVariant;
+        $modelVariant = new ProductVariant();
+        $listProduct = $mdFlashSaleProduct->getProductFlashSaleByProductId($product_id);
+        if($listProduct){
+            foreach ($listProduct as $index => &$value) {
+                $value['price'] = $price;
+                $value['price_sales'] = $priceSales;
+                $value['price_flash_sale'] = $price - $price * $value['percent_flash_sale'] / 100;
+                $mdFlashSaleProduct->updateFlashSaleProduct([
+                    'price' => $value['price'],
+                    'price_sales' => $value['price_sales'],
+                    'price_flash_sale' => $value['price_flash_sale'],
+                ],$value['flash_sale_id'],$product_id);
+                
+                $productVariant = $modelVariant->getProductVariants($product_id);
+                if($productVariant){
+                    foreach ($productVariant as $j => $variant){
+                        $dataProductVariant['percent_flash_sale'] = $value['percent_flash_sale'];
+                        $dataProductVariant['variant_price'] = $variant['variant_price'];
+                        $dataProductVariant['variant_price_sales'] = $variant['variant_price_sales'];
+                        $dataProductVariant['variant_price_flash_sale'] = $variant['variant_price']-($variant['variant_price']*($value['percent_flash_sale']/100));
+                        $modelFlashSaleProductVariant->updateFlashSaleProductVariant($dataProductVariant, $value['flash_sale_id'], $product_id, $variant['id']); 
+                    }
+                }
+            }
         }
     }
     
@@ -568,19 +665,68 @@ class Admin_ProductController extends FrontBaseAction {
      */
     public function deleteAction() {
         $this->isAjax();
-        if (empty($this->post_data['id']) == false) {
-            $modal = new Product();
+        $public_path = UPLOAD_PATH;
+        $modelCombo = new ComboProduct();
+        $mdComboDetail = new ComboDetail();
+        $modelVariant = new ProductVariant();
+        $mdFlashSaleProduct = new FlashSaleProduct();
+        $mdFlashSaleProductVariant = new  FlashSaleProductVariant();
+        $modelVariantImg = new VariantImage();
+        if (!empty($this->post_data['id'])) {
+            $model = new Product();
             $id = intval($this->post_data['id']);
             if ($id > 0) {
-                $reponse = $modal->deleteProduct($id);
+                $product = $model->fetchProductById($id);
+                $image = $product['image'];
+                $listCombo = $modelCombo->getAllComboProduct($id);
+                if ($listCombo) {
+                    foreach ($listCombo as $key => $combo) {
+                        $combo['total_price'] = $combo['total_price'] - $product['price_sales'];
+                        $combo['total_discount'] = $combo['total_price'] - $combo['price_discount'];
+                        $modelCombo->saveComboProduct(
+                            [
+                                "total_price" => $combo['total_price'],
+                                "total_discount" =>  $combo['total_discount'],
+                            ], 
+                            $combo['id']
+                        );
+                    }
+                }
+                $reponse = $model->deleteProduct($id);
                 if ($reponse >= 0) {
+                    $list = $modelVariantImg->getProductImages($id);
+                    foreach ($list as $imageArray) {
+                        foreach ($imageArray as $imageInfo) {
+                            $url = $imageInfo['url'];
+                            $imageId = $imageInfo['id'];
+                            $modelVariantImg->deleteVariantImage($imageId);
+                            if($url){
+                                $full = $public_path . '/images/' . $url;
+                                if (file_exists($full)) unlink($full);
+                            }
+                        }
+                    }
+                    self::deleteImageProduct($image,$public_path);
+                    $mdComboDetail->deleteComboDetailByProductId($id);
+                    $modelVariant->deleteVariantByProductId($id);
+                    $mdFlashSaleProductVariant->deleteFlashSaleProductVariantByProductId($id);
+                    $mdFlashSaleProduct->deleteFlashSaleProductByProductId($id);
                     $this->ajaxResponse(CODE_SUCCESS);
+                }else{
+                    $this->ajaxResponse(CODE_HAS_ERROR);
                 }
             }
         }
         $this->ajaxResponse(CODE_HAS_ERROR);
     }
 
+    public function deleteImageProduct($image,$public_path) {
+        if($image){
+            $full = $public_path . '/images' . $image;
+            if (file_exists($full)) unlink($full);
+        }
+    }
+    
     public function getListProductAction() {
         $this->isAjax();
 

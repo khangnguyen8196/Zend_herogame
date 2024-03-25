@@ -88,23 +88,23 @@ pages = $.extend(pages, {
 	                }
 	                $(".submit-btn").submit();
 	            });
-        		$.each($('.rich-editor'), function () {
-					var id = $(this).attr('id');
-					var h = $(this).attr('data-height');
-					CKEDITOR.replace(id, {
-						height: h,
-						width: '100%',
-						'image_previewText': '  ',
-						'allowedContent': true,
-						'enterMode': CKEDITOR.ENTER_BR,
-				
-						filebrowserBrowseUrl: '/ad-min/assets/js/libs/kcfinder/browse.php?opener=ckeditor&type=files',
-						filebrowserImageBrowseUrl: '/ad-min/assets/js/libs/kcfinder/browse.php?opener=ckeditor&type=images',
-						filebrowserUploadUrl: '/ad-min/assets/js/libs/kcfinder/upload.php?opener=ckeditor&type=files',
-						filebrowserImageUploadUrl: '/ad-min/assets/js/libs/kcfinder/upload.php?opener=ckeditor&type=images',
-						filebrowserFlashUploadUrl: '/ad-min/assets/js/libs/kcfinder/upload.php?opener=ckeditor&type=flash'
-					});
-				});				
+        		$.each($('.rich-editor'),function(){
+        			var id = $(this).attr('id');
+        			var h = $(this).attr('data-height');
+        			 CKEDITOR.replace( id, {
+          		       height: h,
+          		       width: '100%',
+   					   'image_previewText': '  ',
+   					   'allowedContent': true,
+   					   'enterMode' : CKEDITOR.ENTER_BR,
+   					   
+   					 filebrowserBrowseUrl : '/ad-min/assets/js/libs//kcfinder/browse.php?opener=ckeditor&type=files',
+   					 filebrowserImageBrowseUrl : '/ad-min/assets/js/libs//kcfinder/browse.php?opener=ckeditor&type=images',
+   					 filebrowserUploadUrl : '/ad-min/assets/js/libs//kcfinder/upload.php?opener=ckeditor&type=files',
+   					 filebrowserImageUploadUrl : '/ad-min/assets/js/libs//kcfinder/upload.php?opener=ckeditor&type=images',
+   					 filebrowserFlashUploadUrl : '/ad-min/assets/js/libs//kcfinder/upload.php?opener=ckeditor&type=flash',
+          		    });
+        		});	
         		//
         		$(document).on('change', '#url', {}, function ( ) {
         			var value = $(this).val();
@@ -209,15 +209,15 @@ pages = $.extend(pages, {
 				html += 		'<div class="form-group">';
 				html += 			'<label class="control-label col-lg-2">Tên Loại</label>';
 				html += 			'<div class="col-lg-2">';
-				html += 				'<input type= "text" class="form-control variant-name" name="variant_name[]" data-name="variant_name[]" placeholder="Tên Loại" value="" data-msg="Vui Lòng Nhập Tên Loại">';
+				html += 				'<input type= "text" class="form-control variant-name" name="variant_name[]" data-name="variant_name[]" placeholder="Tên Loại" value="" data-msg="Vui Lòng Nhập Tên Loại" >';
 				html += 			'</div>';
 				html += 			'<label class="control-label col-lg-1">Giá</label>';
 				html += 			'<div class="col-lg-2">';
-				html += 				'<input type="number" class="form-control variant-price" name="variant_price[]" data-name="variant_price[]" placeholder="Giá" value="" data-msg="Vui Lòng Nhập Giá Loại">';
+				html += 				'<input type="tel" class="form-control variant-price" name="variant_price[]" data-name="variant_price[]" placeholder="Giá" value="" data-msg="Vui Lòng Nhập Giá Loại" oninput="this.value = this.value.replace(/[^0-9]/g, \'\');"/>';
 				html += 			'</div>';
 				html += 			'<label class="control-label col-lg-1">Giá Sales</label>';
 				html += 			'<div class="col-lg-2">';
-				html += 				'<input type="number" class="form-control variant-price-sales" name="variant_price_sales[]" data-name="variant_price_sales[]" placeholder="Giá Sales" value="" data-msg="Vui Lòng Nhập Giá Sales Loại">';
+				html += 				'<input type="tel" class="form-control variant-price-sales" name="variant_price_sales[]" data-name="variant_price_sales[]" placeholder="Giá Sales" value="" data-msg="Vui Lòng Nhập Giá Sales Loại" oninput="this.value = this.value.replace(/[^0-9]/g, \'\');"/>';
 				html += 			'</div>';
 				html += 			'<input type="hidden"  name="variant_id[]" value="0">';
 				html += 			'<div class="input-group-append">';
@@ -296,13 +296,13 @@ pages = $.extend(pages, {
 				for (let i = 0; i < files.length; i++) {
 					const fileSize = files[i].size;
 					if (fileSize > maxSize) {
-						invalidFiles.push(files[i].name); // Lưu tên của tệp tin không hợp lệ
+						invalidFiles.push(files[i].name); 
 					}
 				}
 		
 				if (invalidFiles.length > 0) {
 					alert("Các tệp tin sau có kích thước vượt quá 1MB:\n" + invalidFiles.join("\n"));
-					$(input).val(''); // Sử dụng jQuery để xóa lựa chọn của người dùng
+					$(input).val(''); 
 				}
 			}
 			

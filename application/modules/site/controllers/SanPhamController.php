@@ -6,6 +6,11 @@
 class Site_SanPhamController extends FrontEndAction {
 
     protected $_categoryMdl = "";
+    protected $_flashSale = "";
+    protected $_flashSaleProduct = "";
+
+    protected $_flashSaleProductVariant = "";
+
     protected $_productMdl = "";
     protected $_variantMdl = "";
     protected $_variantImgMdl = ""; 
@@ -19,6 +24,9 @@ class Site_SanPhamController extends FrontEndAction {
     public function init() {
         parent::init();
         $this->_categoryMdl = new Category();
+        $this->_flashSale = new FlashSale();
+        $this->_flashSaleProduct = new FlashSaleProduct();
+        $this->_flashSaleProductVariant = new FlashSaleProductVariant();
         $this->_productMdl = new Product();
         $this->_variantMdl = new ProductVariant();
         $this->_variantImgMdl = new VariantImage();
@@ -112,6 +120,7 @@ class Site_SanPhamController extends FrontEndAction {
      * 
      */
     public function chiTietAction() {
+        
         $this->getInfoPage(array('banner' => true, 'category' => true, 'new_post' => true, 'product_best_sell' => true,'new_products' => true));
         if (empty($this->post_data["name"]) == true) {
             $this->_redirect("/");
@@ -124,8 +133,9 @@ class Site_SanPhamController extends FrontEndAction {
         $color_list = Commons::getProductColor($productInfo['product_color']);
         $list_variant = $this->_variantMdl->getProductVariants($productInfo['id']);
         $list_variant_img = $this->_variantImgMdl->getProductImage($productInfo['id']);
-       
         
+        $flash_sale = $this->_flashSale->getFlashSale();
+      
         $list_combo_product = $this->_comboDetailMdl->getComboByProductId($productInfo['id']);
         $list_combo_detail = array();
         foreach ($list_combo_product as $combo_product) {
@@ -134,8 +144,19 @@ class Site_SanPhamController extends FrontEndAction {
         }
         $this->view->list_combo_detail = $list_combo_detail;
         $this->view->list_combo_product=$list_combo_product;
-        
+        $now = date('Y-m-d H:i:s');
+        if ($flash_sale && $flash_sale['count_time_start'] <= $now && $flash_sale['status'] == 1) {
+            $this->view->flash_sale = $flash_sale; 
+            $list_variant_flash_sale = $this->_flashSaleProductVariant->getFlashSaleProductVariantBy($flash_sale['flash_sale_id'],$productInfo['id']);
+            $this->view->list_variant_flash_sale = $list_variant_flash_sale; 
+            $list_flash_sale_product = $this->_flashSaleProduct->getFlashSaleProductBy($flash_sale['flash_sale_id'],$productInfo['id']);
+            $this->view->list_flash_sale_product = $list_flash_sale_product; 
+            // echo '<pre>';
+            // print_r( $list_flash_sale_product);
+            // exit;
 
+        
+        }
         $this->view->color_list = $color_list; 
         $this->view->list_variant = $list_variant;   
         $this->view->list_variant_img = $list_variant_img;   

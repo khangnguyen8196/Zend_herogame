@@ -581,6 +581,9 @@ class FrontEndAction extends Zend_Controller_Action {
      */
     public function getProductsFullInfo($cart_list, &$totalMoney) {
         $productMdl = new Product();
+        $flashSaleProductVariantMdl = new FlashSaleProductVariant();
+        $flashSaleProduct = new FlashSaleProduct();
+        $flashSaleMdl = new FlashSale();
         $mdlProductVariant = new ProductVariant();
         $mdlCombo = new ComboProduct();
         $cart_list_full_info = array();;
@@ -621,20 +624,30 @@ class FrontEndAction extends Zend_Controller_Action {
                 foreach ($cart_list['products'] as $p_id => $value) {
                     $now = date('Y-m-d H:i:s');
                     $p_full_info = $productMdl->getProductInfoById($p_id);
+                    $flash_sale = $flashSaleMdl->getFlashSale();
+                    // echo '<pre>';
+                    // print_r($flash_sale);
+                    // exit;
                     if (empty($p_full_info)) {
                         continue;
                     }
                     if (!empty($value['variant']) && is_array($value['variant'])) {
                         $variant_list = $mdlProductVariant->getProductVariants($p_id);
-                        foreach ($value['variant'] as $i=>$var) {
-                            foreach ($variant_list as $variant) {
-                                if ($variant['id'] == $i) {
-                                    if(($now < $p_full_info['count_time']) and ($p_full_info['enable_promo'] ==1)) {
+                        if($flash_sale){
+                            $list_variant_flash_sale = $flashSaleProductVariantMdl->getFlashSaleProductVariantBy($flash_sale['flash_sale_id'],$p_id);
+                        }
+                        if($flash_sale && $now <= $flash_sale['count_time_end'] && $now >= $flash_sale['count_time_start'] && $flash_sale['status'] ==1 && $list_variant_flash_sale) {
+                            foreach ($value['variant'] as $i=>$var) {
+                                foreach ($list_variant_flash_sale as $variant) { 
+                                    if ($variant['variant_id'] == $i) {
                                         $p_full_info["qty"] = $var['qty'];
                                         $p_full_info["variant_price_flash_sale"] = $variant["variant_price_flash_sale"];
                                         $p_full_info["variant_price_sales"] = $variant["variant_price_sales"];
                                         $p_full_info["variant_name"] = $variant['variant_name'];
-                                        $p_full_info["variant_id"] = $variant['id'];
+                                        $p_full_info["variant_id"] = $variant['variant_id'];
+                                        $p_full_info["count_time_start"] = $flash_sale['count_time_start'];
+                                        $p_full_info["count_time_end"] = $flash_sale['count_time_end'];
+                                        $p_full_info["flash_sale_status"] = $flash_sale['status'];
                                         if($variant["variant_price_flash_sale"]){
                                             $p_full_info["total_money"] = $var['qty'] * $variant["variant_price_flash_sale"];
                                         }else{
@@ -643,24 +656,36 @@ class FrontEndAction extends Zend_Controller_Action {
                                         $totalMoney += $p_full_info["total_money"];
                                         $cart_list_full_info[] = $p_full_info;
                                     }
-                                    else{
-                                        $p_full_info["qty"] = $var['qty'];
-                                        $p_full_info["variant_price_sales"] = $variant["variant_price_sales"];
-                                        $p_full_info["variant_name"] = $variant['variant_name'];
-                                        $p_full_info["variant_id"] = $variant['id'];
-                                        $p_full_info["total_money"] = $var['qty'] * $variant["variant_price_sales"];
-                                        $totalMoney += $p_full_info["total_money"];
-                                        $cart_list_full_info[] = $p_full_info;
+                                }
+                            }
+                        }else{
+                            foreach ($value['variant'] as $i=>$var) {
+                                foreach ($variant_list as $variant) {
+                                    if ($variant['id'] == $i) {
+                                            $p_full_info["qty"] = $var['qty'];
+                                            $p_full_info["variant_price_sales"] = $variant["variant_price_sales"];
+                                            $p_full_info["variant_name"] = $variant['variant_name'];
+                                            $p_full_info["variant_id"] = $variant['id'];
+                                            $p_full_info["total_money"] = $var['qty'] * $variant["variant_price_sales"];
+                                            $totalMoney += $p_full_info["total_money"];
+                                            $cart_list_full_info[] = $p_full_info;
+                                        
                                     }
                                 }
                             }
-                        }
+                        }    
                     } else {
-                        if($now < $p_full_info['count_time'] and $p_full_info['enable_promo'] ==1) {
+                        if($flash_sale){
+                            $flash_sale_product = $flashSaleProduct->getFlashSaleProductBy($flash_sale['flash_sale_id'],$p_id);
+                        }
+                        if($flash_sale && $now <= $flash_sale['count_time_end'] && $now >= $flash_sale['count_time_start'] && $flash_sale['status'] ==1 &&  $flash_sale_product) {
                             $p_full_info["qty"] = $value['qty'];
-                            $p_full_info["total_money"] = $value['qty'] * $p_full_info["price_flash_sale"];
+                            $p_full_info["total_money"] = $value['qty'] * $flash_sale_product["price_flash_sale"];
                             $p_full_info["variant_name"] = '';
-                            $p_full_info["variant_id"] = '';
+                            $p_full_info["price_flash_sale"] = $flash_sale_product["price_flash_sale"];
+                            $p_full_info["count_time_start"] = $flash_sale['count_time_start'];
+                            $p_full_info["count_time_end"] = $flash_sale['count_time_end'];
+                            $p_full_info["flash_sale_status"] = $flash_sale['status'];
                             $totalMoney += $p_full_info["total_money"];
                             $cart_list_full_info[] = $p_full_info;
                         }else {

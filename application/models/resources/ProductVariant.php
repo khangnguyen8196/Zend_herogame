@@ -68,6 +68,11 @@ class ProductVariant extends Zend_Db_Table_Abstract {
         // return $this->update( array('status' => STATUS_DELETE ), $where );
     }
 
+    public function deleteVariantByProductId($product_id) {
+        $where = $this->getAdapter()->quoteInto('product_id = ?', $product_id);
+        return $this->delete($where);
+    }
+
     /**
      * [fetchAllColorByGroup description]
      * @param  [type] $group [description]

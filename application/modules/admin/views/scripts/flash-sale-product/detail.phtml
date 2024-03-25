@@ -1,0 +1,242 @@
+<div class="page-header">
+	<div class="page-header-content">
+		<div class="page-title">
+			<h4><i class="icon-cog3 position-left"></i> <span class="text-semibold">Tạo list flash sale</span></h4>
+		</div>
+	</div>
+	<div class="breadcrumb-line">
+		<ul class="breadcrumb">
+			<li><a href="/"><i class="icon-home2 position-left"></i> <?php echo $this->translate('home')?></a></li>
+			<li><a href="/admin/flash-sale-product">Danh Sách Flash sale</a></li>
+			<li class="active">Chi tiết</li>
+		</ul>
+		<!-- tree -->
+	</div>
+</div>
+<div class="content">
+	<div class="panel panel-flat">
+		<div class="panel-heading">
+			<h5 class="panel-title">Chi Tiết</h5>
+		</div>
+		<div class="panel-body">
+			<div class="alert alert-success alert-styled-left <?php if( empty($this->success) == true) { echo 'hidden';}?>">
+				<button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
+				<?php
+					if( empty($this->success) == false ){
+						foreach ($this->success as $key => $value ){
+							echo $value.'<br/>';
+						}
+					}
+				?>
+			</div>
+			<div class="alert alert-danger alert-styled-left <?php if( empty($this->error) == true) { echo 'hidden';}?>">
+				<button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
+				<?php
+					if( empty($this->error) == false ){
+						foreach ($this->error as $key => $value ){
+							echo $value.'<br/>';
+						}
+					}
+				?>
+			</div>
+			<div class="col-lg-12 form-flash-sale " id='form-flash-sale'>
+				<form class="form-horizontal" id="the-flash-sale" method="post" enctype="multipart/form-data">
+					<fieldset class="content-group">
+						<div class="form-group">
+							<label class="control-label col-lg-2">Tiêu đề</label>
+							<div class="col-lg-10">
+								<input type="text" name="title_flash_sale"
+										id="title_flash_sale"
+										class="form-control"
+										placeholder="Tiêu đề" value="<?php echo @$this->info['title_flash_sale'] ?>"> 
+							</div>
+						
+						</div>	
+						<input type="hidden" name="flash_sale_id" value="<?php echo@$this->info['flash_sale_id']; ?>">
+						<span class="succes" style="color:green"></span>
+						<?php if(empty($this->listFlashSale)==false){?>
+							<div class="form-group">
+							<button type="button" class="btn btn-primary add-product"  data-flashSale-id="0" data-product-index="0" data-target="#modalProductList" style="margin-right: 11px;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Chọn sản phẩm</button>
+							<label class="control-label col-lg-2">Chọn sản phẩm</label>
+							<div class="col-lg-8 list-product" id="listProduct_0" style="margin-left: -10px;">
+							<?php 
+							foreach ($this->listFlashSale as $key => $item){?>
+								<div class="form-group file-item-<?php echo $item['id'] ?>">
+									<div class="col-lg-3">
+										<input type="hidden" name="flash_sale_product_id[<?php echo $key ?>]" value="<?php echo $item['id'] ?>" />
+										<input type="text" readonly class="form-control product-name-input" name = "product_name[]" value="<?php echo $item['product_name']?>" placeholder="Chọn sản phẩm"  data-flash-sale-id="<?php echo $item['id'] ?>" data-input-id="<?php echo $item['id'] ?>" />
+										<input type="hidden" class="form-control product-id-input" name = "product_id[]" value="<?php echo $item['product_id'] ?>" placeholder=""  data-flash-sale-id="<?php echo $item['id'] ?>" data-input-id="<?php echo $item['id'] ?>" />
+										<span class="errorSanPham" style="color:red"></span>
+									</div>
+									<div class="col-lg-2">
+										<input  type="tel" readonly class="form-control product-price-input" name="price[]"  value="<?php echo $item['price']?>" placeholder="Giá sản phẩm"  data-flash-sale-id="<?php echo $item['id'] ?>" data-input-id="<?php echo $item['id'] ?>" oninput="this.value = this.value.replace(/[^0-9]/g, '');"/>
+										<span class="errorPrice" style="color:red"></span>
+									</div>
+									<div class="col-lg-2">
+										<input type="tel" readonly class="form-control product-price-sale-input" name="price_sales[]"  value="<?php echo $item['price_sales']?>" placeholder="Giá sale"  data-flash-sale-id="<?php echo $item['id'] ?>" data-input-id="<?php echo $item['id'] ?>" oninput="this.value = this.value.replace(/[^0-9]/g, '');"/>
+										<span class="errorPrice" style="color:red"></span>
+									</div>
+									<div class="col-lg-2">
+										<input type="tel" name="percent_flash_sale[]" maxlength="2" class="form-control product-percent-flash-sale" value="<?php echo $item['percent_flash_sale']?>" placeholder="% sale giảm" data-flash-sale-id="<?php echo $item['id'] ?>" data-input-id="<?php echo $item['id'] ?>" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+									</div>
+									<div class="col-lg-2">
+										<input type="tel" readonly class="form-control product-price-flash-sale" name="price_flash_sale[]"  value="<?php echo $item['price_flash_sale']?>" placeholder="Giá flash sale"  data-flash-sale-id="<?php echo $item['id'] ?>" data-input-id="<?php echo $item['id'] ?>" oninput="this.value = this.value.replace(/[^0-9]/g, '');"/>
+										<span class="errorPrice" style="color:red"></span>
+									</div>
+									<div class="col-lg-1">
+										<button type="button" class="btn btn-alert remove-product-list" style="margin-right: 11px;" data-flash-sale-id ="<?php echo $item['id'] ?>" data-remove="<?php echo $item['id'] ?>">x</button>
+									</div>
+								</div>
+								<div class="hidden list-delete-product" id ="delete_product_input_<?php echo $item['id'] ?>" data-flash-sale-id="<?php echo $item['id'] ?>"><?php echo $item['id'] ?></div>
+								<?php } ?>
+							</div>
+						</div>
+						<?php } else {?>
+						<div class="form-group">
+							<button type="button" class="btn btn-primary add-product"  data-flashSale-id="0" data-product-index="0" data-target="#modalProductList" style="margin-right: 11px;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Chọn sản phẩm</button>
+							<label class="control-label col-lg-2">Chọn sản phẩm</label>
+							<div class="col-lg-8 list-product" id="listProduct_0" style="margin-left: -10px;">
+								<!-- <div class="form-group file-item-0">
+									<div class="col-lg-3">
+										<input type="hidden" name="flash_sale_id[]" value="0" />
+										<input type="text" class="form-control product-name-input" value="" placeholder="Chọn sản phẩm"  data-flash-sale-id="0" data-input-id="0" />
+										<input type="hidden" class="form-control product-id-input" name="product_id[]" value="" placeholder=""  data-flash-sale-id="0" data-input-id="0" />
+										<span class="errorSanPham" style="color:red"></span>
+									</div>
+									<div class="col-lg-2">
+										<input  type="tel" readonly class="form-control product-price-input" name="price[]"  value="" placeholder="Giá sản phẩm"  data-flash-sale-id="0" data-input-id="0" oninput="this.value = this.value.replace(/[^0-9]/g, '');"/>
+										<span class="errorPrice" style="color:red"></span>
+									</div>
+									<div class="col-lg-2">
+										<input type="tel" readonly class="form-control product-price-sale-input" name="price_sales[]"  value="" placeholder="Giá sale"  data-flash-sale-id="0" data-input-id="0" oninput="this.value = this.value.replace(/[^0-9]/g, '');"/>
+										<span class="errorPrice" style="color:red"></span>
+									</div>
+									<div class="col-lg-2">
+										<input type="tel" name="percent_flash_sale[]" maxlength="2" class="form-control product-percent-flash-sale" value="" placeholder="% sale giảm" data-flash-sale-id="0" data-input-id="0" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+									</div>
+									<div class="col-lg-2">
+										<input type="tel" readonly class="form-control product-price-flash-sale" name="price_flash_sale[]"  value="" placeholder="Giá flash sale"  data-flash-sale-id="0" data-input-id="0" oninput="this.value = this.value.replace(/[^0-9]/g, '');"/>
+										<span class="errorPrice" style="color:red"></span>
+									</div>
+									<div class="col-lg-1">
+										<button type="button"  class="btn btn-alert remove-product" style="margin-right: 11px;" data-flash-sale-id="0" data-input-id="0">x</button>
+									</div>
+								</div> -->
+							</div>
+						</div>
+						<?php }?>
+						<div class="form-group">
+							<label class="control-label col-lg-2">Thời gian flash sale</label>
+							<div class="col-lg-3" style="position: relative;display: table;border-collapse: separate;">
+								<input type="text" name="count_time_start"
+										id="startdate" format="yyyy-mm-dd"
+										class="form-control datetimepicker"
+										placeholder="Thời gian bắt đầu" value="<?php echo @$this->info['count_time_start'] ?>"> 
+										<span class="input-group-addon"><i class="icon-calendar"></i></span>
+							</div>
+								<span class="errorDate" style="color:red"></span>
+							<div class="col-lg-3" style="position: relative;display: table;border-collapse: separate;">
+							<input type="text" name="count_time_end"
+									id="enddate" format="yyyy-mm-dd"
+									class="form-control datetimepicker"
+									placeholder="Thời gian kết thúc" value="<?php echo @$this->info['count_time_end'] ?>"> 
+									<span class="input-group-addon"><i class="icon-calendar"></i></span>
+							</div>
+						</div>	
+						<div class="form-group">
+							<label class="control-label col-lg-2"><?php echo $this->translate('status')?></label>
+							<div class="col-lg-4">
+							<select name="status" id="status" class="form-control">
+								<option value="<?php echo STATUS_ACTIVE ?>" <?php
+								if (@$this->info['status'] == STATUS_ACTIVE) {
+									echo 'selected';
+								}
+								?>><?php echo $this->translate('active') ?></option>
+								<option value="<?php echo STATUS_IN_ACTIVE ?>" <?php
+								if (@$this->info['status'] == STATUS_IN_ACTIVE) {
+									echo 'selected';
+								}
+								?>><?php echo $this->translate('in-active') ?></option>
+							</select>
+							</div>
+						</div>
+						</div>
+					</fieldset>
+					<div class="text-right">
+						<input type="hidden" name="id" value="<?php echo @$this->flash_sale_id ?>" />
+						<a href="/admin/flash-sale-product"><button type="button" class="btn btn-default cancel-btn"><?php echo $this->translate('cancel')?><i class="icon-arrow-right14 position-right"></i></button></a>
+						<button type="submit" class="btn btn-primary submit-btn"><?php echo $this->translate('submit')?> <i class="fa fa-plus" aria-hidden="true"></i></button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Modal form -->
+<div class="modal fade" id="modalProductList" tabindex="-1" role="dialog" aria-labelledby="modalProductListLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width: 70%;margin: 30px auto;">
+		<div class="modal-content">
+		<div class="modal-header">
+			<h4 class="modal-title" id="myModalLabel">Modal</h4>
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		</div>
+		<div class="modal-body" style="max-height: calc(100vh - 100px);overflow-y: auto;">
+				<div class="panel-body">
+					<form id="searchPost">
+						<div class="col-md-12">
+							<div class="col-md-4 ">
+								<div class="form-group">
+									<label>Danh mục</label> <select item-type="search"
+										mapping-column="4" class="select-search">
+										<option value="">Tất cả</option>
+										<?php if( empty( $this->listCategory ) == false ){ ?>
+										<?php foreach ( $this->listCategory as $category ){ ?>
+											<option value="<?php echo $category['id'] ?>"><?php echo $category['name'] ?></option>
+										<?php } ?>
+										<?php } ?>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="col-md-12">
+								<button type="button" class="btn btn-primary seach-category">
+									<i class="fa fa-search" aria-hidden="true"></i>&nbsp;<?php echo $this->translate('search')?></button>
+							</div>
+						</div>
+					</form>
+				</div>
+				<table id="listProductTable" class="table datatable-pagination">
+					<thead>
+						<tr>
+							<th class="text-center">
+							Check All <input type="checkbox" id="checkAll"></input>
+								<!-- Action -->
+							</th>
+							<th width="5%"><?php echo $this->translate('id')?></th>
+							<th>Tên Sản Phẩm</th>
+							<th width="8%">Hình Ảnh</th>
+							<th width="8%">Danh Mục</th>
+							<th>Giá</th>
+							<th>Giá sales</th>
+							<th><?php echo $this->translate('status')?></th>
+						</tr>
+					</thead>
+				</table>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Huỷ</button>
+					<button id="confirmSelection" type="submit" class="btn btn-primary submit">Xác nhận</button>
+		</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+

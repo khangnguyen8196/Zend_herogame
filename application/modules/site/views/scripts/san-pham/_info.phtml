@@ -6,21 +6,22 @@
     <div class="intro">
         <ul>
             <?php $now = date('Y-m-d H:i:s');
-            if($now < $this->info['count_time'] && $this->info['enable_promo']==1){?>
-                <li class='product-info' attr-count-down="<?php echo $this->info['count_time']?>" attr-enable-promo="<?php echo $this->info['enable_promo']?>">
+            if($this->flash_sale && $this->flash_sale['count_time_start'] <= $now && $now <= $this->flash_sale['count_time_end'] && $this->list_flash_sale_product){?>
+                <li class='product-info' attr-count-down="<?php echo $this->flash_sale['count_time_end']?>" attr-enable-promo="<?php echo $this->flash_sale['status']?>">
                 </li>
                 <?php if (count($this->list_variant) > 0 ) { ?>
                     <li class="price-variant">
                         <label>Giá tiền:</label>
                         <strong class="price-a">
-                            <span id="selected_price_sales"><?php if($this->list_variant[0]['variant_price_flash_sale'] > 0) {echo number_format($this->list_variant[0]["variant_price_flash_sale"]). '&#8363';} else { echo number_format($this->list_variant[0]["variant_price_sales"]). '&#8363';}?></span>
+                            <span id="selected_price_sales"><?php if($this->list_variant_flash_sale[0]['variant_price_flash_sale'] > 0) {echo number_format($this->list_variant_flash_sale[0]["variant_price_flash_sale"]). '&#8363';} else { echo number_format($this->list_variant[0]["variant_price_sales"]). '&#8363';}?></span>
                         </strong>
-                        <strong  class="price-b <?php if ($this->list_variant[0]['variant_price'] == $this->list_variant[0]['variant_price_flash_sale']) {echo 'hidden';} ?> " id="selected_price"><?php echo ($this->list_variant[0]['variant_price']). '&#8363' ?></strong>
+                        <strong  class="price-b <?php if ($this->list_variant[0]['variant_price'] == $this->list_variant_flash_sale[0]['variant_price_flash_sale']) {echo 'hidden';} ?> " id="selected_price"><?php echo ($this->list_variant[0]['variant_price']). '&#8363' ?></strong>
                     </li>
                 <?php } else { ?>
+                   
                         <li class="product-info-price">
                             <label>Giá tiền:</label>
-                            <strong class="price-a"><?php if ($this->info["price_flash_sale"] > 0) { echo number_format($this->info["price_flash_sale"]) . '&#8363';} else { echo number_format($this->info["price_sales"]) . '&#8363';} ?></strong>
+                            <strong class="price-a"><?php  if ($this->list_flash_sale_product["price_flash_sale"] > 0) { echo number_format($this->list_flash_sale_product["price_flash_sale"]) . '&#8363';} else { echo number_format($this->info["price_sales"]) . '&#8363';} ?></strong>
                             <?php if ($this->info["price"] != $this->info["price_flash_sale"]) { ?>
                                 <strong class="price-b"><?php echo number_format($this->info["price"]) . '&#8363' ?></strong>
                             <?php } ?>
@@ -96,6 +97,7 @@
 
     <!--Phân Loại-->
     <?php if( empty($this->list_variant) == false && is_array($this->list_variant) ){ ?>
+        <input type="hidden" data-var0-id="<?php echo $this->list_variant[0]['id']?>"/>
         <?php
             // Tạo một mảng chứa thông tin về variant, bao gồm tên và giá tiền
             $variants = array();
@@ -105,11 +107,11 @@
                         'variant_name' => $variant['variant_name'],
                         'variant_price' =>$variant['variant_price'],
                         'variant_price_sales'=>$variant['variant_price_sales'],
-                        'variant_price_flash_sale' => $variant['variant_price_flash_sale'],
                     );
                 }
             }
         ?>
+       
         <?php if( (count($variants) > 1 ) || ( count($variants) == 1 && empty($this->list_variant[0]['id']) == false && $this->list_variant[0]['id'] != 1 )){ ?>
             <div class="intro variant-box options" data-value="Loại">
                 <p class="variant-label">
@@ -117,27 +119,37 @@
                     <span id="selected_variant" ><?php echo !empty($this->list_variant[0]['variant_name']) ? $this->list_variant[0]['variant_name']:''?></span>
                 </p>
                 <ul class="variant-list">
-                    <?php foreach( $this->list_variant as $key => $variant ){?>
-                        <input type="hidden" data-var0-id="<?php echo $this->list_variant[0]['id']?>">
+                    <?php
+                    if($this->flash_sale){?>
                         <?php 
-                            if($variant['status'] == 1) { 
-                                $active = '';
-                                if($key == 0 ){
-                                    $active = 'active';
-                                }
-                        ?>
-                            <?php
-                                if($now < $this->info['count_time'] and $variants[$variant['id']]['variant_price_flash_sale']>0 and $this->info['enable_promo']==1) {?>
-                                    <li class="variant-items" data-id = "<?php echo $variant['id']?>" data-price-sales = "<?php echo $variants[$variant['id']]['variant_price_flash_sale'] ?>" data-price = "<?php echo $variants[$variant['id']]['variant_price'] ?>">
-                                        <a class="<?php echo $active ?>" data-id="<?php echo $variant['id']?>" title="<?php echo $variant['variant_name']?>" data-price-sales = "<?php echo $variants[$variant['id']]['variant_price_flash_sale'] ?>" data-price = "<?php echo $variants[$variant['id']]['variant_price'] ?>" ><?php echo $variant['variant_name']?></a>
-                                    </li>
-                            <?php }else {?>
-                                    <li class="variant-items" data-id = "<?php echo $variant['id']?>" data-price-sales = "<?php echo $variants[$variant['id']]['variant_price_sales'] ?>" data-price = "<?php echo $variants[$variant['id']]['variant_price'] ?>">
-                                        <a class="<?php echo $active ?>" data-id="<?php echo $variant['id']?>" title="<?php echo $variant['variant_name']?>" data-price-sales = "<?php echo $variants[$variant['id']]['variant_price_sales'] ?>" data-price = "<?php echo $variants[$variant['id']]['variant_price'] ?>" ><?php echo $variant['variant_name']?></a>
-                                    </li>
-                            <?php }?>
-                        <?php } ?>
-                    <?php }?>
+                     
+                        foreach($this->list_variant_flash_sale as $key => $variant_flash_sale){?>
+                            
+                            <?php 
+                            $active = '';
+                            if($key == 0 ){
+                                $active = 'active';
+                            }?>
+                            <li class="variant-items" data-id="<?php echo $variant_flash_sale['variant_id']?>" data-price-sales="<?php echo $variant_flash_sale['variant_price_flash_sale'] ?>" data-price="<?php echo $variant_flash_sale['variant_price'] ?>">
+                                <a class="<?php echo $active ?>" data-id="<?php echo $variant_flash_sale['variant_id']?>" title="<?php echo $variant_flash_sale['variant_name']?>" data-price-sales="<?php echo $variant_flash_sale['variant_price_flash_sale'] ?>" data-price="<?php echo $variant_flash_sale['variant_price'] ?>" ><?php echo $variant_flash_sale['variant_name']?></a>
+                            </li>
+                        <?php }?>
+                    <?php }else{?>
+                    <?php 
+                        foreach( $this->list_variant as $key => $variant ){?>
+                            <?php 
+                                if($variant['status'] == 1) { 
+                                    $active = '';
+                                    if($key == 0 ){
+                                        $active = 'active';
+                                    }
+                            ?>
+                                <li class="variant-items" data-id="<?php echo $variant['id']?>" data-price-sales="<?php echo $variants[$variant['id']]['variant_price_sales'] ?>" data-price="<?php echo $variants[$variant['id']]['variant_price'] ?>">
+                                    <a class="<?php echo $active ?>" data-id="<?php echo $variant['id']?>" title="<?php echo $variant['variant_name']?>" data-price-sales="<?php echo $variants[$variant['id']]['variant_price_sales'] ?>" data-price="<?php echo $variants[$variant['id']]['variant_price'] ?>" ><?php echo $variant['variant_name']?></a>
+                                </li>
+                            <?php } ?>
+                        <?php }?>
+                   <?php }?>
                 </ul>
             </div>
         <?php } ?>

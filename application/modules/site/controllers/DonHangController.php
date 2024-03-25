@@ -93,7 +93,7 @@ class Site_DonHangController extends FrontEndAction {
         $this->view->headTitle()->append('Đặt hàng');
         $mdlProvince = new Province();
         $userId = -1;
-        if( empty($this->customer_info) == true ){
+        if( empty($this->customer_info) == false ){
 //            $this->_redirect("/");
 //            $this->customer_info = ['user_id' => -1 ];
             $userId = $this->customer_info['user_id'];
@@ -490,41 +490,79 @@ class Site_DonHangController extends FrontEndAction {
         $productMdl = new Product();
         $mdlCombo = new ComboProduct();
         $mdlComboDetail= new ComboDetail();
+        $flashSaleProductVariantMdl = new FlashSaleProductVariant();
+        $flashSaleProduct = new FlashSaleProduct();
+        $flashSaleMdl = new FlashSale();
         if (empty($cart_list) == false && is_array($cart_list)) {
                 if(empty($cart_list['products'])==false){
                     foreach ($cart_list['products'] as $p_id => $value) {
+                       
                         $p_full_info = $productMdl->getProductInfoById($p_id);
                         $variant_list = $mdlVariant->getProductVariants($p_id);
-                        
+                        $now = date('Y-m-d H:i:s');
+                        $flash_sale = $flashSaleMdl->getFlashSale();
                         if (empty($p_full_info)) {
                             continue;
                         }
                         if (!empty($value['variant']) && is_array($value['variant'])) {
-                            foreach ($value['variant'] as $i=>$var) {
-                                foreach ($variant_list as $variant) {
-                                    if ($variant['id'] == $i) {
-                                        $detailItem = array('id_order' =>'','id_product' => $p_id, 'price' =>$variant['variant_price_sales'], 'number' => $var['qty'],'product_variant' => $variant['id']);
-                                        $listItem = array('name' => $p_full_info['title'],'price' => $variant['variant_price_sales'], 'number'=> $var['qty'], 'img' => $p_full_info['image'], 'variant' => $variant['variant_name'],'variant_id'  => $variant['id'] );
-                                        $listProductItem[] = $listItem;
-                                        $orderDetail[] = $detailItem;
-                                        $p_full_info["total_money"] = $var['qty'] * $variant["variant_price_sales"];
-                                        $totalMoney += $p_full_info["total_money"];
-                                        $cart_list_full_info[] = $p_full_info;
-                                        $listCategory[] = $p_full_info['id_category'];
+                            if($flash_sale){
+                                $list_variant_flash_sale = $flashSaleProductVariantMdl->getFlashSaleProductVariantBy($flash_sale['flash_sale_id'],$p_id);
+                            }
+                            if($flash_sale && $now <= $flash_sale['count_time_end'] && $now >= $flash_sale['count_time_start']  && $flash_sale['status'] ==1 && $list_variant_flash_sale) {
+                                foreach ($value['variant'] as $i=>$var) {
+                                    foreach ($list_variant_flash_sale as $variant) { 
+                                        if ($variant['variant_id'] == $i) {
+                                            $detailItem = array('id_order' =>'','id_product' => $p_id, 'price' =>$variant["variant_price_flash_sale"], 'number' => $var['qty'],'product_variant' => $variant['variant_id']);
+                                            $listItem = array('name' => $p_full_info['title'],'price' => $variant["variant_price_flash_sale"], 'number'=> $var['qty'], 'img' => $p_full_info['image'], 'variant' => $variant['variant_name'],'variant_id'  => $variant['variant_id'] );
+                                            $listProductItem[] = $listItem;
+                                            $orderDetail[] = $detailItem;
+                                            $p_full_info["total_money"] = $var['qty'] * $variant["variant_price_flash_sale"];
+                                            $totalMoney += $p_full_info["total_money"];
+                                            $listCategory[] = $p_full_info['id_category'];
+                                        }
+                                    }
+                                }
+                            }else{
+                                foreach ($value['variant'] as $i=>$var) {
+                                    foreach ($variant_list as $variant) {
+                                        if ($variant['id'] == $i) {
+                                            $detailItem = array('id_order' =>'','id_product' => $p_id, 'price' =>$variant['variant_price_sales'], 'number' => $var['qty'],'product_variant' => $variant['id']);
+                                            $listItem = array('name' => $p_full_info['title'],'price' => $variant['variant_price_sales'], 'number'=> $var['qty'], 'img' => $p_full_info['image'], 'variant' => $variant['variant_name'],'variant_id'  => $variant['id'] );
+                                            $listProductItem[] = $listItem;
+                                            $orderDetail[] = $detailItem;
+                                            $p_full_info["total_money"] = $var['qty'] * $variant["variant_price_sales"];
+                                            $totalMoney += $p_full_info["total_money"];
+                                            // $cart_list_full_info[] = $p_full_info;
+                                            $listCategory[] = $p_full_info['id_category'];
+                                        }
                                     }
                                 }
                             }
-                            
                         }else{
-                            // order detail item
-                            $detailItem = array('id_order' =>'','id_product' => $p_id, 'price' => $p_full_info['price_sales'], 'number' => $value['qty'], 'product_color' => 1);
-                            $listItem = array('name' => $p_full_info['title'],'price' => $p_full_info['price_sales'], 'number'=> $value['qty'], 'img' => $p_full_info['image']);
-                            $listProductItem[] = $listItem;
-                            $orderDetail[] = $detailItem;
-                            $listCategory[] = $p_full_info['id_category'];
-                            $p_full_info["qty"] = $value['qty'];
-                            $p_full_info["total_money"] = $value['qty'] * $p_full_info["price_sales"];
-                            $totalMoney = $totalMoney + $p_full_info["total_money"];
+                            if($flash_sale){
+                                $flash_sale_product = $flashSaleProduct->getFlashSaleProductBy($flash_sale['flash_sale_id'],$p_id);
+                            }
+                            if($flash_sale && $now <= $flash_sale['count_time_end'] && $now >= $flash_sale['count_time_start'] && $flash_sale['status'] ==1 &&  $flash_sale_product) {
+                                $detailItem = array('id_order' =>'','id_product' => $p_id, 'price' => $flash_sale_product["price_flash_sale"], 'number' => $value['qty'], 'product_color' => 1);
+                                $listItem = array('name' => $p_full_info['title'],'price' => $flash_sale_product["price_flash_sale"], 'number'=> $value['qty'], 'img' => $p_full_info['image']);
+                                $listProductItem[] = $listItem;
+                                $orderDetail[] = $detailItem;
+                                $listCategory[] = $p_full_info['id_category'];
+                                $p_full_info["qty"] = $value['qty'];
+                                $p_full_info["total_money"] = $value['qty'] * $flash_sale_product["price_flash_sale"];
+                                $totalMoney = $totalMoney + $p_full_info["total_money"];
+                            }else{
+                                 // order detail item
+                                $detailItem = array('id_order' =>'','id_product' => $p_id, 'price' => $p_full_info['price_sales'], 'number' => $value['qty'], 'product_color' => 1);
+                                $listItem = array('name' => $p_full_info['title'],'price' => $p_full_info['price_sales'], 'number'=> $value['qty'], 'img' => $p_full_info['image']);
+                                $listProductItem[] = $listItem;
+                                $orderDetail[] = $detailItem;
+                                $listCategory[] = $p_full_info['id_category'];
+                                $p_full_info["qty"] = $value['qty'];
+                                $p_full_info["total_money"] = $value['qty'] * $p_full_info["price_sales"];
+                                $totalMoney = $totalMoney + $p_full_info["total_money"];
+                            }
+                           
                         }
                     }  
                 }

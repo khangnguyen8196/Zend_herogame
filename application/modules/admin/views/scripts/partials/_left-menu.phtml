@@ -177,10 +177,10 @@
                         ?>
                         <!-- Statistics management -->
                         <li class="<?php echo ($this->module == 'admin' && $this->controller == "flash-sale-product") ? "active" : "" ?>">
-                            <a href="#"><i class="icon-cube"></i> <span>Flash sale and price sales</span></a>
+                            <a href="#"><i class="icon-cube"></i> <span>Flash sale</span></a>
                             <ul>
                                 <?php if (UtilAuth::hasPrivilege('flash-sale-product', ACTION_VIEW) == true) { ?>
-                                    <li class="<?php echo ($this->module == 'admin' && $this->controller == "flash-sale-product" && $this->action == "index" ) ? "active" : "" ?>"><a href="/admin/flash-sale-product/index">Flash sale and price sales</a></li>
+                                    <li class="<?php echo ($this->module == 'admin' && $this->controller == "flash-sale-product" && $this->action == "index" ) ? "active" : "" ?>"><a href="/admin/flash-sale-product/index">Danh sách Flash sale</a></li>
                                 <?php } ?>
                             </ul>
                         </li>

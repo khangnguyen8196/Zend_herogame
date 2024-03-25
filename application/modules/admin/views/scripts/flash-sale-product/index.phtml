@@ -1,0 +1,40 @@
+<!-- Page header -->
+<div class="page-header">
+    <div class="page-header-content">
+        <div class="page-title">
+            <h3><i class="icon-cog3 position-left"></i> <span class="text-semibold">Flash sale</h3>
+        </div>
+        <div class="heading-elements">
+            <a href="/admin/<?php echo $this->controller ?>/detail" class="btn btn-labeled btn-labeled-right bg-blue heading-btn">Tạo Flash sale <b><i class="fa fa-plus" aria-hidden="true"></i></b></a>
+            <!-- <a href="/admin/<?php echo $this->controller ?>/add" class="btn btn-labeled btn-labeled-right bg-blue heading-btn">Tạo price sale <b><i class="fa fa-plus" aria-hidden="true"></i></b></a> -->
+        </div>
+    </div>
+    <div class="breadcrumb-line">
+        <ul class="breadcrumb">
+            <li><a href="/admin/index/"><i class="icon-home2 position-left"></i> Trang Chủ</a></li>
+            <li><a href="/admin/flash-sale-product/">Flash sale</a></li> 
+           <li class="active">Danh Sách Flash sale</li>
+        </ul>
+    </div>
+</div>
+
+<div class="content">
+    <div class="panel panel-flat">
+        <div class="panel-heading">
+            <h4 class="panel-title">Danh Sách Flash sale</h4>
+        </div>
+        <table id="flashSaleTable" class="table  datatable-sorting">
+        <thead>
+                <tr>
+                    <th width="50px">#</th>
+                    <th width="">Tiêu đề</th>
+                    <th width="">Thời gian bắt đầu</th>
+                    <th width="">Thời gian kết thúc</th>
+                    <th><?php echo $this->translate('status')?></th>
+                    <th class="text-center" width="200px"><?php echo $this->translate('action') ?></th>
+                </tr>
+            </thead>
+		</table>
+        
+    </div>
+</div>

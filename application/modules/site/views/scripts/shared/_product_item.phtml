@@ -1,4 +1,17 @@
-<div class="product-item product_<?php echo $this->id ?>" attr-id="<?php echo $this->id ?>" attr-count-down="<?php echo $this->count_down?>" attr-enable-promo="<?php echo $this->enable_promo?>">
+
+<?php 
+$now = date('Y-m-d H:i:s');
+if ($now <= $this->count_down && $now >= $this->count_time_start && $this->status_flash_sale == 1) {
+?>
+    <div class="product-item product_<?php echo $this->id ?>" attr-id="<?php echo $this->id ?>" attr-count-down="<?php echo $this->count_down ?>" attr-enable-promo="<?php echo $this->status_flash_sale ?>">   
+<?php 
+} else {
+?>
+    <div class="product-item product_<?php echo $this->id ?>" attr-id="<?php echo $this->id ?>" attr-count-down="" attr-enable-promo="">
+<?php 
+}
+?>
+
    <a class="avatar" href="<?php echo $this->url?>">
       <?php
          echo $this->partial ( '/shared/_lazy_image.phtml', array (
@@ -6,9 +19,16 @@
          										'css' => 'photo',
          										'url' => $this->photo 
          								) )?>
-      <div class="label-a" style="color:<?php echo $this->labelA ['tcolor']?>;background:<?php echo $this->labelA ['bcolor']?>">
-         <span><?php echo $this->labelA ['text']?></span>
-      </div>
+      <?php
+      if($now <= $this->count_down && $now >= $this->count_time_start && $this->status_flash_sale ==1) {?>
+         <div class="label-a" style="color:<?php echo $this->percent_flash_sale ['tcolor']?>;background:<?php echo $this->percent_flash_sale ['bcolor']?>">
+            <span><?php echo $this->percent_flash_sale ['text']?></span>
+         </div>
+      <?php }else{?>
+         <div class="label-a" style="color:<?php echo $this->labelA ['tcolor']?>;background:<?php echo $this->labelA ['bcolor']?>">
+            <span><?php echo $this->labelA ['text']?></span>
+         </div>
+      <?php }?>
       <?php
          if (empty ( $this->labelB ['text'] [0] ) == false) {
       ?>
@@ -29,8 +49,11 @@
          <span class="price-a">
          <?php
             $now = date('Y-m-d H:i:s');
-            if($now < $this->count_down and $this->enable_promo ==1 and $this->priceC >0){
+            if($now <= $this->count_down && $now >= $this->count_time_start &&  $this->status_flash_sale ==1 && $this->priceC >0){
                echo $this->priceC;
+               if (isset ( $this->priceB ) && $this->priceB == $this->priceA){
+                  echo '<span class="price-b" style="color:black">' . $this->priceB . '</span>';
+               }
             }elseif ($this->priceA > 0) {
             	echo $this->priceA;
             }

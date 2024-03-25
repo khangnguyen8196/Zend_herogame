@@ -65,7 +65,12 @@ class ComboDetail extends Zend_Db_Table_Abstract {
     public function deleteComboDetail($id) {
         $where = $this->getAdapter()->quoteInto('id = ?', $id);
         return $this->delete($where);
-    }    
+    }
+    
+    public function deleteComboDetailByProductId($product_id) {
+        $where = $this->getAdapter()->quoteInto('product_id = ?', $product_id);
+        return $this->delete($where);
+    } 
     public function getComboDetailById($combo_id) {
         $select = $this->getAdapter()->select()
             ->from(array('cb' => 'combo_detail'))

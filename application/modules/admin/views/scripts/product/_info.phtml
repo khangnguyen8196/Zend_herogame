@@ -77,22 +77,22 @@
     <div class="form-group">
         <label class="control-label col-lg-2">Giá</label>
         <div class="col-lg-4">
-            <input type="number" readonly name="price" id="price" placeholder="Giá" class="form-control" data-msg="Vui Lòng Nhập Giá" value="<?php echo @$this->info['price'] ?>">
+            <input type="tel" readonly name="price" id="price" placeholder="Giá" class="form-control" data-msg="Vui Lòng Nhập Giá" value="<?php echo @$this->info['price'] ?>" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
         </div>
         <label class="control-label col-lg-1">Giá Sales</label>
         <div class="col-lg-4">
-            <input type="number" readonly name="price_sales" id="price_sales" placeholder="Giá Sales" class="form-control" value="<?php echo @$this->info['price_sales'] ?>">
+            <input type="tel" readonly name="price_sales" id="price_sales" placeholder="Giá Sales" class="form-control" value="<?php echo @$this->info['price_sales'] ?>" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
         </div>
     </div>
     <?php }else {?>
          <div class="form-group">
          <label class="control-label col-lg-2">Giá</label>
          <div class="col-lg-4">
-             <input type="number" name="price" id="price" placeholder="Giá" class="form-control" data-msg="Vui Lòng Nhập Giá" value="<?php echo @$this->info['price'] ?>">
+             <input type="tel" name="price" id="price" placeholder="Giá" class="form-control" data-msg="Vui Lòng Nhập Giá" value="<?php echo @$this->info['price'] ?>" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
          </div>
          <label class="control-label col-lg-1">Giá Sales</label>
          <div class="col-lg-4">
-             <input type="number" name="price_sales" id="price_sales" placeholder="Giá Sales" class="form-control" value="<?php echo @$this->info['price_sales'] ?>">
+             <input type="tel" name="price_sales" id="price_sales" placeholder="Giá Sales" class="form-control" value="<?php echo @$this->info['price_sales'] ?>" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
          </div>
      </div>
     <?php }?>
@@ -111,11 +111,11 @@
                         </div>
                         <label class="control-label col-lg-1">Giá</label>
                         <div class="col-lg-2">
-                            <input type="number"  name="variant_price[]" data-name="variant_price[]" placeholder="Giá" class="form-control" value="<?php echo $item['variant_price'] ?>" data-msg="Vui Lòng Nhập Giá Loại" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                            <input type="tel"  name="variant_price[]" data-name="variant_price[]" placeholder="Giá" class="form-control" value="<?php echo $item['variant_price'] ?>" data-msg="Vui Lòng Nhập Giá Loại" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                         </div>
                         <label class="control-label col-lg-1">Giá Sales</label>
                         <div class="col-lg-2">
-                            <input type="number"  name="variant_price_sales[]" data-name="variant_price_sales[]" placeholder="Giá Sales" class="form-control" value="<?php echo $item['variant_price_sales'] ?>" data-msg="Vui Lòng Nhập Giá Sales Loại" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                            <input type="tel"  name="variant_price_sales[]" data-name="variant_price_sales[]" placeholder="Giá Sales" class="form-control" value="<?php echo $item['variant_price_sales'] ?>" data-msg="Vui Lòng Nhập Giá Sales Loại" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                         </div>
                         <input type="hidden" name="variant_id[<?php echo $key ?>]" value="<?php echo $item['id'] ?>">
                         <input type="hidden" name="product_id[<?php echo $key ?>]" value="<?php echo $item['product_id']; ?>">
@@ -185,11 +185,11 @@
                     </div>
                     <label class="control-label col-lg-1">Giá</label>
                     <div class="col-lg-2">
-                        <input type="number" class="form-control variant-price" name="variant_price[]" data-name="variant_price[]" placeholder="Giá" value="" data-msg="Vui Lòng Nhập Giá Loại" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                        <input type="tel" class="form-control variant-price" name="variant_price[]" data-name="variant_price[]" placeholder="Giá" value="" data-msg="Vui Lòng Nhập Giá Loại" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                     </div>
                     <label class="control-label col-lg-1">Giá Sales</label>
                     <div class="col-lg-2">
-                        <input type="number" class = "form-control variant-price-sales" name="variant_price_sales[]" data-name="variant_price_sales[]" placeholder="Giá Sales" value="" data-msg="Vui Lòng Nhập Giá Sales Loại" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                        <input type="tel" class = "form-control variant-price-sales" name="variant_price_sales[]" data-name="variant_price_sales[]" placeholder="Giá Sales" value="" data-msg="Vui Lòng Nhập Giá Sales Loại" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                     </div>
                     <input type="hidden"  name = "variant_id[]" value="0">
                     <div class="input-group-append">
