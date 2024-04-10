@@ -97,8 +97,8 @@ class OrderDetail extends Zend_Db_Table_Abstract {
 
     public function getProductByComboIdproduct($orderId,$combo_id) {
         $select = $this->getAdapter()->select();
-        $select->from(array('od' => 'order_detail'), array('product_id_cb','cb_id_product'))
-            ->join(array('p' => 'product'), 'p.id = od.product_id_cb', array('title','price','price_sales', 'image', 'url_product','combo_id'))
+        $select->from(array('od' => 'order_detail'), array('product_id_cb','cb_id_product','price','discount_combo'))
+            ->join(array('p' => 'product'), 'p.id = od.product_id_cb', array('title', 'image', 'url_product','combo_id'))
             ->where("od.id_order =?", $orderId)
             ->where('od.cb_id_product = ?', $combo_id)
             ->where('p.status = ?', STATUS_ACTIVE);

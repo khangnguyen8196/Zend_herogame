@@ -1,12 +1,18 @@
 <div class="info">
     <div class="title">
         <h1><?php echo $this->info["title"] ?></h1>
+        <label >SKU:</label>
+        <strong >
+            <span style="color:#000;text-transform: uppercase;"><?php echo $this->info["sku"] ?></span>
+       </strong>
         <h2><?php echo $this->info["description"] ?></h2>
     </div>
     <div class="intro">
         <ul>
             <?php $now = date('Y-m-d H:i:s');
-            if($this->flash_sale && $this->flash_sale['count_time_start'] <= $now && $now <= $this->flash_sale['count_time_end'] && $this->list_flash_sale_product){?>
+                $priceFlashSale = isset($this->sale_product["price_flash_sale"]) ? substr($this->sale_product["price_flash_sale"], 0, 1) : '';
+                $priceVariantFlashSale = isset($this->l_variant_flash_sale[0]['variant_price_flash_sale']) ? substr($this->l_variant_flash_sale[0]['variant_price_flash_sale'], 0, 1) : '';
+            if($this->flash_sale && $this->flash_sale['count_time_start'] <= $now && $now <= $this->flash_sale['count_time_end'] && $this->flash_sale_product){?>
                 <li class='product-info' attr-count-down="<?php echo $this->flash_sale['count_time_end']?>" attr-enable-promo="<?php echo $this->flash_sale['status']?>">
                 </li>
                 <?php if (count($this->list_variant) > 0 ) { ?>
@@ -15,19 +21,34 @@
                         <strong class="price-a">
                             <span id="selected_price_sales"><?php if($this->list_variant_flash_sale[0]['variant_price_flash_sale'] > 0) {echo number_format($this->list_variant_flash_sale[0]["variant_price_flash_sale"]). '&#8363';} else { echo number_format($this->list_variant[0]["variant_price_sales"]). '&#8363';}?></span>
                         </strong>
-                        <strong  class="price-b <?php if ($this->list_variant[0]['variant_price'] == $this->list_variant_flash_sale[0]['variant_price_flash_sale']) {echo 'hidden';} ?> " id="selected_price"><?php echo ($this->list_variant[0]['variant_price']). '&#8363' ?></strong>
+                        <strong  class="price-b <?php if ($this->list_variant[0]['variant_price'] == $this->list_variant_flash_sale[0]['variant_price_flash_sale']) {echo 'hidden';} ?> " id="selected_price"><?php echo  number_format($this->list_variant[0]['variant_price']). '&#8363' ?></strong>
                     </li>
                 <?php } else { ?>
-                   
                         <li class="product-info-price">
                             <label>Giá tiền:</label>
-                            <strong class="price-a"><?php  if ($this->list_flash_sale_product["price_flash_sale"] > 0) { echo number_format($this->list_flash_sale_product["price_flash_sale"]) . '&#8363';} else { echo number_format($this->info["price_sales"]) . '&#8363';} ?></strong>
+                            <strong class="price-a"><?php  if ($this->flash_sale_product["price_flash_sale"] > 0) { echo number_format($this->flash_sale_product["price_flash_sale"]) . '&#8363';} else { echo number_format($this->info["price_sales"]) . '&#8363';} ?></strong>
                             <?php if ($this->info["price"] != $this->info["price_flash_sale"]) { ?>
                                 <strong class="price-b"><?php echo number_format($this->info["price"]) . '&#8363' ?></strong>
                             <?php } ?>
                         </li>
                 <?php } ?>
-           <?php }else{?>
+            <?php }elseif($this->sale_product && strtotime($now) - strtotime($this->flash_sale['count_time_start']) <= 6 * 3600 ){?>
+                <?php if (count($this->list_variant) > 0 ) { ?>
+                    <li class="price-variant">
+                        <label>Giá tiền:</label>
+                        <strong class="price-a">
+                            <span id="selected_price_sales"><?php echo $priceVariantFlashSale .'?????'. '&#8363';?></span>
+                        </strong>
+                        <strong  class="price-b>" style="text-decoration: line-through;" id="selected_price"><?php echo number_format($this->list_variant[0]['variant_price']). '&#8363' ?></strong>
+                    </li>
+                <?php } else { ?>
+                        <li class="product-info-price">
+                            <label>Giá tiền:</label>
+                            <strong class="price-a"><?php  echo $priceFlashSale.'?????'. '&#8363' ?></strong>
+                            <strong  class="price-b> "  style="text-decoration: line-through;" id="selected_price"><?php echo number_format($this->info["price"]) . '&#8363' ?></strong>
+                        </li>
+                <?php } ?>
+            <?php }else{?>
                 <?php if (count($this->list_variant) > 0) { ?>
                 <li class="price-variant">
                     <label>Giá tiền:</label>
@@ -120,9 +141,8 @@
                 </p>
                 <ul class="variant-list">
                     <?php
-                    if($this->flash_sale){?>
+                    if($this->flash_sale && $this->flash_sale['count_time_start'] <= $now && $now <= $this->flash_sale['count_time_end'] && $this->list_variant_flash_sale){?>
                         <?php 
-                     
                         foreach($this->list_variant_flash_sale as $key => $variant_flash_sale){?>
                             
                             <?php 
@@ -133,6 +153,21 @@
                             <li class="variant-items" data-id="<?php echo $variant_flash_sale['variant_id']?>" data-price-sales="<?php echo $variant_flash_sale['variant_price_flash_sale'] ?>" data-price="<?php echo $variant_flash_sale['variant_price'] ?>">
                                 <a class="<?php echo $active ?>" data-id="<?php echo $variant_flash_sale['variant_id']?>" title="<?php echo $variant_flash_sale['variant_name']?>" data-price-sales="<?php echo $variant_flash_sale['variant_price_flash_sale'] ?>" data-price="<?php echo $variant_flash_sale['variant_price'] ?>" ><?php echo $variant_flash_sale['variant_name']?></a>
                             </li>
+                        <?php }?>
+                    <?php }elseif($this->sale_product && (strtotime($now) - strtotime($this->flash_sale['count_time_start']) <= 6 * 3600)){?>
+                        <?php 
+                        foreach( $this->l_variant_flash_sale as $key => $variant_flash_sale ){?>
+                            <?php 
+                                if($variant['status'] == 1) { 
+                                    $active = '';
+                                    if($key == 0 ){
+                                        $active = 'active';
+                                    }
+                            ?>
+                                 <li class="variant-items" data-id="<?php echo $variant_flash_sale['variant_id']?>" data-start-time ="<?php echo $this->flash_sale['count_time_start'] ?>" data-price-sales="<?php echo $variant_flash_sale['variant_price_flash_sale'] ?>" data-price="<?php echo $variant_flash_sale['variant_price'] ?>">
+                                    <a class="<?php echo $active ?>" data-id="<?php echo $variant_flash_sale['variant_id']?>" title="<?php echo $variant_flash_sale['variant_name']?>" data-price-sales="<?php echo $variant_flash_sale['variant_price_flash_sale'] ?>" data-price="<?php echo $variant_flash_sale['variant_price'] ?>" ><?php echo $variant_flash_sale['variant_name']?></a>
+                                </li>
+                            <?php } ?>
                         <?php }?>
                     <?php }else{?>
                     <?php 
@@ -181,6 +216,17 @@
                                                         $productImgUrl = "/upload/images" . $product["image"];
                                                     }
                                                     $price = $product['price_sales'];
+                                                    if ($this->flash_sale && $this->flash_sale['count_time_start'] <= $now && $now <= $this->flash_sale['count_time_end']) {
+                                                        if ($this->list_flash_sale_product) {
+                                                            foreach ($this->list_flash_sale_product as $product_flash_sale) {
+                                                                if ($product['product_id'] == $product_flash_sale['product_id']) {
+                                                                    $price = $product_flash_sale['price_flash_sale'];
+                                                                    break;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+
                                                     $totalPrice += $price; 
                                                     ?>
                                                 <a href="<?php echo $productUrl ?>" title="<?php echo $product['title'] ?>">
@@ -198,7 +244,7 @@
                             <?php }?>
                             <div class="combo-info">
                                 <strong class="price-total">Tổng giá tiền: <?php echo number_format($totalPrice) . '&#8363'  ?><br/></strong>
-                                <strong class="price-a">Giá Combo Sale: <?php echo number_format($combo_product['total_discount']) . '&#8363'  ?><br/></strong> 
+                                <strong class="price-a">Giá Combo Sale: <?php echo number_format($totalPrice - $combo_product['price_discount']) . '&#8363'  ?><br/></strong> 
                             </div>
                         </div>
                         <?php if ($combo_product['total_discount'] > 0 && $this->status != STATUS_IN_OUT_STOCK) { ?>
@@ -219,31 +265,82 @@
                                 <span class="more-collapse" style="display: none;" data-combo-id ="<?php echo $combo_product['combo_id'] ?>">Ẩn chi tiết &nbsp;&#x25B2;</span>
                                 <span class="icon icon-chervon-down" style="transition: transform 250ms ease-in-out 0s; transform: rotate(0deg);" data-combo-id ="<?php echo $combo_product['combo_id'] ?>"></span>
                             </div>
-                            <?php foreach ($this->list_combo_detail as $combo_id => $combo_detail) { ?>
-                                <?php if($combo_product['combo_id'] == $combo_id) {?>
-                                    <ul class="info-detail" style="display:none;" data-combo-id ="<?php echo $combo_product['combo_id'] ?>">
-                                        <?php foreach($combo_detail as $product){?>
-                                        <li style="border-top:1px solid gray; margin-right:20px">
-                                            <?php
-                                            $productUrl = "/" . $product["url_product"];        
-                                            ?>
-                                            <div class="meta">
-                                                <a href="<?php echo $productUrl ?>" style="color:black;text-decoration: none;" title="<?php echo $product['title'] ?>">
-                                                    <span class="name" style="color:black;text-decoration: none;">Sản phẩm: <?php echo $product['title']?><br/></span>
-                                                </a>
-                                                <?php
-                                                    if($product['price'] >= $product['price_sales'] && $product['price_sales'] != ''  ) { ?>
-                                                        <span class="price-a">Giá:<?php echo number_format($product['price_sales']) . '&#8363'  ?><br/></span>
-                                                    <?php } 
-                                                    else {?>
-                                                        <span class="price-a">Giá:<?php echo number_format($product['price']) . '&#8363'  ?><br/></span>
-                                                   <?php  } ?>
-                                            </div>
-                                        </li>
-                                        <?php }?>
-                                    </ul>
-                                    <?php }?>
-                            <?php } ?>
+                            <?php 
+                                $now = date('Y-m-d H:i:s');
+                                if($this->flash_sale && $this->flash_sale['count_time_start'] <= $now && $now <= $this->flash_sale['count_time_end']) {
+                                    foreach ($this->list_combo_detail as $combo_id => $combo_detail) {
+                                        if($combo_product['combo_id'] == $combo_id) {
+                                           
+                                ?>
+                                            <ul class="info-detail" style="display:none;" data-combo-id ="<?php echo $combo_product['combo_id'] ?>">
+                                <?php 
+                                            foreach($combo_detail as $product) {
+                                             
+                                                $productUrl = "/" . $product["url_product"];        
+                                ?>
+                                                <li style="border-top:1px solid gray; margin-right:20px">
+                                                    <div class="meta">
+                                                        <a href="<?php echo $productUrl ?>" style="color:black;text-decoration: none;" title="<?php echo $product['title'] ?>">
+                                                            <span class="name" style="color:black;text-decoration: none;">Sản phẩm: <?php echo $product['title']?><br/></span>
+                                                        </a>
+                                <?php
+                                                        if($product['price'] >= $product['price_flash_sale'] && $product['price_flash_sale'] != '') { 
+                                ?>
+                                                            <span class="price-a">Giá:<?php echo number_format($product['price_flash_sale']) . '&#8363'  ?><br/></span>
+                                <?php
+                                                        } else {
+                                ?>
+                                                            <span class="price-a">Giá:<?php echo number_format($product['price_sales']) . '&#8363'  ?><br/></span>
+                                <?php
+                                                        }
+                                ?>
+                                                    </div>
+                                                </li>
+                                <?php 
+                                            }
+                                ?>
+                                            </ul>
+                                <?php
+                                        }
+                                    }
+                                } else {
+                                    foreach ($this->list_combo_detail as $combo_id => $combo_detail) {
+                                        if($combo_product['combo_id'] == $combo_id) {
+                                ?>
+                                            <ul class="info-detail" style="display:none;" data-combo-id ="<?php echo $combo_product['combo_id'] ?>">
+                                <?php 
+                                            foreach($combo_detail as $product) {
+                                                $productUrl = "/" . $product["url_product"];        
+                                ?>
+                                                <li style="border-top:1px solid gray; margin-right:20px">
+                                                    <div class="meta">
+                                                        <a href="<?php echo $productUrl ?>" style="color:black;text-decoration: none;" title="<?php echo $product['title'] ?>">
+                                                            <span class="name" style="color:black;text-decoration: none;">Sản phẩm: <?php echo $product['title']?><br/></span>
+                                                        </a>
+                                <?php
+                                                        if($product['price'] >= $product['price_sales'] && $product['price_sales'] != '') { 
+                                ?>
+                                                            <span class="price-a">Giá:<?php echo number_format($product['price_sales']) . '&#8363'  ?><br/></span>
+                                <?php
+                                                        } else {
+                                ?>
+                                                            <span class="price-a">Giá:<?php echo number_format($product['price']) . '&#8363'  ?><br/></span>
+                                <?php
+                                                        }
+                                ?>
+                                                    </div>
+                                                </li>
+                                <?php 
+                                            }
+                                ?>
+                                            </ul>
+                                <?php
+                                        }
+                                    }
+                                }
+                                ?>
+
+                    
                         </div>
                     </ul>
                 

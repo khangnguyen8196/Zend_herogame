@@ -35,7 +35,7 @@
 					<div class="col-md-4 ">
 						<div class="form-group">
 							<label>Danh mục</label> <select item-type="search"
-								mapping-column="3" class="select-search">
+								mapping-column="4" class="select-search">
 								<option value="">Tất cả</option>
 								<?php if( empty( $this->listCategory ) == false ){ ?>
 								<?php foreach ( $this->listCategory as $category ){ ?>
@@ -81,6 +81,7 @@
 				<tr>
 					<th width="5%"><?php echo $this->translate('id')?></th>
 					<th>Tên Sản Phẩm</th>
+					<th width="8%">Mã Sản Phẩm</th>
 					<th width="8%">Hình Ảnh</th>
 					<th width="8%">Danh Mục</th>
 					<th>Giá</th>

@@ -86,10 +86,50 @@ class Admin_FlashSaleProductController extends FrontBaseAction {
                     $dataInsert = array_merge($data, $dataUpdated);
                 }
                 $dataInsert['title_flash_sale'] = $data['title_flash_sale'];
+                $dataInsert['percent_all'] = $data['percent_all'];
+                $dataInsert['discount_all'] = str_replace(',', '', $data['discount_all']);
                 $dataInsert['status'] = $data['status'];
+                $public_path = UPLOAD_PATH;
+                if (empty($_FILES['image_flash_sale']) == false && $_FILES['image_flash_sale']['tmp_name']) {
+                    $upload_img = '';
+                    $nowdir = 'img_'.date('d_m_Y');
+                    $ext = pathinfo($_FILES['image_flash_sale']['name'], PATHINFO_EXTENSION);
+                    $fileName = pathinfo($_FILES['image_flash_sale']['name'], PATHINFO_FILENAME);
+                    $fileName = str_replace(' ','-', $fileName);
+                    $newname = $fileName.'_'.rand(0,1000000).'_'.uniqid('', true).'.'.$ext;
+                    Commons::makedirs($public_path.'/images/'.$nowdir);
+                    if( move_uploaded_file($_FILES["image_flash_sale"]["tmp_name"], $public_path.'/images/'.$nowdir.'/' . $newname)){
+                        $upload_img = '/'.$nowdir.'/'.$newname;
+                    }
+                    $dataInsert['image_flash_sale'] = $upload_img;
+                    if (empty($info['image_flash_sale']) == false) {
+                        $full = $public_path . '/images' . $info['image_flash_sale'];
+                        if (file_exists($full)) {
+                            unlink($full);
+                        }
+                    }
+                }
+                if (empty($_FILES['image_flash_sale_smp']) == false && $_FILES['image_flash_sale_smp']['tmp_name']) {
+                    $upload_img = '';
+                    $nowdir = 'img_'.date('d_m_Y');
+                    $ext = pathinfo($_FILES['image_flash_sale_smp']['name'], PATHINFO_EXTENSION);
+                    $fileName = pathinfo($_FILES['image_flash_sale_smp']['name'], PATHINFO_FILENAME);
+                    $fileName = str_replace(' ','-', $fileName);
+                    $newname = $fileName.'_'.rand(0,1000000).'_'.uniqid('', true).'.'.$ext;
+                    Commons::makedirs($public_path.'/images/'.$nowdir);
+                    if( move_uploaded_file($_FILES["image_flash_sale_smp"]["tmp_name"], $public_path.'/images/'.$nowdir.'/' . $newname)){
+                        $upload_img = '/'.$nowdir.'/'.$newname;
+                    }
+                    $dataInsert['image_flash_sale_smp'] = $upload_img;
+                    if (empty($info['image_flash_sale_smp']) == false) {
+                        $full = $public_path . '/images' . $info['image_flash_sale_smp'];
+                        if (file_exists($full)) {
+                            unlink($full);
+                        }
+                    }
+                }
                 $rs=$modelFlashSale->saveFlashSale( $dataInsert,$id);
-                // $edit =FALSE;
-                // $flash_sale_id = isset($_POST['flash_sale_id']) ? $_POST['flash_sale_id'] : $rs;
+
                 $product_id = isset($_POST['product_id']) ? $_POST['product_id'] : '';
                 if($id !=0 && isset($product_id)) {
                     $deletedProductIds = $_POST['flash_sale_product_delete'];
@@ -117,10 +157,11 @@ class Admin_FlashSaleProductController extends FrontBaseAction {
                             if (isset($_POST['product_name'][$index], $_POST['price'][$index],$_POST['price_sales'][$index],$_POST['price_flash_sale'][$index], $_POST['percent_flash_sale'][$index])) {
                                 $data = [
                                     'product_name' => $_POST['product_name'][$index],
-                                    'price' => $_POST['price'][$index],
-                                    'price_sales' => $_POST['price_sales'][$index],
-                                    'price_flash_sale' => $_POST['price_flash_sale'][$index],
+                                    'price' => str_replace(',', '', $_POST['price'][$index]),
+                                    'price_sales' => str_replace(',', '', $_POST['price_sales'][$index]),
+                                    'price_flash_sale' => str_replace(',', '', $_POST['price_flash_sale'][$index]),
                                     'percent_flash_sale' => $_POST['percent_flash_sale'][$index],
+                                    'price_discount' => str_replace(',', '', $_POST['price_discount'][$index]),
                                     'product_id' =>  $pro_id,
                                     'flash_sale_id' => $id,
                                 ];
@@ -130,9 +171,14 @@ class Admin_FlashSaleProductController extends FrontBaseAction {
                                     if($productVariant){
                                         foreach ($productVariant as $j => $variant){
                                             $dataProductVariant['percent_flash_sale'] = $_POST['percent_flash_sale'][$index];
+                                            $dataProductVariant['price_discount'] = str_replace(',', '', $_POST['price_discount'][$index]);
                                             $dataProductVariant['variant_price'] = $variant['variant_price'];
                                             $dataProductVariant['variant_price_sales'] = $variant['variant_price_sales'];
-                                            $dataProductVariant['variant_price_flash_sale'] = $variant['variant_price']-($variant['variant_price']*($_POST['percent_flash_sale'][$index]/100));
+                                            if($dataProductVariant['percent_flash_sale'] == 0 || $dataProductVariant['percent_flash_sale'] ==''){
+                                                $dataProductVariant['variant_price_flash_sale'] = $variant['variant_price']-($dataProductVariant['price_discount']);
+                                            }else{
+                                                $dataProductVariant['variant_price_flash_sale'] = $variant['variant_price']-($variant['variant_price']*($_POST['percent_flash_sale'][$index]/100));
+                                            }
                                             $dataProductVariant['product_id'] = $pro_id;
                                             $dataProductVariant['variant_id'] = $variant['id'];
                                             $dataProductVariant['flash_sale_id'] = $id;
@@ -145,9 +191,14 @@ class Admin_FlashSaleProductController extends FrontBaseAction {
                                     if($productVariant){
                                         foreach ($productVariant as $j => $variant){
                                             $dataProductVariant['percent_flash_sale'] = $_POST['percent_flash_sale'][$index];
+                                            $dataProductVariant['price_discount'] = str_replace(',', '', $_POST['price_discount'][$index]);
                                             $dataProductVariant['variant_price'] = $variant['variant_price'];
                                             $dataProductVariant['variant_price_sales'] = $variant['variant_price_sales'];
-                                            $dataProductVariant['variant_price_flash_sale'] = $variant['variant_price']-($variant['variant_price']*($_POST['percent_flash_sale'][$index]/100));
+                                            if($dataProductVariant['percent_flash_sale'] == 0 || $dataProductVariant['percent_flash_sale'] ==''){
+                                                $dataProductVariant['variant_price_flash_sale'] = $variant['variant_price']-($dataProductVariant['price_discount']);
+                                            }else{
+                                                $dataProductVariant['variant_price_flash_sale'] = $variant['variant_price']-($variant['variant_price']*($_POST['percent_flash_sale'][$index]/100));
+                                            }
                                             $dataProductVariant['product_id'] = $pro_id;
                                             $dataProductVariant['variant_id'] = $variant['id'];
                                             $dataProductVariant['flash_sale_id'] = $id;
@@ -164,10 +215,11 @@ class Admin_FlashSaleProductController extends FrontBaseAction {
                             if (isset($_POST['product_name'][$index], $_POST['price'][$index],$_POST['price_sales'][$index],$_POST['price_flash_sale'][$index], $_POST['percent_flash_sale'][$index])) {
                                 $data = [
                                     'product_name' => $_POST['product_name'][$index],
-                                    'price' => $_POST['price'][$index],
-                                    'price_sales' => $_POST['price_sales'][$index],
-                                    'price_flash_sale' => $_POST['price_flash_sale'][$index],
+                                    'price' => str_replace(',', '', $_POST['price'][$index]),
+                                    'price_sales' => str_replace(',', '', $_POST['price_sales'][$index]),
+                                    'price_flash_sale' => str_replace(',', '', $_POST['price_flash_sale'][$index]),
                                     'percent_flash_sale' => $_POST['percent_flash_sale'][$index],
+                                    'price_discount' => str_replace(',', '', $_POST['price_discount'][$index]),
                                     'product_id' => $pro_id,
                                     'flash_sale_id' => $id,
                                 ];
@@ -177,9 +229,14 @@ class Admin_FlashSaleProductController extends FrontBaseAction {
                                     if($productVariant){
                                         foreach ($productVariant as $j => $variant){
                                             $dataProductVariant['percent_flash_sale'] = $_POST['percent_flash_sale'][$index];
+                                            $dataProductVariant['price_discount'] = str_replace(',', '', $_POST['price_discount'][$index]);
                                             $dataProductVariant['variant_price'] = $variant['variant_price'];
                                             $dataProductVariant['variant_price_sales'] = $variant['variant_price_sales'];
-                                            $dataProductVariant['variant_price_flash_sale'] = $variant['variant_price']-($variant['variant_price']*($_POST['percent_flash_sale'][$index]/100));
+                                            if($dataProductVariant['percent_flash_sale'] == 0 || $dataProductVariant['percent_flash_sale'] ==''){
+                                                $dataProductVariant['variant_price_flash_sale'] = $variant['variant_price']-($dataProductVariant['price_discount']);
+                                            }else{
+                                                $dataProductVariant['variant_price_flash_sale'] = $variant['variant_price']-($variant['variant_price']*($_POST['percent_flash_sale'][$index]/100));
+                                            }
                                             $dataProductVariant['product_id'] = $pro_id;
                                             $dataProductVariant['variant_id'] = $variant['id'];
                                             $dataProductVariant['flash_sale_id'] = $id;
@@ -192,9 +249,14 @@ class Admin_FlashSaleProductController extends FrontBaseAction {
                                     if($productVariant){
                                         foreach ($productVariant as $j => $variant){
                                             $dataProductVariant['percent_flash_sale'] = $_POST['percent_flash_sale'][$index];
+                                            $dataProductVariant['price_discount'] = str_replace(',', '', $_POST['price_discount'][$index]);
                                             $dataProductVariant['variant_price'] = $variant['variant_price'];
                                             $dataProductVariant['variant_price_sales'] = $variant['variant_price_sales'];
-                                            $dataProductVariant['variant_price_flash_sale'] = $variant['variant_price']-($variant['variant_price']*($_POST['percent_flash_sale'][$index]/100));
+                                            if($dataProductVariant['percent_flash_sale'] == 0 || $dataProductVariant['percent_flash_sale'] ==''){
+                                                $dataProductVariant['variant_price_flash_sale'] = $variant['variant_price']-($dataProductVariant['price_discount']);
+                                            }else{
+                                                $dataProductVariant['variant_price_flash_sale'] = $variant['variant_price']-($variant['variant_price']*($_POST['percent_flash_sale'][$index]/100));
+                                            }
                                             $dataProductVariant['product_id'] = $pro_id;
                                             $dataProductVariant['variant_id'] = $variant['id'];
                                             $dataProductVariant['flash_sale_id'] = $id;
@@ -213,9 +275,14 @@ class Admin_FlashSaleProductController extends FrontBaseAction {
                         if($productVariant){
                             foreach ($productVariant as $j => $variant){
                                 $dataProductVariant['percent_flash_sale'] = $_POST['percent_flash_sale'][$key];
+                                $dataProductVariant['price_discount'] = str_replace(',', '', $_POST['price_discount'][$key]);
                                 $dataProductVariant['variant_price'] = $variant['variant_price'];
                                 $dataProductVariant['variant_price_sales'] = $variant['variant_price_sales'];
-                                $dataProductVariant['variant_price_flash_sale'] = $variant['variant_price']-($variant['variant_price']*($_POST['percent_flash_sale'][$key]/100));
+                                if($dataProductVariant['percent_flash_sale'] == 0 || $dataProductVariant['percent_flash_sale'] ==''){
+                                    $dataProductVariant['variant_price_flash_sale'] = $variant['variant_price']-($dataProductVariant['price_discount']);
+                                }else{
+                                    $dataProductVariant['variant_price_flash_sale'] = $variant['variant_price']-($variant['variant_price']*($_POST['percent_flash_sale'][$key]/100));
+                                }
                                 $dataProductVariant['product_id'] = $productId;
                                 $dataProductVariant['variant_id'] = $variant['id'];
                                 $dataProductVariant['flash_sale_id'] = $rs;
@@ -223,10 +290,11 @@ class Admin_FlashSaleProductController extends FrontBaseAction {
                             }
                         }
                         if ($product) {
-                            $dataProduct['price'] = $_POST['price'][$key];
-                            $dataProduct['price_sales'] = $_POST['price_sales'][$key];
-                            $dataProduct['price_flash_sale'] = $_POST['price_flash_sale'][$key];
+                            $dataProduct['price'] =str_replace(',', '', $_POST['price'][$key]);
+                            $dataProduct['price_sales'] = str_replace(',', '', $_POST['price_sales'][$key]);
+                            $dataProduct['price_flash_sale'] = str_replace(',', '', $_POST['price_flash_sale'][$key]);
                             $dataProduct['percent_flash_sale'] = $_POST['percent_flash_sale'][$key];
+                            $dataProduct['price_discount'] = str_replace(',', '', $_POST['price_discount'][$key]);
                             $dataProduct['product_name'] = $product['title'];
                             $dataProduct['product_id'] = $productId;
                             $dataProduct['flash_sale_id'] = $rs;
@@ -288,12 +356,12 @@ class Admin_FlashSaleProductController extends FrontBaseAction {
         //define columns
         $columns = array(//
             0 => "id",
-            1 => "title",
-            2 => "image",
-            3 => 'id_category',
-            4 => "price",
-            5 => "price_sales",
-            6 => 'status',
+            2 => "title",
+            3 => "image",
+            4 => 'id_category',
+            5 => "price",
+            6 => "price_sales",
+            7 => 'status',
             
         );
 

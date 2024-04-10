@@ -49,53 +49,152 @@
 										id="title_flash_sale"
 										class="form-control"
 										placeholder="Tiêu đề" value="<?php echo @$this->info['title_flash_sale'] ?>"> 
+										<span class="errorTitle" style="color:red"></span>
+							</div>									
+						</div>
+						<div class="form-group">
+							<label class="control-label col-lg-2">Hình ảnh quảng cáo trên web - PC (1024x200)</label>
+							<div class="col-lg-5">
+								<input type="file" class="file-styled form-control" name='image_flash_sale' id="image_flash_sale" accept="image/*" onchange="checkFileSize(this)" id="image_id"/>
 							</div>
-						
-						</div>	
+							<?php if (empty($this->info) == false && empty($this->info['image_flash_sale']) == false) { ?>
+								<div class="col-lg-5">
+									<div class="col-lg-2 col-sm-4 parent">
+										<div class="thumbnail">
+											<div class="thumb">
+												<img class="img-media img-thumbnail-item" src="<?php echo '/upload/images' . $this->info['image_flash_sale']; ?>" alt="">
+												<div class="caption-overflow">
+													<span>
+														<a class="btn border-white text-white btn-flat btn-icon btn-rounded lm-5 container-image" href="<?php echo '/upload/images' . $this->info['image_flash_sale']; ?>" data-popup="lightbox">
+															<i class="icon-plus3"></i>
+														</a>
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							<?php } ?>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-lg-2">Hình ảnh quảng cáo trên web - Mobile (800x600)</label>
+							<div class="col-lg-5">
+								<input type="file" class="file-styled form-control" name='image_flash_sale_smp' id="image_flash_sale_smp" accept="image/*" onchange="checkFileSize(this)" id="image_id"/>
+							</div>
+							<?php if (empty($this->info) == false && empty($this->info['image_flash_sale_smp']) == false) { ?>
+								<div class="col-lg-5">
+									<div class="col-lg-2 col-sm-4 parent">
+										<div class="thumbnail">
+											<div class="thumb">
+												<img class="img-media img-thumbnail-item" src="<?php echo '/upload/images' . $this->info['image_flash_sale_smp']; ?>" alt="">
+												<div class="caption-overflow">
+													<span>
+														<a class="btn border-white text-white btn-flat btn-icon btn-rounded lm-5 container-image" href="<?php echo '/upload/images' . $this->info['image_flash_sale_smp']; ?>" data-popup="lightbox">
+															<i class="icon-plus3"></i>
+														</a>
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							<?php } ?>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-lg-2">Giá giảm cho tất cả</label>
+							<?php if (empty($this->info) == false) { ?>
+								<div class="col-lg-2">
+										<span>% flash sale all</span>	
+										<input type="text" name="percent_all"
+										id="percent_all"
+										class="form-control"
+										placeholder="% giá giảm cho tất cả" value="<?php echo $this->info['percent_all']  ?>" maxlength="2" oninput="this.value = this.value.replace(/[^0-9]/g, '');"> 
+								</div>
+								<div class="col-lg-2">
+										<span>Giá giảm all</span>
+										<input type="text" name="discount_all"
+											id="discount_all"
+											class="form-control"
+											placeholder="Giá giảm cho tất cả" value="<?php echo number_format($this->info['discount_all'])  ?>" oninput="this.value = this.value.replace(/[^0-9]/g, '');"> 
+								</div>		
+							<?php } else { ?>
+								<div class="col-lg-2">
+										<span>% flash sale all</span>	
+										<input type="text" name="percent_all"
+										id="percent_all"
+										class="form-control"
+										placeholder="% giá giảm cho tất cả" value="" maxlength="2" oninput="this.value = this.value.replace(/[^0-9]/g, '');"> 
+								</div>
+								<div class="col-lg-2">
+									<span>Giá giảm all</span>
+									<input type="text" name="discount_all"
+											id="discount_all"
+											class="form-control"
+											placeholder="Giá giảm cho tất cả" value="" oninput="this.value = this.value.replace(/[^0-9]/g, '');"> 
+								</div>				
+							<?php } ?>				
+						</div>
 						<input type="hidden" name="flash_sale_id" value="<?php echo@$this->info['flash_sale_id']; ?>">
 						<span class="succes" style="color:green"></span>
 						<?php if(empty($this->listFlashSale)==false){?>
-							<div class="form-group">
 							<button type="button" class="btn btn-primary add-product"  data-flashSale-id="0" data-product-index="0" data-target="#modalProductList" style="margin-right: 11px;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Chọn sản phẩm</button>
+							<div class="form-group">
 							<label class="control-label col-lg-2">Chọn sản phẩm</label>
-							<div class="col-lg-8 list-product" id="listProduct_0" style="margin-left: -10px;">
+							<div class="col-lg-10 list-product" id="listProduct_0">
 							<?php 
 							foreach ($this->listFlashSale as $key => $item){?>
-								<div class="form-group file-item-<?php echo $item['id'] ?>">
-									<div class="col-lg-3">
-										<input type="hidden" name="flash_sale_product_id[<?php echo $key ?>]" value="<?php echo $item['id'] ?>" />
-										<input type="text" readonly class="form-control product-name-input" name = "product_name[]" value="<?php echo $item['product_name']?>" placeholder="Chọn sản phẩm"  data-flash-sale-id="<?php echo $item['id'] ?>" data-input-id="<?php echo $item['id'] ?>" />
-										<input type="hidden" class="form-control product-id-input" name = "product_id[]" value="<?php echo $item['product_id'] ?>" placeholder=""  data-flash-sale-id="<?php echo $item['id'] ?>" data-input-id="<?php echo $item['id'] ?>" />
-										<span class="errorSanPham" style="color:red"></span>
-									</div>
-									<div class="col-lg-2">
-										<input  type="tel" readonly class="form-control product-price-input" name="price[]"  value="<?php echo $item['price']?>" placeholder="Giá sản phẩm"  data-flash-sale-id="<?php echo $item['id'] ?>" data-input-id="<?php echo $item['id'] ?>" oninput="this.value = this.value.replace(/[^0-9]/g, '');"/>
-										<span class="errorPrice" style="color:red"></span>
-									</div>
-									<div class="col-lg-2">
-										<input type="tel" readonly class="form-control product-price-sale-input" name="price_sales[]"  value="<?php echo $item['price_sales']?>" placeholder="Giá sale"  data-flash-sale-id="<?php echo $item['id'] ?>" data-input-id="<?php echo $item['id'] ?>" oninput="this.value = this.value.replace(/[^0-9]/g, '');"/>
-										<span class="errorPrice" style="color:red"></span>
-									</div>
-									<div class="col-lg-2">
-										<input type="tel" name="percent_flash_sale[]" maxlength="2" class="form-control product-percent-flash-sale" value="<?php echo $item['percent_flash_sale']?>" placeholder="% sale giảm" data-flash-sale-id="<?php echo $item['id'] ?>" data-input-id="<?php echo $item['id'] ?>" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
-									</div>
-									<div class="col-lg-2">
-										<input type="tel" readonly class="form-control product-price-flash-sale" name="price_flash_sale[]"  value="<?php echo $item['price_flash_sale']?>" placeholder="Giá flash sale"  data-flash-sale-id="<?php echo $item['id'] ?>" data-input-id="<?php echo $item['id'] ?>" oninput="this.value = this.value.replace(/[^0-9]/g, '');"/>
-										<span class="errorPrice" style="color:red"></span>
-									</div>
-									<div class="col-lg-1">
-										<button type="button" class="btn btn-alert remove-product-list" style="margin-right: 11px;" data-flash-sale-id ="<?php echo $item['id'] ?>" data-remove="<?php echo $item['id'] ?>">x</button>
-									</div>
+								<div style="border:1px solid #ccc; border-radius:20px;padding:10px;" class="form-group file-item-<?php echo  $item['id'] ?>">
+										<div class="col-lg-2">
+											<img class="img-media img-thumbnail-item" width="140px" height="92px" src="/upload/images/<?php echo $item['product_image'] ?>" alt="">
+										</div>
+										<div class="col-lg-10">
+											<div class="form-group">
+												<label class="control-label col-lg-2">Tên sản phẩm</label>
+												<div class="col-lg-10">
+													<input type="hidden" name="flash_sale_product_id[<?php echo $key ?>]" value="<?php echo $item['id'] ?>" />
+													<input type="text" readonly class="form-control product-name-input" name = "product_name[]" value="<?php echo $item['product_name']?>" placeholder="Chọn sản phẩm"  data-flash-sale-id="<?php echo $item['id'] ?>" data-input-id="<?php echo $item['id'] ?>" />
+													<input type="hidden" class="form-control product-id-input" name = "product_id[]" value="<?php echo $item['product_id'] ?>" placeholder=""  data-flash-sale-id="<?php echo $item['id'] ?>" data-input-id="<?php echo $item['id'] ?>" />
+													<span class="errorSanPham" style="color:red"></span>
+												</div>
+											</div>
+											<label class="control-label col-lg-2">Thông tin</label>
+											<div class="col-lg-2">
+												<span>Price</span>
+												<input  type="tel" readonly class="form-control product-price-input" name="price[]"  value="<?php echo number_format($item['price'])?>" placeholder="Giá sản phẩm"  data-flash-sale-id="<?php echo $item['id'] ?>" data-input-id="<?php echo $item['id'] ?>" oninput="this.value = this.value.replace(/[^0-9]/g, '');"/>
+												<span class="errorPrice" style="color:red"></span>
+											</div>
+											<div class="col-lg-2">
+												<span>Price sale</span>
+												<input type="tel" readonly class="form-control product-price-sale-input" name="price_sales[]"  value="<?php echo number_format($item['price_sales'])?>" placeholder="Giá sale"  data-flash-sale-id="<?php echo $item['id'] ?>" data-input-id="<?php echo $item['id'] ?>" oninput="this.value = this.value.replace(/[^0-9]/g, '');"/>
+												<span class="errorPrice" style="color:red"></span>
+											</div>
+											<div class="col-lg-1">
+												<span>%</span>
+												<input type="tel" name="percent_flash_sale[]" maxlength="2" class="form-control product-percent-flash-sale" value="<?php echo $item['percent_flash_sale']?>" placeholder="% sale giảm" data-flash-sale-id="<?php echo $item['id'] ?>" data-input-id="<?php echo $item['id'] ?>" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+											</div>
+											<div class="col-lg-2">
+												<span>Price discount</span>
+												<input type="tel" name="price_discount[]"  class="form-control product-price-discount" value="<?php echo number_format($item['price_discount'])?>" placeholder="tiền giảm" data-flash-sale-id="<?php echo $item['id'] ?>" data-input-id="<?php echo $item['id'] ?>" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+											</div>
+											<div class="col-lg-2">
+												<span>Price flash sale</span>
+												<input type="tel" readonly class="form-control product-price-flash-sale" name="price_flash_sale[]"  value="<?php echo number_format($item['price_flash_sale'])?>" placeholder="Giá flash sale"  data-flash-sale-id="<?php echo $item['id'] ?>" data-input-id="<?php echo $item['id'] ?>" oninput="this.value = this.value.replace(/[^0-9]/g, '');"/>
+												<span class="errorPrice" style="color:red"></span>
+											</div>
+											<div class="col-lg-1">
+												<button type="button" class="btn btn-alert remove-product-list" style="display: block;margin-top: 20px;" data-flash-sale-id ="<?php echo $item['id'] ?>" data-remove="<?php echo $item['id'] ?>">x</button>
+											</div>
+										</div>
 								</div>
 								<div class="hidden list-delete-product" id ="delete_product_input_<?php echo $item['id'] ?>" data-flash-sale-id="<?php echo $item['id'] ?>"><?php echo $item['id'] ?></div>
 								<?php } ?>
 							</div>
 						</div>
 						<?php } else {?>
+						<button type="button" class="btn btn-primary add-product"  data-flashSale-id="0" data-product-index="0" data-target="#modalProductList" style="margin-right: 11px;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Chọn sản phẩm</button>
 						<div class="form-group">
-							<button type="button" class="btn btn-primary add-product"  data-flashSale-id="0" data-product-index="0" data-target="#modalProductList" style="margin-right: 11px;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Chọn sản phẩm</button>
 							<label class="control-label col-lg-2">Chọn sản phẩm</label>
-							<div class="col-lg-8 list-product" id="listProduct_0" style="margin-left: -10px;">
+							<div  class="col-lg-10 list-product" id="listProduct_0">
 								<!-- <div class="form-group file-item-0">
 									<div class="col-lg-3">
 										<input type="hidden" name="flash_sale_id[]" value="0" />
@@ -129,18 +228,24 @@
 							<label class="control-label col-lg-2">Thời gian flash sale</label>
 							<div class="col-lg-3" style="position: relative;display: table;border-collapse: separate;">
 								<input type="text" name="count_time_start"
-										id="startdate" format="yyyy-mm-dd"
+										id="startDate" format="yyyy-mm-dd"
 										class="form-control datetimepicker"
 										placeholder="Thời gian bắt đầu" value="<?php echo @$this->info['count_time_start'] ?>"> 
 										<span class="input-group-addon"><i class="icon-calendar"></i></span>
+								<div>
+									<span class="errorStartDate" style="color:red"></span>
+								</div>
 							</div>
 								<span class="errorDate" style="color:red"></span>
 							<div class="col-lg-3" style="position: relative;display: table;border-collapse: separate;">
 							<input type="text" name="count_time_end"
-									id="enddate" format="yyyy-mm-dd"
+									id="endDate" format="yyyy-mm-dd"
 									class="form-control datetimepicker"
 									placeholder="Thời gian kết thúc" value="<?php echo @$this->info['count_time_end'] ?>"> 
 									<span class="input-group-addon"><i class="icon-calendar"></i></span>
+								<div>
+									<span class="errorEndDate" style="color:red"></span>
+								</div>
 							</div>
 						</div>	
 						<div class="form-group">
@@ -211,17 +316,17 @@
 				<table id="listProductTable" class="table datatable-pagination">
 					<thead>
 						<tr>
+							<th width="5%"><?php echo $this->translate('id')?></th>
 							<th class="text-center">
 							Check All <input type="checkbox" id="checkAll"></input>
 								<!-- Action -->
 							</th>
-							<th width="5%"><?php echo $this->translate('id')?></th>
 							<th>Tên Sản Phẩm</th>
 							<th width="8%">Hình Ảnh</th>
 							<th width="8%">Danh Mục</th>
 							<th>Giá</th>
 							<th>Giá sales</th>
-							<th><?php echo $this->translate('status')?></th>
+							<th mapping-column="7"><?php echo $this->translate('status')?></th>
 						</tr>
 					</thead>
 				</table>

@@ -58,10 +58,6 @@ class ComboDetail extends Zend_Db_Table_Abstract {
      * @param  [type] $id [description]
      * @return [type]     [description]
      */
-    // public function deleteComboDetail( $id ) {
-    //     $where[] = $this->getAdapter()->quoteInto( "id = ?", $id, Zend_Db::INT_TYPE );
-    //     return $this->update( array('status' => STATUS_DELETE ), $where );
-    // }
     public function deleteComboDetail($id) {
         $where = $this->getAdapter()->quoteInto('id = ?', $id);
         return $this->delete($where);
@@ -93,18 +89,79 @@ class ComboDetail extends Zend_Db_Table_Abstract {
     }
 
     public function getProductByComboId($combo_id) {
+        $currentTime = date('Y-m-d H:i:s');
+        
+        $subQuery = $this->getAdapter()->select()
+            ->from('flash_sale_product', array(
+                'product_id',
+                'price_flash_sale',
+                'percent_flash_sale',
+                'flash_sale_id'
+            ))
+            ->join('flash_sale', 'flash_sale_product.flash_sale_id = flash_sale.flash_sale_id', array(
+                'count_time_start',
+                'count_time_end',
+                'status'
+            ))
+            ->where('flash_sale.status = ?', 1)
+            ->where('flash_sale.count_time_end > ?', $currentTime)
+            ->order('flash_sale.count_time_start ASC');
+    
         $select = $this->getAdapter()->select();
         $select->from(array('cd' => 'combo_detail'), array('product_id'))
             ->join(array('p' => 'product'), 'p.id = cd.product_id', array('title','price','price_sales', 'image', 'url_product','combo_id'))
+            ->joinLeft(
+                array('fsp' => new Zend_Db_Expr("(" . $subQuery->__toString() . ")")),
+                'fsp.product_id = cd.product_id',
+                array(
+                    'price_flash_sale' => 'fsp.price_flash_sale',
+                    'percent_flash_sale' => 'fsp.percent_flash_sale',
+                    'flash_sale_id' => 'fsp.flash_sale_id',
+                    'count_time_start' => 'fsp.count_time_start',
+                    'count_time_end' => 'fsp.count_time_end',
+                    'status_flash_sale' => 'fsp.status'
+                )
+            )
             ->where('cd.combo_id = ?', $combo_id)
             ->where('cd.status = ?', STATUS_ACTIVE)
             ->where('p.status = ?', STATUS_ACTIVE);
-        return $this->getAdapter()->fetchAll($select);        
+    
+        return $this->getAdapter()->fetchAll($select);
     }
+    
     public function getComboByProductId($product_id) {
+        $currentTime = date('Y-m-d H:i:s');
+        $subQuery = $this->getAdapter()->select()
+        ->from('flash_sale_product', array(
+            'product_id',
+            'price_flash_sale',
+            'percent_flash_sale',
+            'flash_sale_id'
+        ))
+        ->join('flash_sale', 'flash_sale_product.flash_sale_id = flash_sale.flash_sale_id', array(
+            'count_time_start',
+            'count_time_end',
+            'status'
+        ))
+        ->where('flash_sale.status = ?', 1)
+        ->where('flash_sale.count_time_end > ?', $currentTime)
+        ->order('flash_sale.count_time_start ASC');
+
         $select = $this->getAdapter()->select();
         $select->from(array('cd' => 'combo_detail'), array('product_id','combo_id'))
-            ->join(array('cb' => 'combo_product'), 'cb.id = cd.combo_id', array('title','total_discount','image_cb'))
+            ->join(array('cb' => 'combo_product'), 'cb.id = cd.combo_id', array('title','total_discount','image_cb','price_discount'))
+            ->joinLeft(
+                array('fsp' => new Zend_Db_Expr("(" . $subQuery->__toString() . ")")),
+                'fsp.product_id = cd.product_id',
+                array(
+                    'price_flash_sale' => 'fsp.price_flash_sale',
+                    'percent_flash_sale' => 'fsp.percent_flash_sale',
+                    'flash_sale_id' => 'fsp.flash_sale_id',
+                    'count_time_start' => 'fsp.count_time_start',
+                    'count_time_end' => 'fsp.count_time_end',
+                    'status_flash_sale' => 'fsp.status'
+                )
+            )
             ->where('cd.product_id = ?', $product_id)
             ->where('cd.status = ?', STATUS_ACTIVE)
             ->where('cb.status = ?', STATUS_ACTIVE);

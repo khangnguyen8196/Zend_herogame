@@ -24,6 +24,35 @@
     </div>
 
     <div class="container">
+        <div class="qc hidden">
+            <div id="countdown" class="countdown">
+                <div class="info-left">
+                    <label class="flash-sale"><?php echo $this->flashSale['title_flash_sale'] ?></label>
+                    <div>
+                        <label> diễn ra từ ngày:</label>
+                        <span class="start">
+                            <?php 
+                                $timeStart = strtotime($this->flashSale['count_time_start']);
+                                echo date('d.m', $timeStart); 
+                            ?>
+                        </span>
+                        <span>-</span>
+                        <span class="end">
+                            <?php 
+                                $timeEnd = strtotime($this->flashSale['count_time_end']);
+                                echo date('d.m', $timeEnd); 
+                            ?>
+                        </span>
+                    </div> 
+                </div>
+                <div class="countdown-info">
+                        <label>Còn lại :</label>
+                        <span id="count_time_start" class="count_time_start" attr-count-down="<?php echo $this->flashSale['count_time_start'] ?>"></span>
+                        <span id="count_time_end" class="count_time_end hidden" attr-count-down="<?php echo $this->flashSale['count_time_end'] ?>"></span>
+                </div>
+            </div>
+        </div>
+
         <div class="product-new">
             <?php
                 echo $this->partial('/shared/_quick_view.phtml', array(
@@ -508,6 +537,10 @@
 
 
     <style>
+        .hidden {
+            display: none;
+        }
+        
         .container-fluid.slide-mobile {
             padding: 0;
             overflow: auto;
@@ -527,6 +560,43 @@
             }
             .slide-mobile{
                 display: none;
+            }
+            #countdown {
+                display: flex;
+                justify-content: space-between; 
+                align-items: center; 
+                border-radius: 10px;
+                padding:40px;
+                margin-top: 13px;
+                text-align: center;
+                color: white;
+                font-size: 30px;
+                text-transform: capitalize;
+                font-weight: bold;
+                background-image: url('<?php echo '/upload/images' . $this->flashSale['image_flash_sale']; ?>');
+            }
+
+            .flash-sale,
+            .start,
+            .end {
+                flex: 1;
+            }
+
+            .countdown-info {
+                display: flex;
+            }
+
+            .countdown-info div {
+                margin-right: 10px; 
+            }
+
+            #count_time_start {
+                font-weight: bold;
+                color: white; 
+            }
+            #count_time_end {
+                font-weight: bold;
+                color: white; 
             }
         }
         @media screen and (max-width: 767px){
@@ -553,6 +623,47 @@
                 height: 2.4rem;
                 overflow: hidden;
                 font-size: 9px;
+            }
+
+            .qc {
+                margin-top: 20px;
+            }
+            #countdown {
+                display: flex;
+                justify-content: space-between; 
+                align-items: center; 
+                border-radius: 10px;
+                padding:0px;
+                margin-top: 0px;
+                text-align: center;
+                color: white;
+                text-transform: capitalize;
+                font-size: 1rem;
+                font-weight: bold;
+                background-image: url('<?php echo '/upload/images' . $this->flashSale['image_flash_sale_smp']; ?>')
+            }
+            #countdown label {
+                margin: 0px 1rem;
+            }
+
+            .flash-sale,
+            .start,
+            .end {
+                flex: 1;
+            }
+
+            .countdown-info {
+                display: flex;
+                align-items: center; 
+            }
+
+            .countdown-info div {
+                margin-right: 10px; 
+            }
+
+            #count_time_start {
+                font-weight: bold;
+                color: white; 
             }
         }
 

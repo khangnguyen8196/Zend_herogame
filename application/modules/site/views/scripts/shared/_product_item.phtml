@@ -29,39 +29,50 @@ if ($now <= $this->count_down && $now >= $this->count_time_start && $this->statu
             <span><?php echo $this->labelA ['text']?></span>
          </div>
       <?php }?>
+
       <?php
-         if (empty ( $this->labelB ['text'] [0] ) == false) {
+         if (empty ( $this->labelB ['text'] [0] ) == false && $now <= $this->count_down && $now >= $this->count_time_start && $this->status_flash_sale ==1) {
       ?>
-      <div class="label-b label-text" style="color:<?php echo $this->labelB ['tcolor']?>;background:<?php echo $this->labelB ['bcolor']?>">
-         <div class="rotator">
-            <?php for($x = 0; $x < count ( $this->labelB ['text'] ); $x ++) { ?>
-            <span><?php echo $this->labelB ['text'] [$x]?></span>
-            <?php } ?>
+         <div class="label-b label-text" style="color:<?php echo $this->labelB ['tcolor']?>;background:<?php echo $this->labelB ['bcolor']?>">
+            <div class="rotator">
+               <?php for($x = 0; $x < count ( $this->labelB ['text'] ); $x ++) { ?>
+               <span><?php echo $this->labelB ['text'] [$x]?></span>
+               <?php } ?>
+            </div>
          </div>
-      </div>
-      <?php } ?>
+      <?php }elseif(empty ( $this->labelB ['text'] [0] ) == false) {?>
+         <div class="label-b label-text" style="color:<?php echo $this->labelB ['tcolor']?>;background:<?php echo $this->labelB ['bcolor']?>">
+            <div class="rotator">
+               <?php for($x = 0; $x < count ( $this->labelB ['text'] ); $x ++) { ?>
+               <span><?php echo $this->labelB ['text'] [$x]?></span>
+               <?php } ?>
+            </div>
+         </div>
+      <?php }?>
    </a>
    <div class="detail">
       <div class="name">
          <a href="<?php echo $this->url?>"><?php echo $this->name?></a>
       </div>
       <div class="price">
-         <span class="price-a">
          <?php
             $now = date('Y-m-d H:i:s');
-            if($now <= $this->count_down && $now >= $this->count_time_start &&  $this->status_flash_sale ==1 && $this->priceC >0){
-               echo $this->priceC;
-               if (isset ( $this->priceB ) && $this->priceB == $this->priceA){
+            $priceflashSale = isset($this->priceC) ? substr($this->priceC, 0, 1) : '';
+            if ($now <= $this->count_down && $now >= $this->count_time_start && $this->status_flash_sale == 1 && $this->priceC > 0) {
+               echo '<span class="price-a">' . $this->priceC . '</span>';
+               echo '<span class="price-b" style="color:black">' . $this->priceB . '</span>';
+            } elseif (strtotime($now) - strtotime($this->count_time_start) <= 6 * 3600) {
+               echo '<span class="price-a">' . $priceflashSale . '?????&#8363;</span>';
+               echo '<span class="price-b" style="color:black">' . $this->priceB . '</span>';
+            } else {
+               if ((isset($this->priceB) && $this->priceB == $this->priceA)) {
+                  echo '<span class="price-a">' . $this->priceA . '</span>';
+              } elseif (isset($this->priceB) && $this->priceB != $this->priceA) {
+                  echo '<span class="price-a">' . $this->priceA . '</span>';
                   echo '<span class="price-b" style="color:black">' . $this->priceB . '</span>';
-               }
-            }elseif ($this->priceA > 0) {
-            	echo $this->priceA;
+              }
             }
          ?>
-         </span>
-         <?php if (isset ( $this->priceB ) && $this->priceB != $this->priceA) { ?>
-         <span class="price-b"> <?php echo $this->priceB?></span>
-         <?php } ?>
       </div>
    </div>
    <?php if ($this->priceA > 0 && $this->status != STATUS_IN_OUT_STOCK) { ?>

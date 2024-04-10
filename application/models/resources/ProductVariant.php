@@ -98,6 +98,7 @@ class ProductVariant extends Zend_Db_Table_Abstract {
         $select = $this->getAdapter()->select()
             ->from(array('p' => 'product_variant'))
             ->where('product_id= ?', $product_id)
+            ->where("status = ?",STATUS_ACTIVE)
             ->order('id ASC');
         return $this->getAdapter()->fetchAll($select);
     }

@@ -96,6 +96,9 @@ class FlashSaleProductVariant extends Zend_Db_Table_Abstract {
         if (isset($data['percent_flash_sale']) == true) {
             $datain['percent_flash_sale'] = $data['percent_flash_sale'];
         }
+        if (isset($data['price_discount']) == true) {
+            $datain['price_discount'] = $data['price_discount'];
+        }
             return $this->insert($datain);
     }
 

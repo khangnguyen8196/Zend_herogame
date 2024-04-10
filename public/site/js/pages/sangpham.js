@@ -194,6 +194,9 @@ pages = $.extend(pages, {
             // Phân loại sản phẩm
             $(document).on("click", ".variant-items", {}, function (e) {
                 e.preventDefault();
+                var timeStart = $(this).attr('data-start-time');
+                var currentTime = Math.round(Date.now() / 1000); 
+                var saleStartTime = new Date(timeStart).getTime() / 1000; 
                 $(".variant-items a").removeClass("active");
                 var variant_id = $(this).attr("data-id");
                 var variant0Id = $("input[data-var0-id]").data("var0-id");
@@ -202,12 +205,17 @@ pages = $.extend(pages, {
                     $(this).children("a").addClass("active");
                     $("#selected_variant").text($(this).text());
                     $("#variant").val(variant_id);
-            
-                    // Lấy giá tiền tương ứng với variant-item được chọn
+        
                     var variant_price = $(this).attr("data-price");
                     var variant_price_sales = $(this).attr("data-price-sales");
                     var variant_name = $(this).find("a").text();
-                    $("#selected_price_sales").text(formatNumber(variant_price_sales) + '₫');
+                    if(saleStartTime - currentTime <= 6 * 3600){
+                        var variant_price_flash_sales = $(this).attr("data-price-sales");
+                        var first_char = variant_price_flash_sales.substring(0, 1);
+                        $("#selected_price_sales").text(first_char+'?????' + '₫');
+                    }else{
+                        $("#selected_price_sales").text(formatNumber(variant_price_sales) + '₫');
+                    }
                     $("#selected_price").text(formatNumber(variant_price) + '₫');
                     $("#selected_variant").text(variant_name);
                     $("#variant_price_sales").val(variant_price_sales);
@@ -250,7 +258,7 @@ pages = $.extend(pages, {
                 }
             });
             function formatNumber(number) {
-                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); // định dạng số với dấu phẩy phân cách hàng nghìn
+                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
             }
             //
             // check is mobile

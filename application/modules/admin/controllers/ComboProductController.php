@@ -231,7 +231,7 @@ class Admin_ComboProductController extends FrontBaseAction {
             1 => "title",
             2 => "image",
             3 => "price",
-            4 => 'status',
+            7 => 'status',
             5 => 'id_category'
         );
 
@@ -256,10 +256,10 @@ class Admin_ComboProductController extends FrontBaseAction {
         }
         //get total data
         $this->post_data['count_only'] = 1;
-        $count = $model->fetchAllProduct($this->post_data);
+        $count = $model->getAllProduct($this->post_data);
         //get filtered data
         unset($this->post_data['count_only']);
-        $list = $model->fetchAllProduct($this->post_data);
+        $list = $model->getAllProduct($this->post_data);
         $response["PostData"] = $this->post_data;
         $response["Response"]["Count"] = $count;
         $response["Response"]["List"] = $list;

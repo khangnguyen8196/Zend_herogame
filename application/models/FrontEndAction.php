@@ -75,6 +75,9 @@ class FrontEndAction extends Zend_Controller_Action {
         $listAllProductCategory = $category->listAllCategoryHomePage(array('type' => CATEGORY_TYPE_PRODUCT));
         $menuCategory = self::_getMenuCategory($listAllProductCategory);
         $this->view->menuCategory = $menuCategory;
+        $modelFlashSale = new FlashSale();
+        $flashSale = $modelFlashSale->getFlashSale();
+        $this->view->flashSale = $flashSale;
         //check permissions
         $this->view->hasViewPermission = UtilAuth::hasPrivilege($this->controller, ACTION_VIEW);
         $this->view->hasAddPermission = UtilAuth::hasPrivilege($this->controller, ACTION_ADD);
@@ -586,10 +589,12 @@ class FrontEndAction extends Zend_Controller_Action {
         $flashSaleMdl = new FlashSale();
         $mdlProductVariant = new ProductVariant();
         $mdlCombo = new ComboProduct();
-        $cart_list_full_info = array();;
+        $cart_list_full_info = array();
+        $now = date('Y-m-d H:i:s');
+        $flash_sale = $flashSaleMdl->getFlashSale();
         if (!empty($cart_list) && is_array($cart_list)) {
             if(!empty($cart_list['combos'])) {
-                foreach($cart_list['combos'] as $c_id => $value) {
+                foreach($cart_list['combos'] as $c_id => $value) {             
                     $combo_info = $mdlCombo->fetchComboProductById($c_id);
                     $combo_detail_list = $value['products'];
                     if(empty($combo_info)) {
@@ -597,37 +602,65 @@ class FrontEndAction extends Zend_Controller_Action {
                     }
                     
                     $combo_product = array();
-                    $combo_product['id_combo'] = $combo_info['id']; 
-                    $combo_product['combo_code'] = $combo_info['combo_code']; 
-                    $combo_product['title'] = $combo_info['title'];
-                    $combo_product['qty'] = $value['qty'];
-                    $combo_product['image_cb'] = $combo_info['image_cb'];
-                    $combo_product["price_sales"]= $combo_info["total_discount"];
-                    $combo_product["total_money"] = $value['qty'] * $combo_product["price_sales"];
-                    $totalMoney += $combo_product["total_money"];
-                    
+                    // $combo_product['id_combo'] = $combo_info['id']; 
+                    // $combo_product['combo_code'] = $combo_info['combo_code']; 
+                    // $combo_product['title'] = $combo_info['title'];
+                    // $combo_product['qty'] = $value['qty'];
+                    // $combo_product['image_cb'] = $combo_info['image_cb'];
+                    // $combo_product["price_sales"]= $combo_info["total_discount"];
+                    // $combo_product["total_money"] = $value['qty'] * $combo_product["price_sales"];
+                    // $totalMoney += $combo_product["total_money"];
                     $combo_product['products'] = array();
+                    $total_price_combo = 0;
                     foreach($combo_detail_list as $p_id => $product) {
-                        $combo_detail = $productMdl->getProductInfoById($p_id);
-                        $combo_detail["qty"] = $value['qty'];
-                        $combo_detail["price_sales"] = $combo_detail["price_sales"];
-                        $combo_detail["title"] = $combo_detail['title'];
-                        $combo_detail["combo_id"] = $combo_detail["combo_id"];
-                        $combo_detail["total_money"] = $value['qty'] * $combo_detail["price_sales"];
-                        
+                        if($flash_sale){
+                            $flash_sale_product = $flashSaleProduct->getFlashSaleProductBy($flash_sale['flash_sale_id'],$p_id);
+                        }
+                        if($flash_sale && $now <= $flash_sale['count_time_end'] && $now >= $flash_sale['count_time_start'] && $flash_sale['status'] ==1) {
+                            $combo_detail = $productMdl->getProductInfoById($p_id);
+                            $combo_detail["qty"] = $value['qty'];
+                            if($flash_sale_product['product_id'] != $p_id ){
+                                $combo_detail["price_sales"] = $combo_detail["price_sales"];
+                            }else{   
+                                $combo_detail["price_sales"] = $flash_sale_product["price_flash_sale"];
+                            }             
+                            $total_price_combo +=$combo_detail["price_sales"]; 
+                            $combo_detail["title"] = $combo_detail['title'];
+                            $combo_detail["combo_id"] = $combo_detail["combo_id"];
+                            $combo_detail["total_money"] = $value['qty'] * $combo_detail["price_sales"];
+                            $combo_product['id_combo'] = $combo_info['id']; 
+                            $combo_product['combo_code'] = $combo_info['combo_code']; 
+                            $combo_product['title'] = $combo_info['title'];
+                            $combo_product['qty'] = $value['qty'];
+                            $combo_product['image_cb'] = $combo_info['image_cb'];
+                            $combo_product["price_discount"]= $combo_info["price_discount"];
+                            $combo_product["price_sales"]= $total_price_combo - $combo_product["price_discount"];
+                            $combo_product["total_money"] = $value['qty'] * $combo_product["price_sales"];
+                        }
+                        else{
+                            $combo_detail = $productMdl->getProductInfoById($p_id);
+                            $combo_detail["qty"] = $value['qty'];
+                            $combo_detail["price_sales"] = $combo_detail["price_sales"];
+                            $combo_detail["title"] = $combo_detail['title'];
+                            $combo_detail["combo_id"] = $combo_detail["combo_id"];
+                            $combo_detail["total_money"] = $value['qty'] * $combo_detail["price_sales"];
+                            $combo_product['id_combo'] = $combo_info['id']; 
+                            $combo_product['combo_code'] = $combo_info['combo_code']; 
+                            $combo_product['title'] = $combo_info['title'];
+                            $combo_product['qty'] = $value['qty'];
+                            $combo_product['image_cb'] = $combo_info['image_cb'];
+                            $combo_product["price_sales"]= $combo_info["total_discount"];
+                            $combo_product["total_money"] = $value['qty'] * $combo_product["price_sales"];
+                        }
                         $combo_product['products'][] = $combo_detail;
                     }
+                    $totalMoney += $combo_product["total_money"];
                     $cart_list_full_info[] = $combo_product;
                 }
             }
             if(!empty($cart_list['products'])) {
                 foreach ($cart_list['products'] as $p_id => $value) {
-                    $now = date('Y-m-d H:i:s');
                     $p_full_info = $productMdl->getProductInfoById($p_id);
-                    $flash_sale = $flashSaleMdl->getFlashSale();
-                    // echo '<pre>';
-                    // print_r($flash_sale);
-                    // exit;
                     if (empty($p_full_info)) {
                         continue;
                     }

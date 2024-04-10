@@ -43,8 +43,8 @@ class Product extends Zend_Db_Table_Abstract {
             $select = $select->where("DATE(product.updated_date) =?", $data["updated_date"]);
         }
         if (empty($data['search-key']) == false) {
-            $select->where("product.title like '%" . $data['search-key'] . "%' or c.name like '%" . $data['search-key'] . "%'
-        			 or product.updated_by like '%" . $data['search-key'] . "%' or product.id like '%" . $data['search-key'] . "%'");
+            $select->where("product.title like '%" . $data['search-key'] . "%' or c.name like '%" . $data['search-key'] . "%' 
+        			 or product.updated_by like '%" . $data['search-key'] . "%' or product.id like '%" . $data['search-key'] . "%' or product.sku like '%" . $data['search-key'] . "%' ");
             
         }
         if (empty($data['name_category']) == false) {
@@ -161,6 +161,25 @@ class Product extends Zend_Db_Table_Abstract {
         $result = $result->toArray();
         return $result;
     }
+    public function checkExistProductSku($sku, $id) {
+        if ($sku === '') {
+            return null; 
+        }
+        $db = $this->getAdapter();
+        $where[] = $db->quoteInto("sku = ?", $sku);
+        $where[] = $db->quoteInto("status <>  ?", STATUS_DELETE);
+        if (empty($id) == false && $id > 0) {
+            $where[] = $db->quoteInto("id <> ?", $id, Zend_Db::INT_TYPE);
+        }
+        $result = $this->fetchRow($where);
+
+        if ($result !== null) {
+            return $result->toArray();
+        } else {
+            return null; 
+        }
+    }
+    
 
     /**
      * Update/Add user
@@ -220,9 +239,9 @@ class Product extends Zend_Db_Table_Abstract {
         if (isset($data['id_category']) == true) {
             $datain['id_category'] = $data['id_category'];
         }
-        // if (isset($data['combo_id']) == true) {
-            //     $datain['combo_id'] = $data['combo_id'];
-            // }
+        if (isset($data['sku']) == true) {
+                $datain['sku'] = $data['sku'];
+        }
         if (isset($data['created_at']) == true) {
             $datain['created_date'] = $data['created_at'];
         }
@@ -325,23 +344,74 @@ class Product extends Zend_Db_Table_Abstract {
      * @param int $id
      * @return multitype:|unknown
      */
-    public function getProductsByCategoryId($categoryGroup, $params = array()) {
-        $select = $this->getAdapter()->select();
-        $select = $select->from($this->_name);
+    // public function getProductsByCategoryId($categoryGroup, $params = array()) {
+    //     $select = $this->getAdapter()->select();
+    //     $select = $select->from($this->_name);
 
-        $select = $select->where("id_category IN (?)", $categoryGroup);
-        $select = $select->where("status <>?", STATUS_DELETE);
-        $select = $select->where("product.status <> ?", STATUS_IN_ACTIVE);
-        if (empty($params["minRange"]) == false && is_numeric($params["minRange"]) == true) {
-            $select = $select->where("price_sales >=?", $params["minRange"]);
+    //     $select = $select->where("id_category IN (?)", $categoryGroup);
+    //     $select = $select->where("status <>?", STATUS_DELETE);
+    //     $select = $select->where("product.status <> ?", STATUS_IN_ACTIVE);
+    //     if (empty($params["minRange"]) == false && is_numeric($params["minRange"]) == true) {
+    //         $select = $select->where("price_sales >=?", $params["minRange"]);
+    //     }
+    //     if (empty($params["maxRange"]) == false && is_numeric($params["maxRange"]) == true) {
+    //         $select = $select->where("price_sales <=?", $params["maxRange"]);
+    //     }
+    //     if (empty($params["sort"]) == false) {
+    //         $select = $select->order($params["sort"]);
+    //     } else {
+    //         $select = $select->order("priority desc");
+    //     }
+    //     return $select;
+    // }
+
+    public function getProductsByCategoryId($categoryGroup, $params = array()) {
+        $currentTime = date('Y-m-d H:i:s');
+        
+        $selectSub = $this->getAdapter()->select();
+        $selectSub->from('flash_sale_product', array(
+            'product_id',
+            'price_flash_sale',
+            'percent_flash_sale',
+            'price_discount',
+            'flash_sale_id'
+        ))
+        ->join('flash_sale', 'flash_sale_product.flash_sale_id = flash_sale.flash_sale_id', array(
+            'count_time_start',
+            'count_time_end',
+            'status',
+            'title_flash_sale'
+        ))
+        ->where('flash_sale.status = 1')
+        ->where('count_time_end > ?', $currentTime) 
+        ->order('flash_sale.count_time_start ASC');
+    
+        $select = $this->getAdapter()->select();
+        $select->from(array('product' => $this->_name), array('product.*'))
+        ->joinLeft(array('fsp' => $selectSub), 'fsp.product_id = product.id', array(
+            'price_flash_sale' => 'fsp.price_flash_sale',
+            'percent_flash_sale' => 'fsp.percent_flash_sale',
+            'flash_sale_id' => 'fsp.flash_sale_id',
+            'count_time_start' => 'fsp.count_time_start',
+            'count_time_end' => 'fsp.count_time_end',
+            'status_flash_sale' => 'fsp.status',
+            'title_flash_sale' => 'fsp.title_flash_sale',
+            'price_discount' => 'fsp.price_discount'
+        ))
+        ->where("id_category IN (?)", $categoryGroup)
+        ->where("product.status <> ?", STATUS_DELETE)
+        ->where("product.status <> ?", STATUS_IN_ACTIVE)
+        ->group('product.id');
+        if (!empty($params["minRange"]) && is_numeric($params["minRange"])) {
+            $select->where("product.price_sales >= ?", $params["minRange"]);
         }
-        if (empty($params["maxRange"]) == false && is_numeric($params["maxRange"]) == true) {
-            $select = $select->where("price_sales <=?", $params["maxRange"]);
+        if (!empty($params["maxRange"]) && is_numeric($params["maxRange"])) {
+            $select->where("product.price_sales <= ?", $params["maxRange"]);
         }
-        if (empty($params["sort"]) == false) {
-            $select = $select->order($params["sort"]);
+        if (!empty($params["sort"])) {
+            $select->order($params["sort"]);
         } else {
-            $select = $select->order("priority desc");
+            $select->order("priority desc");
         }
         return $select;
     }
@@ -358,19 +428,19 @@ class Product extends Zend_Db_Table_Abstract {
                        'product_id',
                        'price_flash_sale',
                        'percent_flash_sale',
+                       'price_discount',
                        'flash_sale_id'
                    ))
                    ->join('flash_sale', 'flash_sale_product.flash_sale_id = flash_sale.flash_sale_id', array(
                        'count_time_start',
                        'count_time_end',
-                       'status'
+                       'status',
+                       'title_flash_sale'
                    ));
         
         $selectSub->where('flash_sale.status = 1')
                 ->where('count_time_end > ?', $currentTime) 
                 ->order('flash_sale.count_time_start ASC');
-        
-                 
         $select = $this->getAdapter()->select();
         $select->from('product')
             ->columns(array(
@@ -387,16 +457,12 @@ class Product extends Zend_Db_Table_Abstract {
                 'flash_sale_id' => 'fsp.flash_sale_id',
                 'count_time_start' => 'fsp.count_time_start',
                 'count_time_end' => 'fsp.count_time_end',
-                'status_flash_sale'=> 'fsp.status'
+                'status_flash_sale'=> 'fsp.status',
+                'title_flash_sale' => 'fsp.title_flash_sale',
+                'price_discount' => 'fsp.price_discount'
             ))
             ->group('product.id');
 
-
-
-
-
-
-        
         if (empty($params["best_sell"]) == false && $params["best_sell"] == 1) {
             $select = $select->where("product.best_sell =? ", $params["best_sell"]);
         }
@@ -474,12 +540,14 @@ class Product extends Zend_Db_Table_Abstract {
                        'product_id',
                        'price_flash_sale',
                        'percent_flash_sale',
+                       'price_discount',
                        'flash_sale_id'
                    ))
                    ->join('flash_sale', 'flash_sale_product.flash_sale_id = flash_sale.flash_sale_id', array(
                        'count_time_start',
                        'count_time_end',
-                       'status'
+                       'status',
+                       'title_flash_sale'
                    ));
         
         $selectSub->where('flash_sale.status = 1')
@@ -496,7 +564,9 @@ class Product extends Zend_Db_Table_Abstract {
             'flash_sale_id' => 'fsp.flash_sale_id',
             'count_time_start' => 'fsp.count_time_start',
             'count_time_end' => 'fsp.count_time_end',
-            'status_flash_sale'=> 'fsp.status'
+            'status_flash_sale'=> 'fsp.status',
+            'title_flash_sale' => 'fsp.title_flash_sale',
+            'price_discount' => 'fsp.price_discount',
         ))
         ->group('product.id');
         //get only active product
@@ -504,7 +574,7 @@ class Product extends Zend_Db_Table_Abstract {
         $select = $select->where("product.status <> ?", STATUS_IN_ACTIVE);
         if (empty($key) == false) {
             $key =str_replace(' ','%',(string)$key);
-            $select->where('upper( product.title ) LIKE upper(?) or upper( product.description ) LIKE upper(?) or upper( product.content ) LIKE upper(?) or upper( c.name ) LIKE upper(?)', '%' . $key . '%');
+            $select->where('upper( product.title ) LIKE upper(?) or upper( product.sku ) LIKE upper(?) or upper( product.description ) LIKE upper(?) or upper( product.content ) LIKE upper(?) or upper( c.name ) LIKE upper(?)', '%' . $key . '%');
             $case = new Zend_Db_Expr($this->getAdapter()->quoteInto('case when upper( product.title ) LIKE upper(?) then 1
             when upper( product.description ) LIKE upper(?) then 2 
             when upper( c.name ) LIKE upper(?) then 3 
@@ -585,7 +655,7 @@ class Product extends Zend_Db_Table_Abstract {
         $select = $this->getAdapter()->select();
         if (isset($data['count_only']) == true && $data['count_only'] == 1) {
             $select = $select->from($this->_name, array("cnt" => new Zend_Db_Expr("COUNT(1)")));
-            $select = $select->where("product.status <> ?", STATUS_DELETE);
+            $select = $select->where("product.status = ?", STATUS_ACTIVE);
             $select = $select->where("product.price <> ?", 0);
         } else {
             $select = $select->from($this->_name)
@@ -595,7 +665,7 @@ class Product extends Zend_Db_Table_Abstract {
         $select = $select->joinLeft(array('c' => 'category'), 'c.id = product.id_category', array('category_name' => 'c.name'));
         $commonObj = new My_Controller_Action_Helper_Common();
         //search by name
-        $select = $select->where("product.status <> ?", STATUS_DELETE);
+        $select = $select->where("product.status = ?", STATUS_ACTIVE);
         $select = $select->where("product.price <> ?", 0);
 
         if (empty($data["title"]) == false) {

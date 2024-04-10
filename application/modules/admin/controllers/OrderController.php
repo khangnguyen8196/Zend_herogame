@@ -275,13 +275,12 @@ class Admin_OrderController extends FrontBaseAction {
             } else {
                 $info = $this->post_data;
             }
-        }
+        }       
         $listCombo = array();
         if (!empty($listOrderDetail)) {
             foreach ($listOrderDetail as $key => $value) {
                 if (!empty($value['combo_id']) && $value['combo_id'] != 0) {
-                    $modelComboDetail =new ComboDetail();
-                    $listProducts = $modelComboDetail->getProductByComboId($value['combo_id']);
+                    $listProducts = $orderDetailModel->getProductByComboIdproduct($id,$value['combo_id']);
                     if (!empty($listProducts)) {
                         foreach ($listProducts as $product) {
                             $listCombo[$value['combo_id']][] = $product;
@@ -290,19 +289,6 @@ class Admin_OrderController extends FrontBaseAction {
                 }
             }
         }
-        // $listCombo = array();
-        // if (!empty($listOrderDetail)) {
-        //     foreach ($listOrderDetail as $key => $value) {
-        //         if (!empty($value['combo_id']) && $value['combo_id'] != 0) {
-        //             $listProducts = $orderDetailModel->getProductByComboIdproduct($id,$value['combo_id']);
-        //             if (!empty($listProducts)) {
-        //                 foreach ($listProducts as $product) {
-        //                     $listCombo[$value['combo_id']][] = $product;
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
        
         if($info['ma_province']){
             $mdlDistrict = new District();

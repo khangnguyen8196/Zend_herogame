@@ -504,7 +504,12 @@ class Commons {
 				}
 			}
 		}elseif($value ["status_flash_sale"]==1 and $now >= $value["count_time_start"] and $now <= $value["count_time_end"] and $value['price_flash_sale']>0){
-			$titleText = $value['percent_flash_sale'];
+			if( $value ["percent_flash_sale"] == 0 ||  $value ["percent_flash_sale"] ==''){
+				$titleText = round ( ($value ["price_discount"] / $value ["price"]) * 100 );
+			}else{
+				$titleText =$value ["percent_flash_sale"];
+			}
+			// $titleText = $value['percent_flash_sale'];
 				if ($titleText > 0) {
 					$titleText = '-' . $titleText;
 				} else if ($titleText == 0) {
@@ -536,13 +541,17 @@ class Commons {
 			'text' => $titleText,
 			'tcolor' => '#ffffff',
 			'bcolor' => $bcolor 
-	);
+		);
 		
 		$shortDes = '';
 		if (empty ( $value ["notice_message"] ) == false) {
 			$shortDes = $value ["notice_message"];
+			$bcolorLabelB = '#189eff';
 		}
-		$bcolorLabelB = '#189eff';
+		if (empty ( $value ["title_flash_sale"] ) == false) {
+			$shortDes = $value ["title_flash_sale"];
+			$bcolorLabelB = '#ff9601';
+		}
 		if (empty ( $value ["color"] ) == false) {
 			$bcolorLabelB = $value ["color"];
 		}
@@ -556,6 +565,7 @@ class Commons {
 		$product ["name"] = $value ["title"];
 		$product ["priceA"] = number_format ( $value ["price_sales"] ) . '&#8363';
 		$product ["priceB"] = number_format ( $value ["price"] ) . '&#8363';
+		
 		$product ["priceC"] = number_format ( $value ["price_flash_sale"] ) . '&#8363';
 		// $product["url"] = "/san-pham/chi-tiet/name/" . $value["url_product"];
 		$product ["url"] = "/" . $value ["url_product"];

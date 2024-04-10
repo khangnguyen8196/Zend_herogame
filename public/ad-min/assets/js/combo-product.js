@@ -268,7 +268,7 @@ pages = $.extend(pages, {
 	  		                        }
 	  		                        return label;
 	  		                    },
-	  		                    orderable: true,
+	  		                    orderable: false,
 	  		                    targets: 7
 	  					},
 	  					 {

@@ -78,6 +78,14 @@ class Admin_ProductController extends FrontBaseAction {
                     $error[] = 'Url Này Đã Tồn Tại';
                 }
             }
+            if (empty($error) == true) {
+                $data['sku'] = Commons::url_slug($data['sku']);
+                $check = $model->checkExistProductSku($data['sku'], $id);
+                if ($check !== null && !empty($check)) {
+                    $error[] = 'Mã sản phẩm này đã tồn tại';
+                }
+                
+            }
             if( isset($data['variant_name']) && empty($data['variant_name']) == false) {
                 foreach($data['variant_name'] as $key =>$variant){
                     if(empty($data['variant_name'][$key])){
@@ -204,9 +212,7 @@ class Admin_ProductController extends FrontBaseAction {
                         $data['image_color'] = $info['image_color'];
                     }
 
-                }
-                   
-                
+                }              
                 if( empty($data["relative_product"]) == false){
                     $data["relative_product"] = implode(',', $data["relative_product"]);
                 }else{
@@ -222,38 +228,23 @@ class Admin_ProductController extends FrontBaseAction {
                     $data["product_color"] = implode(',', $data["product_color"]);
                 }
                 
-                /*if( empty($data["image_color"]) == false){
-                    $data["image_color"] = implode(',', $data["image_color"]);
-                }*/ 
-
-                // $listFlashSaleProductVariant = $mdFlashSaleProductVariant->getAllFlashSaleProductVariantBy($id);
-                // foreach($listFlashSaleProductVariant as  $flashSaleProductVariant){
-                //     echo '<pre>';
-                //     print_r($listFlashSaleProductVariant);
-                //     exit;
-                // }
-                
                 $listCombo = $modelCombo->getAllComboProduct($id);
                 if ($listCombo) {
-                    foreach ($listCombo as $key => $combo) {
-                        if($data['price_sales'] == 0 ){
-                            $combo['total_price'] = $combo['total_price'] - $combo['price'] + $data['price'];
+                    if($data['status']==2 || $data['status']==-1){
+                        foreach ($listCombo as $key => $combo) {
+                            $combo['total_price'] = $combo['total_price'] - $data['price_sales'];
                             $combo['total_discount'] = $combo['total_price'] - $combo['price_discount'];
-                            $combo['price'] = $data['price'];
-                        }else{
-                            $combo['total_price'] = $combo['total_price'] - $combo['price'] + $data['price_sales'];
-                            $combo['total_discount'] = $combo['total_price'] - $combo['price_discount'];
-                            $combo['price'] = $data['price_sales'];
+                            $modelCombo->saveComboProduct(
+                                [
+                                    "total_price" => $combo['total_price'],
+                                    "total_discount" =>  $combo['total_discount'],
+                                ], 
+                                $combo['id']
+                            );
                         }
-                        $mdComboDetail->updateComboDetail(["price" => $combo['price']],$id);
-                        $modelCombo->saveComboProduct(
-                            [
-                                "total_price" => $combo['total_price'],
-                                "total_discount" =>  $combo['total_discount'],
-
-                    
-                        ], $combo['id'] );
+                        $mdComboDetail->deleteComboDetailByProductId($id);
                     }
+                    
                 }
                 $rs = $model->saveProduct($data, $id);
                 
@@ -304,15 +295,30 @@ class Admin_ProductController extends FrontBaseAction {
                                 $listProFlashSale = $mdFlashSaleProduct->getProductFlashSaleByProductId($id);
                                 if($listProFlashSale){
                                     foreach ($listProFlashSale as $ind => $pro){
-                                        $data_var = [
-                                            'variant_price_flash_sale' => $_POST['variant_price'][$i] - ($_POST['variant_price'][$i]*$pro['percent_flash_sale']/100),
-                                            'variant_price' => $_POST['variant_price'][$i],
-                                            'variant_price_sales' => $_POST['variant_price_sales'][$i],
-                                            'product_id' => $product_id,
-                                            'percent_flash_sale' => $pro['percent_flash_sale'],
-                                            'flash_sale_id' => $pro['flash_sale_id'],
-                                            'variant_id' =>$result,
-                                        ];
+                                        if ($pro['percent_flash_sale'] > 0 && $pro['percent_flash_sale'] <= 100) {
+                                            $data_var = [
+                                                'variant_price_flash_sale' => $_POST['variant_price'][$i] - ($_POST['variant_price'][$i]*$pro['percent_flash_sale']/100),
+                                                'variant_price' => $_POST['variant_price'][$i],
+                                                'variant_price_sales' => $_POST['variant_price_sales'][$i],
+                                                'product_id' => $product_id,
+                                                'percent_flash_sale' => $pro['percent_flash_sale'],
+                                                'flash_sale_id' => $pro['flash_sale_id'],
+                                                'variant_id' =>$result,
+                                                'price_discount' =>$pro['price_discount'],
+                                            ];
+                                        }else{
+                                            $data_var = [
+                                                'variant_price_flash_sale' => $_POST['variant_price'][$i] - $pro['price_discount'],
+                                                'variant_price' => $_POST['variant_price'][$i],
+                                                'variant_price_sales' => $_POST['variant_price_sales'][$i],
+                                                'product_id' => $product_id,
+                                                'percent_flash_sale' => $pro['percent_flash_sale'],
+                                                'flash_sale_id' => $pro['flash_sale_id'],
+                                                'variant_id' =>$result,
+                                                'price_discount' =>$pro['price_discount'],
+                                            ];
+                                        }
+                                       
                                         $mdFlashSaleProductVariant->saveFlashSaleProductVariant($data_var);
                                     }
                                 }
@@ -337,15 +343,30 @@ class Admin_ProductController extends FrontBaseAction {
                                 $listProFlashSale = $mdFlashSaleProduct->getProductFlashSaleByProductId($id);
                                 if($listProFlashSale){
                                     foreach ($listProFlashSale as $ind => $pro){
-                                        $data_var = [
-                                            'variant_price_flash_sale' => $_POST['variant_price'][$i] - ($_POST['variant_price'][$i]*$pro['percent_flash_sale']/100),
-                                            'variant_price' => $_POST['variant_price'][$i],
-                                            'variant_price_sales' => $_POST['variant_price_sales'][$i],
-                                            'product_id' => $product_id,
-                                            'percent_flash_sale' => $pro['percent_flash_sale'],
-                                            'flash_sale_id' => $pro['flash_sale_id'],
-                                            'variant_id' =>$result,
-                                        ];
+                                        if ($pro['percent_flash_sale'] > 0 && $pro['percent_flash_sale'] <= 100) {
+                                            $data_var = [
+                                                'variant_price_flash_sale' => $_POST['variant_price'][$i] - ($_POST['variant_price'][$i]*$pro['percent_flash_sale']/100),
+                                                'variant_price' => $_POST['variant_price'][$i],
+                                                'variant_price_sales' => $_POST['variant_price_sales'][$i],
+                                                'product_id' => $product_id,
+                                                'percent_flash_sale' => $pro['percent_flash_sale'],
+                                                'flash_sale_id' => $pro['flash_sale_id'],
+                                                'variant_id' =>$result,
+                                                'price_discount' =>$pro['price_discount'],
+                                            ];
+                                        }else{
+                                            $data_var = [
+                                                'variant_price_flash_sale' => $_POST['variant_price'][$i] - $pro['discount'],
+                                                'variant_price' => $_POST['variant_price'][$i],
+                                                'variant_price_sales' => $_POST['variant_price_sales'][$i],
+                                                'product_id' => $product_id,
+                                                'percent_flash_sale' => $pro['percent_flash_sale'],
+                                                'flash_sale_id' => $pro['flash_sale_id'],
+                                                'variant_id' =>$result,
+                                                'price_discount' =>$pro['price_discount'],
+                                            ];
+                                        }
+                                       
                                         $mdFlashSaleProductVariant->saveFlashSaleProductVariant($data_var);
                                     }
                                 }
@@ -574,7 +595,11 @@ class Admin_ProductController extends FrontBaseAction {
             foreach ($listProduct as $index => &$value) {
                 $value['price'] = $price;
                 $value['price_sales'] = $priceSales;
-                $value['price_flash_sale'] = $price - $price * $value['percent_flash_sale'] / 100;
+                if ($value['percent_flash_sale'] > 0 && $value['percent_flash_sale'] <= 100) {
+                    $value['price_flash_sale'] = $price - $price * $value['percent_flash_sale'] / 100;
+                } else {
+                    $value['price_flash_sale'] = $price - $value['price_discount'];
+                }                
                 $mdFlashSaleProduct->updateFlashSaleProduct([
                     'price' => $value['price'],
                     'price_sales' => $value['price_sales'],
@@ -587,7 +612,11 @@ class Admin_ProductController extends FrontBaseAction {
                         $dataProductVariant['percent_flash_sale'] = $value['percent_flash_sale'];
                         $dataProductVariant['variant_price'] = $variant['variant_price'];
                         $dataProductVariant['variant_price_sales'] = $variant['variant_price_sales'];
-                        $dataProductVariant['variant_price_flash_sale'] = $variant['variant_price']-($variant['variant_price']*($value['percent_flash_sale']/100));
+                        if ($value['percent_flash_sale'] > 0 && $value['percent_flash_sale'] <= 100) {
+                            $dataProductVariant['variant_price_flash_sale'] = $variant['variant_price'] - ($variant['variant_price']*($value['percent_flash_sale']/100));
+                        }else{
+                            $dataProductVariant['variant_price_flash_sale'] = $variant['variant_price'] - $value['price_discount'];
+                        }
                         $modelFlashSaleProductVariant->updateFlashSaleProductVariant($dataProductVariant, $value['flash_sale_id'], $product_id, $variant['id']); 
                     }
                 }
@@ -618,13 +647,15 @@ class Admin_ProductController extends FrontBaseAction {
         $columns = array(//
             0 => "id",
             1 => "title",
-            2 => "image",
-            3 => "price",
-            4 => "created_date",
-            5 => "updated_date",
-            6 => 'updated_by',
-            7 => 'status',
-            8 => 'id_category'
+            2 => "sku",
+            3 => "image",
+            4 => 'id_category',
+            5 => "price",
+            6 => "created_date",
+            7 => "updated_date",
+            8 => 'updated_by',
+            9 => 'status',
+            
         );
 
         //order function
@@ -729,8 +760,6 @@ class Admin_ProductController extends FrontBaseAction {
     
     public function getListProductAction() {
         $this->isAjax();
-
-
         $categoryRearrange = array();
         $categoryMdl = new Category();
         $params["type_of_category"] = 1;

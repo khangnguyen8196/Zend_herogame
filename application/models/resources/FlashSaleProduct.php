@@ -31,10 +31,11 @@ class FlashSaleProduct extends Zend_Db_Table_Abstract {
     public function getFlashSaleProductById($flash_sale_id) {
         $select = $this->getAdapter()->select()
             ->from(array('fsp' => 'flash_sale_product'))
-            ->where('flash_sale_id= ?', $flash_sale_id)
-            ->order('id ASC');
+            ->joinLeft(array('p' => 'product'), 'fsp.product_id = p.id', array('product_image' => 'p.image')) 
+            ->where('fsp.flash_sale_id = ?', $flash_sale_id)
+            ->order('fsp.id ASC'); 
         return $this->getAdapter()->fetchAll($select);
-    }
+    } 
 
     public function getFlashSaleProductId($flash_sale_id) {
         $select = $this->getAdapter()->select()
@@ -112,6 +113,9 @@ class FlashSaleProduct extends Zend_Db_Table_Abstract {
         }
         if (isset($data['percent_flash_sale']) == true) {
             $datain['percent_flash_sale'] = $data['percent_flash_sale'];
+        }
+        if (isset($data['price_discount']) == true) {
+            $datain['price_discount'] = $data['price_discount'];
         }
             return $this->insert($datain);
     }

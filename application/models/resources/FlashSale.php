@@ -94,6 +94,12 @@ class FlashSale extends Zend_Db_Table_Abstract {
         if (isset($data['title_flash_sale']) == true) {
             $datain['title_flash_sale'] = $data['title_flash_sale'];
         }
+        if (isset($data['image_flash_sale']) == true) {
+            $datain['image_flash_sale'] = $data['image_flash_sale'];
+        }
+        if (isset($data['image_flash_sale_smp']) == true) {
+            $datain['image_flash_sale_smp'] = $data['image_flash_sale_smp'];
+        }
         if (isset($data['count_time_start']) == true) {
             $datain['count_time_start'] = $data['count_time_start'];
         }
@@ -111,6 +117,12 @@ class FlashSale extends Zend_Db_Table_Abstract {
         }
         if (isset($data['updated_by']) == true) {
             $datain['updated_by'] = $data['updated_by'];
+        }
+        if (isset($data['percent_all']) == true) {
+            $datain['percent_all'] = $data['percent_all'];
+        }
+        if (isset($data['discount_all']) == true) {
+            $datain['discount_all'] = $data['discount_all'];
         }
         if (empty($id) == false) {
             $where[] = $this->getAdapter()->quoteInto("flash_sale_id = ?", $id, Zend_Db::INT_TYPE);

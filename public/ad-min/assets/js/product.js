@@ -82,10 +82,15 @@ pages = $.extend(pages, {
                         });
         		$('#color').colorpicker();
         		me.initValidation();
-        		$(document).on('click', '.submit-btn', {}, function ( ) {
+        		$(document).on('click', '.submit-btn', {}, function (e) {
 	                if ( pages.validation.validator['#postDetailForm'].form() == false ) {
 	                    return false;
 	                }
+					var sku = $('#sku').val();
+					if(sku == ''){
+						e.preventDefault();
+						$('#skuError').text('Mã sản phẩm không được để trống')
+					}
 	                $(".submit-btn").submit();
 	            });
         		$.each($('.rich-editor'),function(){
@@ -423,6 +428,7 @@ pages = $.extend(pages, {
         	var aoColumns = [
 	    	                 {"data": "id"},
 	    	                 { "data": "title" },
+							 { "data": "sku" },
 	    	                 { "data": "image" },
 	    	                 { "data": "id_category" },
 	    	                 { "data": "price" },
@@ -433,6 +439,22 @@ pages = $.extend(pages, {
 	    	                 { "data": "Action_Table"}
 	    	];
 	        var columnDefs = [
+						{
+							"render": function ( data, type, row ) {
+								return row['id'];
+							},
+							"targets": 0,
+							"orderable": true,
+							"data": "id"
+						},
+						{
+							"render": function ( data, type, row ) {
+								return row['title'];
+							},
+							"targets": 1,
+							"orderable": false,
+							"data": "title"
+						},
                   		{
 							"render": function ( data, type, row ) {
 								var img = '';
@@ -443,15 +465,15 @@ pages = $.extend(pages, {
 								}
 								return img;
 							},
-							"targets": 2,
-							"orderable": true,
+							"targets": 3,
+							"orderable": false,
 							"data": "image"
 						},
 						{
                         	"render": function ( data, type, row ) {
                         		return row['category_name'];
                         	},
-                        	"targets": 3,
+                        	"targets": 4,
   							"orderable": true,
   							"data": "id_category"
 						},
@@ -463,7 +485,7 @@ pages = $.extend(pages, {
                         			return '-';
                         		}
                         	},
-                        	"targets": 4,
+                        	"targets": 5,
   							"orderable": true,
   							"data": "price"
 						},
@@ -475,11 +497,11 @@ pages = $.extend(pages, {
                         			return '-';
                         		}
                         	},
-                        	"targets": 5,
+                        	"targets": 6,
   							"orderable": true,
-  							"data": "created_at"
+  							"data": "created_date"
 						},
-	                     {
+	                    {
 	                        	"render": function ( data, type, row ) {
 	                        		if( pages.core.isDefined(data)){
 	                        			return pages.datetime.parseIsoDatetimeUTC(data,true,'dd/mm/yyyy');
@@ -487,10 +509,18 @@ pages = $.extend(pages, {
 	                        			return '-';
 	                        		}
 	                        	},
-	                        	"targets": 6,
+	                        	"targets": 7,
 	  							"orderable": true,
-	  							"data": "updated_at"
+	  							"data": "updated_date"
 	                     },
+						 {
+                        	"render": function ( data, type, row ) {
+                        		return row['updated_by'];
+                        	},
+                        	"targets": 8,
+  							"orderable": false,
+  							"data": "updated_by"
+						},
 	                     {
 	  							"render": function (data, type, row) {
 	  		                        var label = '';
@@ -502,7 +532,7 @@ pages = $.extend(pages, {
 	  		                        return label;
 	  		                    },
 	  		                    orderable: true,
-	  		                    targets: 8
+	  		                    targets: 9
 	  					},
 	  					 {
 	                    	 "render": function (data, type, row) {
@@ -519,7 +549,7 @@ pages = $.extend(pages, {
 	                             return 	action;
 	                         },
 	                         "className": "text-center",
-	                         "targets": 9,
+	                         "targets": 10,
 	                         "orderable": false,
 	                         "data": "Action_Table"
 	  					 }

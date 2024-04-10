@@ -419,25 +419,18 @@
 														echo number_format($value['price']);
 					            					} elseif(!empty($value['combo_id']) && $value['combo_id'] != 0){
 														if(!empty($this->listCombo)){
-															$total_price =0;
 															foreach($this->listCombo[$value['combo_id']] as $comboDetail){
-																$price = $comboDetail['price'];
-                                    							$total_price += $price; 
+																$price = $comboDetail['price'];			
 														}
-															// echo number_format($total_price);
-														echo number_format($value['p_sale']);
-															
+												
+														echo number_format($value['price']);			
 														}
-														// echo number_format($value['price']);
 													}else{
-														// echo number_format($value['p_price']);
 														echo number_format($value['price']);
 													}
 					            					
 					            					?>
 					            				</td>
-					            				<!-- <td><?php echo number_format($value['price'])?></td> -->
-					            				<!-- <td><?php echo number_format($value['p_sale'])?></td> -->
 					            				<td><?php echo $value['number']?></td>
 					            			</tr>
 											<?php 
@@ -450,8 +443,7 @@
 																<td style="border-top:none !important"><img width="40px" height="40px" src="/upload/images/<?php echo $comboDetail['image']?>" /></td>
 																<td style="border-top:none !important"><?php echo $comboDetail['title'] ?></td>
 																<td style="border-top:none !important"><?php echo 'Mặc Định';?></td>
-																<!-- <td style="border-top:none !important"><?php echo number_format($comboDetail['price'])?></td> -->
-																<td style="border-top:none !important"><?php echo number_format($comboDetail['price_sales'])?></td>
+																<td style="border-top:none !important"><?php echo number_format($comboDetail['price'])?></td>
 																<td style="border-top:none !important"><?php echo $value['number']?></td>
 															</tr>
 														<?php }		

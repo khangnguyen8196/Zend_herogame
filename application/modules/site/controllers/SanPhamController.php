@@ -135,6 +135,13 @@ class Site_SanPhamController extends FrontEndAction {
         $list_variant_img = $this->_variantImgMdl->getProductImage($productInfo['id']);
         
         $flash_sale = $this->_flashSale->getFlashSale();
+        if($flash_sale){
+            $sale_product = $this->_flashSaleProduct->getFlashSaleProductBy($flash_sale['flash_sale_id'],$productInfo['id']);
+            $this->view->sale_product = $sale_product;
+            $l_variant_flash_sale = $this->_flashSaleProductVariant->getFlashSaleProductVariantBy($flash_sale['flash_sale_id'],$productInfo['id']);
+            $this->view->l_variant_flash_sale = $l_variant_flash_sale; 
+        }
+        $this->view->flash_sale = $flash_sale; 
       
         $list_combo_product = $this->_comboDetailMdl->getComboByProductId($productInfo['id']);
         $list_combo_detail = array();
@@ -146,16 +153,12 @@ class Site_SanPhamController extends FrontEndAction {
         $this->view->list_combo_product=$list_combo_product;
         $now = date('Y-m-d H:i:s');
         if ($flash_sale && $flash_sale['count_time_start'] <= $now && $flash_sale['status'] == 1) {
-            $this->view->flash_sale = $flash_sale; 
             $list_variant_flash_sale = $this->_flashSaleProductVariant->getFlashSaleProductVariantBy($flash_sale['flash_sale_id'],$productInfo['id']);
             $this->view->list_variant_flash_sale = $list_variant_flash_sale; 
-            $list_flash_sale_product = $this->_flashSaleProduct->getFlashSaleProductBy($flash_sale['flash_sale_id'],$productInfo['id']);
+            $flash_sale_product = $this->_flashSaleProduct->getFlashSaleProductBy($flash_sale['flash_sale_id'],$productInfo['id']);
+            $this->view->flash_sale_product = $flash_sale_product;
+            $list_flash_sale_product = $this->_flashSaleProduct->getFlashSaleProductById($flash_sale['flash_sale_id']);
             $this->view->list_flash_sale_product = $list_flash_sale_product; 
-            // echo '<pre>';
-            // print_r( $list_flash_sale_product);
-            // exit;
-
-        
         }
         $this->view->color_list = $color_list; 
         $this->view->list_variant = $list_variant;   

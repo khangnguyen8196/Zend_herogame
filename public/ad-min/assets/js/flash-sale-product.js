@@ -33,67 +33,53 @@ pages = $.extend(pages, {
         	};
 
 			var selectedProducts = [];
+		
+			$("#checkAll").change(function() {
+				var isChecked = $(this).prop("checked");
+				$("#listProductTable tbody input[type='checkbox']").prop("checked", isChecked).trigger("change");
+			});
 			$(document).ready(function() {
-				$("#checkAll").change(function() {
-					var isChecked = $(this).prop("checked");
-					$("#listProductTable tbody input[type='checkbox']").prop("checked", isChecked).trigger("change");
-				});
-			
-				$(document).on('change', '#listProductTable input[type="checkbox"]', function() {
-					var isCheckedAll = true;
-					$("#listProductTable tbody input[type='checkbox']").each(function() {
-						if (!$(this).prop('checked')) {
-							isCheckedAll = false;
-							return false; 
-						}
-					});
-					$("#checkAll").prop("checked", isCheckedAll);
-					var rowData = $("#listProductTable").DataTable().row($(this).parents('tr')).data();
-					var productId = rowData.id;
-					if ($(this).prop('checked')) {
-						var inputId = selectedProducts.length;
-						selectedProducts.push({
-							inputId: inputId,
-							productId: productId,
-							name: rowData.title,
-							priceSale: rowData.price_sales,
-							price: rowData.price
-						});
-					} else {
-						selectedProducts = selectedProducts.filter(product => product.productId !== productId);
-					}
+				$(document).on('click', 'a.paginate_button', function() {
+					$("#checkAll").removeAttr('checked');
 				});
 			});
-			// $(document).ready(function() {
-			// 	$("#checkAll").change(function() {
-			// 		var isChecked = $(this).prop("checked"); 
-			// 		$("#listProductTable tbody input[type='checkbox']").prop("checked", isChecked);
-			// 	});
-			// });
-
-			// $(document).on('change', '#listProductTable input[type="checkbox"]', function() {
-			// 	var rowData = $("#listProductTable").DataTable().row($(this).parents('tr')).data();
-			// 	var productId = rowData.id;
-
-			// 	if ($(this).prop('checked')) {
-			// 		var inputId = selectedProducts.length; 
-
-			// 		if (selectedProducts.some(product => product.productId === productId)) {
-			// 			alert('Sản phẩm đã tồn tại. Vui lòng chọn sản phẩm khác.');
-			// 			$(this).prop('checked', false);
-			// 			return;
-			// 		}
-			// 		selectedProducts.push({
-			// 			inputId: inputId,
-			// 			productId: productId,
-			// 			name: rowData.title,
-			// 			priceSale: rowData.price_sales,
-			// 			price: rowData.price
-			// 		});
-			// 	} else {
-			// 		selectedProducts = selectedProducts.filter(product => product.productId !== productId);
-			// 	}
-			// });
+			
+			$(document).on('change', '#listProductTable input[type="checkbox"]', function() {
+				var isCheckedAll = true;
+				$("#listProductTable tbody input[type='checkbox']").each(function() {
+					if (!$(this).prop('checked')) {
+						isCheckedAll = false;
+						return false;
+					}
+				});
+				$("#checkAll").prop("checked", isCheckedAll);
+				var rowData = $("#listProductTable").DataTable().row($(this).parents('tr')).data();
+				if (rowData && rowData.id) {
+					var productId = rowData.id;
+					if ($(this).prop('checked')) {
+						var existingProductIndex = selectedProducts.findIndex(product => product.productId === productId);
+						console.log(existingProductIndex);
+						if (existingProductIndex === -1) {
+							var inputId = selectedProducts.length;
+							selectedProducts.push({
+								inputId: inputId,
+								productId: productId,
+								name: rowData.title,
+								image:rowData.image,
+								priceSale: rowData.price_sales,
+								price: rowData.price
+							});
+						}
+					} else {
+						selectedProducts = selectedProducts.filter(product => product.productId !== productId);
+						console.log("After removing:", selectedProducts);
+					}
+				} else {
+					console.log("rowData.id is empty or not available.");
+				}
+			});
+			
+			
 			$(document).on('click', '.add-product', function() {
 				var inputId = $(this).data('input-id');
 				$('.product-id-input').each(function() {
@@ -104,7 +90,6 @@ pages = $.extend(pages, {
 			});
 
 			$(document).on('draw.dt', '#listProductTable', function() {
-				console.log('hello world');
 				$('.product-id-input').each(function() {
 					var productId = $(this).val(); 
 					$('input[type="checkbox"][value="' + productId + '"]').prop('checked', true);
@@ -116,56 +101,6 @@ pages = $.extend(pages, {
 				$('.file-item-' + inputId).remove();
 				delete selectedProducts[inputId];
 			});
-
-			// $(document).on('input', '.product-percent-flash-sale', function() {
-			// 	var inputId = $(this).data('input-id').split('-')[0];
-			// 	var productId = $(this).data('input-id').split('-')[1];
-			// 	var parentDiv = $(this).closest('.file-item-' + inputId + '-' + productId);
-			// 	var priceValue = parseFloat(parentDiv.find('.product-price-input').val());
-			// 	var percentValue = parseFloat($(this).val());
-			// 	var total = priceValue - (priceValue * percentValue) / 100;
-			// 	if (!isNaN(total)) {
-			// 		parentDiv.find('.product-price-flash-sale').val(total.toFixed(2));
-			// 	}
-			// });
-
-			// $("#confirmSelection").click(function(e) {
-			// 	selectedProducts.forEach(function(product) {
-			// 		e.preventDefault()
-			// 		var inputId = product.inputId;
-			// 		var productName = product.name;
-			// 		var productId = product.productId;
-			// 		var price = product.price;
-			// 		var priceSale = product.priceSale;
-			// 		var html = 	'<div class="form-group file-item-'+ inputId + '">' +
-			// 				'<div class="col-lg-3">' +
-			// 					'<input type="hidden" name="flash_sale_product_id[]" value="0" />'+
-			// 					'<input type="text" readonly class="form-control product-name-input" name = "product_name[]" value="' + productName+ '" placeholder="Chọn sản phẩm" data-input-id="' + inputId + '" />' +
-			// 					'<input type="hidden" class="form-control product-id-input" name = "product_id[]" value="' + productId + '" placeholder="" data-input-id="' + inputId + '" />' +
-			// 					'<span class="errorSanPham" style="color:red"></span>'+
-			// 					'</div>' +
-			// 				'<div class="col-lg-2">' +
-			// 					'<input type="tel" readonly maxlength="10" name="price[]" class="form-control product-price-input" value="' + price + '" placeholder="Giá sản phẩm"  data-input-id="' + inputId + '" oninput="this.value = this.value.replace(/[^0-9]/g, \'\');" />' +
-			// 					'<span class="errorPrice" style="color:red"></span>'+
-			// 					'</div>' +
-			// 				'<div class="col-lg-2">' +
-			// 					'<input type="tel" readonly maxlength="10" name="price_sales[]" class="form-control product-price-sale-input"  value="' + priceSale + '" placeholder="Giá sale"  data-input-id="' + inputId + '" oninput="this.value = this.value.replace(/[^0-9]/g, \'\');" />' +
-			// 					'<span class="errorPrice" style="color:red"></span>'+
-			// 				'</div>' +
-			// 				'<div class="col-lg-2">' +
-			// 					'<input type="tel" maxlength="2" name="percent_flash_sale[]" class="form-control product-percent-flash-sale"  value="" placeholder="% sale giảm" data-input-id="' + inputId + '" oninput="this.value = this.value.replace(/[^0-9]/g, \'\');"/>' +
-			// 				'</div>' +
-			// 				'<div class="col-lg-2">' +
-			// 					'<input type="tel" readonly maxlength="2" name="price_flash_sale[]" class="form-control product-price-flash-sale"  value="" placeholder="giá flash sale" data-input-id="' + inputId + '" oninput="this.value = this.value.replace(/[^0-9]/g, \'\');"/>' +
-			// 				'</div>' +
-			// 				'<div class="col-lg-1">' +
-			// 					'<button type="button" class="btn btn-alert remove-product" style="margin-right: 11px;" data-input-id="' + inputId + '">x</button>' +
-			// 				'</div>' +
-			// 				'</div>';
-			// 				$('.list-product').append(html);
-			// 	});
-			// 	$('#modalProductList').modal('hide');
-			// });
 
 			$(document).on('click', '#confirmSelection', function(e) {
 				e.preventDefault();
@@ -182,33 +117,52 @@ pages = $.extend(pages, {
 					} else {
 						var inputId = product.inputId;
 						var productName = product.name;
-						var price = product.price;
-						var priceSale = product.priceSale;
+						var image = product.image;
+						var price = formatNumber(product.price);
+						var priceSale = formatNumber(product.priceSale);
 			
-						var html = '<div class="form-group file-item-'+ inputId + '">' +
-										'<div class="col-lg-3">' +
-											'<input type="hidden" name="flash_sale_product_id[]" value="0" />'+
-											'<input type="text" readonly class="form-control product-name-input" name="product_name[]" value="' + productName + '" placeholder="Chọn sản phẩm" data-input-id="' + inputId + '" />' +
-											'<input type="hidden" class="form-control product-id-input" name="product_id[]" value="' + productId + '" placeholder="" data-input-id="' + inputId + '" />' +
-											'<span class="errorSanPham" style="color:red"></span>'+
-										'</div>' +
-										'<div class="col-lg-2">' +
-											'<input type="tel" readonly maxlength="10" name="price[]" class="form-control product-price-input" value="' + price + '" placeholder="Giá sản phẩm"  data-input-id="' + inputId + '" oninput="this.value = this.value.replace(/[^0-9]/g, \'\');" />' +
-											'<span class="errorPrice" style="color:red"></span>'+
-										'</div>' +
-										'<div class="col-lg-2">' +
-											'<input type="tel" readonly maxlength="10" name="price_sales[]" class="form-control product-price-sale-input"  value="' + priceSale + '" placeholder="Giá sale"  data-input-id="' + inputId + '" oninput="this.value = this.value.replace(/[^0-9]/g, \'\');" />' +
-											'<span class="errorPrice" style="color:red"></span>'+
-										'</div>' +
-										'<div class="col-lg-2">' +
-											'<input type="tel" maxlength="2" name="percent_flash_sale[]" class="form-control product-percent-flash-sale"  value="" placeholder="% sale giảm" data-input-id="' + inputId + '" oninput="this.value = this.value.replace(/[^0-9]/g, \'\');" />' +
-										'</div>' +
-										'<div class="col-lg-2">' +
-											'<input type="tel" readonly maxlength="2" name="price_flash_sale[]" class="form-control product-price-flash-sale"  value="" placeholder="giá flash sale" data-input-id="' + inputId + '" oninput="this.value = this.value.replace(/[^0-9]/g, \'\');"/>' +
-										'</div>' +
-										'<div class="col-lg-1">' +
-											'<button type="button" class="btn btn-alert remove-product" style="margin-right: 11px;" data-input-id="' + inputId + '">x</button>' +
-										'</div>' +
+						var html = '<div style="border:1px solid #ccc; border-radius:20px;padding:10px;" class="form-group file-item-'+ inputId + '">' +
+										
+											'<div class="col-lg-2">' +
+												'<img class="img-media img-thumbnail-item" width="140px" height="92px" src="/upload/images/'+ image +'" alt="">'+
+											'</div>'+
+											'<div class="col-lg-10">' +
+												'<div class="form-group">'+
+													'<label class="control-label col-lg-2">Tên sản phẩm</label>'+
+													'<div class="col-lg-10">' +
+														'<input type="hidden" name="flash_sale_product_id[]" value="0" />'+
+														'<input type="text" readonly class="form-control product-name-input" name="product_name[]" value="' + productName + '" placeholder="Chọn sản phẩm" data-input-id="' + inputId + '" />' +
+														'<input type="hidden" class="form-control product-id-input" name="product_id[]" value="' + productId + '" placeholder="" data-input-id="' + inputId + '" />' +
+														'<span class="errorSanPham" style="color:red"></span>'+
+													'</div>' +
+												'</div>'+
+												'<label class="control-label col-lg-2">Thông tin</label>'+
+												'<div class="col-lg-2">' +
+													'<span>Price</span>'+
+													'<input type="tel" readonly maxlength="10" name="price[]" class="form-control product-price-input" value="' + price + '" placeholder="Giá sản phẩm"  data-input-id="' + inputId + '" oninput="this.value = this.value.replace(/[^0-9]/g, \'\');" />' +
+													'<span class="errorPrice" style="color:red"></span>'+
+												'</div>' +
+												'<div class="col-lg-2">' +
+													'<span>Price sale</span>'+
+													'<input type="tel" readonly maxlength="10" name="price_sales[]" class="form-control product-price-sale-input"  value="' + priceSale + '" placeholder="Giá sale"  data-input-id="' + inputId + '" oninput="this.value = this.value.replace(/[^0-9]/g, \'\');" />' +
+													'<span class="errorPrice" style="color:red"></span>'+
+												'</div>' +
+												'<div class="col-lg-1">' +
+													'<span>%</span>'+
+													'<input type="tel" maxlength="2" name="percent_flash_sale[]" class="form-control product-percent-flash-sale"  value="" placeholder="% sale giảm" data-input-id="' + inputId + '" oninput="this.value = this.value.replace(/[^0-9]/g, \'\');" />' +
+												'</div>' +
+												'<div class="col-lg-2">' +
+													'<span>Price discount</span>'+
+													'<input type="tel" name="price_discount[]" class="form-control product-price-discount"  value="" placeholder="tiền giảm" data-input-id="' + inputId + '" oninput="this.value = this.value.replace(/[^0-9]/g, \'\');" />' +
+												'</div>' +
+												'<div class="col-lg-2">' +
+													'<span>Price flash sale</span>'+
+													'<input type="tel" readonly maxlength="2" name="price_flash_sale[]" class="form-control product-price-flash-sale"  value="" placeholder="giá flash sale" data-input-id="' + inputId + '" oninput="this.value = this.value.replace(/[^0-9]/g, \'\');"/>' +
+												'</div>' +
+												'<div class="col-lg-1">' +
+													'<button type="button" class="btn btn-alert remove-product" style="display: block;margin-top: 20px;" data-input-id="' + inputId + '">x</button>' +
+												'</div>' +
+											'</div>'+
 									'</div>';
 						$('.list-product').append(html);
 					}
@@ -217,118 +171,109 @@ pages = $.extend(pages, {
 				
 			});
 			
+			$(document).on('click', '.submit-btn', function(e) {
+				var title = $('#title_flash_sale').val();
+				var startDate = $('#startDate').val();
+				var endDate = $('#endDate').val(); 
 			
+				if (title == '') {
+					e.preventDefault();
+					$('.errorTitle').text('Tiêu đề không được để trống');
+				}
+				if (startDate > endDate) {
+					e.preventDefault();
+					$('.errorStartDate').text('Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc');
+				}
+				if (startDate == '') {
+					e.preventDefault();
+					$('.errorStartDate').text('Hãy chọn thời gian bắt đầu nhỏ hơn thời gian kết thúc');
+				}
+				if (endDate == '') {
+					e.preventDefault();
+					$('.errorEndDate').text('Hãy chọn thời gian kết thúc phải lớn hơn thời gian bắt đầu');
+				}
+			});
 			
-			
-			
-			
-			
-			// $(document).on('click','.submit-btn',function(e){
-			// 	var product = $('.product-name-input').val();
-			// 	var priceSale = $('.product-price-input').val();
-			// 	var date = $('#startdate').val();
-			// 	if(product=='' || priceSale =='' || priceSale ==0 || date ==''){
-			// 		e.preventDefault();
-			// 	}
-			// 	if(product ==''){
-			// 		$('.errorSanPham').text('Hãy chọn sản phẩm');
-			// 	} 
-			// 	if(priceSale ==''){
-			// 		$('.errorPrice').text('Giá sale phải lớn hơn 0')
-			// 	}
-			// 	if(date ==''){
-			// 		$('.errorDate').text('Không được để trống')
-			// 	}
-			// })
-
-			// $(document).on('click', '.product-name-input', function() {
-			// 	var inputId = $(this).data('input-id');
-			// 	var product = $('.product-name-input').val();
-			// 	if(product==''){
-			// 		$('.errorSanPham').text('')
-			// 	}
-			// 	var priceSale = $('.product-price-input').val();
-			// 	if(priceSale ==''){
-			// 		$('.errorPrice').text('')
-			// 	}
-			// 	$('#modalProductList').data('input-id', inputId).modal('show');
-			// });
-
-			// var selectedProducts = [];
-			// var selectedProductId = [];
-			// var selectedProductPriceSale = [];
-			// var selectedProductPrice = [];
-			// var priceFlashSale = [];
-			// var percentFlashSale = [];
-			// var selectedCheckboxes = {};
-			// $(document).on('click', '#listProductTable input[type="checkbox"]', function() {
-			// 	var inputId = $('#modalProductList').data('input-id');
-			// 	var rowData = $("#listProductTable").DataTable().row($(this).parents('tr')).data();
-			// 	var productId = rowData.id;
-			// 	var productName = rowData.title;
-			// 	var productPriceSale = rowData.price_sales;
-			// 	var productPrice = rowData.price;
-			// 	if (selectedProductId[inputId] === productId) {
-
-			// 		return;
-			// 	}
-			// 	if (Object.values(selectedProductId).indexOf(productId) > -1) {
-			// 		alert('Sản phẩm đã tồn tại. Vui lòng chọn sản phẩm khác.');
-			// 		return;
-			// 	}
-			// 	var existingCheckbox = selectedCheckboxes[inputId];
-			// 	if (existingCheckbox) {
-			// 		existingCheckbox.prop('checked', false);
-			// 	}
-			// 	selectedCheckboxes[inputId] = $(this);
-			// 	selectedProducts[inputId] = productName;
-			// 	selectedProductId[inputId] = rowData.id;
-			// 	selectedProductPriceSale[inputId] = rowData.price_sales;
-			// 	selectedProductPrice[inputId] = rowData.price;
-			// 	$('.product-name-input[data-input-id="' + inputId + '"]').val(productName);
-			// 	$('.product-id-input[data-input-id="' + inputId + '"]').val(productId);
-			// 	$('.product-price-input[data-input-id="' + inputId + '"]').val(productPrice);
-			// 	$('.product-price-sale-input[data-input-id="' + inputId + '"]').val(productPriceSale);
-			// 	$('.product-percent-flash-sale[data-input-id="' + inputId + '"]').removeAttr('readonly');
-			// });
-		
+	
 			$(document).on('focusin', 'input[name="percent_flash_sale[]"]', function() {
 				var inputId = $(this).data('input-id');
 				var parentDiv = $(this).closest('.file-item-' + inputId + '');
-				var priceValue = parentDiv.find('input[name="price[]"]').val();
+				var priceValue = parseFloat(parentDiv.find('input[name="price[]"]').val().replace(/,/g, ''));
 				var total =0;
 				$(document).on('input','.product-percent-flash-sale[data-input-id="' + inputId + '"]',function(){
 					var percentValue = parentDiv.find('input[name="percent_flash_sale[]"]').val();
+					var priceDiscount = parentDiv.find('input[name="price_discount[]"]').val('');
+					if((percentValue =='' ||percentValue == 0) && priceDiscount == '' || priceDiscount==0){
+						total =0;
+					}
 					total = priceValue - (priceValue * percentValue)/100;
 					console.log(total);
-					parentDiv.find('input[name="price_flash_sale[]"]').val(total);
+					parentDiv.find('input[name="price_flash_sale[]"]').val(formatNumber(total));
+					
+				})
+			});
+
+			$('#percent_all').on('input', function() {
+				var percentAllValue = $(this).val();
+				$('input[name="discount_all"]').val('');
+				$('input[name="price_discount[]"]').val(percentAllValue !== 0 ? 0 : '');
+				$('input[name="percent_flash_sale[]"]').val(percentAllValue);
+				var pricesArray = []; 
+				$('input[name="price[]"]').each(function() {
+					var priceValue = $(this).val();
+					priceValue = priceValue.replace(/,/g, ''); 
+					pricesArray.push(priceValue); 
+				});
+				pricesArray.forEach(function(priceValue, index) {
+					var percentAllValue = parseFloat($('input[name="percent_all"]').val()); 
+					var newPrice = parseFloat(priceValue - (priceValue * percentAllValue / 100));
+					console.log(percentAllValue);
+					$('input[name="price_flash_sale[]"]').eq(index).val(formatNumber(newPrice)); 
+				});
+			});
+
+			$('#discount_all').on('input', function() {
+				var discountAllValue = $(this).val();
+				$('input[name="percent_all"]').val('');
+				$('input[name="percent_flash_sale[]"]').val(discountAllValue !== 0 ? 0 : '');
+				var pricesArray = []; 
+				$('input[name="price[]"]').each(function() {
+					var priceValue = $(this).val();
+					priceValue = priceValue.replace(/,/g, ''); 
+					pricesArray.push(priceValue); 
+				});
+				pricesArray.forEach(function(priceValue, index) {
+					var discountAllValue = parseFloat($('input[name="discount_all"]').val());
+					if(discountAllValue > priceValue){
+						var newPrice = parseFloat(priceValue - priceValue);
+						$('input[name="price_discount[]"]').eq(index).val(formatNumber(priceValue));
+					}else{
+						var newPrice = parseFloat(priceValue - discountAllValue);
+						$('input[name="price_discount[]"]').eq(index).val(formatNumber(discountAllValue));
+					}
+					$('input[name="price_flash_sale[]"]').eq(index).val(formatNumber(newPrice)); 
+				});
+			});
+
+			$(document).on('focusin', 'input[name="price_discount[]"]', function() {
+				var inputId = $(this).data('input-id');
+				var parentDiv = $(this).closest('.file-item-' + inputId + '');
+				var priceValue = parseFloat(parentDiv.find('input[name="price[]"]').val().replace(/,/g, ''));
+				var total =0;
+				$(document).on('input','.product-price-discount[data-input-id="' + inputId + '"]',function(){
+					var percentValue = parentDiv.find('input[name="percent_flash_sale[]"]').val('');
+					var priceDiscount = parseFloat(parentDiv.find('input[name="price_discount[]"]').val().replace(/,/g, ''));
+					if((percentValue =='' ||percentValue == 0) && priceDiscount == '' || priceDiscount==0){
+						total =0;
+					}
+					total = priceValue - priceDiscount;
+					parentDiv.find('input[name="price_flash_sale[]"]').val(formatNumber(total));
 					
 				})
 			});
 		
-			// $("#selectProduct").submit(function(e) {
-			// 	e.preventDefault();
-			// 	var inputId = $('#modalProductList').data('input-id');
-			// 	var productName = selectedProducts[inputId];
-			// 	var productId =selectedProductId[inputId];
-
-			// 	$('.product-name-input[data-input-id="' + inputId + '"]').val(productName);
-			// 	$('.product-id-input[data-input-id="' + inputId + '"]').val(productId);
-			// 	$.ajax({
-			// 		type: "POST",
-			// 		url: $(this).attr('action'),
-			// 		data: $(this).serialize(),
-			// 		success: function(data) {
-			// 		},
-			// 		error: function(jqXHR, textStatus, errorThrown) {
-			// 		}
-			// 	});
-			// 	$("#modalProductList").modal("hide");
-			// });
-
 			$(document).on('click', '.remove-product', function() {
 				var inputId = $(this).data('input-id');
-				// var inputId = $(this).parents('.file-item').find('.product-name-input').data('input-id');
 				delete selectedProducts[inputId];
 				delete selectedProductId[inputId];
 				delete selectedProductPriceSale[inputId];
@@ -342,36 +287,47 @@ pages = $.extend(pages, {
         		$('#delete_product_input_'+id).append('<input type="hidden" name="flash_sale_product_delete[]" value="'+val+'">');
         		$(this).parents('.file-item-'+id).remove();
         	});
-			// var Index = 0;
-			// $(document).on('click', '.add-product', function() {
-			// 	Index++;
-			// 	var html = 	'<div class="form-group file-item-'+ Index + '">' +
-			// 				'<div class="col-lg-3">' +
-			// 					'<input type="hidden" name="flash_sale_product_id[]" value="0" />'+
-			// 					'<input type="text" class="form-control product-name-input" name = "product_name[]"  placeholder="Chọn sản phẩm" data-input-id="' + Index + '" />' +
-			// 					'<input type="hidden" class="form-control product-id-input" name = "product_id[]" placeholder="" data-input-id="' + Index + '" />' +
-			// 					'<span class="errorSanPham" style="color:red"></span>'+
-			// 					'</div>' +
-			// 				'<div class="col-lg-2">' +
-			// 					'<input type="tel" readonly maxlength="10" name="price[]" class="form-control product-price-input"  value="" placeholder="Giá sản phẩm"  data-input-id="' + Index + '" oninput="this.value = this.value.replace(/[^0-9]/g, \'\');" />' +
-			// 					'<span class="errorPrice" style="color:red"></span>'+
-			// 					'</div>' +
-			// 				'<div class="col-lg-2">' +
-			// 					'<input type="tel" readonly maxlength="10" name="price_sales[]" class="form-control product-price-sale-input"  value="" placeholder="Giá sale"  data-input-id="' + Index + '" oninput="this.value = this.value.replace(/[^0-9]/g, \'\');" />' +
-			// 					'<span class="errorPrice" style="color:red"></span>'+
-			// 				'</div>' +
-			// 				'<div class="col-lg-2">' +
-			// 					'<input type="tel" maxlength="2" name="percent_flash_sale[]" class="form-control product-percent-flash-sale"  value="" placeholder="% sale giảm" data-input-id="' + Index + '" oninput="this.value = this.value.replace(/[^0-9]/g, \'\');"/>' +
-			// 				'</div>' +
-			// 				'<div class="col-lg-2">' +
-			// 					'<input type="tel" readonly maxlength="2" name="price_flash_sale[]" class="form-control product-price-flash-sale"  value="" placeholder="giá flash sale" data-input-id="' + Index + '" oninput="this.value = this.value.replace(/[^0-9]/g, \'\');"/>' +
-			// 				'</div>' +
-			// 				'<div class="col-lg-1">' +
-			// 					'<button type="button" class="btn btn-alert remove-product" style="margin-right: 11px;" data-input-id="' + Index + '">x</button>' +
-			// 				'</div>' +
-			// 				'</div>';
-			// 	$(this).closest('.form-group').find('.list-product').append(html);
-			// });
+
+			$(document).on('input', 'input[name="discount_all"]', function(){
+				var inputVal = $(this).val();
+				var numericVal = inputVal.replace(/\D/g,'');
+				if (numericVal.length > 2 && numericVal.charAt(0) === '0') {
+					numericVal = numericVal.slice(1);
+				}
+				var formattedVal = addCommasToNumber(numericVal);
+				$(this).val(formattedVal);
+			});
+
+			$(document).on('input', 'input[name="price_discount[]"]', function(){
+				var inputVal = $(this).val();
+				var numericVal = inputVal.replace(/\D/g,'');
+				if (numericVal.length > 2 && numericVal.charAt(0) === '0') {
+					numericVal = numericVal.slice(1);
+				}
+				var formattedVal = addCommasToNumber(numericVal);
+				$(this).val(formattedVal);
+			});
+			
+			$(document).on('input', 'input[name="price_discount[]"]', function(){
+				var inputId = $(this).data('input-id');
+				var parentDiv = $(this).closest('.file-item-' + inputId + '');
+				var priceDiscount = parseFloat(parentDiv.find('input[name="price_discount[]"]').val().replace(/,/g, ''));
+				var priceValue = parseFloat(parentDiv.find('input[name="price[]"]').val().replace(/,/g, ''));
+				if(priceDiscount > priceValue) {
+					parentDiv.find('input[name="price_discount[]"]').val(parentDiv.find('input[name="price[]"]').val());
+				}
+			});
+	
+			function formatNumber(number) {
+				var parts = number.toString().split(".");
+				parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+				return parts.join(".");
+			}
+
+			function addCommasToNumber(number) {
+				return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			}
+
         },
         initDatatable: function(){
         	var me = this;
@@ -386,6 +342,22 @@ pages = $.extend(pages, {
 	    	                 { "data": "status" },
 	    	];
 	        var columnDefs = [
+						{
+							"render": function ( data, type, row ) {
+								return row['id'];
+							},
+							"targets": 0,
+							"orderable": true,
+							"data": "id"
+						},
+						{
+							"render": function ( data, type, row ) {
+								return row['title'];
+							},
+							"targets": 2,
+							"orderable": true,
+							"data": "id"
+						},
                   		{
 							"render": function ( data, type, row ) {
 								var img = '';
@@ -443,27 +415,24 @@ pages = $.extend(pages, {
 	  		                        }
 	  		                        return label;
 	  		                    },
-	  		                    orderable: true,
+	  		                    orderable: false,
 	  		                    targets: 7
 	  					},
 	  					 {
 	                    	 "render": function (data, type, row) {
-	                             return '<input type="checkbox" value="'+row.id+'" name="rowcheck[]" class="row-checkbox"">';
+	                             return '<input type="checkbox" value="'+row.id+'" name="rowcheck[]" class="row-checkbox">';
 	                         },
 	                         "className": "text-center",
-	                         "targets": 0,
+	                         "targets": 1,
 	                         "orderable": false,
 	                         "data": "Action_Table"
 	  					 }
 	  	    ];
 	        pages.common.setupDataTable( "#listProductTable", "/admin/flash-sale-product/list-product/", aoColumns, columnDefs, {order:[[ 0, "desc" ]]});
 			$('#listProductTable').on('click', '.row-checkbox', function() {
-				if($(this).prop('checked')) {
-					$(this).attr('checked', true);
-				} else {
-					$(this).removeAttr('checked');
-				}
+				$(this).prop('checked', $(this).prop('checked'));
 			});
+			
         },
 		
 		initDatatables: function () {
