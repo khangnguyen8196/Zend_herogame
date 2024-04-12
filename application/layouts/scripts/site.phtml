@@ -184,14 +184,14 @@
                         $('.qc').removeClass('hidden');
                         $('#count_time_start').countdown(new Date(saleStartTime * 1000), function(event) {
                             $(this).text(
-                                event.strftime('%H giờ %M phút %S giây')
+                                "Bắt đầu: " + event.strftime('%H giờ %M phút %S giây')
                             );
                             if (event.elapsed){
                                 $('#count_time_start').addClass('hidden');
                                 $('#count_time_end').removeClass('hidden');
                                 $('#count_time_end').countdown(new Date(timeEnd), function(event) {
                                     $(this).text(
-                                        event.strftime('%D ngày %H giờ %M phút %S giây')
+                                        "Kết thúc: " + event.strftime('%D ngày %H giờ %M phút %S giây')
                                     );
                                     if (event.elapsed) { 
                                         $('#count_time_start').removeClass('hidden');

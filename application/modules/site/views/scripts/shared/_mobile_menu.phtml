@@ -38,3 +38,30 @@
     </nav>
     <div class="overlay"></div>
 </aside>
+
+<style>
+    .mobile-menu nav {
+        width: 85vw;
+        height: 100%;
+        overflow: auto;
+        background: #e4e4e4;
+        display: block;
+        z-index: 2;
+        position: absolute;
+        top: 0;
+        left: -85vw;
+    }
+    .mobile-menu nav>ul li a {
+        display: block;
+        padding: 10px;
+        font-size: 1.1rem;
+        color: #444;
+        padding-left: 2.25rem;
+        text-transform: uppercase;
+        border-bottom: 1px solid #cbcbcb;
+    }
+    .mobile-menu nav>ul:last-of-type {
+        margin-top: 0;
+        border-top: 0;
+    }
+</style>

@@ -14,7 +14,7 @@ $(document).ready(function() {
 	// });
   
 	$sliderPC.slick({
-		dots: true,
+		// dots: true,
 		// autoplay: true,
 		// autoplaySpeed:3000,
 		infinite: true,

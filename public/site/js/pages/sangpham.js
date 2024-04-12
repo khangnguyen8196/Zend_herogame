@@ -257,6 +257,29 @@ pages = $.extend(pages, {
                     }
                 }
             });
+
+            $(document).ready(function() {
+                var timeStart = $('.count_time_start').attr('attr-start-time');
+                console.log(timeStart);
+                var saleStartTime = new Date(timeStart).getTime() / 1000; 
+                function checkCountdown() {
+                    var currentTime = Math.round(Date.now() / 1000); 
+                    if (saleStartTime - currentTime <= 6 * 3600) { 
+                        $('.count_time_start').countdown(new Date(saleStartTime * 1000), function(event) {
+                            $(this).text(
+                               event.strftime('%H giờ %M phút %S giây')
+                            );
+                            if (event.elapsed){
+                               $('.product-info').hide();
+                            }  
+                        });
+                        clearInterval(interval); 
+                    }
+                }
+
+                var interval = setInterval(checkCountdown, 1000);            
+            });
+
             function formatNumber(number) {
                 return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
             }

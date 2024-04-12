@@ -33,6 +33,10 @@
                         </li>
                 <?php } ?>
             <?php }elseif($this->sale_product && strtotime($now) - strtotime($this->flash_sale['count_time_start']) <= 6 * 3600 ){?>
+                <li class='product-info'>
+                    <label class="flash-sale">Bắt đầu:</label>
+                    <span style = "margin:0 10px; color: white;font-size:20px;font-weight:600"  class="count_time_start" attr-start-time="<?php echo $this->flash_sale['count_time_start']?>"></span>
+                </li>
                 <?php if (count($this->list_variant) > 0 ) { ?>
                     <li class="price-variant">
                         <label>Giá tiền:</label>
@@ -469,6 +473,15 @@
     ul>.bt-plus:last-of-type {
         display: none !important;
     }
+    @media (max-width: 767px) {
+        .imgh.r6x4:before {
+            padding-top: 100% !important;
+        }
+        .product-item-view .piv-top .info .title h1 {
+            font-size: 1.2rem !important;
+        }
+    }
+
    
     img.bt-plus {
         width: 30px;

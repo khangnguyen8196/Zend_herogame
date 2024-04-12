@@ -548,7 +548,7 @@ class Commons {
 			$shortDes = $value ["notice_message"];
 			$bcolorLabelB = '#189eff';
 		}
-		if (empty ( $value ["title_flash_sale"] ) == false) {
+		if ((empty ( $value ["title_flash_sale"] ) == false ) && $now >= $value["count_time_start"] && $now <= $value["count_time_end"]) {
 			$shortDes = $value ["title_flash_sale"];
 			$bcolorLabelB = '#ff9601';
 		}

@@ -295,7 +295,7 @@ pages = $.extend(pages, {
 		
 			function checkFileSizes(input) {
 				const files = input.files;
-				const maxSize = 1048576;
+				const maxSize = 524288;
 				let invalidFiles = [];
 		
 				for (let i = 0; i < files.length; i++) {
@@ -306,7 +306,7 @@ pages = $.extend(pages, {
 				}
 		
 				if (invalidFiles.length > 0) {
-					alert("Các tệp tin sau có kích thước vượt quá 1MB:\n" + invalidFiles.join("\n"));
+					alert("Các tệp tin sau có kích thước vượt quá 500kb:\n" + invalidFiles.join("\n"));
 					$(input).val(''); 
 				}
 			}

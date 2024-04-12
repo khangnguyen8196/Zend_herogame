@@ -111,7 +111,7 @@ return array(
     '_sessionVar' => "KCFINDER",
     '_check4htaccess' => false,
     '_normalizeFilenames' => false,
-    '_dropUploadMaxFilesize' => 1048576,
+    '_dropUploadMaxFilesize' => 524288,
     //'_tinyMCEPath' => "/tiny_mce",
     //'_cssMinCmd' => "java -jar /path/to/yuicompressor.jar --type css {file}",
     //'_jsMinCmd' => "java -jar /path/to/yuicompressor.jar --type js {file}",

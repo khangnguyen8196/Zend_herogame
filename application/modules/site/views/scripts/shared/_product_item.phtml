@@ -54,26 +54,32 @@ if ($now <= $this->count_down && $now >= $this->count_time_start && $this->statu
       <div class="name">
          <a href="<?php echo $this->url?>"><?php echo $this->name?></a>
       </div>
-      <div class="price">
-         <?php
-            $now = date('Y-m-d H:i:s');
-            $priceflashSale = isset($this->priceC) ? substr($this->priceC, 0, 1) : '';
-            if ($now <= $this->count_down && $now >= $this->count_time_start && $this->status_flash_sale == 1 && $this->priceC > 0) {
-               echo '<span class="price-a">' . $this->priceC . '</span>';
-               echo '<span class="price-b" style="color:black">' . $this->priceB . '</span>';
-            } elseif (strtotime($now) - strtotime($this->count_time_start) <= 6 * 3600) {
-               echo '<span class="price-a">' . $priceflashSale . '?????&#8363;</span>';
-               echo '<span class="price-b" style="color:black">' . $this->priceB . '</span>';
-            } else {
-               if ((isset($this->priceB) && $this->priceB == $this->priceA)) {
-                  echo '<span class="price-a">' . $this->priceA . '</span>';
-              } elseif (isset($this->priceB) && $this->priceB != $this->priceA) {
-                  echo '<span class="price-a">' . $this->priceA . '</span>';
+      <?php
+      if($this->priceB && $this->priceB==0){?>
+          <div class="price" style="display:none"></div>
+      <?php }else{?>
+         <div class="price">
+            <?php
+               $now = date('Y-m-d H:i:s');
+               $priceflashSale = isset($this->priceC) ? substr($this->priceC, 0, 1) : '';
+               if ($now <= $this->count_down && $now >= $this->count_time_start && $this->status_flash_sale == 1 && $this->priceC > 0) {
+                  echo '<span class="price-a">' . $this->priceC . '</span>';
                   echo '<span class="price-b" style="color:black">' . $this->priceB . '</span>';
-              }
-            }
-         ?>
-      </div>
+               } elseif (strtotime($now) - strtotime($this->count_time_start) <= 6 * 3600) {
+                  echo '<span class="price-a">' . $priceflashSale . '?????&#8363;</span>';
+                  echo '<span class="price-b" style="color:black">' . $this->priceB . '</span>';
+               } else {
+                  if ((isset($this->priceB) && $this->priceB == $this->priceA)) {
+                     echo '<span class="price-a">' . $this->priceA . '</span>';
+               } elseif (isset($this->priceB) && $this->priceB != $this->priceA) {
+                     echo '<span class="price-a">' . $this->priceA . '</span>';
+                     echo '<span class="price-b" style="color:black">' . $this->priceB . '</span>';
+               }
+               }
+            ?>
+         </div>
+      <?php }?>
+      
    </div>
    <?php if ($this->priceA > 0 && $this->status != STATUS_IN_OUT_STOCK) { ?>
    <a class="btn cart cart_btn my_btn" href="<?php echo $this->cart?>" pid="<?php echo $this->id?>" qty="1">

@@ -46,7 +46,7 @@
                     </div> 
                 </div>
                 <div class="countdown-info">
-                        <label>Còn lại :</label>
+                        <!-- <label>Còn lại :</label> -->
                         <span id="count_time_start" class="count_time_start" attr-count-down="<?php echo $this->flashSale['count_time_start'] ?>"></span>
                         <span id="count_time_end" class="count_time_end hidden" attr-count-down="<?php echo $this->flashSale['count_time_end'] ?>"></span>
                 </div>
@@ -350,7 +350,7 @@
                 </div>
                 <div class="banner hidden-md-down">
                         <?php if (empty($this->banner_vertical['child_' . BANNER_CHILD_LEFT_VERTICAL1]) == false) { ?>
-                            <div class="col-12" style="margin-top:10px;padding:10px; border:1px solid #ccc; border-radius:10px">
+                            <div class="col-12" style="margin-top:10px;padding:0px; border-radius:10px">
                                 <?php
                                 echo $this->partial('/shared/_banner_rotator.phtml', array(
                                     'bhov' => true,
@@ -362,7 +362,7 @@
                 </div>
                 <div class="banner hidden-md-down">
                         <?php if (empty($this->banner_vertical['child_' . BANNER_CHILD_LEFT_VERTICAL2]) == false) { ?>
-                            <div class="col-12" style="margin-top:10px;padding:10px; border:1px solid #ccc; border-radius:10px">
+                            <div class="col-12" style="margin-top:10px;padding:0px; border-radius:10px">
                                 <?php
                                 echo $this->partial('/shared/_banner_rotator.phtml', array(
                                     'bhov' => true,
@@ -374,7 +374,7 @@
                 </div>
                 <div class="banner hidden-md-down">
                         <?php if (empty($this->banner_vertical['child_' . BANNER_CHILD_LEFT_VERTICAL3]) == false) { ?>
-                            <div class="col-12" style="margin-top:10px;padding:10px; border:1px solid #ccc; border-radius:10px">
+                            <div class="col-12" style="margin-top:10px;padding:0px; border-radius:10px">
                                 <?php
                                 echo $this->partial('/shared/_banner_rotator.phtml', array(
                                     'bhov' => true,
@@ -562,18 +562,23 @@
                 display: none;
             }
             #countdown {
+                width: 100%;
                 display: flex;
                 justify-content: space-between; 
                 align-items: center; 
                 border-radius: 10px;
-                padding:40px;
+                /* padding:40px; */
                 margin-top: 13px;
                 text-align: center;
                 color: white;
-                font-size: 30px;
+                font-size: 28px;
                 text-transform: capitalize;
                 font-weight: bold;
-                background-image: url('<?php echo '/upload/images' . $this->flashSale['image_flash_sale']; ?>');
+                background-image: url('<?php echo '/upload/images' . $this->flashSale['image_flash_sale']; ?>');     
+                height: 200px;
+                background-size: 100% 100%;
+                background-position: center; 
+                background-repeat: no-repeat;
             }
 
             .flash-sale,
@@ -633,6 +638,7 @@
                 justify-content: space-between; 
                 align-items: center; 
                 border-radius: 10px;
+                height: 150px;
                 padding:0px;
                 margin-top: 0px;
                 text-align: center;
@@ -640,7 +646,10 @@
                 text-transform: capitalize;
                 font-size: 1rem;
                 font-weight: bold;
-                background-image: url('<?php echo '/upload/images' . $this->flashSale['image_flash_sale_smp']; ?>')
+                background-image: url('<?php echo '/upload/images' . $this->flashSale['image_flash_sale_smp']; ?>');
+                background-size: 100% 100%;
+                background-position: center; 
+                background-repeat: no-repeat;
             }
             #countdown label {
                 margin: 0px 1rem;
