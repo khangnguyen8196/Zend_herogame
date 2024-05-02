@@ -3,9 +3,11 @@
         <div class="page-title">
             <h4><i class="icon-dice position-left"></i> <span class="text-semibold">Danh Mục - Danh Sách Danh Mục</span></h4>
         </div>
-        <div class="heading-elements">
+        <?php if(UtilAuth::hasPrivilege('category', ACTION_ADD) == true){?>
+            <div class="heading-elements">
             <a href="/admin/<?php echo $this->controller ?>/detail" class="btn btn-labeled btn-labeled-right bg-blue heading-btn"><?php echo $this->translate('create-category') ?> <b><i class="fa fa-plus" aria-hidden="true"></i></b></a>
         </div>
+        <?php }?>     
     </div>
     <div class="breadcrumb-line">
         <ul class="breadcrumb">

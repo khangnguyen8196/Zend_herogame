@@ -107,16 +107,45 @@ class Product extends Zend_Db_Table_Abstract {
      * @return multitype:|unknown
      */
     public function fetchProductById($id) {
+        $currentTime = date('Y-m-d H:i:s');
+        
+        $selectSub = $this->getAdapter()->select();
+        $selectSub->from('flash_sale_product', array(
+            'product_id',
+            'price_flash_sale',
+            'percent_flash_sale',
+            'price_discount',
+            'flash_sale_id'
+        ))
+        ->join('flash_sale', 'flash_sale_product.flash_sale_id = flash_sale.flash_sale_id', array(
+            'count_time_start',
+            'count_time_end',
+            'status',
+            'title_flash_sale'
+        ))
+        ->where('flash_sale.status = 1')
+        ->where('count_time_end > ?', $currentTime) 
+        ->order('flash_sale.count_time_start ASC');
         $select = $this->getAdapter()->select();
         $select = $select->from($this->_name)
                 ->columns(array('product.created_date' => new Zend_Db_Expr("DATE_FORMAT(product.created_date,'%Y-%m-%d %H:%i:%s')")))
                 ->columns(array('product.updated_date' => new Zend_Db_Expr("DATE_FORMAT(product.updated_date,'%Y-%m-%d %H:%i:%s')")));
 
-        $select = $select->joinLeft( array('c' => 'category'), 'c.id = product.id_category', array( 'category_name' => 'c.name',"category_url" =>"c.url_slug" ));
+        $select = $select->joinLeft( array('c' => 'category'), 'c.id = product.id_category', array( 'category_name' => 'c.name',"category_url" =>"c.url_slug" ))
+        ->joinLeft(array('fsp' => $selectSub), 'fsp.product_id = product.id', array(
+            'price_flash_sale' => 'fsp.price_flash_sale',
+            'percent_flash_sale' => 'fsp.percent_flash_sale',
+            'flash_sale_id' => 'fsp.flash_sale_id',
+            'count_time_start' => 'fsp.count_time_start',
+            'count_time_end' => 'fsp.count_time_end',
+            'status_flash_sale' => 'fsp.status',
+            'title_flash_sale' => 'fsp.title_flash_sale',
+            'price_discount' => 'fsp.price_discount'
+        ));
         $commonObj = new My_Controller_Action_Helper_Common();
         $id = $commonObj->quoteLike($id);
         $select = $select->where("product.id =?", $id);
-        $select = $select->where("product.status <>?", STATUS_DELETE);
+        $select = $select->where("product.status <>?", STATUS_DELETE)->group('product.id');
         $result = $this->getAdapter()->fetchRow($select);
         if (empty($result) == true) {
             return array();
@@ -574,7 +603,8 @@ class Product extends Zend_Db_Table_Abstract {
         $select = $select->where("product.status <> ?", STATUS_IN_ACTIVE);
         if (empty($key) == false) {
             $key =str_replace(' ','%',(string)$key);
-            $select->where('upper( product.title ) LIKE upper(?) or upper( product.sku ) LIKE upper(?) or upper( product.description ) LIKE upper(?) or upper( product.content ) LIKE upper(?) or upper( c.name ) LIKE upper(?)', '%' . $key . '%');
+            // $select->where('upper( product.title ) LIKE upper(?) or upper( product.sku ) LIKE upper(?) or upper( product.description ) LIKE upper(?) or upper( product.content ) LIKE upper(?) or upper( c.name ) LIKE upper(?)', '%' . $key . '%');
+            $select->where('upper( product.title ) LIKE upper(?) or upper( product.sku ) LIKE upper(?) or upper( c.name ) LIKE upper(?)', '%' . $key . '%');
             $case = new Zend_Db_Expr($this->getAdapter()->quoteInto('case when upper( product.title ) LIKE upper(?) then 1
             when upper( product.description ) LIKE upper(?) then 2 
             when upper( c.name ) LIKE upper(?) then 3 

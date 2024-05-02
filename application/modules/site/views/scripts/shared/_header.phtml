@@ -6,7 +6,7 @@
 	$vendor_logo2 = Commons::getSettingByKey($this->setting, 'logo_header_2');
 	
 ?>
-<header class="pheader">
+<header class="pheader" >
     <div class="ph-top">
         <div class="container">
             <div class="row">
@@ -26,7 +26,13 @@
                     </div>
                     <div class="pull-right-a">
                         <?php echo $this->partial('/shared/_vendor_logo.phtml', array('logo1' => @$vendor_logo1['value'], 'logo2' => @$vendor_logo2['value'] )) ?>
-                        <?php echo $this->render('/shared/_shopping_cart.phtml') ?>
+                        <?php 
+                            $user_agent = $_SERVER['HTTP_USER_AGENT'];
+                            if (!preg_match('/(iPhone|iPod|iPad|Android|Windows Phone)/', $user_agent)) {
+                                echo $this->render('/shared/_shopping_cart.phtml'); 
+                            }
+                        ?>
+
                     </div>              
                 </div>
                 <div class="tim-kiem">

@@ -34,7 +34,7 @@
                         </li>
 
                     <?php } ?>
-                    <?php if (UtilAuth::hasPrivilege('category', ACTION_VIEW) == true || UtilAuth::hasPrivilege('category', ACTION_ADD) == true || UtilAuth::hasPrivilege('category', ACTION_EDIT) == true) {
+                    <?php if (UtilAuth::hasPrivilege('category', ACTION_VIEW) == true) {
                         ?>
                         <li class="<?php echo ($this->module == 'admin' && $this->controller == "category") ? "active" : "" ?>">
                             <a href="#"><i class="icon-dice"></i> <span>Danh Mục</span></a>

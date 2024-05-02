@@ -68,7 +68,7 @@ ul.slider .product-item .btn.cart:hover {
     color: #fff;
     background-color: red;
 }
-.product ul.grid .product-item {
+/* .product ul.grid .product-item {
     min-height: 22rem;
 }
 .product .product-view li {
@@ -76,7 +76,7 @@ ul.slider .product-item .btn.cart:hover {
 }
 .home ul.grid .product-item {
     min-height: 22rem;
-}
+} */
 
 @media (min-width: 768px){
     .home ul.grid .product-item{

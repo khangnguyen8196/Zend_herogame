@@ -28,7 +28,7 @@ class FrontBaseAction extends Zend_Controller_Action {
         $this->controller = $this->request->getControllerName();
         $this->module = $this->request->getModuleName();
         $this->login_info = UtilAuth::getLoginInfo();
-
+        ini_set('max_execution_time', '300');
         $this->view->login_info = $this->login_info;
         if( $this->require_login == true ){
         	$this->isLoggedIn();

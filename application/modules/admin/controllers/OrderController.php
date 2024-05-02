@@ -438,9 +438,11 @@ class Admin_OrderController extends FrontBaseAction {
         $this->isAjax();
         if (empty($this->post_data['id']) == false) {
             $modal = new Order();
-            $reponse = $modal->deleteOrder($this->post_data['id']);
-            if ($reponse >= 0) {
-                $this->ajaxResponse(CODE_SUCCESS);
+            if(UtilAuth::hasPrivilege('order', ACTION_DELETE) == true){
+                $reponse = $modal->deleteOrder($this->post_data['id']);
+                if ($reponse >= 0) {
+                    $this->ajaxResponse(CODE_SUCCESS);
+                }
             }
         }
         $this->ajaxResponse(CODE_HAS_ERROR);
@@ -448,9 +450,11 @@ class Admin_OrderController extends FrontBaseAction {
     public function deleteAllAction(){
         $this->isAjax();
         $modal = new Order();
-        $reponse = $modal->deleteOrderCancel();
-        if ($reponse >= 0) {
-            $this->ajaxResponse(CODE_SUCCESS);
+        if(UtilAuth::hasPrivilege('order', ACTION_DELETE) == true){
+            $reponse = $modal->deleteOrderCancel();
+            if ($reponse >= 0) {
+                $this->ajaxResponse(CODE_SUCCESS);
+            }
         }
         $this->ajaxResponse(CODE_HAS_ERROR);
     }

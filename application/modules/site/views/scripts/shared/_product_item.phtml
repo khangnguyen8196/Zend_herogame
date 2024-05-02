@@ -65,7 +65,7 @@ if ($now <= $this->count_down && $now >= $this->count_time_start && $this->statu
                if ($now <= $this->count_down && $now >= $this->count_time_start && $this->status_flash_sale == 1 && $this->priceC > 0) {
                   echo '<span class="price-a">' . $this->priceC . '</span>';
                   echo '<span class="price-b" style="color:black">' . $this->priceB . '</span>';
-               } elseif (strtotime($now) - strtotime($this->count_time_start) <= 6 * 3600) {
+               } elseif ((strtotime($this->count_time_start)-strtotime($now)) > 0 &&  (strtotime($this->count_time_start)-strtotime($now)) <= 6 * 3600) {
                   echo '<span class="price-a">' . $priceflashSale . '?????&#8363;</span>';
                   echo '<span class="price-b" style="color:black">' . $this->priceB . '</span>';
                } else {
@@ -82,17 +82,53 @@ if ($now <= $this->count_down && $now >= $this->count_time_start && $this->statu
       
    </div>
    <?php if ($this->priceA > 0 && $this->status != STATUS_IN_OUT_STOCK) { ?>
-   <a class="btn cart cart_btn my_btn" href="<?php echo $this->cart?>" pid="<?php echo $this->id?>" qty="1">
+   <!-- <a class="btn cart cart_btn my_btn" href="<?php echo $this->cart?>" pid="<?php echo $this->id?>" qty="1">
   	   <i class="fa fa-cart-plus"></i> Thêm vào giỏ
-   </a>
+   </a> -->
    <?php }elseif($this->priceA==0){ ?>
    <a class="btn btn-danger my_btn" href="tel:+84906221218">
     Liên hệ
    </a>
    <?php }else {?>
-   <a class="btn btn-danger my_btn" href="tel:+84906221218">
+   <!-- <a class="btn btn-danger my_btn" href="tel:+84906221218">
     Tạm hết hàng
-   </a>
+   </a> -->
    <?php }?>
 </div>
+<style>
+   ul.grid .category-item .detail .name a, ul.grid .product-item .detail .name a, ul.slider .category-item .detail .name a, ul.slider .product-item .detail .name a {
+      margin: auto;
+      display: block;
+      font-weight: bold;
+      color: #222;
+   }
+    @media screen and (min-width: 768px){
+
+    }
+    @media screen and (max-width: 767px){
+      ul.grid .category-item .detail .name a, ul.grid .product-item .detail .name a, ul.slider .category-item .detail .name a, ul.slider .product-item .detail .name a {
+         font-size: 14px!important;
+         display: -webkit-box;
+         -webkit-box-orient: vertical;
+         -webkit-line-clamp: 3;
+         overflow: hidden;
+         text-overflow: ellipsis;
+         white-space: normal;
+      }
+      .count_down_container.label-b {
+         font-size: 1rem !important;
+      }
+      ul.grid .product-item .avatar .label-a, ul.slider .product-item .avatar .label-a {
+         border-radius: inherit;
+         font-size: 14px!important;
+      }
+      ul.grid .product-item .avatar .label-a, ul.slider .product-item .avatar .label-a {
+         border-radius: .2rem;
+         display: block;
+         z-index: 2;
+         position: absolute;
+         top: 0!important;
+         right:0!important;
+      }
+    }
 </style>

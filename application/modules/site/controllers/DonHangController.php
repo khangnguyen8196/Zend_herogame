@@ -130,33 +130,36 @@ class Site_DonHangController extends FrontEndAction {
             $district = $this->post_data['district'];
             $wards = $this->post_data['wards'];
             $fee_cod_pro = $this->post_data['fee_cod'];
-            if ($fee_cod_pro == 2 && ($province == 1 || $province == 79)) {
-                $fee_ship = 0;
-                $fee_cod = 0;
-            }else{
-                if($province){
-                    $mdlShippingRates = new ShippingRates;
-                    $fee_ships = $mdlShippingRates->getFeeShip($province, $district,$wards);
-                    if($fee_ships){
-                        $fee_ship =  $fee_ships['fee_ship'];
-                    }else{
-                        $mdlSetting = new Setting;
-                        $fee_ship_default =$mdlSetting->fetchSettingByKey('fee_ship_default');
-                        if($fee_ship_default){
-                            $fee_ship = $fee_ship_default['value'];
-                        }else{
-                            $fee_ship = 40000;
-                        }
-                    }
-                }else {
+            $payment_method = $this->post_data['payment_method'];
+            if($payment_method !=3){
+                if ($fee_cod_pro == 2 && ($province == 1 || $province == 79)) {
                     $fee_ship = 0;
-                }
-                if($fee_cod_pro == 2){
-                    $mdlSetting = new Setting;
-                    $fee_cods =$mdlSetting->fetchSettingByKey('fee_cod');
-                    $fee_cod = $fee_cods['value'];
-                }else{
                     $fee_cod = 0;
+                }else{
+                    if($province){
+                        $mdlShippingRates = new ShippingRates;
+                        $fee_ships = $mdlShippingRates->getFeeShip($province, $district,$wards);
+                        if($fee_ships){
+                            $fee_ship =  $fee_ships['fee_ship'];
+                        }else{
+                            $mdlSetting = new Setting;
+                            $fee_ship_default =$mdlSetting->fetchSettingByKey('fee_ship_default');
+                            if($fee_ship_default){
+                                $fee_ship = $fee_ship_default['value'];
+                            }else{
+                                $fee_ship = 40000;
+                            }
+                        }
+                    }else {
+                        $fee_ship = 0;
+                    }
+                    if($fee_cod_pro == 2){
+                        $mdlSetting = new Setting;
+                        $fee_cods =$mdlSetting->fetchSettingByKey('fee_cod');
+                        $fee_cod = $fee_cods['value'];
+                    }else{
+                        $fee_cod = 0;
+                    }
                 }
             }
             $t = $this->post_data["t"];
@@ -249,17 +252,20 @@ class Site_DonHangController extends FrontEndAction {
                         if( $cacl > $promoInfo['max_price']){
                             $cacl = $promoInfo['max_price'];
                         }
-                        if($fee_ship && $fee_cod){
-                            $rs = array('t'=> $t, 'cTotal' => $totalMoney,'cacl' => $cacl, 'caclText' => number_format($cacl), 'aTotal'=> $totalMoney - $cacl + $fee_ship + $fee_cod, 'aTotalText' => number_format($totalMoney - $cacl + $fee_ship +$fee_cod) );
-                        }elseif($fee_ship){
-                            $rs = array('t'=> $t, 'cTotal' => $totalMoney,'cacl' => $cacl, 'caclText' => number_format($cacl), 'aTotal'=> $totalMoney - $cacl + $fee_ship, 'aTotalText' => number_format($totalMoney - $cacl + $fee_ship) );
-                        }elseif($fee_cod){
-                            $rs = array('t'=> $t, 'cTotal' => $totalMoney,'cacl' => $cacl, 'caclText' => number_format($cacl), 'aTotal'=> $totalMoney - $cacl + $fee_cod, 'aTotalText' => number_format($totalMoney - $cacl + $fee_cod) );
-
+                        if($payment_method !=3){
+                            if($fee_ship && $fee_cod){
+                                $rs = array('t'=> $t, 'cTotal' => $totalMoney,'cacl' => $cacl, 'caclText' => number_format($cacl), 'aTotal'=> $totalMoney - $cacl + $fee_ship + $fee_cod, 'aTotalText' => number_format($totalMoney - $cacl + $fee_ship +$fee_cod) );
+                            }elseif($fee_ship){
+                                $rs = array('t'=> $t, 'cTotal' => $totalMoney,'cacl' => $cacl, 'caclText' => number_format($cacl), 'aTotal'=> $totalMoney - $cacl + $fee_ship, 'aTotalText' => number_format($totalMoney - $cacl + $fee_ship) );
+                            }elseif($fee_cod){
+                                $rs = array('t'=> $t, 'cTotal' => $totalMoney,'cacl' => $cacl, 'caclText' => number_format($cacl), 'aTotal'=> $totalMoney - $cacl + $fee_cod, 'aTotalText' => number_format($totalMoney - $cacl + $fee_cod) );
+    
+                            }else{
+                                $rs = array('t'=> $t, 'cTotal' => $totalMoney,'cacl' => $cacl, 'caclText' => number_format($cacl), 'aTotal'=> $totalMoney - $cacl, 'aTotalText' => number_format($totalMoney - $cacl) );
+                            } 
                         }else{
                             $rs = array('t'=> $t, 'cTotal' => $totalMoney,'cacl' => $cacl, 'caclText' => number_format($cacl), 'aTotal'=> $totalMoney - $cacl, 'aTotalText' => number_format($totalMoney - $cacl) );
-                        }
-                        
+                        } 
                         $this->ajaxResponse(CODE_SUCCESS, 'Sử Dụng Mã Giảm Giá Thành Công!', $rs);
                     }
                 } else {
@@ -280,33 +286,36 @@ class Site_DonHangController extends FrontEndAction {
             $district = $this->post_data['district'];
             $wards = $this->post_data['wards'];
             $fee_cod_dis = $this->post_data['fee_cod'];
-            if ($fee_cod_dis == 2 && ($province == 1 || $province == 79)) {
-                $fee_ship = 0;
-                $fee_cod = 0;
-            }else{
-                if($province){
-                    $mdlShippingRates = new ShippingRates;
-                    $fee_ships = $mdlShippingRates->getFeeShip($province, $district,$wards);
-                    if($fee_ships){
-                        $fee_ship =  $fee_ships['fee_ship'];
-                    }else{
-                        $mdlSetting = new Setting;
-                        $fee_ship_default =$mdlSetting->fetchSettingByKey('fee_ship_default');
-                        if($fee_ship_default){
-                            $fee_ship = $fee_ship_default['value'];
-                        }else{
-                            $fee_ship = 40000;
-                        }
-                    }
-                }else {
+            $payment_method = $this->post_data['payment_method'];
+            if($payment_method !=3){
+                if ($fee_cod_dis == 2 && ($province == 1 || $province == 79)) {
                     $fee_ship = 0;
-                }
-                if($fee_cod_dis == 2){
-                    $mdlSetting = new Setting;
-                    $fee_cods =$mdlSetting->fetchSettingByKey('fee_cod');
-                    $fee_cod = $fee_cods['value'];
-                }else{
                     $fee_cod = 0;
+                }else{
+                    if($province){
+                        $mdlShippingRates = new ShippingRates;
+                        $fee_ships = $mdlShippingRates->getFeeShip($province, $district,$wards);
+                        if($fee_ships){
+                            $fee_ship =  $fee_ships['fee_ship'];
+                        }else{
+                            $mdlSetting = new Setting;
+                            $fee_ship_default =$mdlSetting->fetchSettingByKey('fee_ship_default');
+                            if($fee_ship_default){
+                                $fee_ship = $fee_ship_default['value'];
+                            }else{
+                                $fee_ship = 40000;
+                            }
+                        }
+                    }else {
+                        $fee_ship = 0;
+                    }
+                    if($fee_cod_dis == 2){
+                        $mdlSetting = new Setting;
+                        $fee_cods =$mdlSetting->fetchSettingByKey('fee_cod');
+                        $fee_cod = $fee_cods['value'];
+                    }else{
+                        $fee_cod = 0;
+                    }
                 }
             }
             $cart_list = UtilSession::get($t . "_CART_LIST");
@@ -405,27 +414,35 @@ class Site_DonHangController extends FrontEndAction {
                             $totalMoney = $totalMoney - $discount;
                         }
                     }
-                    if($fee_ship && $fee_cod ){
-                        $this->ajaxResponse(CODE_SUCCESS, 
-                        'Sử Dụng Chiết Khấu: '.number_format($scoreDiscount).' Điểm', 
-                        array('t'=> $t, 'cTotal' => $total, 'discount' => $discount, 'discountText' => number_format($discount), 
-                        'aTotal'=> $totalMoney+$fee_ship+$fee_cod, 'aTotalText' => number_format($totalMoney+$fee_ship+$fee_cod) ));
-                    }if($fee_ship){
-                        $this->ajaxResponse(CODE_SUCCESS, 
-                        'Sử Dụng Chiết Khấu: '.number_format($scoreDiscount).' Điểm', 
-                        array('t'=> $t, 'cTotal' => $total, 'discount' => $discount, 'discountText' => number_format($discount), 
-                        'aTotal'=> $totalMoney+$fee_ship, 'aTotalText' => number_format($totalMoney+$fee_ship) ));
-                    }elseif($fee_cod){
-                        $this->ajaxResponse(CODE_SUCCESS, 
-                        'Sử Dụng Chiết Khấu: '.number_format($scoreDiscount).' Điểm', 
-                        array('t'=> $t, 'cTotal' => $total, 'discount' => $discount, 'discountText' => number_format($discount), 
-                        'aTotal'=> $totalMoney+$fee_cod, 'aTotalText' => number_format($totalMoney+$fee_cod) ));
+                    if($payment_method !=3){
+                        if($fee_ship && $fee_cod ){
+                            $this->ajaxResponse(CODE_SUCCESS, 
+                            'Sử Dụng Chiết Khấu: '.number_format($scoreDiscount).' Điểm', 
+                            array('t'=> $t, 'cTotal' => $total, 'discount' => $discount, 'discountText' => number_format($discount), 
+                            'aTotal'=> $totalMoney+$fee_ship+$fee_cod, 'aTotalText' => number_format($totalMoney+$fee_ship+$fee_cod) ));
+                        }if($fee_ship){
+                            $this->ajaxResponse(CODE_SUCCESS, 
+                            'Sử Dụng Chiết Khấu: '.number_format($scoreDiscount).' Điểm', 
+                            array('t'=> $t, 'cTotal' => $total, 'discount' => $discount, 'discountText' => number_format($discount), 
+                            'aTotal'=> $totalMoney+$fee_ship, 'aTotalText' => number_format($totalMoney+$fee_ship) ));
+                        }elseif($fee_cod){
+                            $this->ajaxResponse(CODE_SUCCESS, 
+                            'Sử Dụng Chiết Khấu: '.number_format($scoreDiscount).' Điểm', 
+                            array('t'=> $t, 'cTotal' => $total, 'discount' => $discount, 'discountText' => number_format($discount), 
+                            'aTotal'=> $totalMoney+$fee_cod, 'aTotalText' => number_format($totalMoney+$fee_cod) ));
+                        }else{
+                            $this->ajaxResponse(CODE_SUCCESS, 
+                                'Sử Dụng Chiết Khấu: '.number_format($scoreDiscount).' Điểm', 
+                                array('t'=> $t, 'cTotal' => $total, 'discount' => $discount, 'discountText' => number_format($discount), 
+                                'aTotal'=> $totalMoney, 'aTotalText' => number_format($totalMoney) ));
+                        }
                     }else{
                         $this->ajaxResponse(CODE_SUCCESS, 
                             'Sử Dụng Chiết Khấu: '.number_format($scoreDiscount).' Điểm', 
                             array('t'=> $t, 'cTotal' => $total, 'discount' => $discount, 'discountText' => number_format($discount), 
                             'aTotal'=> $totalMoney, 'aTotalText' => number_format($totalMoney) ));
                     }
+                    
                 } else {
                     $this->ajaxResponse(CODE_HAS_ERROR, 'Tài Khoản Không Tồn Tại');
                 }
@@ -450,27 +467,49 @@ class Site_DonHangController extends FrontEndAction {
             $userIdMine = $this->customer_info['user_id'];
         }
         $scoreDiscount = 0;
-        $dataOrder = array(
-            'address' => $data['cfa_address'],
-            // 'place' => $data['cfa_place'],
-            'name' => $data['cfa_name'],
-            'user_id' => $userIdMine,
-            'phone' => $data['cfa_phone'],
-            'email' => $data['cfa_email'],
-            'created_date' => date("Y-m-d H:i:s"),
-            'updated_date' => date("Y-m-d H:i:s"),
-            'payment_method' => $data['pm'],
-            'cod' => $data['cod'],
-            'status' => 1,
-            'is_pay' => 0,
-            'note' => $data['note'],
-            'fee_ship' => $data['fee_ship'],
-            'fee_cod' => ($data['cod'] == 2) ? $data['fee_cod'] : 0 ,
-            'ma_province' => $data['province'],
-            'ma_district' => $data['district'],
-            'ma_wards' => $data['wards'],
-
-        );
+        if($data['pm'] !=3 ){
+            $dataOrder = array(
+                'address' => $data['cfa_address'],
+                // 'place' => $data['cfa_place'],
+                'name' => $data['cfa_name'],
+                'user_id' => $userIdMine,
+                'phone' => $data['cfa_phone'],
+                'email' => $data['cfa_email'],
+                'created_date' => date("Y-m-d H:i:s"),
+                'updated_date' => date("Y-m-d H:i:s"),
+                'payment_method' => $data['pm'],
+                'cod' => $data['cod'],
+                'status' => 1,
+                'is_pay' => 0,
+                'note' => $data['note'],
+                'fee_ship' => $data['fee_ship'],
+                'fee_cod' => ($data['cod'] == 2) ? $data['fee_cod'] : 0 ,
+                'ma_province' => $data['province'],
+                'ma_district' => $data['district'],
+                'ma_wards' => $data['wards'],
+            );
+        }else{
+            $dataOrder = array(
+                'address' => $data['cfa_address'],
+                // 'place' => $data['cfa_place'],
+                'name' => $data['cfa_name'],
+                'user_id' => $userIdMine,
+                'phone' => $data['cfa_phone'],
+                'email' => $data['cfa_email'],
+                'created_date' => date("Y-m-d H:i:s"),
+                'updated_date' => date("Y-m-d H:i:s"),
+                'payment_method' => $data['pm'],
+                'cod' => $data['cod'],
+                'status' => 1,
+                'is_pay' => 0,
+                'note' => $data['note'],
+                'fee_ship' => 0,
+                'fee_cod' => 0,
+                'ma_province' => $data['province'],
+                'ma_district' => $data['district'],
+                'ma_wards' => $data['wards'],
+            );
+        }
         $errors = array();
         $orderDetail = array();
         $t = $this->token;
@@ -668,6 +707,7 @@ class Site_DonHangController extends FrontEndAction {
             $this->_redirect("/don-hang/gio-hang");
         }
         $totalMoneyCurrent = $totalMoney;
+        $payment_method = $data['pm'];
         $fee_ship = $data['fee_ship'];
         $fee_cod = ($data['cod'] == 2) ? $data['fee_cod'] : 0; 
         if($fee_ship && $fee_cod ){
@@ -741,15 +781,20 @@ class Site_DonHangController extends FrontEndAction {
             }
             
         }
-        if($fee_ship && $fee_cod){
-            $dataOrder['total'] = $totalMoney+$fee_ship +$fee_cod;
-        }elseif($fee_ship){
-            $dataOrder['total'] = $totalMoney+$fee_ship;
-        }elseif($fee_cod){
-            $dataOrder['total'] = $totalMoney+$fee_cod;
+        if($payment_method!=3){
+            if($fee_ship && $fee_cod){
+                $dataOrder['total'] = $totalMoney+$fee_ship +$fee_cod;
+            }elseif($fee_ship){
+                $dataOrder['total'] = $totalMoney+$fee_ship;
+            }elseif($fee_cod){
+                $dataOrder['total'] = $totalMoney+$fee_cod;
+            }else{
+                $dataOrder['total'] = $totalMoney;
+            }
         }else{
             $dataOrder['total'] = $totalMoney;
         }
+        
 
         if( $this->customer_info == true ){
             $dataOrder['score'] =  floor($totalMoney/$this->_exchange_rate_money_to_score); 

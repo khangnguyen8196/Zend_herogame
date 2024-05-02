@@ -94,7 +94,8 @@ pages = $.extend(pages, {
                 var wards = $('.wards').val().trim();
                 var fee_cod = $('input[name="cod"]:checked').val().trim();
                 var totalPrice = $('#totalPrice').text();
-                me.checkAndGetPromotion(value, province, district, wards, fee_cod, totalPrice);
+                var payment_method = $('input[name="pm"].checked').val().trim();
+                me.checkAndGetPromotion(value, province, district, wards, fee_cod, totalPrice,payment_method);
             });
             $("#btnDisCount").click(function(){
                 var value = $("#discount").val();
@@ -103,7 +104,8 @@ pages = $.extend(pages, {
                 var district = $('.district').val().trim();
                 var wards = $('.wards').val().trim();
                 var fee_cod = $('input[name="cod"]:checked').val().trim();
-                me.checkAndGetDiscount(value, province, district, wards, fee_cod);
+                var payment_method = $('input[name="pm"].checked').val().trim();
+                me.checkAndGetDiscount(value, province, district, wards, fee_cod,payment_method);
             });
             $("#discount").maskNumber({integer: true});
             $(".cancel-order").click(function(){
@@ -158,6 +160,8 @@ pages = $.extend(pages, {
             });
             
             $(document).on('change','.province', function(){
+                $('#wards').prop('selectedIndex', 0);
+                $('#district').prop('selectedIndex', 0);
                 if($('#province').val() != ''){
                     $('select#province').css('color','black')
                 }else{
@@ -172,213 +176,221 @@ pages = $.extend(pages, {
                     $('select#district').css('color','#9090909c')
                 }
             });
-
+            
             $(document).on('change','.wards', function(){
                 if($('#wards').val() != ''){
                     $('select#wards').css('color','black')
                 }else{
                     $('select#wards').css('color','#9090909c')
                 }
+                var payment_method = $('input[name="pm"].checked').val().trim();
                 var phi_cod = $('#has-cod').prop('checked');
                 var province = $('.province').val().trim();
                 var district = $('.district').val().trim();
                 var wards = $('.wards').val().trim();
                 var token = $.cookie("token");
                 var timestamp = new Date().getTime();
-                if((province == 1 && phi_cod == true) || (province == 79 && phi_cod == true) ) {
-                    $('.fee-cod').css('display','block');
-                    $('#fee-cod').html('0đ');
-                    $('#fee-cod-last').val(0)
-                    var totalPrice = parseFloat($('#currTotalPrice').val());
-                    var khuyenmai = $('#priceDiscount').text();
-                    var khuyenmai = khuyenmai.replace(/,/g, '');
-                    var feeCod = parseFloat($('#fee-cod-last').val());
-                    $.ajax({
-                        url: '/site/don-hang/fee-ship?timestamp=' + timestamp,
-                        type: 'POST',
-                        data: {province: province, district:district,wards:wards, token:token, phi_cod:phi_cod },
-                        success: function (data) {
-                            var total = 0;
-                            if(data){
-                                $('#fee-ship').html('0đ');
-                                var fee = parseFloat(data.data[0]);
-                                $('#fee-ship').removeClass('hidden');
-                                if(khuyenmai == 0 || khuyenmai ==''){
-                                    total = numberFormat(fee +totalPrice+feeCod)+ '&#8363';
-                                    $('#totalPrice').html(total);
-                                    $('#fee-ship-last').val(fee);
-                                }else {
-                                    total = numberFormat(totalPrice - khuyenmai + fee +feeCod)+'&#8363';
-                                    $('#totalPrice').html(total);
-                                    $('#fee-ship-last').val(fee);
-                                }
-
-                                $("#fee_shipping_order").val(fee);
-                                $('#fee_cod_order').val(feeCod);
-                                $('.custom-control-description-check').html('Có máy game ở TP.HCM hoặc Hà nội free phí vận chuyển và phí cod');
-                            }
-                        },
-                        error: function (data) {
-                        }
-                    });
-                }else if((province != 1 && phi_cod == true) || (province != 79 && phi_cod == true) ) {
-                    var totalPrice = parseFloat($('#currTotalPrice').val());
-                    var khuyenmai = $('#priceDiscount').text();
-                    var khuyenmai = khuyenmai.replace(/,/g, '');
-                    $.ajax({
-                        url: '/site/don-hang/fee-ship?timestamp=' + timestamp,
-                        type: 'POST',
-                        data: {province: province, district:district,wards:wards, token:token, phi_cod:phi_cod },
-                        success: function (data) {
-                            if(data){
+                if(payment_method != 3){
+                    if((province == 1 && phi_cod == true) || (province == 79 && phi_cod == true) ) {
+                        $('.fee-cod').css('display','block');
+                        $('#fee-cod').html('0đ');
+                        $('#fee-cod-last').val(0)
+                        var totalPrice = parseFloat($('#currTotalPrice').val());
+                        var khuyenmai = $('#priceDiscount').text();
+                        var khuyenmai = khuyenmai.replace(/,/g, '');
+                        var feeCod = parseFloat($('#fee-cod-last').val());
+                        $.ajax({
+                            url: '/site/don-hang/fee-ship?timestamp=' + timestamp,
+                            type: 'POST',
+                            data: {province: province, district:district,wards:wards, token:token, phi_cod:phi_cod },
+                            success: function (data) {
                                 var total = 0;
-                                var feeCod = parseFloat(data.data[1]);
-                                $('#fee-cod').html(numberFormat(data.data[1])+ '&#8363');
-                                $('#fee-cod-last').val(feeCod)
-                                if(data.data[0] > 0){
-                                    $('#fee-ship').html(numberFormat(data.data[0])+ '&#8363');
-                                }else {
+                                if(data){
                                     $('#fee-ship').html('0đ');
+                                    var fee = parseFloat(data.data[0]);
+                                    $('#fee-ship').removeClass('hidden');
+                                    if(khuyenmai == 0 || khuyenmai ==''){
+                                        total = numberFormat(fee +totalPrice+feeCod)+ '&#8363';
+                                        $('#totalPrice').html(total);
+                                        $('#fee-ship-last').val(fee);
+                                    }else {
+                                        total = numberFormat(totalPrice - khuyenmai + fee +feeCod)+'&#8363';
+                                        $('#totalPrice').html(total);
+                                        $('#fee-ship-last').val(fee);
+                                    }
+    
+                                    $("#fee_shipping_order").val(fee);
+                                    $('#fee_cod_order').val(feeCod);
+                                    $('.custom-control-description-check').html('Có máy game ở TP.HCM hoặc Hà nội free phí vận chuyển và phí cod');
                                 }
-                                var fee = parseFloat(data.data[0]);
-                                $('#fee-ship').removeClass('hidden');
-                                if(khuyenmai == 0 || khuyenmai ==''){
-                                    total = numberFormat(fee +totalPrice+feeCod)+ '&#8363';
-                                    $('#totalPrice').html(total);
-                                    $('#fee-ship-last').val(fee);
-                                }else {
-                                    total = numberFormat(totalPrice - khuyenmai + fee +feeCod)+'&#8363';
-                                    $('#totalPrice').html(total);
-                                    $('#fee-ship-last').val(fee);
-                                }
-
-                                $('#fee_shipping_order').val(fee);
-                                $('#fee_cod_order').val(feeCod);
-                                $('.custom-control-description-check').html('Có máy game liên tỉnh')
+                            },
+                            error: function (data) {
                             }
-                        },
-                        error: function (data) {
-                        }
-                    });
-                }else {
-                    var totalPrice = parseFloat($('#currTotalPrice').val());
-                    var khuyenmai = $('#priceDiscount').text();
-                    var khuyenmai = khuyenmai.replace(/,/g, '');
-                    var feeCod = parseFloat($('#fee-cod-last').val());
-                    $.ajax({
-                        url: '/site/don-hang/fee-ship?timestamp=' + timestamp,
-                        type: 'POST',
-                        data: {province: province, district:district,wards:wards, token:token },
-                        success: function (data) {
-                            var total = 0;
-                            if(data){
-                                if(data.data[0] > 0){
-                                    $('#fee-ship').html(numberFormat(data.data[0])+ '&#8363');
-                                }else {
-                                    $('#fee-ship').html('0đ');
+                        });
+                    }else if((province != 1 && phi_cod == true) || (province != 79 && phi_cod == true) ) {
+                        var totalPrice = parseFloat($('#currTotalPrice').val());
+                        var khuyenmai = $('#priceDiscount').text();
+                        var khuyenmai = khuyenmai.replace(/,/g, '');
+                        $.ajax({
+                            url: '/site/don-hang/fee-ship?timestamp=' + timestamp,
+                            type: 'POST',
+                            data: {province: province, district:district,wards:wards, token:token, phi_cod:phi_cod },
+                            success: function (data) {
+                                if(data){
+                                    var total = 0;
+                                    var feeCod = parseFloat(data.data[1]);
+                                    $('#fee-cod').html(numberFormat(data.data[1])+ '&#8363');
+                                    $('#fee-cod-last').val(feeCod)
+                                    if(data.data[0] > 0){
+                                        $('#fee-ship').html(numberFormat(data.data[0])+ '&#8363');
+                                    }else {
+                                        $('#fee-ship').html('0đ');
+                                    }
+                                    var fee = parseFloat(data.data[0]);
+                                    $('#fee-ship').removeClass('hidden');
+                                    if(khuyenmai == 0 || khuyenmai ==''){
+                                        total = numberFormat(fee +totalPrice+feeCod)+ '&#8363';
+                                        $('#totalPrice').html(total);
+                                        $('#fee-ship-last').val(fee);
+                                    }else {
+                                        total = numberFormat(totalPrice - khuyenmai + fee +feeCod)+'&#8363';
+                                        $('#totalPrice').html(total);
+                                        $('#fee-ship-last').val(fee);
+                                    }
+    
+                                    $('#fee_shipping_order').val(fee);
+                                    $('#fee_cod_order').val(feeCod);
+                                    $('.custom-control-description-check').html('Có máy game liên tỉnh')
                                 }
-                                var fee = parseFloat(data.data[0]);
-                                $('#fee-ship').removeClass('hidden');
-                                if(khuyenmai == 0 || khuyenmai ==''){
-                                    total = numberFormat(fee +totalPrice+feeCod)+ '&#8363';
-                                    $('#totalPrice').html(total);
-                                    $('#fee-ship-last').val(fee);
-                                }else {
-                                    total = numberFormat(totalPrice - khuyenmai + fee +feeCod)+'&#8363';
-                                    $('#totalPrice').html(total);
-                                    $('#fee-ship-last').val(fee);
-                                }
-
-                                $("#fee_shipping_order").val(fee);
+                            },
+                            error: function (data) {
                             }
-                        },
-                        error: function (data) {
-                        }
-                    });
+                        });
+                    }else {
+                        var totalPrice = parseFloat($('#currTotalPrice').val());
+                        var khuyenmai = $('#priceDiscount').text();
+                        var khuyenmai = khuyenmai.replace(/,/g, '');
+                        var feeCod = parseFloat($('#fee-cod-last').val());
+                        $.ajax({
+                            url: '/site/don-hang/fee-ship?timestamp=' + timestamp,
+                            type: 'POST',
+                            data: {province: province, district:district,wards:wards, token:token },
+                            success: function (data) {
+                                var total = 0;
+                                if(data){
+                                    if(data.data[0] > 0){
+                                        $('#fee-ship').html(numberFormat(data.data[0])+ '&#8363');
+                                    }else {
+                                        $('#fee-ship').html('0đ');
+                                    }
+                                    var fee = parseFloat(data.data[0]);
+                                    $('#fee-ship').removeClass('hidden');
+                                    if(khuyenmai == 0 || khuyenmai ==''){
+                                        total = numberFormat(fee +totalPrice+feeCod)+ '&#8363';
+                                        $('#totalPrice').html(total);
+                                        $('#fee-ship-last').val(fee);
+                                    }else {
+                                        total = numberFormat(totalPrice - khuyenmai + fee +feeCod)+'&#8363';
+                                        $('#totalPrice').html(total);
+                                        $('#fee-ship-last').val(fee);
+                                    }
+    
+                                    $("#fee_shipping_order").val(fee);
+                                }
+                            },
+                            error: function (data) {
+                            }
+                        });
+                    }
                 }
+                
             })
 
             $(document).on('click','#has-cod',function(){
+                var payment_method = $('input[name="pm"].checked').val().trim();
                 var fee_cod = $('#has-cod').val();
                 var province = $('#province').val();
                 var timestamp = new Date().getTime();
-                if(province == 1 || province == 79){
-                    $('.fee-cod').css('display','block');
-                    $('#fee-cod').html('0đ');
-                    $('#fee-cod-last').val(0);
-                    $('#fee-ship').html('0đ');
-                    $.ajax({
-                        url: '/site/don-hang/fee-cod?timestamp=' + timestamp,
-                        type: 'POST',
-                        data: {fee_cod: fee_cod, province:province},
-                        success: function (data) {
-                            var khuyenmai = $('#priceDiscount').text();
-                            var khuyenmai = khuyenmai.replace(/,/g, '');
-                            var total = 0;
-                            if(data){
-                                var feeShip=  parseFloat(data.data[0]);
-                                var totalPrice = parseFloat($('#currTotalPrice').val());
-                                var feeCod = parseFloat(data.data[0]);
-                                $('#fee-cod-last').val(feeCod)
-                                $('.fee-cod').css('display','block');
-                                $('#fee-cod').html(numberFormat(feeCod)+ '&#8363');
-                                if(khuyenmai == 0 || khuyenmai ==''){
-                                        total = numberFormat(totalPrice+feeCod+feeShip)+ '&#8363';
+                if(payment_method !=3){
+                    if(province == 1 || province == 79){
+                        $('.fee-cod').css('display','block');
+                        $('#fee-cod').html('0đ');
+                        $('#fee-cod-last').val(0);
+                        $('#fee-ship').html('0đ');
+                        $.ajax({
+                            url: '/site/don-hang/fee-cod?timestamp=' + timestamp,
+                            type: 'POST',
+                            data: {fee_cod: fee_cod, province:province},
+                            success: function (data) {
+                                var khuyenmai = $('#priceDiscount').text();
+                                var khuyenmai = khuyenmai.replace(/,/g, '');
+                                var total = 0;
+                                if(data){
+                                    var feeShip=  parseFloat(data.data[0]);
+                                    var totalPrice = parseFloat($('#currTotalPrice').val());
+                                    var feeCod = parseFloat(data.data[0]);
+                                    $('#fee-cod-last').val(feeCod)
+                                    $('.fee-cod').css('display','block');
+                                    $('#fee-cod').html(numberFormat(feeCod)+ '&#8363');
+                                    if(khuyenmai == 0 || khuyenmai ==''){
+                                            total = numberFormat(totalPrice+feeCod+feeShip)+ '&#8363';
+                                            $('#totalPrice').html(total);
+                                    }
+                                    else{
+                                        total = numberFormat(totalPrice+feeCod+feeShip -khuyenmai)+ '&#8363';
                                         $('#totalPrice').html(total);
+                                    }
+                                    $('#fee_cod_order').val(feeCod);
+                                    $('#fee_shipping_order').val(feeShip)
+                                    $('#fee-cod').html('0đ');
+                                    $('.custom-control-description-check').html('Có máy game ở TP.HCM hoặc Hà nội free phí vận chuyển và phí cod')
                                 }
-                                else{
-                                    total = numberFormat(totalPrice+feeCod+feeShip -khuyenmai)+ '&#8363';
-                                    $('#totalPrice').html(total);
-                                }
-                                $('#fee_cod_order').val(feeCod);
-                                $('#fee_shipping_order').val(feeShip)
-                                $('#fee-cod').html('0đ');
-                                $('.custom-control-description-check').html('Có máy game ở TP.HCM hoặc Hà nội free phí vận chuyển và phí cod')
+                            },
+                            error: function (data) {
                             }
-                        },
-                        error: function (data) {
-                        }
-                    });
-                } else{
-                    $.ajax({
-                        url: '/site/don-hang/fee-cod?timestamp=' + timestamp,
-                        type: 'POST',
-                        data: {fee_cod: fee_cod},
-                        success: function (data) {
-                            var khuyenmai = $('#priceDiscount').text();
-                            var khuyenmai = khuyenmai.replace(/,/g, '');
-                            var total = 0;
-                            if(data){
-                                var feeShip=  parseFloat($('#fee-ship-last').val());
-                                var totalPrice = parseFloat($('#currTotalPrice').val());
-                                var feeCod = parseFloat(data.data[0]);
-                                $('#fee-cod-last').val(feeCod)
-                                $('.fee-cod').css('display','block');
-                                $('#fee-cod').html(numberFormat(feeCod)+ '&#8363');
-                                if(khuyenmai == 0 || khuyenmai ==''){
-                                        total = numberFormat(totalPrice+feeCod+feeShip)+ '&#8363';
+                        });
+                    } else{
+                        $.ajax({
+                            url: '/site/don-hang/fee-cod?timestamp=' + timestamp,
+                            type: 'POST',
+                            data: {fee_cod: fee_cod},
+                            success: function (data) {
+                                var khuyenmai = $('#priceDiscount').text();
+                                var khuyenmai = khuyenmai.replace(/,/g, '');
+                                var total = 0;
+                                if(data){
+                                    var feeShip=  parseFloat($('#fee-ship-last').val());
+                                    var totalPrice = parseFloat($('#currTotalPrice').val());
+                                    var feeCod = parseFloat(data.data[0]);
+                                    $('#fee-cod-last').val(feeCod)
+                                    $('.fee-cod').css('display','block');
+                                    $('#fee-cod').html(numberFormat(feeCod)+ '&#8363');
+                                    if(khuyenmai == 0 || khuyenmai ==''){
+                                            total = numberFormat(totalPrice+feeCod+feeShip)+ '&#8363';
+                                            $('#totalPrice').html(total);
+                                    }
+                                    else{
+                                        total = numberFormat(totalPrice+feeCod+feeShip -khuyenmai)+ '&#8363';
                                         $('#totalPrice').html(total);
+                                    }
+                                    $('#fee_cod_order').val(feeCod);
+                                    $('.custom-control-description-check').html('Có máy game liên tỉnh')
                                 }
-                                else{
-                                    total = numberFormat(totalPrice+feeCod+feeShip -khuyenmai)+ '&#8363';
-                                    $('#totalPrice').html(total);
-                                }
-                                $('#fee_cod_order').val(feeCod);
-                                $('.custom-control-description-check').html('Có máy game liên tỉnh')
+                            },
+                            error: function (data) {
                             }
-                        },
-                        error: function (data) {
-                        }
-                    });
-                }
+                        });
+                    }
+                } 
             })
             $(document).on('click','#no-cod',function(){
+                var payment_method = $('input[name="pm"].checked').val().trim();
                 var province = $('.province').val().trim();
                 var district = $('.district').val().trim();
                 var wards = $('.wards').val().trim();
                 var non_cod = $('#no-cod').prop('checked');
                 $('.custom-control-description-check').html('Có máy game')
-                if(non_cod && province ==''){
+                if(non_cod && province =='' || non_cod && district =='' || non_cod && wards ==''){
                     $('#fee-cod').html('');
                     // $('.fee-cod').css('display','none');
                     var fee_code = $('#fee-cod-last').val();
@@ -387,51 +399,81 @@ pages = $.extend(pages, {
                     var total = numberFormat(totalPresent - fee_code)+ '&#8363';
                     $('#totalPrice').html(total);
                 }
-                if(non_cod && province && district && wards){
-                    var totalPrice = parseFloat($('#currTotalPrice').val());
-                    var khuyenmai = $('#priceDiscount').text();
-                    var khuyenmai = khuyenmai.replace(/,/g, '');
-                    var timestamp = new Date().getTime();
-                    var token = $.cookie("token");
-                    $.ajax({
-                        url: '/site/don-hang/fee-ship?timestamp=' + timestamp,
-                        type: 'POST',
-                        data: {province: province, district:district,wards:wards, token:token,non_cod:non_cod },
-                        success: function (data) {
-                            console.log(data)
-                            var total = 0;
-                            if(data){
-                                if(data.data[0] > 0){
-                                    $('#fee-ship').html(numberFormat(data.data[0])+ '&#8363');
-                                }else {
-                                    $('#fee-ship').html('0đ');
+                if(payment_method != 3){
+                    if(non_cod && province && district && wards){
+                        var totalPrice = parseFloat($('#currTotalPrice').val());
+                        var khuyenmai = $('#priceDiscount').text();
+                        var khuyenmai = khuyenmai.replace(/,/g, '');
+                        var timestamp = new Date().getTime();
+                        var token = $.cookie("token");
+                        $.ajax({
+                            url: '/site/don-hang/fee-ship?timestamp=' + timestamp,
+                            type: 'POST',
+                            data: {province: province, district:district,wards:wards, token:token,non_cod:non_cod },
+                            success: function (data) {
+                                console.log(data)
+                                var total = 0;
+                                if(data){
+                                    if(data.data[0] > 0){
+                                        $('#fee-ship').html(numberFormat(data.data[0])+ '&#8363');
+                                    }else {
+                                        $('#fee-ship').html('0đ');
+                                    }
+                                    var fee = parseFloat(data.data[0]);
+                                    var feeCod = 0;
+                                    $('#fee-cod').html('0đ');
+                                    $('#fee-ship').removeClass('hidden');
+                                    $('#fee-cod-last').val(0);
+                                    $('#fee_cod_order').val(0);
+                                    if(khuyenmai == 0 || khuyenmai ==''){
+                                        total = numberFormat(fee +totalPrice+feeCod)+ '&#8363';
+                                        $('#totalPrice').html(total);
+                                        $('#fee-ship-last').val(fee);
+                                    }else {
+                                        total = numberFormat(totalPrice - khuyenmai + fee +feeCod)+'&#8363';
+                                        $('#totalPrice').html(total);
+                                        $('#fee-ship-last').val(fee);
+                                    }
+    
+                                    $("#fee_shipping_order").val(fee);
                                 }
-                                var fee = parseFloat(data.data[0]);
-                                var feeCod = 0;
-                                $('#fee-cod').html('0đ');
-                                $('#fee-ship').removeClass('hidden');
-                                $('#fee-cod-last').val(0);
-                                $('#fee_cod_order').val(0);
-                                if(khuyenmai == 0 || khuyenmai ==''){
-                                    total = numberFormat(fee +totalPrice+feeCod)+ '&#8363';
-                                    $('#totalPrice').html(total);
-                                    $('#fee-ship-last').val(fee);
-                                }else {
-                                    total = numberFormat(totalPrice - khuyenmai + fee +feeCod)+'&#8363';
-                                    $('#totalPrice').html(total);
-                                    $('#fee-ship-last').val(fee);
-                                }
-
-                                $("#fee_shipping_order").val(fee);
+                            },
+                            error: function (data) {
                             }
-                        },
-                        error: function (data) {
-                        }
-                    });
+                        });
+                    }
                 }
-
             })
 
+            $(document).on('click', 'input[name="pm"]', function(event) {
+                $('input[name="pm"]').removeClass('checked');
+                $(this).addClass('checked');
+            });
+            
+            $(document).on('click', 'input[name="pm"]', function(event) {
+
+                var payment_value = $(this).val();
+                var current_price = $('#currTotalPrice').val();
+                if(payment_value == 3){
+                    var total_price = $('#currTotalPrice').val();
+                    $('#fee-ship-last').val(0);
+                    $('#fee-ship').html(0+ '&#8363');
+                    $('#fee-cod').html(0+ '&#8363');
+                    $('#fee-cod-last').val(0);
+                    $('#totalPrice').html(numberFormat(total_price)+ '&#8363');
+                    $('#wards').prop('selectedIndex', 0);
+                    $('#priceDiscount').html('0');
+                }else{
+                    $('#wards').prop('selectedIndex', 0);
+                    $('#discount').val('');
+                    $('#priceDiscount').html('0');
+                    $('#promotionCode').val('');
+                    $('#fee-ship').html('');
+                    $('#fee-cod').html('');
+                    $('#totalPrice').html(numberFormat(current_price)+ '&#8363')
+                }
+            });
+ 
             $(document).ready(function() {
                 checkWindowSize();
             });
@@ -499,7 +541,7 @@ pages = $.extend(pages, {
                     }
                 });
         },
-        checkAndGetDiscount: function( percent, province, district, wards, fee_cod ){
+        checkAndGetDiscount: function( percent, province, district, wards, fee_cod,payment_method ){
             var me = this;
             if( percent != undefined && percent != ""){
                 var token = $.cookie("token");
@@ -511,7 +553,7 @@ pages = $.extend(pages, {
                 $.ajax({
                     url: "/don-hang/check-discount",
                     type: 'POST',
-                    data: { percent: percent, t: token, province:province, district:district,wards:wards, fee_cod:fee_cod},
+                    data: { percent: percent, t: token, province:province, district:district,wards:wards, fee_cod:fee_cod, payment_method:payment_method},
                     beforeSend: function () {
                         $("#btnDisCount").hide();
                         $(".loading_discount").show();
@@ -539,7 +581,7 @@ pages = $.extend(pages, {
                 });
             }
         },
-        checkAndGetPromotion: function( code, province, district, wards,fee_cod, totalPrice ){
+        checkAndGetPromotion: function( code, province, district, wards,fee_cod, totalPrice,payment_method ){
             var me = this;
             if( code != undefined && code != ""){
                 var token = $.cookie("token");
@@ -551,7 +593,7 @@ pages = $.extend(pages, {
                 $.ajax({
                     url: "/don-hang/check-promotion",
                     type: 'POST',
-                    data: {code: code, t: token , province:province, district:district,wards:wards, fee_cod:fee_cod},
+                    data: {code: code, t: token , province:province, district:district,wards:wards, fee_cod:fee_cod, payment_method:payment_method},
                     beforeSend: function () {
                         $("#btnPromotion").hide();
                         $(".loading_promotion").show();

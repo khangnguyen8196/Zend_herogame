@@ -24,6 +24,9 @@ class UtilAuth {
                 $arrayResources = self::getAllPermission();
                 if ( empty( $arrayResources ) == false ) {
                     $controllerPermission = self::getPermissionByController( $controllerName );
+                    // echo '<pre>';
+                    // print_r($controllerPermission);
+                    // exit;
                     if ( empty( $controllerPermission ) == false && empty( $controllerPermission[$actionName] ) == false ) {
                         $resourceId = $controllerPermission[$actionName];
                         if ( in_array( $resourceId, $arrayResources ) ) {

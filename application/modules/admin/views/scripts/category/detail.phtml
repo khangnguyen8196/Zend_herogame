@@ -135,7 +135,7 @@
                     <div class="form-group">
                         <label class="control-label col-lg-2">Icon Hover</label>
                         <div class="col-lg-5">
-                            <input type="file" class="file-styled form-control" name='icon_hover' id="icon"/> 
+                            <input type="file" class="file-styled form-control" name='icon_hover' id="icon_hover"/> 
                         </div>
                         <label class="control-label col-lg-2"></label>
                         <?php if (empty($this->info) == false && empty($this->info['icon_hover']) == false) { ?>
@@ -158,6 +158,163 @@
                             </div>
                         <?php } ?>
                     </div>
+                    <?php 
+                        if (!empty($this->info) && !empty($this->info['image_2_botton'])) { ?>
+                        <div class="form-group">
+                            <label class="control-label col-lg-2">Danh sách 2 banner nhỏ của Danh mục</label>
+                        </div>
+                        <div class="form-group">
+                            <?php 
+                            $listImage2Dm = explode(',', $this->info['image_2_botton']);
+                            $listUrl2Dm = explode(',', $this->info['url_image_2_botton']);
+                            foreach($listImage2Dm as $key => $item) {
+                                ?>
+                                <div class="list_image_2_botton_<?php echo $key ?>" id="count_image_2_botton_<?php echo $key ?>">
+                                    <div class="col-lg-2 col-sm-4 parent image_2_botton">
+                                        <div class="form-group ">
+                                            <input type="file" id="image_2_botton_<?php echo $key ?>" class="file-styled form-control image_2_botton_dm" name="image_2_botton[<?php echo $key ?>]" accept="image/*"/>
+                                        </div>
+                                        <div class="thumbnail">
+                                            <div class="thumb">
+                                                <img class="img-media img-thumbnail-item" style="height: 100px" src="<?php echo '/upload' . $item; ?>" alt="">
+                                                <div class="caption-overflow">
+                                                    <span>
+                                                        <a class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5 container-image" href="<?php echo '/upload' . $item; ?>" data-popup="lightbox">
+                                                            <i class="icon-plus3"></i>
+                                                        </a>
+                                                        <a class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5">
+                                                            <i class="icon-cross2 remove_image_2_botton" data-id="<?php echo $this->info['id'] ?>" data-url ="<?php echo $listUrl2Dm[$key]?>" data-url-image="<?php echo $item ?>" data-remove-image-2="<?php echo $item ?>"></i>
+                                                        </a>
+                                                    </span>
+                                                </div>           
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" id="url_image_2_botton_<?php echo $key ?>" class="file-styled form-control" value="<?php echo $listUrl2Dm[$key]?>" name="url_image_2_botton[<?php echo $key ?>]"/>
+                                        </div >
+                                    </div>
+                                    
+                                    <div class="hidden list-delete-image-2" id ="delete_image_2_<?php echo $key ?>" data-index="<?php echo $key ?>"></div>
+                                </div>
+                            <?php }?>
+                            <div class="col-lg-12">
+                                <button type="button" id="add_image_2_botton" class="btn btn-primary" style="margin-right: 11px;position: relative;border-radius: 2px;margin-top: 10px;"><span class="glyphicon glyphicon-plus" attr-count="<?php echo $key+2 ?>" aria-hidden="true"></span> Thêm Banner</button>
+                            </div>
+                        </div>
+                        <div id="new_image_2_botton"></div>
+                    <?php } else{?>
+                           <div class="form-group">
+                        <label class="control-label col-lg-2">Danh sách 2 banner nhỏ của Danh mục</label>
+                            <button type="button" id="add_image_2_botton" class="btn btn-primary" style="margin-right: 11px;float: inline-end;"><span class="glyphicon glyphicon-plus" attr-count="0" aria-hidden="true"></span> Thêm Banner</button>
+                        </div>
+                        <div id="new_image_2_botton"></div>
+                    <?php }?>
+
+                    <?php 
+                        if (!empty($this->info) && !empty($this->info['image_3_botton'])) { ?>
+                        <div class="form-group">
+                            <label class="control-label col-lg-2">Danh sách 3 banner nhỏ của Danh mục</label>
+                        </div>
+                        <div class="form-group">
+                            <?php 
+                            $listImage3Dm = explode(',', $this->info['image_3_botton']);
+                            $listUrl3Dm = explode(',', $this->info['url_image_3_botton']);
+                            foreach($listImage3Dm as $key => $item) {
+                                ?>
+                                <div class="list_image_3_botton_<?php echo $key ?>" id="count_image_3_botton_<?php echo $key ?>">
+                                    <div class="col-lg-2 col-sm-4 parent image_3_botton">
+                                        <div class="form-group ">
+                                            <input type="file" id="image_3_botton_<?php echo $key ?>" class="file-styled form-control image_3_botton_dm" name="image_3_botton[<?php echo $key ?>]" accept="image/*"/>
+                                        </div>
+                                        <div class="thumbnail">
+                                            <div class="thumb">
+                                                <img class="img-media img-thumbnail-item" style="height: 100px" src="<?php echo '/upload' . $item; ?>" alt="">
+                                                <div class="caption-overflow">
+                                                    <span>
+                                                        <a class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5 container-image" href="<?php echo '/upload' . $item; ?>" data-popup="lightbox">
+                                                            <i class="icon-plus3"></i>
+                                                        </a>
+                                                        <a class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5">
+                                                            <i class="icon-cross2 remove_image_3_botton" data-id="<?php echo $this->info['id'] ?>" data-url ="<?php echo $listUrl3Dm[$key]?>" data-url-image="<?php echo $item ?>" data-remove-image-3="<?php echo $item ?>"></i>
+                                                        </a>
+                                                    </span>
+                                                </div>           
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" id="url_image_3_botton_<?php echo $key ?>" class="file-styled form-control" value="<?php echo $listUrl3Dm[$key]?>" name="url_image_3_botton[<?php echo $key ?>]"/>
+                                        </div >
+                                    </div>
+                                    
+                                    <div class="hidden list-delete-image-3" id ="delete_image_3_<?php echo $key ?>" data-index="<?php echo $key ?>"></div>
+                                </div>
+                            <?php }?>
+                            <div class="col-lg-12">
+                                <button type="button" id="add_image_3_botton" class="btn btn-primary" style="margin-right: 11px;position: relative;border-radius: 2px;margin-top: 10px;"><span class="glyphicon glyphicon-plus" attr-count="<?php echo $key+2 ?>" aria-hidden="true"></span> Thêm Banner</button>
+                            </div>
+                        </div>
+                        <div id="new_image_3_botton"></div>
+                    <?php } else{?>
+                           <div class="form-group">
+                        <label class="control-label col-lg-2">Danh sách 3 banner nhỏ của Danh mục</label>
+                            <button type="button" id="add_image_3_botton" class="btn btn-primary" style="margin-right: 11px;float: inline-end;"><span class="glyphicon glyphicon-plus" attr-count="0" aria-hidden="true"></span> Thêm Banner</button>
+                        </div>
+                        <div id="new_image_3_botton"></div>
+                    <?php }?>
+
+                    
+                    <?php 
+                        if (!empty($this->info) && !empty($this->info['image_12_botton'])) { ?>
+                        <div class="form-group">
+                            <label class="control-label col-lg-2">Danh sách 12 banner nhỏ của Danh mục</label>
+                        </div>
+                        <div class="form-group">
+                            <?php 
+                            $listImage12Dm = explode(',', $this->info['image_12_botton']);
+                            $listUrl12Dm = explode(',', $this->info['url_image_12_botton']);
+                            foreach($listImage12Dm as $key => $item) {
+                                ?>
+                                <div class="list_image_12_botton_<?php echo $key ?>" id="count_image_12_botton_<?php echo $key ?>">
+                                    <div class="col-lg-2 col-sm-4 parent image_12_botton" style="margin-top:10px">
+                                        <div class="form-group ">
+                                            <input type="file" id="image_12_botton_<?php echo $key ?>" class="file-styled form-control image_12_botton_dm" name="image_12_botton[<?php echo $key ?>]" accept="image/*"/>
+                                        </div>
+                                        <div class="thumbnail">
+                                            <div class="thumb">
+                                                <img class="img-media img-thumbnail-item" style="height: 100px" src="<?php echo '/upload' . $item; ?>" alt="">
+                                                <div class="caption-overflow">
+                                                    <span>
+                                                        <a class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5 container-image" href="<?php echo '/upload' . $item; ?>" data-popup="lightbox">
+                                                            <i class="icon-plus3"></i>
+                                                        </a>
+                                                        <a class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5">
+                                                            <i class="icon-cross2 remove_image_12_botton" data-id="<?php echo $this->info['id'] ?>" data-url ="<?php echo $listUrl12Dm[$key]?>" data-url-image="<?php echo $item ?>" data-remove-image-12="<?php echo $item ?>"></i>
+                                                        </a>
+                                                    </span>
+                                                </div>           
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" id="url_image_12_botton_<?php echo $key ?>" class="file-styled form-control" value="<?php echo $listUrl12Dm[$key]?>" name="url_image_12_botton[<?php echo $key ?>]"/>
+                                        </div >
+                                    </div>
+                                    
+                                    <div class="hidden list-delete-image-12" id ="delete_image_12_<?php echo $key ?>" data-index="<?php echo $key ?>"></div>
+                                </div>
+                            <?php }?>
+                            <div class="col-lg-12">
+                                <button type="button" id="add_image_12_botton" class="btn btn-primary" style="margin-right: 11px;position: relative;border-radius: 2px;margin-top: 10px;"><span class="glyphicon glyphicon-plus" attr-count="<?php echo $key+2 ?>" aria-hidden="true"></span> Thêm Banner</button>
+                            </div>
+                        </div>
+                        <div id="new_image_12_botton"></div>
+                    <?php } else{?>
+                           <div class="form-group">
+                        <label class="control-label col-lg-2">Danh sách 12 banner nhỏ của Danh mục</label>
+                            <button type="button" id="add_image_12_botton" class="btn btn-primary" style="margin-right: 11px;float: inline-end;"><span class="glyphicon glyphicon-plus" attr-count="0" aria-hidden="true"></span> Thêm Banner</button>
+                        </div>
+                        <div id="new_image_12_botton"></div>
+                    <?php }?>
+
                     <div class="form-group">
                         <label class="control-label col-lg-2">Url</label>
                         <div class="col-lg-10">
@@ -300,7 +457,7 @@
                     <div class="form-group">
                         <label class="control-label col-lg-2">Mô tả thẻ meta</label>
                         <div class="col-lg-10">
-                            <input maxlength="100" type="text" name="meta_description" id="meta_description" placeholder="Mô tả thẻ meta" class="form-control" value="<?php echo @$this->info['meta_description'] ?>">
+                            <input maxlength="200" type="text" name="meta_description" id="meta_description" placeholder="Mô tả thẻ meta" class="form-control" value="<?php echo @$this->info['meta_description'] ?>">
                         </div>
                     </div>
                     <div class="form-group">
@@ -318,7 +475,14 @@
                 </fieldset>
                 <div class="text-right">
                     <a href="/admin/category"><button type="button" class="btn btn-default cancel-btn"><?php echo $this->translate('cancel') ?><i class="icon-arrow-right14 position-right"></i></button></a>
-                    <button type="submit" class="btn btn-primary submit-btn"><?php echo $this->translate('submit') ?> <i class="fa fa-plus" aria-hidden="true"></i></button>
+                    <?php
+                    if(UtilAuth::hasPrivilege('category', ACTION_EDIT) ==true && $this->info['id']){?>
+                        <button type="submit" class="btn btn-primary submit-btn"><?php echo $this->translate('submit') ?> <i class="fa fa-plus" aria-hidden="true"></i></button>
+                    <?php }elseif(UtilAuth::hasPrivilege('category', ACTION_ADD)==true && !$this->info['id']){?>
+                         <button type="submit" class="btn btn-primary submit-btn"><?php echo $this->translate('submit') ?> <i class="fa fa-plus" aria-hidden="true"></i></button>
+                   <?php }else{?>
+                     <button disabled type="submit" class="btn btn-primary submit-btn"><?php echo $this->translate('submit') ?> <i class="fa fa-plus" aria-hidden="true"></i></button>
+                   <?php }?>
                 </div>
             </form>
         </div>

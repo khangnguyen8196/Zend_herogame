@@ -101,12 +101,7 @@
     ?>
         <div class="line">
             <label>Phí vận chuyển:</label>
-            <span class="price hidden" id="fee-ship">
-                <?php
-                if ($fee_ship !== null) {
-                    echo number_format($fee_ship).'&#8363';
-                } 
-                ?>
+            <span class="price" id="fee-ship">
             </span>
             <input type="hidden" id ="fee-ship-last" value = "0">
         </div>

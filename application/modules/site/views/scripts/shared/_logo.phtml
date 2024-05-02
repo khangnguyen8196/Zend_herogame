@@ -3,5 +3,5 @@
     $url = isset($this->url) ? $this->url : '/';
 ?>
 <a class="<?php echo $css ?>" href="<?php echo $url ?>">
-    <img src="<?php if( empty($this->logo) == false) { echo $this->logo['value'];} else { echo '/site/img/logo.png';}?>" width="259" height="240" />
+    <img src="<?php if( empty($this->logo) == false) { echo $this->logo['value'];} else { echo '/site/img/logo.png';}?>" width="259" height="240"  loading="lazy"/>
 </a>

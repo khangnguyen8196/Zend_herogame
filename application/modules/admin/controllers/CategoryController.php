@@ -72,8 +72,9 @@ class Admin_CategoryController extends FrontBaseAction {
                 $check = $models->checkExistCategoryUrl($this->post_data['url_slug'], $id);
                 if (empty($check) == false) {
                     $error[] = 'Đường dẫn đã tồn tại';
-                }
+                }    
             }
+            
             if (empty($error) == true) {
                 if (empty($this->post_data['priority']) == false && is_numeric($this->post_data['priority']) == true) {
                     $data_in['priority'] = $this->post_data['priority'];
@@ -164,8 +165,271 @@ class Admin_CategoryController extends FrontBaseAction {
                         }
                     }
                 }
-                //save data
+
+                //  banner 2
+                if( empty($_POST['url_image_2_delete']) == false && empty($info['image_2_botton']) == false ){
+                    $public_path = UPLOAD_PATH;
+                    $image_2_botton = explode(",",$info['image_2_botton']);
+                    foreach ($_POST['url_image_2_delete'] as $keyd => $valued ){
+                        foreach ($image_2_botton as $k => $v ){
+                            if( $valued == $v){
+                                unset($image_2_botton[$k]);
+                                $full = $public_path  . $valued;
+                                if (file_exists($full)) {
+                                    unlink($full);
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    if( empty($image_2_botton) == false ){
+                        $info['image_2_botton'] = implode(",",$image_2_botton);
+                    } else {
+                        $info['image_2_botton'] = '';
+                    }
+                    $data_in['image_2_botton'] = $info['image_2_botton'];
+                }
+
+                if(empty($_POST['url_image_2_botton_delete'])== false && empty($info['url_image_2_botton']) == false ){
+                    $url_image_2_botton = explode(",",$info['url_image_2_botton']);
+                    foreach ($_POST['url_image_2_delete'] as $keyd => $valued ){
+                        foreach ($url_image_2_botton as $k => $v ){
+                            if( $valued == $v){
+                                unset($url_image_2_botton[$k]);
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (!empty($_FILES['image_2_botton'])) {
+                    $public_path = UPLOAD_PATH;
+                    $nowdir = 'img_' . date('d_m_Y');
+                    $listFile = array();
+                    foreach ($_FILES['image_2_botton']['name'] as $key => $value) {
+                        if (!empty($value)) {
+                            $ext = pathinfo($value, PATHINFO_EXTENSION);
+                            $fileName = pathinfo($value, PATHINFO_FILENAME);
+                            $fileName = str_replace(' ', '-', $fileName);
+                            $newname = $fileName . '_' . rand(0, 1000000) . '_' . uniqid('', true) . '.' . $ext;
+                            Commons::makedirs($public_path . '/images/' . $nowdir);
+                            if (move_uploaded_file($_FILES["image_2_botton"]["tmp_name"][$key], $public_path . '/images/' . $nowdir . '/' . $newname)) {
+                                $listFile[$key] = '/images/' . $nowdir . '/' . $newname;
+                            }
+                        }
+                    }
+                    
+                    if (!empty($listFile)) {
+                        if (!empty($info['image_2_botton'])) {
+                            $current_images = explode(",", $info['image_2_botton']);
+                            if (count($current_images) <= 100) {
+                                foreach ($listFile as $key => $file) {
+                                    if (isset($current_images[$key])) {
+                                        $full = $public_path  . $current_images[$key];
+                                        if (file_exists($full)) {
+                                            unlink($full);
+                                        }
+                                        $current_images[$key] = $file;
+                                    }elseif(count($current_images)<$key && $key<=100){
+                                        $current_images[] = $file;
+                                      
+                                    }
+                                }
+                                $data_in['image_2_botton'] = implode(",", $current_images);
+                            } else {
+                                $data_in['image_2_botton'] = $info['image_2_botton'] . ',' . implode(",", $listFile);
+                            }
+                        } else {
+                            $data_in['image_2_botton'] = implode(",", $listFile);
+                        }
+                    }
+                }
+                if (!empty($_POST['url_image_2_botton'])) {
+                    $allUrls = array();
+                    foreach ($_POST['url_image_2_botton'] as $url) {
+                        if (!empty($url)) {
+                            $allUrls[] = $url;
+                        }
+                    }
+                    $data_in['url_image_2_botton'] = implode(",", $allUrls);
+                }
+                // end banner 2
+
+                // banner 3 
+                if(empty($_POST['url_image_3_delete']) == false && empty($info['image_3_botton']) == false ){
+                    $public_path = UPLOAD_PATH;
+                    $image_3_botton = explode(",",$info['image_3_botton']);
+                    foreach ($_POST['url_image_3_delete'] as $keyd => $valued ){
+                        foreach ($image_3_botton as $k => $v ){
+                            if( $valued == $v){
+                                unset($image_3_botton[$k]);
+                                $full = $public_path  . $valued;
+                                if (file_exists($full)) {
+                                    unlink($full);
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    if( empty($image_3_botton) == false ){
+                        $info['image_3_botton'] = implode(",",$image_3_botton);
+                    } else {
+                        $info['image_3_botton'] = '';
+                    }
+                    $data_in['image_3_botton'] = $info['image_3_botton'];
+                }
+                if(empty($_POST['url_image_3_botton_delete'])== false && empty($info['url_image_3_botton']) == false ){
+                    $url_image_3_botton = explode(",",$info['url_image_3_botton']);
+                    foreach ($_POST['url_image_3_delete'] as $keyd => $valued ){
+                        foreach ($url_image_3_botton as $k => $v ){
+                            if( $valued == $v){
+                                unset($url_image_3_botton[$k]);
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (!empty($_FILES['image_3_botton'])) {
+                    $public_path = UPLOAD_PATH;
+                    $nowdir = 'img_' . date('d_m_Y');
+                    $listFile = array();
+                    foreach ($_FILES['image_3_botton']['name'] as $key => $value) {
+                        if (!empty($value)) {
+                            $ext = pathinfo($value, PATHINFO_EXTENSION);
+                            $fileName = pathinfo($value, PATHINFO_FILENAME);
+                            $fileName = str_replace(' ', '-', $fileName);
+                            $newname = $fileName . '_' . rand(0, 1000000) . '_' . uniqid('', true) . '.' . $ext;
+                            Commons::makedirs($public_path . '/images/' . $nowdir);
+                            if (move_uploaded_file($_FILES["image_3_botton"]["tmp_name"][$key], $public_path . '/images/' . $nowdir . '/' . $newname)) {
+                                $listFile[$key] = '/images/' . $nowdir . '/' . $newname;
+                            }
+                        }
+                    }
+                    
+                    if (!empty($listFile)) {
+                        if (!empty($info['image_3_botton'])) {
+                            $current_images = explode(",", $info['image_3_botton']);
+                            if (count($current_images) <= 100) {
+                                foreach ($listFile as $key => $file) {
+                                    if (isset($current_images[$key])) {
+                                        $full = $public_path  . $current_images[$key];
+                                        if (file_exists($full)) {
+                                            unlink($full);
+                                        }
+                                        $current_images[$key] = $file;
+                                    }elseif(count($current_images)<$key && $key<=100){
+                                        $current_images[] = $file;
+                                    }
+                                }
+                                $data_in['image_3_botton'] = implode(",", $current_images);
+                            } else {
+                                $data_in['image_3_botton'] = $info['image_3_botton'] . ',' . implode(",", $listFile);
+                            }
+                        } else {
+                            $data_in['image_3_botton'] = implode(",", $listFile);
+                        }
+                    }
+                }
+                if (!empty($_POST['url_image_3_botton'])) {
+                    $allUrls = array();
+                    foreach ($_POST['url_image_3_botton'] as $url) {
+                        if (!empty($url)) {
+                            $allUrls[] = $url;
+                        }
+                    }
+                    $data_in['url_image_3_botton'] = implode(",", $allUrls);
+                }
+                // end banner 3 
+
+                // banner 12
+                if(empty($_POST['url_image_12_delete']) == false && empty($info['image_12_botton']) == false ){
+                    $public_path = UPLOAD_PATH;
+                    $image_12_botton = explode(",",$info['image_12_botton']);
+                    foreach ($_POST['url_image_12_delete'] as $keyd => $valued ){
+                        foreach ($image_12_botton as $k => $v ){
+                            if( $valued == $v){
+                                unset($image_12_botton[$k]);
+                                $full = $public_path  . $valued;
+                                if (file_exists($full)) {
+                                    unlink($full);
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    if( empty($image_12_botton) == false ){
+                        $info['image_12_botton'] = implode(",",$image_12_botton);
+                    } else {
+                        $info['image_12_botton'] = '';
+                    }
+                    $data_in['image_12_botton'] = $info['image_12_botton'];
+                }
+                if(empty($_POST['url_image_12_botton_delete'])== false && empty($info['url_image_12_botton']) == false ){
+                    $url_image_12_botton = explode(",",$info['url_image_12_botton']);
+                    foreach ($_POST['url_image_12_delete'] as $keyd => $valued ){
+                        foreach ($url_image_12_botton as $k => $v ){
+                            if( $valued == $v){
+                                unset($url_image_12_botton[$k]);
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (!empty($_FILES['image_12_botton'])) {
+                    $public_path = UPLOAD_PATH;
+                    $nowdir = 'img_' . date('d_m_Y');
+                    $listFile = array();
+                    foreach ($_FILES['image_12_botton']['name'] as $key => $value) {
+                        if (!empty($value)) {
+                            $ext = pathinfo($value, PATHINFO_EXTENSION);
+                            $fileName = pathinfo($value, PATHINFO_FILENAME);
+                            $fileName = str_replace(' ', '-', $fileName);
+                            $newname = $fileName . '_' . rand(0, 1000000) . '_' . uniqid('', true) . '.' . $ext;
+                            Commons::makedirs($public_path . '/images/' . $nowdir);
+                            if (move_uploaded_file($_FILES["image_12_botton"]["tmp_name"][$key], $public_path . '/images/' . $nowdir . '/' . $newname)) {
+                                $listFile[$key] = '/images/' . $nowdir . '/' . $newname;
+                            }
+                        }
+                    }
+                    
+                    if (!empty($listFile)) {
+                        if (!empty($info['image_12_botton'])) {
+                            $current_images = explode(",", $info['image_12_botton']);
+                            if (count($current_images) <= 100) {
+                                foreach ($listFile as $key => $file) {
+                                    if (isset($current_images[$key])) {
+                                        $full = $public_path  . $current_images[$key];
+                                        if (file_exists($full)) {
+                                            unlink($full);
+                                        }
+                                        $current_images[$key] = $file;
+                                    }elseif(count($current_images)<$key && $key<=100){
+                                        $current_images[] = $file;
+                                    }
+                                }
+                                $data_in['image_12_botton'] = implode(",", $current_images);
+                            } else {
+                                $data_in['image_12_botton'] = $info['image_12_botton'] . ',' . implode(",", $listFile);
+                            }
+                        } else {
+                            $data_in['image_12_botton'] = implode(",", $listFile);
+                        }
+                    }
+                }
+                if (!empty($_POST['url_image_12_botton'])) {
+                    $allUrls = array();
+                    foreach ($_POST['url_image_12_botton'] as $url) {
+                        if (!empty($url)) {
+                            $allUrls[] = $url;
+                        }
+                    }
+                    $data_in['url_image_12_botton'] = implode(",", $allUrls);
+                }
+                //end banner 12
+                
                 $rs = $models->saveCategory($data_in, $id);
+
                 if ($id > 0) {
                     if ($rs >= 0) {
                         $this->_redirect('/admin/' . $this->controller);
@@ -247,10 +511,12 @@ class Admin_CategoryController extends FrontBaseAction {
         $this->isAjax();
         if (empty($this->post_data['id']) == false) {
             $modal = new Category();
-            $reponse = $modal->deleteCategory($this->post_data['id']);
-            if ($reponse >= 0) {
-                $this->ajaxResponse(CODE_SUCCESS);
-            }
+            if(UtilAuth::hasPrivilege('category', ACTION_DELETE) == true){
+                $reponse = $modal->deleteCategory($this->post_data['id']);
+                if ($reponse >= 0) {
+                    $this->ajaxResponse(CODE_SUCCESS);
+                }
+            } 
         }
         $this->ajaxResponse(CODE_HAS_ERROR);
     }

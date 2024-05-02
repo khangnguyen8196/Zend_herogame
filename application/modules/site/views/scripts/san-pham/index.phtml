@@ -135,6 +135,79 @@
             <?php if (count($this->paginator) > 1) { ?>
                 <?php echo $this->paginator; ?>
             <?php } ?>
+            <?php if (!empty($this->categoryInfo) && !empty($this->categoryInfo['image_2_botton'])) { ?>
+                <div class="banner-category2">
+                    <?php 
+                    $listImage2Dm = explode(',', $this->categoryInfo['image_2_botton']);
+                    $listUrl2Dm = explode(',', $this->categoryInfo['url_image_2_botton']);
+                    $imageCount = 0;
+                    
+                    foreach($listImage2Dm as $key => $item) {
+                        if ($imageCount < 100) { 
+                            ?>
+                            <div class="banner-category2-item">
+                                <a href="<?php echo trim($listUrl2Dm[$key]) ?>"> 
+                                <img src="<?php echo '/upload' . $item; ?>" alt="" width="100%" height="100%" loading="lazy">
+                                </a>
+                            </div>
+                            <?php 
+                            $imageCount++;
+                        } else {
+                            break; 
+                        }
+                    }?>
+                </div>
+            <?php } ?>
+
+
+            <?php if (!empty($this->categoryInfo) && !empty($this->categoryInfo['image_3_botton'])) { ?>
+                <div class="banner-category3">
+                    <?php 
+                    $listImage3Dm = explode(',', $this->categoryInfo['image_3_botton']);
+                    $listUrl3Dm = explode(',', $this->categoryInfo['url_image_3_botton']);
+                    $imageCount = 0; 
+                    foreach($listImage3Dm as $key => $item) {
+                        if ($imageCount < 100) { 
+                            ?>
+                            <div class="banner-category3-item">
+                            <a href="<?php echo trim($listUrl3Dm[$key]) ?>"> 
+                                <img src="<?php echo '/upload' . $item; ?>" alt="" loading="lazy">
+                            </a>
+                            </div>
+                            <?php 
+                            $imageCount++;
+                        } else {
+                            break;
+                        }
+                    }?>
+                </div>
+            <?php } ?>
+
+            <?php if (!empty($this->categoryInfo) && !empty($this->categoryInfo['image_12_botton'])) { ?>
+                <div class="banner-category12">
+                    <?php 
+                    $listImage12Dm = explode(',', $this->categoryInfo['image_12_botton']);
+                    $listUrl12Dm = explode(',', $this->categoryInfo['url_image_12_botton']);
+                    $imageCount = 0; 
+                    foreach($listImage12Dm as $key => $item) {
+                        if ($imageCount < 100) { 
+                            ?>
+                            <div class="banner-category12-item">
+                                <a href="<?php echo trim($listUrl12Dm[$key]) ?>"> 
+                                    <img src="<?php echo '/upload' . $item; ?>" alt="" width="100%" height="100%" loading="lazy">
+                                </a> 
+                            </div>
+                            <?php 
+                            $imageCount++;
+                        } else {
+                            break;
+                        }
+                    }?>
+                </div>
+            <?php } ?>
+
+
+
         </section>
     </div>
 </div>
@@ -180,5 +253,118 @@ if (empty($imageBottom) == false && $imageBottom['value'] == STATUS_SHOW) {
     .banner-mobile {
         display: block;
     }
+
+    .banner-category2 {
+        display: block;
+        margin-top: 30px;
+    }
+
+    .banner-category2-item {
+        display: block;
+        margin-top: 20px;
+        height: 200px;
+        width: 100%;
+    }
+    .banner-category2-item img {
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+    }
+    .banner-category3 {
+        display: block;
+    }
+    .banner-category3-item {
+        display: block;
+        margin-top: 20px;
+        height: 200px;
+        width: 100%;
+    } 
+    .banner-category3-item img {
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+    }
+    .banner-category12 {
+        display: flex;
+        margin-top: 20px;
+        flex-wrap: wrap; 
+        justify-content: space-between;
+    }
+
+    .banner-category12-item {
+        width: calc(33% - 4px);
+        height: 100px;
+        margin-bottom: 8px; 
+     }
+    .banner-category12-item img {
+        width: 100%;
+        height: 100%;
+    }
+
    }
+
+   @media screen and (min-width: 767px){
+
+        .banner-category2 {
+            display: flex;
+            margin-top: 30px;
+            flex-wrap: wrap; 
+            justify-content: space-between;
+        }
+        .banner-category2-item:hover {
+            transform: translateY(-10px);
+        }
+     
+        .banner-category2-item {
+            width: calc(50% - 4px);
+            margin-bottom:20px ;
+            height: 275px;
+            transition: transform 0.3s ease-in-out;
+        }
+        .banner-category2-item img {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+        }
+        .banner-category3 {
+            display: flex;
+            flex-wrap: wrap; 
+            justify-content: space-between;
+        }
+        
+        .banner-category3-item {
+            height: 260px;
+            margin-bottom:20px ;
+            width: 340px;
+            transition: transform 0.3s ease-in-out;
+        }
+        .banner-category3-item:hover {
+            transform: translateY(-10px);
+        }
+        
+        .banner-category3-item img {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+        }
+   
+        .banner-category12 {
+            display: flex;
+            flex-wrap: wrap; 
+            justify-content: space-between;
+        }
+
+        .banner-category12-item {
+            width: calc(16.6% - 5px);
+            max-height: 140px;
+            margin-bottom:8px ;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .banner-category12-item img {
+            width: 100%;
+            height: 100%;
+        }
+                
+    }
 </style>

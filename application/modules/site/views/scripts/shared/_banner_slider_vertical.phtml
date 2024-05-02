@@ -17,7 +17,7 @@ if ($banActiveIndex < 0 || $banActiveIndex >= count($this->data)) {
                 $banOutside = (isset($banner['outside']) && $banner['outside']) ? 'target="_blank" rel="noopener noreferrer nofollow"' : '';
             ?>
             <a class="banner-photo <?php echo $banCss ?>" href="<?php echo $banner['url'] ?>" <?php echo $banOutside ?>>
-                <?php echo $this->partial('/shared/_lazy_image.phtml', array(
+                <?php echo $this->partial('/shared/_lazy_image _post_yt.phtml', array(
                     'url' => $banner['photo'],
                     'width' => $banner['width'],
                     'height' => $banner['height']
@@ -32,7 +32,7 @@ if ($banActiveIndex < 0 || $banActiveIndex >= count($this->data)) {
             ?>
             <a class="banner-video <?php echo $banCss ?>" href="<?php echo $ytvideo ?>">
                 <i class="fa fa-youtube-play"></i>
-                <?php echo $this->partial('/shared/_lazy_image.phtml', array(
+                <?php echo $this->partial('/shared/_lazy_image _post_yt.phtml', array(
                     'url' => $ytthumb,
                     'width' => $banner['width'],
                     'height' => $banner['height']

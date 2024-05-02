@@ -115,7 +115,10 @@ class FrontEndAction extends Zend_Controller_Action {
 	    	$this->view->listCategory = $contentCategory;
     	}
     	if( empty($data['new_post']) == false && $data['new_post'] == true ){
-    		$this->view->newestPost = self::_getNewestPost(LEFT_SITE_PRODUCT_LIMIT);
+    		$this->view->newestPostHome = self::_getNewestPost(10);
+    	}
+        if( empty($data['new_post']) == false && $data['new_post'] == true ){
+    		$this->view->newestPostMenu = self::_getNewestPost(LEFT_SITE_PRODUCT_LIMIT);
     	}
     	if( empty($data['product_best_sell']) == false && $data['product_best_sell'] == true ){
     		$this->view->productBestSell = self::getProductsBestSale(LEFT_SITE_PRODUCT_LIMIT);

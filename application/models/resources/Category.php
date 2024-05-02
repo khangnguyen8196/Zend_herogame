@@ -151,6 +151,13 @@ class Category extends Zend_Db_Table_Abstract {
         $where[] = $this->getAdapter()->quoteInto("id = ?", $id, Zend_Db::INT_TYPE);
         return $this->delete($where);
     }
+
+    public function deleteimage2Category($id, $valueToDelete) {
+        $db = $this->getAdapter(); 
+        $sql = "UPDATE category SET image_2_botton = TRIM(BOTH ',' FROM REPLACE(CONCAT(',', image_2_botton, ','), CONCAT(',', ? , ','), ',')) WHERE id = ?";
+        $db->query($sql, array($valueToDelete, $id));
+    }
+    
     
     // ----------------------- FRONT END ---------------------------------------
     /**

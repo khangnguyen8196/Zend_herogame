@@ -221,7 +221,7 @@ pages = $.extend(pages, {
                 "sPaginationType": "full_numbers",
                 "dom": '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
                 "language": pages.common.dataTableLang,
-                "pageLength": 20,
+                "pageLength": 100,
                 "ajax": {
                     "url": requestUrl,
                     "dataType": "json",

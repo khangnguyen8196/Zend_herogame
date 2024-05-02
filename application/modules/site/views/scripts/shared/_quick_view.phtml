@@ -31,9 +31,10 @@
             $tcss = ($key == $this->tidx) ? 'active show' : ''
         ?>
         <div id="<?php echo $tab['uuid'] ?>" class="tab-pane fade <?php echo $tcss ?>" role="tabpanel">
-                    <?php
+            <?php
                 $customClass = $ucss;
-                if( count($tab['data']) < 5 ){
+                $isMobile = preg_match('/(android|iphone|ipod|opera mini|blackberry|mobile|windows phone)/i', $_SERVER['HTTP_USER_AGENT']);
+                if(!$isMobile && count($tab['data']) < 5 ){
                     $customClass = 'grid';
                 } 
             ?>

@@ -69,13 +69,13 @@
         </div>
         <div class="row post-home">
         <?php
-            if( empty($this->newestPost) == false ){
-                $top = $this->newestPost[0];
-                unset($this->newestPost[0]);
+            if( empty($this->newestPostHome) == false ){
+                $top = $this->newestPostHome[0];
+                unset($this->newestPostHome[0]);
                 echo $this->partial('/shared/_post_menu_home.phtml', array(
                         'title' => 'Tin tức mới',
                         'top' => $top,
-                        'data' => $this->newestPost
+                        'data' => $this->newestPostHome
                 ));
             }
         ?>
@@ -186,7 +186,7 @@
                     );
                 
                 } 
-                shuffle($slides); // Xáo trộn thứ tự của các slide
+                shuffle($slides); 
 
                 foreach ($slides as $slide) {
                     echo '<div class="col-4">';
@@ -418,10 +418,10 @@
                             'title' => 'Pre-Order',
                             'data' => $this->contentProductGroup["best_sell"]
                         ),
-                        array(
-                            'title' => 'Hot deal',
-                            'data' => $this->contentProductGroup["promotion"]
-                        )
+                        // array(
+                        //     'title' => 'Hot deal',
+                        //     'data' => $this->contentProductGroup["promotion"]
+                        // )
                     )
                 ))
                 ?>

@@ -124,7 +124,7 @@ pages = $.extend(pages, {
 						var html = '<div style="border:1px solid #ccc; border-radius:20px;padding:10px;" class="form-group file-item-'+ inputId + '">' +
 										
 											'<div class="col-lg-2">' +
-												'<img class="img-media img-thumbnail-item" width="140px" height="92px" src="/upload/images/'+ image +'" alt="">'+
+												'<img class="img-media img-thumbnail-item" width="140px" height="92px" src="/upload/images/'+ image +'" loading="lazy" alt="">'+
 											'</div>'+
 											'<div class="col-lg-10">' +
 												'<div class="form-group">'+
@@ -363,7 +363,7 @@ pages = $.extend(pages, {
 								var img = '';
 								if( pages.core.isDefined( row['image'] ) && row['image'] != null ){
 									var img = '<a href="/upload/images'+ row['image']+'" data-popup="lightbox">'
-			                        	+'<img src="/upload/images'+ row['image']+'" alt="" class="img-rounded img-preview">'
+			                        	+'<img src="/upload/images'+ row['image']+'" alt="" class="img-rounded img-preview" loading="lazy">'
 			                        	+'</a>';
 								}
 								return img;

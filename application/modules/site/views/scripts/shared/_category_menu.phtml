@@ -9,8 +9,8 @@
                     <a href="/danh-muc/<?php echo $value0['url_slug'] ?>">
                     	<span class="icon">
                     		<?php if( empty($value0['icon']) == false && empty($value0['icon_hover']) == false ) { ?>
-			                    <img class="state-1" src="<?php echo PHOTO_PATH.$value0['icon'];?>" width="24" height="24" />
-			                    <img class="state-2" src="<?php echo PHOTO_PATH.$value0['icon_hover'];?>" width="24" height="24" />
+			                    <img class="state-1" src="<?php echo PHOTO_PATH.$value0['icon'];?>" width="24" height="24"  loading="lazy"/>
+			                    <img class="state-2" src="<?php echo PHOTO_PATH.$value0['icon_hover'];?>" width="24" height="24" loading="lazy"/>
 		                    <?php }?>
 		                </span>
                         <span> <?php echo $value0['name'] ?></span>

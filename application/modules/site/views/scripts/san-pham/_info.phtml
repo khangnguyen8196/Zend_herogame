@@ -32,7 +32,7 @@
                             <?php } ?>
                         </li>
                 <?php } ?>
-            <?php }elseif($this->sale_product && strtotime($now) - strtotime($this->flash_sale['count_time_start']) <= 6 * 3600 ){?>
+            <?php }elseif($this->sale_product && (strtotime($this->flash_sale['count_time_start'])-strtotime($now)) > 0 &&  (strtotime($this->flash_sale['count_time_start'])-strtotime($now)) <= 6 * 3600 ){?>
                 <li class='product-info'>
                     <label class="flash-sale">Bắt đầu:</label>
                     <span style = "margin:0 10px; color: white;font-size:20px;font-weight:600"  class="count_time_start" attr-start-time="<?php echo $this->flash_sale['count_time_start']?>"></span>
@@ -158,7 +158,7 @@
                                 <a class="<?php echo $active ?>" data-id="<?php echo $variant_flash_sale['variant_id']?>" title="<?php echo $variant_flash_sale['variant_name']?>" data-price-sales="<?php echo $variant_flash_sale['variant_price_flash_sale'] ?>" data-price="<?php echo $variant_flash_sale['variant_price'] ?>" ><?php echo $variant_flash_sale['variant_name']?></a>
                             </li>
                         <?php }?>
-                    <?php }elseif($this->sale_product && (strtotime($now) - strtotime($this->flash_sale['count_time_start']) <= 6 * 3600)){?>
+                    <?php }elseif($this->sale_product && (strtotime($this->flash_sale['count_time_start'])-strtotime($now)) > 0 &&  (strtotime($this->flash_sale['count_time_start'])-strtotime($now)) <= 6 * 3600 ){?>
                         <?php 
                         foreach( $this->l_variant_flash_sale as $key => $variant_flash_sale ){?>
                             <?php 

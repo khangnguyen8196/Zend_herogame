@@ -27,13 +27,13 @@
             </div>
             <div class="hidden-md-down">
                 <?php
-                if (empty($this->newestPost) == false) {
-                    $top = $this->newestPost[0];
-                    unset($this->newestPost[0]);
+                if (empty($this->newestPostMenu) == false) {
+                    $top = $this->newestPostMenu[0];
+                    unset($this->newestPostMenu[0]);
                     echo $this->partial('/shared/_post_menu.phtml', array(
                         'title' => 'Tin tức mới',
                         'top' => $top,
-                        'data' => $this->newestPost
+                        'data' => $this->newestPostMenu
                     ));
                 }
                 ?>
