@@ -16,10 +16,10 @@ pages = $.extend(pages, {
     		
     		$(document).on( "click", "#uploadImage", {}, function( e ){
     			e.preventDefault();
-    			if( $('#image').val() == '' ){
-    				alert($('#image').attr('msg'));
-    				return false;
-    			}
+    			// if( $('#image').val() == '' ){
+    			// 	alert($('#image').attr('msg'));
+    			// 	return false;
+    			// }
     			
     			//var formData = new FormData();
     			// Main magic with files here
@@ -119,7 +119,7 @@ pages = $.extend(pages, {
 			str = str.toLowerCase();
 		  
 			// remove accents, swap ñ for n, etc
-			var from = "ảãạẵẳặằắăậẫẩầấâàáäâẹẽẻệễểềếêèéëêìíïîỉĩịợỡởờớơộỗồốôõỏọòóöôựữửừứưũủụùúüûñç·/_,:;";
+			var from = "ảãạẵẳặằắăậẫẩầấâàáäâẹẽẻệễểềếêèéëêìíïîỉĩịợỡởờớơộỗổồốôõỏọòóöôựữửừứưũủụùúüûñç·/_,:;";
 			var to = "aaaaaaaaaaaaaaaaaaaeeeeeeeeeeeeeiiiiiiioooooooooooooooooouuuuuuuuuuuuunc------";
 			for (var i = 0, l = from.length; i < l; i++) {
 			  str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
@@ -221,7 +221,7 @@ pages = $.extend(pages, {
                 "sPaginationType": "full_numbers",
                 "dom": '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
                 "language": pages.common.dataTableLang,
-                "pageLength": 100,
+                "pageLength": 20,
                 "ajax": {
                     "url": requestUrl,
                     "dataType": "json",

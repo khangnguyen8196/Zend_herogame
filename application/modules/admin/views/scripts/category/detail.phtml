@@ -472,6 +472,15 @@
                             <input maxlength="100" type="text" name="keyword" id="keyword" placeholder="Keyword" class="form-control" value="<?php echo @$this->info['keyword'] ?>">
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Ảnh Facebook</label>
+                        <div class="col-lg-8">
+                            <input type="text" name="og_image" id="og_image" placeholder="Ảnh Facebook" class="form-control" value="<?php echo @$this->info['og_image'] ?>">
+                        </div>
+                        <div class="col-lg-2">
+                            <button type="button" class="btn bg-teal-400 btn-labeled btn-rounded select-media og-img"><b><i class="icon-select2"></i></b> Chọn ảnh</button>
+                        </div>
+                    </div>
                 </fieldset>
                 <div class="text-right">
                     <a href="/admin/category"><button type="button" class="btn btn-default cancel-btn"><?php echo $this->translate('cancel') ?><i class="icon-arrow-right14 position-right"></i></button></a>

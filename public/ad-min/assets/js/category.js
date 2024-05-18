@@ -252,13 +252,32 @@ pages = $.extend(pages, {
                         alert("Các tệp tin sau có kích thước vượt quá 300kb:\n" + invalidFiles.join("\n"));
                         $(input).val(''); 
                     }
-                }
-                
+                }          
                 // $(document).on('click', '.remove_image_2_botton', function() {
                 //     $(this).parents('.image_2_botton').remove();
                 // });
             }
+            if( currController == 'category' && currAction == 'media'){
+        		pages.common.setupMasonry();
+        		$(document).on('click', '.choose-img', function() {
+                   url = $(this).attr('data-src');
+                   var functionNum = $("#CKEditorFuncNum").val();
+                   window.opener.CKEDITOR.tools.callFunction(functionNum, url, '');
+                   window.close();
+                });
+        	}
+            $(document).on('click', '.select-media', {}, function ( ) {
+                pages.category.showMedia();
+            });
+        
+            $(document).on('click', '.media-select-image', {}, function ( ) {
+                var url = $(this).attr('data-src');
+                var frontUrl = frontLink;
+                $('#og_image').val( frontUrl.substring(0, frontUrl.length-1) + url );
+                $('.close-media-dialog').click();
+            });
         },
+        
         initValidation: function () {
             var loptions = {
                 rules: {
@@ -280,6 +299,25 @@ pages = $.extend(pages, {
             };
             pages.validation.setupValidation("#categoryDetailForm", loptions);
 
+        },
+        showMedia: function () {
+            $.ajax({
+                url: '/admin/media/get-list-media',
+                type: 'GET',
+                data: {},
+                beforeSend: function ( ) {
+                },
+                success: function (data) {
+                    if (data.Code > 0) {
+                        $('#modal_media').html(data.Data);
+                        pages.common.setupMasonry();
+                        $('#modal_media').modal({keyboard: false, show: true, backdrop: 'static'});
+                    } else {
+                    }
+                },
+                error: function (error) {
+                }
+            });
         },
         initDatatable: function () {
             var aoColumns = [
@@ -397,5 +435,6 @@ pages = $.extend(pages, {
                 }
             });
         }
+        
     }
 });

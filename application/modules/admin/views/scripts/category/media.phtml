@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <?php echo $this->headMeta(); ?>
+        <?php echo $this->headTitle(); ?>
+        <?php echo $this->headLink(); ?>
+        <script type="text/javascript" >
+            var language = '<?php echo (!empty($this->lang_code)) ? $this->lang_code : 'vi'; ?>';
+            var currController = '<?php echo $this->controller; ?>';
+            var currAction = '<?php echo $this->action; ?>';
+        </script>
+    </head>
+    <body class="rich-media">
+    	<div class="content-wrapper" style="display: block !important;">  
+	    	<div class="content">
+	    		<div class="form-group">
+					<div class="col-lg-10">
+						<input type="file" name="image" id="image" class="form-control" msg="Vui lòng chọn ảnh!" accept="image/*">
+					</div>
+					<div class="col-lg-2">
+						<span class="loading" style="display: none">
+							<i class="icon-spinner3 spinner"></i>
+						</span>
+						<button class="btn btn-success" id="uploadImage" ><?php echo $this->translate('upload')?></button>
+					</div>
+					<div class="col-lg-1 clear_image hidden" >
+						<button type="button" id="clearPath" class="btn btn-danger btn-icon btn-rounded"><i class="icon-cross2"></i></button>
+					</div>
+				</div>
+	    		<h6 class="content-group text-semibold">
+					<?php echo $this->translate('gallery')?>
+				</h6>
+		    	<div class="grid">
+		    	<?php 
+		    		if( empty( $this->listMedia ) == false ){
+		    			foreach ( $this->listMedia as $item ){
+		    	?>
+					<div class="grid-item col-lg-2">
+						<div class="thumbnail">
+							<div class="thumb">
+								<img class="img-scr" src="<?php echo '/upload/images'.$item['url_thumnail']?>" alt="">
+								<div class="caption-overflow">
+									<span>
+										<a href="#" class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5 choose-img"
+										data-src="<?php echo '/upload/images'.$item['url']?>"
+										><i class="icon-link2"></i></a>
+									</span>
+								</div>
+							</div>
+							<div class="caption media-title">
+								<h6 class="no-margin"><a href="#" class="text-default"><?php echo Commons::truncateStr( $item['url']) ?></a></h6>
+							</div>
+						</div>
+					</div>
+				<?php
+		    			}
+		    		}
+				?>
+				</div>
+			</div>
+		</div>
+    	<input type="hidden" name="CKEditorFuncNum" id="CKEditorFuncNum" value="<?php echo $this->functionNum;?>" />
+        <?php echo $this->headScript(); ?>
+    </body>
+</html>

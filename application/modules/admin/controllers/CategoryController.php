@@ -88,6 +88,7 @@ class Admin_CategoryController extends FrontBaseAction {
                 $data_in['title_page'] = @$this->post_data['title_page'];
                 $data_in['keyword'] = @$this->post_data['keyword'];
                 $data_in['summary'] = @$this->post_data['summary'];
+                $data_in['og_image'] = @$this->post_data['og_image'];
                 if (empty($this->post_data['url_menu']) == false) {
                     $data_in['url_menu'] = $this->post_data['url_menu'];
                 } else {
@@ -520,5 +521,16 @@ class Admin_CategoryController extends FrontBaseAction {
         }
         $this->ajaxResponse(CODE_HAS_ERROR);
     }
+
+    public function mediaAction(){
+		$this->_helper->layout->disableLayout( true );
+		$this->loadJs('category');
+		$mdlMedia = new Media();
+		$data = array();
+		$data['length'] = MAX_ITEM_IMAGE;
+		$list = $mdlMedia->fetchAllMedia( $data );
+		$this->view->listMedia = $list;
+		$this->view->functionNum = $this->post_data["CKEditorFuncNum"];
+	}
 
 }
