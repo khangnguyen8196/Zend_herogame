@@ -91,13 +91,13 @@ ul.slider .product-item .btn.cart:hover {
 }
 @media (min-width: 576px){
     .home ul.grid .product-item{
-        min-height: 24rem;
+        min-height: 20rem;
     } 
     .product .product-view li{
-        min-height: 25.5rem;
+        min-height: 20rem;
     }
     .product ul.grid .product-item{
-        min-height: 24rem;
+        min-height: 20rem;
     }
 }
 

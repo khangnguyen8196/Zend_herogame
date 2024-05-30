@@ -1,12 +1,17 @@
-<div class="vendor-logo">
+<div class="vendor-logo d-flex">
 	<?php if(empty($this->logo1) == false ){ ?>
-	    <a href="#">
-	        <img src="<?php echo @$this->logo1;?>" loading="lazy"/>
-	    </a>
+		<div>
+			<a href="#">
+				<img src="<?php echo @$this->logo1;?>" loading="lazy"/>
+			</a>
+		</div>
+	   
     <?php } ?>
     <?php if(empty($this->logo2) == false ){ ?>
-	    <a href="#">
-	        <img src="<?php echo @$this->logo2;?>" loading="lazy" />
-	    </a>
+		<div>
+			<a href="#">
+				<img src="<?php echo @$this->logo2;?>" loading="lazy" />
+			</a>
+		</div>
     <?php } ?>
 </div>

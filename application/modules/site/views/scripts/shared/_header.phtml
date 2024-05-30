@@ -7,16 +7,6 @@
 	
 ?>
 <header class="pheader" >
-    <div class="ph-top">
-        <div class="container">
-            <div class="row">
-                <div class="contact-number">
-                    <strong><?php echo @$title['value']?></strong>
-                </div>
-                <?php echo $this->partial('/shared/_user_identity.phtml',array('user' => $this->customer_info)) ?>
-            </div>
-        </div>
-    </div>
 	<div class="ph-mid" <?php if( empty($backgroundheader) == false ){ ?>style="background-image:url(<?php echo $backgroundheader['value']?>)"<?php }?>>
         <div class="container">
             <div class="row">
@@ -24,19 +14,23 @@
                     <div class="logo-web">
                         <?php echo $this->partial('/shared/_logo.phtml', array('logo'=> $logo)) ?>
                     </div>
-                    <div class="pull-right-a">
+                    <div class="tim-kiem">
+                        <?php echo $this->partial('/shared/_search.phtml') ?>
+                    </div>
+                    <div class="pull-right-a hidden-img">
                         <?php echo $this->partial('/shared/_vendor_logo.phtml', array('logo1' => @$vendor_logo1['value'], 'logo2' => @$vendor_logo2['value'] )) ?>
+                    </div>     
+                    <div class="ph-top">
+                        <?php echo $this->partial('/shared/_user_identity.phtml',array('user' => $this->customer_info)) ?>
+                    </div> 
+                    <div class="cart">
                         <?php 
                             $user_agent = $_SERVER['HTTP_USER_AGENT'];
-                            if (!preg_match('/(iPhone|iPod|iPad|Android|Windows Phone)/', $user_agent)) {
+                            if (!preg_match('/(iPhone|Android|Windows Phone)/', $user_agent)) {
                                 echo $this->render('/shared/_shopping_cart.phtml'); 
                             }
                         ?>
-
-                    </div>              
-                </div>
-                <div class="tim-kiem">
-                    <?php echo $this->partial('/shared/_search.phtml') ?>
+                    </div>        
                 </div>
             </div>
         </div>
@@ -91,6 +85,11 @@
 
 <?php echo $this->partial('/shared/_mobile_menu.phtml', array( 'menu' => $this->menu,'menuCategory'=>$this->menuCategory,'user' => $this->customer_info,'item_count'=>$this->item_count)); ?>
 <style>
+    .pheader .ph-top {
+        padding: .5rem 1rem;
+        background: #222;
+        border-radius: 0.5rem;
+    }
     .pheader .ph-mid {
         padding: 0;
         background-color: transparent;
@@ -167,8 +166,14 @@
         color: black;
     }
     @media (max-width: 1054px){
+        .header-top {
+            padding: 0 10px;
+        }
+        .hidden-img {
+            display: none;
+        }
         .search input {
-            min-width: 26em;
+            min-width: 15em;
         }
     }
 </style>

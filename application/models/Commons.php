@@ -548,7 +548,11 @@ class Commons {
 			$shortDes = $value ["notice_message"];
 			$bcolorLabelB = '#189eff';
 		}
-		if ((empty ( $value ["title_flash_sale"] ) == false ) && $now >= $value["count_time_start"] && $now <= $value["count_time_end"]) {
+
+		if((empty ($value ["title_flash_sale"] ) == false ) && ((strtotime($value["count_time_start"])-strtotime($now)) > 0 &&  (strtotime($value["count_time_start"])-strtotime($now)) <= 6 * 3600) && $now <= $value["count_time_end"]){
+			$shortDes = $value ["title_flash_sale"];
+			$bcolorLabelB = '#ff9601';
+		}elseif ((empty ( $value ["title_flash_sale"] ) == false ) && $now >= $value["count_time_start"] && $now <= $value["count_time_end"]) {
 			$shortDes = $value ["title_flash_sale"];
 			$bcolorLabelB = '#ff9601';
 		}
@@ -578,7 +582,26 @@ class Commons {
 		$product ["count_time_start"] = $value ["count_time_start"];
 		$product ["status_flash_sale"] = $value ["status_flash_sale"];
 		return $product;
-	}	
+	}
+	
+	public static function _buildPostResponse($res) {
+		$postRes = array ();
+		if (empty ( $res ) == false) {
+			foreach ( $res as $key => $value ) {
+				$postRes [] = self::_buildPostData ( $value );
+			}
+		}
+		return $postRes;
+	}
+	public static function _buildPostData($value) {
+		$post["title"] = $value ["title"];
+		$post["url"] = "/bai-viet/" . $value ["url_name"];
+		$post ["photo"] = "/upload/images/" . $value ["image_id"];
+		$post["content"] = $value["content"];
+		$post["date"] = date('d/m/Y', strtotime($value["updated_at"]));
+		$post["summary"] =  $value["summary"];
+		return $post;
+	}
 	/**
 	 *
 	 * @return array

@@ -254,7 +254,7 @@ class Post extends Zend_Db_Table_Abstract {
      * @param type $key
      * @return type
      */
-    public function search($key) {
+    public function search($key,$params = array()) {
         $select = $this->getAdapter()->select();
         $select = $select->from($this->_name)
                 ->columns(array('post.created_at' => new Zend_Db_Expr("DATE_FORMAT(post.created_at,'%Y-%m-%d %H:%i:%s')")))
@@ -264,6 +264,11 @@ class Post extends Zend_Db_Table_Abstract {
             $select->where('upper( post.title ) LIKE upper(?) or upper( post.summary ) LIKE upper(?) or upper( post.content ) LIKE upper(?)', '%' . $key . '%');
             $case = new Zend_Db_Expr($this->getAdapter()->quoteInto('case when upper( post.title ) LIKE upper(?) then 1 when upper( post.summary ) LIKE upper(?) then 2 else 3 end', '%' . $key . '%'));
             $select = $select->order($case);
+        }
+        if (empty($params["sort"]) == false) {
+            $select = $select->order($params["sort"]);
+        } else {
+            $select = $select->order("priority desc");
         }
         $result = $this->getAdapter()->fetchAll($select);
         if (empty($result) == true) {

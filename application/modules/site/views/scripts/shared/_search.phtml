@@ -5,9 +5,122 @@
 <form id="form-search" action="<?php echo $this->url(array('module' => 'site', 'controller' => 'tim-kiem', 'action' => 'search'), 'default', true) ?>" method="get">
     <i class="fa fa-search"></i>
     <i class="fa fa-times"></i>
+    <select id="select-option" name="option">
+        <option value="sanpham">Sản phẩm</option>
+        <option value="baiviet">Bài viết</option>
+    </select>
     <input id="searchV" name="keyword" type="search" class="searchV" value="<?php echo htmlspecialchars(isset($_GET['keyword']) ? $_GET['keyword'] : ''); ?>" placeholder="Nhập từ khóa cần tìm..." />
 </form>
 </div>
+<style>
+    form#form-search {
+        display: flex;
+    }
+    select#select-option:hover{
+        cursor: pointer;
+    }
+    select#select-option {
+        background: white;
+        border: 0.5rem solid #e4e4e4;
+        border-top-left-radius: .5rem;
+        border-bottom-left-radius: .5rem;
+        border-top-right-radius: 0rem;
+        border-bottom-right-radius: 0rem;
+    }
+    select#select-option:focus{
+        outline: none;
+    }
+   @media screen and (min-width:1055px) {
+        .search input {
+            min-width: 25em!important;
+        }
+   }
+   @media screen and (min-width: 768px) {
+    .pheader .ph-mid .search {
+        transform: none !important;
+        display: block;
+        z-index: 1090;
+        position: relative!important;
+        top: 0;
+        left: 0 !important;
+    }
+    i.fa.fa-search:hover {
+        cursor: pointer;
+    }
+    .search input:focus{
+        border-color: #e4e4e4;
+    }
+    .search .fa.fa-search {
+        line-height: 1;
+        font-size: 1.3rem;
+        color: #777;
+        display: block;
+        z-index: 1;
+        position: absolute;
+        top: 34%;
+        right: 1.5rem;
+    }
+    .search input {
+        display: block;
+        outline: 0 none;
+        line-height: 1;
+        font-size: 1.2rem;
+        padding: .75rem 1rem;
+        padding-right: 3rem;
+        background: #fff;
+        border-left: none;
+        border-bottom: 0.5rem solid #e4e4e4;
+        border-top: 0.5rem solid #e4e4e4;
+        border-right: 0.5rem solid #e4e4e4;
+        border-top-left-radius: 0rem;
+        border-bottom-left-radius: 0rem;
+        border-top-right-radius: .5rem;
+        border-bottom-right-radius: .5rem;
+        transition: all 0.2s ease-in;
+    }
+   }
+   @media screen and (max-width: 767px) {
+    .search .fa.fa-times {
+        line-height: 1;
+        font-size: 1.3rem;
+        color: #777;
+        display: block;
+        z-index: 1;
+        position: absolute;
+        top: 34%;
+        right: 1.5rem;
+    }
+    select#select-option {
+        border: none;
+        background: white!important;
+        border-top-right-radius: 0rem;
+        border-bottom-right-radius: 0rem;
+    }
+    .search input {
+        display: block;
+        outline: 0 none;
+        line-height: 1;
+        font-size: 1.2rem;
+        padding: .75rem 1rem;
+        padding-right: 3rem;
+        background: #fff;
+        border-top-left-radius: 0rem;
+        border-bottom-left-radius: 0rem;
+        border-top-right-radius: .5rem;
+        border-bottom-right-radius:.5rem;
+        transition: all 0.2s ease-in;
+    }
+   }
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const selectedOption = urlParams.get('option');
+    if (selectedOption) {
+        document.getElementById('select-option').value = selectedOption;
+    }
+});
+</script>
 
 
 

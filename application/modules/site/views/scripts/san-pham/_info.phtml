@@ -78,7 +78,7 @@
                     <strong class="status-b"><?php echo $this->info["product_note"]; ?></strong>
                 </li>
             <?php } ?>
-            <li>
+            <li class="status_product">
                 <label>Trạng thái:</label>
                 <?php
                 $isOutOfOrder = false;
@@ -154,7 +154,7 @@
                             if($key == 0 ){
                                 $active = 'active';
                             }?>
-                            <li class="variant-items" data-id="<?php echo $variant_flash_sale['variant_id']?>" data-price-sales="<?php echo $variant_flash_sale['variant_price_flash_sale'] ?>" data-price="<?php echo $variant_flash_sale['variant_price'] ?>">
+                            <li class="variant-items" data-id="<?php echo $variant_flash_sale['variant_id']?>" data-index ="<?php echo $key ?>" data-status = "<?php echo $this->info["status"] ?>" data-price-sales="<?php echo $variant_flash_sale['variant_price_flash_sale'] ?>" data-price="<?php echo $variant_flash_sale['variant_price'] ?>">
                                 <a class="<?php echo $active ?>" data-id="<?php echo $variant_flash_sale['variant_id']?>" title="<?php echo $variant_flash_sale['variant_name']?>" data-price-sales="<?php echo $variant_flash_sale['variant_price_flash_sale'] ?>" data-price="<?php echo $variant_flash_sale['variant_price'] ?>" ><?php echo $variant_flash_sale['variant_name']?></a>
                             </li>
                         <?php }?>
@@ -168,7 +168,7 @@
                                         $active = 'active';
                                     }
                             ?>
-                                 <li class="variant-items" data-id="<?php echo $variant_flash_sale['variant_id']?>" data-start-time ="<?php echo $this->flash_sale['count_time_start'] ?>" data-price-sales="<?php echo $variant_flash_sale['variant_price_flash_sale'] ?>" data-price="<?php echo $variant_flash_sale['variant_price'] ?>">
+                                 <li class="variant-items" data-id="<?php echo $variant_flash_sale['variant_id']?>" data-index ="<?php echo $key ?>" data-status = "<?php echo $this->info["status"] ?>" data-start-time ="<?php echo $this->flash_sale['count_time_start'] ?>" data-price-sales="<?php echo $variant_flash_sale['variant_price_flash_sale'] ?>" data-price="<?php echo $variant_flash_sale['variant_price'] ?>">
                                     <a class="<?php echo $active ?>" data-id="<?php echo $variant_flash_sale['variant_id']?>" title="<?php echo $variant_flash_sale['variant_name']?>" data-price-sales="<?php echo $variant_flash_sale['variant_price_flash_sale'] ?>" data-price="<?php echo $variant_flash_sale['variant_price'] ?>" ><?php echo $variant_flash_sale['variant_name']?></a>
                                 </li>
                             <?php } ?>
@@ -183,8 +183,8 @@
                                         $active = 'active';
                                     }
                             ?>
-                                <li class="variant-items" data-id="<?php echo $variant['id']?>" data-price-sales="<?php echo $variants[$variant['id']]['variant_price_sales'] ?>" data-price="<?php echo $variants[$variant['id']]['variant_price'] ?>">
-                                    <a class="<?php echo $active ?>" data-id="<?php echo $variant['id']?>" title="<?php echo $variant['variant_name']?>" data-price-sales="<?php echo $variants[$variant['id']]['variant_price_sales'] ?>" data-price="<?php echo $variants[$variant['id']]['variant_price'] ?>" ><?php echo $variant['variant_name']?></a>
+                                <li class="variant-items" data-id="<?php echo $variant['id']?>" data-index ="<?php echo $key ?>" data-status = "<?php echo $this->info["status"] ?>" data-price-sales="<?php echo $variants[$variant['id']]['variant_price_sales'] ?>" data-price="<?php echo $variants[$variant['id']]['variant_price'] ?>">
+                                    <a class="<?php echo $active ?>" data-id="<?php echo $variant['id']?>" title="<?php echo $variant['variant_name']?>" data-price-sales="<?php echo $variants[$variant['id']]['variant_price_sales'] ?>" data-price="<?php echo $variants[$variant['id']]['variant_price'] ?>"><?php echo $variant['variant_name']?></a>
                                 </li>
                             <?php } ?>
                         <?php }?>
@@ -194,7 +194,9 @@
         <?php } ?>
     <?php } ?>
     <!-- end Phân Loại-->
-    <?php if( $this->info["price_sales"] > 0 && $this->info["status"] == 1 ) { ?>
+    <?php if($this->list_variant){?>
+        <?php echo $this->render('/san-pham/_purchase.phtml') ?>
+    <?php }elseif( $this->info["price_sales"] > 0 && $this->info["status"] == 1 ) { ?>
         <?php echo $this->render('/san-pham/_purchase.phtml') ?>
     <?php } ?>
 
@@ -396,6 +398,11 @@
 </script>
 
 <style>
+    .disabled {
+        pointer-events: none; 
+        cursor: not-allowed; 
+        opacity: 0.5; 
+    }
     li.product-info {
         background: #ee4d2d;
         display: flex;
