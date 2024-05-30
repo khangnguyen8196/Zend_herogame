@@ -1,0 +1,58 @@
+   <div class="product-item product_<?php echo $this->id ?>" attr-id="<?php echo $this->id ?>" attr-count-down="" attr-enable-promo="">
+
+
+   <a class="avatar" href="<?php echo $this->url?>">
+      <?php
+         echo $this->partial ( '/shared/_lazy_image.phtml', array (
+         										'ratio' => '1x1',
+         										'css' => 'photo',
+         										'url' => $this->photo 
+         								) )?>
+   </a>
+   <div class="detail">
+      <div class="name">
+         <a href="<?php echo $this->url?>"><?php echo $this->title?></a>
+      </div>
+      <div class="date">
+         <label>Ngày:</label>
+         <span><?php echo $this->date?></span>
+      </div>
+   </div>
+</div>
+<style>
+   ul.grid .category-item .detail .name a, ul.grid .product-item .detail .name a, ul.slider .category-item .detail .name a, ul.slider .product-item .detail .name a {
+      margin: auto;
+      display: block;
+      font-weight: bold;
+      color: #222;
+   }
+    @media screen and (min-width: 768px){
+
+    }
+    @media screen and (max-width: 767px){
+      ul.grid .category-item .detail .name a, ul.grid .product-item .detail .name a, ul.slider .category-item .detail .name a, ul.slider .product-item .detail .name a {
+         font-size: 14px!important;
+         display: -webkit-box;
+         -webkit-box-orient: vertical;
+         -webkit-line-clamp: 3;
+         overflow: hidden;
+         text-overflow: ellipsis;
+         white-space: normal;
+      }
+      /* .count_down_container.label-b {
+         font-size: 1rem !important;
+      } */
+      ul.grid .product-item .avatar .label-a, ul.slider .product-item .avatar .label-a {
+         border-radius: inherit;
+         font-size: 14px!important;
+      }
+      ul.grid .product-item .avatar .label-a, ul.slider .product-item .avatar .label-a {
+         border-radius: .2rem;
+         display: block;
+         z-index: 2;
+         position: absolute;
+         top: 0!important;
+         right:0!important;
+      }
+    }
+</style>
