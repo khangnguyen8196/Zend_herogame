@@ -378,8 +378,8 @@ pages = $.extend(pages, {
 				{
 				    "render": function (data, type, row) {
                                         var t = row['name'];
-                                        if( t.length > 10 ){
-                                            t = t.substring(0,10)+'...';
+                                        if( t.length > 50 ){
+                                            t = t.substring(0,50)+'...';
                                             return '<span title="'+row['name']+'">'+t+'</span>';
                                         } else {
                                             return row['name'];
@@ -394,8 +394,8 @@ pages = $.extend(pages, {
                                 {
 				    "render": function (data, type, row) {
                                         var t = row['email'];
-                                        if( t.length > 15 ){
-                                            t = t.substring(0,15)+'...';
+                                        if( t.length > 50 ){
+                                            t = t.substring(0,50)+'...';
                                             return '<span title="'+row['email']+'">'+t+'</span>';
                                         } else {
                                             return row['email'];
@@ -452,17 +452,9 @@ pages = $.extend(pages, {
 				    "orderable": false,
 				    "data": "status"
 				},
-                                {
+                {
 				    "render": function (data, type, row) {
-						console.log(row.created_date);
-				    	// var d = row['created_date'];
-                        //                 d = new Date(d);
-                        //                 var date = d.getDate();
-                        //                 if( date < 10) {  date = '0'+date;}
-                        //                 var month = d.getMonth()+1;
-                        //                 if( month < 10) {  month = '0'+month;}
-				    	// return date+'/'+month+'-'+d.getFullYear();
-						return row.created_date;
+						return pages.order.formatDate(row.created_date);
 				    },
 				    "className": "text-center",
 				    "targets": 7,
@@ -527,6 +519,28 @@ pages = $.extend(pages, {
                 }
             });
         },
+		formatDate:function(dateString) {
+			var d = new Date(dateString);
+		
+			var date = d.getDate();
+			if (date < 10) { date = '0' + date; }
+		
+			var month = d.getMonth() + 1;
+			if (month < 10) { month = '0' + month; }
+		
+			var year = d.getFullYear();
+		
+			var hours = d.getHours();
+			if (hours < 10) { hours = '0' + hours; }
+		
+			var minutes = d.getMinutes();
+			if (minutes < 10) { minutes = '0' + minutes; }
+		
+			var seconds = d.getSeconds();
+			if (seconds < 10) { seconds = '0' + seconds; }
+		
+			return date + '/' + month + '/' + year + ' ' + hours + ':' + minutes + ':' + seconds;
+		},
         updateStatus: function(id, currentStauts, user_id, note, discount){
         	console.log(discount);
         	$("#status-update").val(currentStauts);
