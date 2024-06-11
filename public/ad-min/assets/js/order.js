@@ -367,7 +367,8 @@ pages = $.extend(pages, {
                 {"data": "order_code"},
                 {"data": "user_id"},
                 {"data": "phone"},
-                {"data": "email"},
+				{"data": "address"},
+				{"data": "name_province"},
                 {"data": "total"},
                 {"data": "is_pay"},
                 {"data": "status"},
@@ -391,21 +392,37 @@ pages = $.extend(pages, {
 				    "orderable": false,
 				    "data": "user_id"
 				},
-                                {
+                {
 				    "render": function (data, type, row) {
-                                        var t = row['email'];
+                                        var t = row['address'];
                                         if( t.length > 50 ){
                                             t = t.substring(0,50)+'...';
-                                            return '<span title="'+row['email']+'">'+t+'</span>';
+                                            return '<span title="'+row['address']+'">'+t+'</span>';
                                         } else {
-                                            return row['email'];
+                                            return row['address'];
+                                        }
+				        
+				    },
+				    "className": "text-left",
+				    "targets": 3,
+				    "orderable": false,
+				    "data": "address"
+				},
+				{
+				    "render": function (data, type, row) {
+                                        var t = row['name_province'];
+                                        if( t.length > 50 ){
+                                            t = t.substring(0,50)+'...';
+                                            return '<span title="'+row['name_province']+'">'+t+'</span>';
+                                        } else {
+                                            return row['name_province'];
                                         }
 				        
 				    },
 				    "className": "text-center",
-				    "targets": 3,
+				    "targets": 4,
 				    "orderable": false,
-				    "data": "email"
+				    "data": "name_province"
 				},
 				{
 				    "render": function (data, type, row) {
@@ -416,7 +433,7 @@ pages = $.extend(pages, {
 				        return 	Number(total).toLocaleString();
 				    },
 				    "className": "text-center",
-				    "targets": 4,
+				    "targets": 5,
 				    "orderable": false,
 				    "data": "total"
 				},
@@ -429,7 +446,7 @@ pages = $.extend(pages, {
 				        return 	pay;
 				    },
 				    "className": "text-center",
-				    "targets": 5,
+				    "targets": 6,
 				    "orderable": false,
 				    "data": "is_pay"
 				},
@@ -448,7 +465,7 @@ pages = $.extend(pages, {
 				    	return st;
 				    },
 				    "className": "text-center",
-				    "targets": 6,
+				    "targets": 7,
 				    "orderable": false,
 				    "data": "status"
 				},
@@ -457,7 +474,7 @@ pages = $.extend(pages, {
 						return pages.order.formatDate(row.created_date);
 				    },
 				    "className": "text-center",
-				    "targets": 7,
+				    "targets": 8,
 				    "orderable": true,
 				    "data": "created_date"
 				},
@@ -488,7 +505,7 @@ pages = $.extend(pages, {
                         return 	action;
                     },
                     "className": "text-center",
-                    "targets": 8,
+                    "targets": 9,
                     "orderable": false,
                     "data": "Action_Table"
                 }

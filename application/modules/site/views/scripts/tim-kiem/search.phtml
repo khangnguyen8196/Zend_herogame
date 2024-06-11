@@ -38,7 +38,7 @@
                     <?php } ?>
                 <?php }elseif(empty($this->postBySearch) == false){?>
                     <?php
-                        $sortList = array_slice($this->sortList, 0, -2);
+                        $sortList = array_slice($this->sortList, 0, -4);
                         echo $this->partial('/shared/_data_filter.phtml', array(
                             'sort' => $sortList,
                             'limit' => $this->pageSize,

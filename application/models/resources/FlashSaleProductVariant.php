@@ -57,7 +57,7 @@ class FlashSaleProductVariant extends Zend_Db_Table_Abstract {
     public function getFlashSaleProductVariantBy($flash_sale_id, $product_id) {
         $select = $this->getAdapter()->select()
             ->from(array('fspv' => $this->_name))
-            ->join(array('pv' => 'product_variant'), 'pv.id = fspv.variant_id', array('variant_name'))
+            ->join(array('pv' => 'product_variant'), 'pv.id = fspv.variant_id', array('variant_name','status'))
             ->where('fspv.flash_sale_id = ?', $flash_sale_id)
             ->where('fspv.product_id = ?', $product_id);
             

@@ -247,8 +247,6 @@ class Admin_ProductController extends FrontBaseAction {
                     
                 }
                 $rs = $model->saveProduct($data, $id);
-                
-                
                 $product_id = isset($_POST['id']) ? $_POST['id'] : $rs;
                 $variant_id = isset($_POST['variant_id']) ? $_POST['variant_id'] : '';
                 $new_variant_ids = array();
@@ -283,13 +281,13 @@ class Admin_ProductController extends FrontBaseAction {
                         $newVariantIds = array_values($newVariantIds);
                         foreach ($newVariantIds as $i => $new_var_id) {
                             $index = $i + $countVarianat;
-                            if (isset($_POST['variant_name'][$index], $_POST['variant_price'][$index], $_POST['variant_price_sales'][$index])) {
+                            if (isset($_POST['variant_name'][$index], $_POST['variant_price'][$index], $_POST['variant_price_sales'][$index], $_POST['status_variant'][$index]) ) {
                                 $data_variant = [
                                     'variant_name' => $_POST['variant_name'][$index],
                                     'variant_price' => $_POST['variant_price'][$index],
                                     'variant_price_sales' => $_POST['variant_price_sales'][$index],
                                     'product_id' => $product_id,
-                                    'status' => STATUS_ACTIVE
+                                    'status' => $_POST['status_variant'][$index]
                                 ];
                                 $result = $modelVariant->saveVariant($data_variant);
                                 $listProFlashSale = $mdFlashSaleProduct->getProductFlashSaleByProductId($id);
@@ -331,13 +329,13 @@ class Admin_ProductController extends FrontBaseAction {
                         }
                     }else{
                         foreach ($newVariantIds as $i => $new_var_id) {
-                            if (isset($_POST['variant_name'][$i], $_POST['variant_price'][$i], $_POST['variant_price_sales'][$i])) {
+                            if (isset($_POST['variant_name'][$i], $_POST['variant_price'][$i], $_POST['variant_price_sales'][$i], $_POST['status_variant'][$i])) {
                                 $data_variant = [
                                     'variant_name' => $_POST['variant_name'][$i],
                                     'variant_price' => $_POST['variant_price'][$i],
                                     'variant_price_sales' => $_POST['variant_price_sales'][$i],
                                     'product_id' => $product_id,
-                                    'status' => STATUS_ACTIVE
+                                    'status' => $_POST['status_variant'][$i]
                                 ];
                                 $result = $modelVariant->saveVariant($data_variant);
                                 $listProFlashSale = $mdFlashSaleProduct->getProductFlashSaleByProductId($id);
@@ -379,12 +377,13 @@ class Admin_ProductController extends FrontBaseAction {
                         if(($variantIdOlds[0])){
                             foreach ($variantIdOlds as $key => $var_id_old) {
                                     $index = $key ;
-                                if (isset($_POST['variant_name'][$index], $_POST['variant_price'][$index], $_POST['variant_price_sales'][$index])) {
+                                if (isset($_POST['variant_name'][$index], $_POST['variant_price'][$index], $_POST['variant_price_sales'][$index], $_POST['status_variant'][$index])) {
                                     $data_variant = [
                                         'variant_name' => $_POST['variant_name'][$index],
                                         'variant_price' => $_POST['variant_price'][$index],
                                         'variant_price_sales' => $_POST['variant_price_sales'][$index],
                                         'product_id' => $product_id,
+                                        'status' => $_POST['status_variant'][$index] ,
                                     ];
                                     $result = $modelVariant->updateVariant($data_variant, $var_id_old);
                                 }
@@ -394,12 +393,13 @@ class Admin_ProductController extends FrontBaseAction {
                         }else{
                             $variantIdOlds = array_values($variantIdOlds);
                             foreach ($variantIdOlds as $key => $var_id_old) {
-                                if (isset($_POST['variant_name'][$key], $_POST['variant_price'][$key], $_POST['variant_price_sales'][$key])) {
+                                if (isset($_POST['variant_name'][$key], $_POST['variant_price'][$key], $_POST['variant_price_sales'][$key], $_POST['status_variant'][$key])) {
                                     $data_variant = [
                                         'variant_name' => $_POST['variant_name'][$key],
                                         'variant_price' => $_POST['variant_price'][$key],
                                         'variant_price_sales' => $_POST['variant_price_sales'][$key],
                                         'product_id' => $product_id,
+                                        'status' => $_POST['status_variant'][$key],
                                     ];
                                     $result = $modelVariant->updateVariant($data_variant, $var_id_old);
                                 }
@@ -408,19 +408,20 @@ class Admin_ProductController extends FrontBaseAction {
                             }
                         }
                         if (isset($variantIdOlds)) {
-                            self::updateProductVariant0($model, $product_id, $_POST['variant_price'][0], $_POST['variant_price_sales'][0]);
+                            self::updateProductVariant0($model, $product_id, $_POST['variant_price'][0], $_POST['variant_price_sales'][0], $_POST['status_variant'][0]);
                         }
                         if (!empty($_POST['url_image_delete'])) {
                             self::deleteImages($_POST['url_image_delete'], $modelVariantImg, $public_path);
                         }
                     }else{
                         foreach ($variantIdOlds as $key => $var_id_old) {
-                            if (isset($_POST['variant_name'][$key], $_POST['variant_price'][$key], $_POST['variant_price_sales'][$key])) {
+                            if (isset($_POST['variant_name'][$key], $_POST['variant_price'][$key], $_POST['variant_price_sales'][$key], $_POST['status_variant'][$key])) {
                                 $data_variant = [
                                     'variant_name' => $_POST['variant_name'][$key],
                                     'variant_price' => $_POST['variant_price'][$key],
                                     'variant_price_sales' => $_POST['variant_price_sales'][$key],
                                     'product_id' => $product_id,
+                                    'status' => $_POST['status_variant'][$key],
                                 ];
                                 $result = $modelVariant->updateVariant($data_variant, $var_id_old);
                             }
@@ -431,7 +432,7 @@ class Admin_ProductController extends FrontBaseAction {
                             self::deleteImages($_POST['url_image_delete'], $modelVariantImg, $public_path);
                         }
                         if (isset($variantIdOlds[0])) {
-                            self::updateProductVariant0($model, $product_id, $_POST['variant_price'][0], $_POST['variant_price_sales'][0]);                      
+                            self::updateProductVariant0($model, $product_id, $_POST['variant_price'][0], $_POST['variant_price_sales'][0], $_POST['status_variant'][0]);                      
                         }
                     }
                 }else{
@@ -442,7 +443,7 @@ class Admin_ProductController extends FrontBaseAction {
                                 'variant_price' => $_POST['variant_price'][$key],
                                 'variant_price_sales' => $_POST['variant_price_sales'][$key],
                                 'product_id' => $rs,
-                                'status' => STATUS_ACTIVE
+                                'status' => $_POST['status_variant'][$key]
                             ];
                             $id_variant = $modelVariant->saveVariant($var);
                             $new_variant_ids[] = $id_variant;
@@ -546,17 +547,18 @@ class Admin_ProductController extends FrontBaseAction {
         }
     }
 
-    function updateProductVariant0($model, $product_id, $variantPrice, $variantPriceSales) {
+    function updateProductVariant0($model, $product_id, $variantPrice, $variantPriceSales, $status) {
         $modelCombo = new ComboProduct();
         $mdComboDetail = new ComboDetail();
         if (isset($product_id)) {
             $product = $model->getProductInfoById($product_id);
             $product['price'] = $variantPrice;
             $product['price_sales'] = $variantPriceSales;
-    
+            $product['status'] = $status;
             $updateData = [
                 'price' => $product['price'],
                 'price_sales' => $product['price_sales'],
+                'status' => $product['status'],
             ];
     
             $model->updateProduct($updateData, $product_id);

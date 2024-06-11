@@ -110,7 +110,7 @@
             <?php
                 foreach ( $this->variants as $key => $item) { 
                 ?>
-                <div id="inputFormRow" class="inputFormRowVariant  <?php if ($item['status'] == 0) { echo 'd-none'; } ?>">
+                <div id="inputFormRow" class="inputFormRowVariant">
                     <div class="form-group">
                         <label class="control-label col-lg-2">Tên Loại</label>
                         <div class="col-lg-2">
@@ -126,7 +126,14 @@
                         </div>
                         <input type="hidden" name="variant_id[<?php echo $key ?>]" value="<?php echo $item['id'] ?>">
                         <input type="hidden" name="product_id[<?php echo $key ?>]" value="<?php echo $item['product_id']; ?>">
-                        <input type="hidden" name="variant_status[<?php echo $key ?>]" value="<?php echo $item['status']; ?>">
+                        <!-- <input type="hidden" name="variant_status[<?php echo $key ?>]" value="<?php echo $item['status']; ?>"> -->
+                        <div class="col-lg-1">
+                            <select class="form-control" name="status_variant[]">
+                                <option value="2" <?php if ($item['status'] == 2) echo 'selected'; ?>>Hết hàng</option>
+                                <option value="1" <?php if ($item['status'] == 1) echo 'selected'; ?>>Còn hàng</option>
+                            </select>
+                        </div>
+
                         <div class="input-group-append">
                             <button type="button" data-id="<?php echo $item['id'] ?>" class="btn btn-danger removeVariant">Remove</button>
                         </div>
@@ -197,6 +204,12 @@
                     <label class="control-label col-lg-1">Giá Sales</label>
                     <div class="col-lg-2">
                         <input type="tel" class = "form-control variant-price-sales" name="variant_price_sales[]" data-name="variant_price_sales[]" placeholder="Giá Sales" value="" data-msg="Vui Lòng Nhập Giá Sales Loại" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                    </div>
+                    <div class="col-lg-1">
+                        <select  class = "form-control" name="status_variant[]">
+                            <option value="2"> Hết hàng </option>
+                            <option value="1" selected >Còn hàng </option>
+                        </select>
                     </div>
                     <input type="hidden"  name = "variant_id[]" value="0">
                     <div class="input-group-append">

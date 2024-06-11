@@ -613,16 +613,16 @@ class Commons {
 						'text' => PAGINNATOR_LIMIT_ROW 
 				),
 				array (
-						'value' => PAGINNATOR_LIMIT_ROW + 20,
-						'text' => PAGINNATOR_LIMIT_ROW + 20 
+						'value' => PAGINNATOR_LIMIT_ROW + 24,
+						'text' => PAGINNATOR_LIMIT_ROW + 24 
 				),
 				array (
-						'value' => PAGINNATOR_LIMIT_ROW + 45,
-						'text' => PAGINNATOR_LIMIT_ROW + 45 
+						'value' => PAGINNATOR_LIMIT_ROW + 48,
+						'text' => PAGINNATOR_LIMIT_ROW +48 
 				),
 				array (
-						'value' => PAGINNATOR_LIMIT_ROW + 70,
-						'text' => PAGINNATOR_LIMIT_ROW + 70 
+						'value' => PAGINNATOR_LIMIT_ROW + 76,
+						'text' => PAGINNATOR_LIMIT_ROW + 76 
 				) 
 		);
 		return $list;
@@ -652,6 +652,14 @@ class Commons {
 				array (
 						'value' => "price_sales_desc",
 						'text' => "Giá Giảm Dần" 
+				),
+				array (
+						'value' => "updated_date_desc",
+						'text' => "Mới nhất" 
+				),
+				array (
+						'value' => "updated_date_asc",
+						'text' => "Cũ nhất" 
 				) 
 		);
 		return $list;
@@ -675,6 +683,12 @@ class Commons {
 				break;
 			case "price_sales_desc" :
 				$sortValue = "price_sales DESC";
+				break;
+			case "updated_date_desc" :
+				$sortValue = "updated_date DESC";
+				break;
+			case "updated_date_asc" :
+				$sortValue = "updated_date DESC";
 				break;
 			default :
 				$sortValue = "priority DESC";

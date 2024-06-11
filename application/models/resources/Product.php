@@ -629,6 +629,66 @@ class Product extends Zend_Db_Table_Abstract {
         }
         return $result;
     }
+
+    public function getProductFlashSales($params = array()) {
+        $currentTime = date('Y-m-d H:i:s');
+        $selectSub = $this->getAdapter()->select();
+        $selectSub->from('flash_sale_product', array(
+                       'product_id',
+                       'price_flash_sale',
+                       'percent_flash_sale',
+                       'price_discount',
+                       'flash_sale_id'
+                   ))
+                   ->join('flash_sale', 'flash_sale_product.flash_sale_id = flash_sale.flash_sale_id', array(
+                       'count_time_start',
+                       'count_time_end',
+                       'status',
+                       'title_flash_sale'
+                   ));
+        
+        $selectSub->where('flash_sale.status = 1')
+        ->where('count_time_end > ?', $currentTime) 
+        ->order('flash_sale.count_time_start ASC');
+        $select = $this->getAdapter()->select();
+        $select = $select->from($this->_name)
+                ->columns(array('product.created_date' => new Zend_Db_Expr("DATE_FORMAT(product.created_date,'%Y-%m-%d %H:%i:%s')")))
+                ->columns(array('product.updated_date' => new Zend_Db_Expr("DATE_FORMAT(product.updated_date,'%Y-%m-%d %H:%i:%s')")));
+        $select = $select->joinLeft(array('c' => 'category'), 'c.id = product.id_category', array('category_name' => 'c.name'))
+        ->joinLeft(array('fsp' => $selectSub), 'fsp.product_id = product.id', array(
+            'price_flash_sale' => 'fsp.price_flash_sale',
+            'percent_flash_sale' => 'fsp.percent_flash_sale',
+            'flash_sale_id' => 'fsp.flash_sale_id',
+            'count_time_start' => 'fsp.count_time_start',
+            'count_time_end' => 'fsp.count_time_end',
+            'status_flash_sale'=> 'fsp.status',
+            'title_flash_sale' => 'fsp.title_flash_sale',
+            'price_discount' => 'fsp.price_discount',
+        ))
+        ->group('product.id');
+        $select = $select->where('count_time_end > ?', $currentTime);
+        $select = $select->where('fsp.status = ?', 1);
+        //get only active product
+        $select = $select->where("product.status <> ?", STATUS_DELETE);
+        $select = $select->where("product.status <> ?", STATUS_IN_ACTIVE);
+        //
+        if (empty($params["minRange"]) == false && is_numeric($params["minRange"]) == true) {
+            $select = $select->where("price_sales >=?", $params["minRange"]);
+        }
+        if (empty($params["maxRange"]) == false && is_numeric($params["maxRange"]) == true) {
+            $select = $select->where("price_sales <=?", $params["maxRange"]);
+        }
+        if (empty($params["sort"]) == false) {
+            $select = $select->order($params["sort"]);
+        } else {
+            $select = $select->order("priority desc");
+        }
+        $result = $this->getAdapter()->fetchAll($select);
+        if (empty($result) == true) {
+            return array();
+        }
+        return $result;
+    }
     /**
      * 
      * @return int

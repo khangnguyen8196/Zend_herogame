@@ -17,7 +17,7 @@ class ProductVariant extends Zend_Db_Table_Abstract {
         
     	$select = $this->getAdapter()->select();
     	$select = $select->from($this->_name);
-        $select = $select->where("status = ?",STATUS_ACTIVE);
+        // $select = $select->where("status = ?",STATUS_ACTIVE);
         $result = $this->getAdapter()->fetchAll( $select );
         return $result;
     }
@@ -88,7 +88,7 @@ class ProductVariant extends Zend_Db_Table_Abstract {
     public function fetchAllCustomVariant() {
         $select = $this->getAdapter()->select();
         $select = $select->from($this->_name);
-        $select = $select->where("status = ?",STATUS_ACTIVE);
+        // $select = $select->where("status = ?",STATUS_ACTIVE);
         $select = $select->where("id <> ?", 1);
         $result = $this->getAdapter()->fetchAll($select);
         return $result;
@@ -98,7 +98,7 @@ class ProductVariant extends Zend_Db_Table_Abstract {
         $select = $this->getAdapter()->select()
             ->from(array('p' => 'product_variant'))
             ->where('product_id= ?', $product_id)
-            ->where("status = ?",STATUS_ACTIVE)
+            // ->where("status = ?",STATUS_ACTIVE)
             ->order('id ASC');
         return $this->getAdapter()->fetchAll($select);
     }

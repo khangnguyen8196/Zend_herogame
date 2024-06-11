@@ -225,6 +225,12 @@ pages = $.extend(pages, {
 				html += 				'<input type="tel" class="form-control variant-price-sales" name="variant_price_sales[]" data-name="variant_price_sales[]" placeholder="Giá Sales" value="" data-msg="Vui Lòng Nhập Giá Sales Loại" oninput="this.value = this.value.replace(/[^0-9]/g, \'\');"/>';
 				html += 			'</div>';
 				html += 			'<input type="hidden"  name="variant_id[]" value="0">';
+				html +=					'<div class="col-lg-1">';
+				html +=						'<select class = "form-control" name="status_variant[]">';
+				html +=							'<option value="2"> Hết hàng </option>';
+				html +=							'<option value="1" selected> Còn hàng </option>';
+				html +=						'</select>';
+				html +=					'</div>';
 				html += 			'<div class="input-group-append">';
 				html += 				'<button id="removeRow" type="button" class="btn btn-danger">Remove</button>';
 				html += 			'</div>';
@@ -262,6 +268,24 @@ pages = $.extend(pages, {
 				'</div>'
 				);
 			});
+
+			
+			$(document).on('change', 'input[name="status_variant[]"]', function() {
+                $(this).val($(this).is(':checked') ? '1' : '0');
+            });
+
+            $('input[name="status_variant[]"]').each(function() {
+                $(this).val($(this).is(':checked') ? '1' : '0');
+            });
+
+			$(document).on('click', '.status_variant', function() {
+                $(this).toggleClass('checked');
+                const checkbox = $(this).find('input[type="checkbox"]');
+                const isChecked = $(this).hasClass('checked');
+                checkbox.prop('checked', isChecked);
+                checkbox.val(isChecked ? '1' : '0');
+            });
+
 			// delete img variant
 			$(document).on('click', '.remove-item-variant-img', function() {
 				var variant_id = $('.list-delete-variant-img').data('variation-id');
@@ -312,17 +336,17 @@ pages = $.extend(pages, {
 			}
 			
 			
-			function checkVariantStatus() {
-				$('.inputFormRowVariant').each(function() {
-					var status = $(this).find('input[name^="variant_status"]').val();
-					if (status == 1) {
-						$(this).show();
-					} else {
-						$(this).hide();
-					}
-				});
-			}
-			checkVariantStatus();
+			// function checkVariantStatus() {
+			// 	$('.inputFormRowVariant').each(function() {
+			// 		var status = $(this).find('input[name^="variant_status"]').val();
+			// 		if (status == 1) {
+			// 			$(this).show();
+			// 		} else {
+			// 			$(this).hide();
+			// 		}
+			// 	});
+			// }
+			// checkVariantStatus();
 
         	$(document).on('click', '#saveproduct', {}, function ( ) {
         		var data = {id: $('#idProduct').val(), type: $('#typeProduct').val() };
@@ -527,8 +551,10 @@ pages = $.extend(pages, {
 	  		                        if( row["status"] == 1){
 	  		                            label = '<span class="label label-success">'+translate('active')+'</span>';
 	  		                        } else if( row["status"] == -1 ){
-	  		                             label = '<span class="label label-default">'+translate('disabled')+'</span>';
-	  		                        }
+	  		                            label = '<span class="label label-default">'+translate('disabled')+'</span>';
+	  		                        } else if( row["status"] == 2 ) {
+										label = '<span class="label label-default">Hết hàng</span>';
+									}
 	  		                        return label;
 	  		                    },
 	  		                    orderable: true,

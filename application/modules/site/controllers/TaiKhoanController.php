@@ -12,6 +12,7 @@ class Site_TaiKhoanController extends FrontEndAction {
     public function init() {
         parent::init();
         $this->isLoggedIn();
+        $this->loadJs('pages/taikhoan');
     }
 
     /**
@@ -116,5 +117,14 @@ class Site_TaiKhoanController extends FrontEndAction {
         $html = $this->view->render("/tai-khoan/_thong-tin-tai-khoan.phtml");
         $this->ajaxResponse(CODE_SUCCESS, "", $html);
     }
+
+    // public function thongTinRankAction() {
+    //     $this->isAjax();
+    //     $mdlRank = new MemberBenefits();
+    //     $response = $mdlRank->fetchAllMemberBenefits();
+    //     $this->view->info_rank = $response;
+    //     $html = $this->view->render("/tai-khoan/_thong-tin-rank.phtml");
+    //     $this->ajaxResponse(CODE_SUCCESS, "", $html);
+    // }
 
 }

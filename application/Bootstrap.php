@@ -381,6 +381,16 @@ class Bootstrap extends Zend_Application_Bootstrap_BootstrapAbstract {
             )
         );
         $router->addRoute('/tim-kiem/', $route1_9);
+
+        $route2_1 = new Zend_Controller_Router_Route(
+            '/flash-sales', 
+            array(
+                'module' =>'site',
+                'controller' => 'tim-kiem',
+                'action'=> 'flash'
+            )
+        );
+        $router->addRoute('/flash-sales/', $route2_1);
         
     }
 

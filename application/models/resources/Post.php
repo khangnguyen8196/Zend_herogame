@@ -261,10 +261,10 @@ class Post extends Zend_Db_Table_Abstract {
                 ->columns(array('post.updated_at' => new Zend_Db_Expr("DATE_FORMAT(post.updated_at,'%Y-%m-%d %H:%i:%s')")));
         $select = $select->where("post.status = ?", STATUS_ACTIVE);
         if (empty($key) == false) {
-            $select->where('upper( post.title ) LIKE upper(?) or upper( post.summary ) LIKE upper(?) or upper( post.content ) LIKE upper(?)', '%' . $key . '%');
-            $case = new Zend_Db_Expr($this->getAdapter()->quoteInto('case when upper( post.title ) LIKE upper(?) then 1 when upper( post.summary ) LIKE upper(?) then 2 else 3 end', '%' . $key . '%'));
+            $select->where('upper(post.title) LIKE upper(?) or upper(post.summary) LIKE upper(?)', '%' . $key . '%');
+            $case = new Zend_Db_Expr($this->getAdapter()->quoteInto('case when upper(post.title) LIKE upper(?) then 1 when upper(post.summary) LIKE upper(?) then 2 else 3 end', '%' . $key . '%'));
             $select = $select->order($case);
-        }
+        }   
         if (empty($params["sort"]) == false) {
             $select = $select->order($params["sort"]);
         } else {

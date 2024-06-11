@@ -34,39 +34,51 @@
         </div>
 
         <div class="form-group">
-            <p>Ngày Sinh</p>
+    <p>Ngày Sinh</p>
+    <?php
+    $yr = "";
+    $mth = "";
+    $dy = "";
+    if (!empty($this->customer_info["day_of_birth"]) && $this->customer_info["day_of_birth"] != "0000-00-00") {
+        $dateArray = explode("-", $this->customer_info["day_of_birth"]);
+        $yr = $dateArray[0];
+        $mth = $dateArray[1];
+        $dy = $dateArray[2];
+    }
+    ?>
+    <div class="input-group form-inline">
+        <select class="form-control custom-select w-25 mr-3" name="uif_byear" id="uif_byear">
+            <option value="">Năm</option>
             <?php
-            $yr = "";
-            $mth = "";
-            $dy = "";
-            if (empty($this->customer_info["day_of_birth"]) == false && $this->customer_info["day_of_birth"] != "0000-00-00") {
-                $dateArray = explode("-", $this->customer_info["day_of_birth"]);
-                $yr = $dateArray[0];
-                $mth = $dateArray[1];
-                $ds = $dateArray[2];
-            }
-            ?>
-            <div class="input-group form-inline">
-                <select class="form-control custom-select w-25 mr-3" name="uif_byear" id="uif_byear">
-                    <option value="">Năm</option>
-                    <?php $cur_year = date('Y'); ?>
-                    <?php for ($y = 0; $y <= YEAR_RANGE; $y++) { ?>
-                        <?php $year = $cur_year--; ?>
-                        <option <?php if (empty($yr) == false && $yr == $year) { ?> selected="selected" <?php } ?> value="<?php echo $year ?>"><?php echo $year ?></option>
-                    <?php } ?>
-                </select>
-                <select class="form-control custom-select w-25 mr-3" name="uif_bmonth" id="uif_bmonth">
-                    <option value="">Tháng</option>
-                    <?php for ($m = 1; $m <= 12; $m++) { ?>
-                        <?php $month = ( $m < 10 ) ? "0" . $m : $m; ?>
-                        <option <?php if (empty($mth) == false && $mth == $m) { ?>  selected="selected" <?php } ?> value="<?php echo $month ?>"><?php echo $month ?></option>
-                    <?php } ?>
-                </select>
-                <select class="form-control custom-select w-25 mr-25" name="uif_bday" id="uif_bday" slt_dy="<?php echo $ds ?>">
-                    <option value="">Ngày</option>
-                </select>
-            </div>
-        </div>
+            $cur_year = date('Y');
+            for ($y = 0; $y <= YEAR_RANGE; $y++) {
+                $year = $cur_year--;
+                ?>
+                <option value="<?php echo $year ?>" <?php if (!empty($yr) && $yr == $year) { ?> selected="selected"<?php } ?>><?php echo $year ?></option>
+            <?php } ?>
+        </select>
+
+        <select class="form-control custom-select w-25 mr-3" name="uif_bmonth" id="uif_bmonth">
+            <option value="">Tháng</option>
+            <?php
+            for ($m = 1; $m <= 12; $m++) {
+                $month = str_pad($m, 2, "0", STR_PAD_LEFT);
+                ?>
+                <option value="<?php echo $month ?>" <?php if (!empty($mth) && $mth == $month) { ?> selected="selected"<?php } ?>><?php echo $month ?></option>
+            <?php } ?>
+        </select>
+
+        <select class="form-control custom-select w-25 mr-3" name="uif_bday" id="uif_bday" slt_dy="<?php echo $dy ?>">
+            <option value="">Ngày</option>
+            <?php
+            for ($d = 1; $d <= 31; $d++) {
+                $day = str_pad($d, 2, "0", STR_PAD_LEFT);
+                ?>
+                <option value="<?php echo $day ?>" <?php if (!empty($dy) && $dy == $day) { ?> selected="selected"<?php } ?>><?php echo $day ?></option>
+            <?php } ?>
+        </select>
+    </div>
+</div>
 
         <label class="form-group has-float-label mt-4">
             <input name="uif_email" class="form-control" type="email"

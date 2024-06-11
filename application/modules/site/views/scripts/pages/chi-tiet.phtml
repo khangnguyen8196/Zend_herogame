@@ -23,7 +23,7 @@
         </div>
     </div>
     <div class="row">
-        <aside class="col-md-2 hidden-md-down no-gutter">
+        <aside class="col-md-2 hidden-mobile">
             <?php echo $this->render("/shared/_left-aside-post.phtml")?>
         </aside>
         <section class="col-md-10 col-12 both-gutter">
@@ -91,4 +91,21 @@
         display: block!important;
         text-align: center!important;
     }
+    @media screen and (min-width: 768px){
+        .hidden-mobile{
+            display: block;
+        }
+    }
+    @media (max-width: 767px) {
+        .hidden-mobile{
+            display: none;
+        }
+        .post-detail header h1 {
+            font-size: 24px;
+        }
+        .content .news_if div span span span {
+            font-size: 24px !important;
+        }
+    }
+    
 </style>

@@ -127,7 +127,7 @@
             // Tạo một mảng chứa thông tin về variant, bao gồm tên và giá tiền
             $variants = array();
             foreach( $this->list_variant as $variant ){
-                if($variant['status'] == 1) { // Kiểm tra nếu status = 1 thì mới hiển thị variant
+                if($variant['status'] != null) { // Kiểm tra nếu status = 1 thì mới hiển thị variant
                     $variants[$variant['id']] = array(
                         'variant_name' => $variant['variant_name'],
                         'variant_price' =>$variant['variant_price'],
@@ -154,7 +154,7 @@
                             if($key == 0 ){
                                 $active = 'active';
                             }?>
-                            <li class="variant-items" data-id="<?php echo $variant_flash_sale['variant_id']?>" data-index ="<?php echo $key ?>" data-status = "<?php echo $this->info["status"] ?>" data-price-sales="<?php echo $variant_flash_sale['variant_price_flash_sale'] ?>" data-price="<?php echo $variant_flash_sale['variant_price'] ?>">
+                            <li class="variant-items" data-id="<?php echo $variant_flash_sale['variant_id']?>" data-index ="<?php echo $key ?>" data-status = "<?php echo $this->info["status"] ?>" data-status-variant = "<?php echo $variant_flash_sale['status'] ?>" data-price-sales="<?php echo $variant_flash_sale['variant_price_flash_sale'] ?>" data-price="<?php echo $variant_flash_sale['variant_price'] ?>">
                                 <a class="<?php echo $active ?>" data-id="<?php echo $variant_flash_sale['variant_id']?>" title="<?php echo $variant_flash_sale['variant_name']?>" data-price-sales="<?php echo $variant_flash_sale['variant_price_flash_sale'] ?>" data-price="<?php echo $variant_flash_sale['variant_price'] ?>" ><?php echo $variant_flash_sale['variant_name']?></a>
                             </li>
                         <?php }?>
@@ -162,13 +162,13 @@
                         <?php 
                         foreach( $this->l_variant_flash_sale as $key => $variant_flash_sale ){?>
                             <?php 
-                                if($variant['status'] == 1) { 
+                                if($variant['status'] != null) { 
                                     $active = '';
                                     if($key == 0 ){
                                         $active = 'active';
                                     }
                             ?>
-                                 <li class="variant-items" data-id="<?php echo $variant_flash_sale['variant_id']?>" data-index ="<?php echo $key ?>" data-status = "<?php echo $this->info["status"] ?>" data-start-time ="<?php echo $this->flash_sale['count_time_start'] ?>" data-price-sales="<?php echo $variant_flash_sale['variant_price_flash_sale'] ?>" data-price="<?php echo $variant_flash_sale['variant_price'] ?>">
+                                 <li class="variant-items" data-id="<?php echo $variant_flash_sale['variant_id']?>" data-index ="<?php echo $key ?>" data-status = "<?php echo $this->info["status"] ?>" data-status-variant = "<?php echo $variant_flash_sale['status'] ?>" data-start-time ="<?php echo $this->flash_sale['count_time_start'] ?>" data-price-sales="<?php echo $variant_flash_sale['variant_price_flash_sale'] ?>" data-price="<?php echo $variant_flash_sale['variant_price'] ?>">
                                     <a class="<?php echo $active ?>" data-id="<?php echo $variant_flash_sale['variant_id']?>" title="<?php echo $variant_flash_sale['variant_name']?>" data-price-sales="<?php echo $variant_flash_sale['variant_price_flash_sale'] ?>" data-price="<?php echo $variant_flash_sale['variant_price'] ?>" ><?php echo $variant_flash_sale['variant_name']?></a>
                                 </li>
                             <?php } ?>
@@ -177,13 +177,13 @@
                     <?php 
                         foreach( $this->list_variant as $key => $variant ){?>
                             <?php 
-                                if($variant['status'] == 1) { 
+                                if($variant['status'] != null) { 
                                     $active = '';
                                     if($key == 0 ){
                                         $active = 'active';
                                     }
                             ?>
-                                <li class="variant-items" data-id="<?php echo $variant['id']?>" data-index ="<?php echo $key ?>" data-status = "<?php echo $this->info["status"] ?>" data-price-sales="<?php echo $variants[$variant['id']]['variant_price_sales'] ?>" data-price="<?php echo $variants[$variant['id']]['variant_price'] ?>">
+                                <li class="variant-items" data-id="<?php echo $variant['id']?>" data-index ="<?php echo $key ?>" data-status = "<?php echo $this->info["status"] ?>" data-status-variant = "<?php echo $variant['status'] ?>" data-price-sales="<?php echo $variants[$variant['id']]['variant_price_sales'] ?>" data-price="<?php echo $variants[$variant['id']]['variant_price'] ?>">
                                     <a class="<?php echo $active ?>" data-id="<?php echo $variant['id']?>" title="<?php echo $variant['variant_name']?>" data-price-sales="<?php echo $variants[$variant['id']]['variant_price_sales'] ?>" data-price="<?php echo $variants[$variant['id']]['variant_price'] ?>"><?php echo $variant['variant_name']?></a>
                                 </li>
                             <?php } ?>
@@ -508,7 +508,6 @@
 <!-- Your Plugin chat code -->
 <div id="fb-customer-chat" class="fb-customerchat">
 </div>
-
 <script>
   var chatbox = document.getElementById('fb-customer-chat');
   chatbox.setAttribute("page_id", "100111066262770");

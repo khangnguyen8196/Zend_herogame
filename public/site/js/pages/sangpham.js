@@ -167,7 +167,6 @@ pages = $.extend(pages, {
                     $('#click-right').off('click');
                     $('#click-left').off('click');
                     currentVariantId = variant_id;
-                    console.log(currentVariantId);
                     var currentIndex = $('.variant-' + currentVariantId + ' a.active').index();
                     var totalImages = $('.variant-' + currentVariantId + ' a').length;
 
@@ -191,6 +190,21 @@ pages = $.extend(pages, {
                     });
                 }
             });
+            $(document).ready(function(){
+                if ($('li[data-status="-1"]').length > 0) {
+                    window.location.href = '/';
+                }
+                if ($('li[data-index="0"]').not('[data-status="1"]').length > 0) {
+                    $(".purchase").css("display", "none");
+                    $('.status-a').text('TẠM HẾT HÀNG')
+                    $('.variant-items[data-index="0"] a').addClass('disabled');
+                }
+                if ($('li[data-index="0"][data-status="1"][data-price-sales="0"]').length > 0) {
+                    $(".purchase").css("display", "none");
+                    $('.status-a').text('CÒN HÀNG')
+                    $('.variant-items[data-index="0"] a').addClass('disabled');
+                }
+            }); 
             // Phân loại sản phẩm
             $(document).on("click", ".variant-items", {}, function (e) {
                 e.preventDefault();
@@ -200,13 +214,15 @@ pages = $.extend(pages, {
                 $(".variant-items a").removeClass("active");
                 var variant_id = $(this).attr("data-id");
                 var variant0Id = $("input[data-var0-id]").data("var0-id");
+                var status = $(this).attr("data-status");
+                var status_variant = $(this).attr("data-status-variant");
                 var vcId = $('.combo-product').data('vc-id');
                 if (isNaN(variant_id) == false) {
                     $(this).children("a").addClass("active");
                     $("#selected_variant").text($(this).text());
                     $("#variant").val(variant_id);
-        
                     var variant_price = $(this).attr("data-price");
+                    var index = $(this).attr("data-index");
                     var variant_price_sales = $(this).attr("data-price-sales");
                     var variant_name = $(this).find("a").text();
                     if(saleStartTime - currentTime <= 6 * 3600){
@@ -221,6 +237,23 @@ pages = $.extend(pages, {
                     $("#variant_price_sales").val(variant_price_sales);
                     $("#variant_price").val(variant_price);
                     $("#variant_name").val(variant_name);
+                    if( index == 0 && status != 1){
+                        $(".purchase").css("display", "none");
+                        $('.status-a').text('TẠM HẾT HÀNG')
+                    }else if(status_variant == 2){
+                        $(".purchase").css("display", "none");
+                        $('.status-a').text('TẠM HẾT HÀNG')
+                    }else if(index != 0 && variant_price == 0){
+                        $(".purchase").css("display", "none");
+                        $('.status-a').text('TẠM HẾT HÀNG')
+                    }else if(index == 0 && status == 1 && variant_price == 0){
+                        $(".purchase").css("display", "none");
+                        $('.status-a').text('CÒN HÀNG');
+                        $('#selected_price_sales').text('Liên hệ');
+                    }else{
+                        $(".purchase").css("display", "block");
+                        $('.status-a').text('CÒN HÀNG')
+                    }
                     if(variant_price!=variant_price_sales){
                         $('strong.price-b.hidden').css('opacity','1');
                     }else {   
@@ -257,10 +290,18 @@ pages = $.extend(pages, {
                     }
                 }
             });
-
+            $(document).ready(function() {
+                $('.variant-items[data-price-sales="0"] a').click(function(event) {
+                    event.preventDefault();
+                });
+                $('.variant-items[data-status-variant="2"] a').click(function(event) {
+                    event.preventDefault();
+                });
+                $('.variant-items[data-price-sales="0"] a').addClass('disabled');
+                $('.variant-items[data-status-variant="2"] a').addClass('disabled');
+            });
             $(document).ready(function() {
                 var timeStart = $('.count_time_start').attr('attr-start-time');
-                console.log(timeStart);
                 var saleStartTime = new Date(timeStart).getTime() / 1000; 
                 function checkCountdown() {
                     var currentTime = Math.round(Date.now() / 1000); 
@@ -471,7 +512,6 @@ pages = $.extend(pages, {
                 }
                 $("#productMobilePhotos").empty();
                 $("a.variant_" + variant_id).trigger("click");
-                console.log(variant_image2);
                 variant_image2.forEach(function(image, index) {
                     var $imageThumb = $('<a>', {
                       'class': 'image_thumbs variant_' + variant_id,

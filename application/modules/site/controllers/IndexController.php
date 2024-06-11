@@ -86,15 +86,55 @@ class Site_IndexController extends FrontEndAction {
         return $promotionProducts;
     }
 
+    // public function getNumberOfDayInMonthAction(){
+    //     if(empty($this->post_data["m"]) == true || empty($this->post_data["y"]) == true){
+    //         $this->ajaxResponse(CODE_HAS_ERROR);
+    //     }
+    //     $numberOfDay = cal_days_in_month(CAL_GREGORIAN, $this->post_data["m"], $this->post_data["y"]);
+    //     $this->view->numberOfDay = $numberOfDay;
+    //     $this->view->slt_day = @$this->post_data["slt_day"];
+    //     $html = $this->view->render("/tai-khoan/_day-option.phtml");
+    //     $this->ajaxResponse(CODE_SUCCESS,"",$html);
+    // }
     public function getNumberOfDayInMonthAction(){
-        if(empty($this->post_data["m"]) == true || empty($this->post_data["y"]) == true){
+        if(empty($this->post_data["m"]) || empty($this->post_data["y"])){
             $this->ajaxResponse(CODE_HAS_ERROR);
         }
-        $numberOfDay = cal_days_in_month(CAL_GREGORIAN, $this->post_data["m"], $this->post_data["y"]);
+    
+        $month = (int)$this->post_data["m"];
+        $year = (int)$this->post_data["y"];
+    
+        $numberOfDay = $this->getNumberOfDaysInMonth($month, $year);
+    
         $this->view->numberOfDay = $numberOfDay;
         $this->view->slt_day = @$this->post_data["slt_day"];
         $html = $this->view->render("/tai-khoan/_day-option.phtml");
         $this->ajaxResponse(CODE_SUCCESS,"",$html);
+    }
+
+    public function getNumberOfDaysInMonth($month, $year) {
+        if ($month < 1 || $month > 12) {
+            return 0; // Tháng không hợp lệ
+        }
+    
+        // Tính số ngày trong tháng
+        switch ($month) {
+            case 2: // Tháng 2
+                if ($year % 4 == 0 && ($year % 100 != 0 || $year % 400 == 0)) {
+                    return 29; // Năm nhuận
+                } else {
+                    return 28; // Năm không nhuận
+                }
+                break;
+            case 4:
+            case 6:
+            case 9:
+            case 11:
+                return 30; // Tháng có 30 ngày
+                break;
+            default:
+                return 31; // Tháng có 31 ngày
+        }
     }
     
 }
