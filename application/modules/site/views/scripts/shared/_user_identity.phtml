@@ -3,10 +3,10 @@
 ?>
 <div class="<?php echo $css ?>">
     <?php if ( empty($this->user) == false ) { ?>
-    <a href="/don-hang/lich-su-mua-hang">Danh sách Đơn Hàng</a>
+    <!-- <a href="/don-hang/lich-su-mua-hang">Danh sách Đơn Hàng</a> -->
     <div id="uiAccountBtn" class="action">
         <div class="text">
-            Xin Chào, <strong><?php echo trim($this->user["fullname"]) ?></strong>
+        <i class="fa fa-user-circle-o"></i>  <strong><?php echo trim($this->user["fullname"]) ?></strong>
         </div>
         <div class="popover">
             <ul class="menu">
@@ -14,6 +14,15 @@
                     <i class="fa fa-user-circle-o"></i>
                     <a href="javascript:;"
                         data-toggle="modal" id="userInfoBtn">Thông tin Tài Khoản</a>
+                </li>
+                <!-- <li>
+                    <i class="fa fa-user-circle-o"></i>
+                    <a href="javascript:;"
+                        data-toggle="modal" id="userInfoRank">Thông tin rank</a>
+                </li> -->
+                <li>
+                    <i class="fa fa-shopping-cart"></i>
+                    <a href="/don-hang/lich-su-mua-hang">Danh sách Đơn Hàng</a>
                 </li>
                 <li>
                     <i class="fa fa-key"></i>
@@ -29,7 +38,19 @@
         </div>
     </div>
     <?php } else { ?>
-    <a href="javascript:;" data-toggle="modal" data-target="#signupModal">Đăng Ký</a>
-    <a href="javascript:;" data-toggle="modal" data-target="#signinModal">Đăng Nhập</a>
+    <a class = "register" href="javascript:;" data-toggle="modal" data-target="#signupModal">Đăng Ký</a>
+    <a class="login" href="javascript:;" data-toggle="modal" data-target="#signinModal">Đăng Nhập</a>
     <?php } ?>
 </div>
+<style>
+    .register {
+        border-right: 1px solid #555!important;
+        padding-right: .75rem!important;
+        margin-right: .75rem!important;
+    }
+    .pheader .ph-top .user-identity>a:first-child, .pheader .ph-top .user-identity>.action:first-child {
+        margin-right: 0rem;
+        padding-right: 0rem;
+        border-right: none;
+    }
+</style>

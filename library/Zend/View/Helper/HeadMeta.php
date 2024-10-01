@@ -409,24 +409,24 @@ class Zend_View_Helper_HeadMeta extends Zend_View_Helper_Placeholder_Container_S
      * @param  string|int $indent
      * @return string
      */
-    public function toString($indent = null)
-    {
-        $indent = (null !== $indent)
-                ? $this->getWhitespace($indent)
-                : $this->getIndent();
+    // public function toString($indent = null)
+    // {
+    //     $indent = (null !== $indent)
+    //             ? $this->getWhitespace($indent)
+    //             : $this->getIndent();
 
-        $items = array();
-        $this->getContainer()->ksort();
-        try {
-            foreach ($this as $item) {
-                $items[] = $this->itemToString($item);
-            }
-        } catch (Zend_View_Exception $e) {
-            trigger_error($e->getMessage(), E_USER_WARNING);
-            return '';
-        }
-        return $indent . implode($this->_escape($this->getSeparator()) . $indent, $items);
-    }
+    //     $items = array();
+    //     $this->getContainer()->ksort();
+    //     try {
+    //         foreach ($this as $item) {
+    //             $items[] = $this->itemToString($item);
+    //         }
+    //     } catch (Zend_View_Exception $e) {
+    //         trigger_error($e->getMessage(), E_USER_WARNING);
+    //         return '';
+    //     }
+    //     return $indent . implode($this->_escape($this->getSeparator()) . $indent, $items);
+    // }
 
     /**
      * Create data item for inserting into stack
@@ -445,5 +445,44 @@ class Zend_View_Helper_HeadMeta extends Zend_View_Helper_Placeholder_Container_S
         $data->content   = $content;
         $data->modifiers = $modifiers;
         return $data;
+    }
+    
+    public function appendProperty($property, $content)
+    {
+        $meta = new stdClass();
+        $meta->property = $property;
+        $meta->content = $content;
+        $this->_container[] = $meta;
+        return $this;
+    }
+
+
+    /**
+     * Render các thẻ meta
+     *
+     * @return string
+     */
+    public function toString(){
+        $tags = '';
+        foreach ($this->_container as $meta) {
+            if (is_object($meta)) {
+                if (isset($meta->property)) {
+                    $tags .= '<meta property="' . htmlspecialchars($meta->property, ENT_QUOTES, 'UTF-8') . 
+                            '" content="' . htmlspecialchars($meta->content, ENT_QUOTES, 'UTF-8') . '" />' . PHP_EOL;
+                } else {
+                    $tags .= '<meta name="' . htmlspecialchars($meta->name, ENT_QUOTES, 'UTF-8') . 
+                            '" content="' . htmlspecialchars($meta->content, ENT_QUOTES, 'UTF-8') . '" />' . PHP_EOL;
+                }
+            } elseif (is_array($meta)) {
+                if (isset($meta['property'])) {
+                    $tags .= '<meta property="' . htmlspecialchars($meta['property'], ENT_QUOTES, 'UTF-8') . 
+                            '" content="' . htmlspecialchars($meta['content'], ENT_QUOTES, 'UTF-8') . '" />' . PHP_EOL;
+                } else {
+                    $tags .= '<meta name="' . htmlspecialchars($meta['name'], ENT_QUOTES, 'UTF-8') . 
+                            '" content="' . htmlspecialchars($meta['content'], ENT_QUOTES, 'UTF-8') . '" />' . PHP_EOL;
+                }
+            }
+        }
+        return $tags;
     }
 }

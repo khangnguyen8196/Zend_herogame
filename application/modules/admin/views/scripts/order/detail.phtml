@@ -373,7 +373,8 @@
 										<th width="50px">#</th>
 					                	<th width="150px">Ảnh</th>
 					                    <th>Tên sản phẩm</th>
-					                    <th width="10%">Màu</th>
+					                    <th>Mã sản phẩm</th>
+					                    <th width="10%">Loại</th>
 					                    <th>Giá</th>
 					                    <!-- <th>Giá Sell</th> -->
 					                    <th>Số lượng</th>
@@ -390,10 +391,11 @@
 												<td><?php echo $key + 1?></td>
 					            			<?php if( empty($value['combo_id']) == false ){?>
 												<td><img width="40px" height="40px" src="/upload/images/<?php echo $value['c_img']?>" /></td>
-					            			<?php } else {?>
+					            			<?php } elseif($value['p_variant_image']) {?>
+												<td><img width="40px" height="40px" src="/upload/images/<?php echo $value['p_variant_image']?>" /></td>
+					            			<?php }else {?>
 												<td><img width="40px" height="40px" src="/upload/images/<?php echo $value['p_img']?>" /></td>
-
-					            			<?php }?>
+											<?php }?>
 					            
 					            				<td>
 					            					<?php
@@ -401,6 +403,15 @@
 					            					  echo $value['c_combo_name'];
 					            					} else {
 														echo $value['p_name'];
+					            					}
+					            					?>
+					            				</td>
+					            				<td>
+					            					<?php
+					            					if( empty($value['p_sku']) == false ){
+					            					  echo $value['p_sku'];
+					            					} else {
+					            					  echo '';
 					            					}
 					            					?>
 					            				</td>

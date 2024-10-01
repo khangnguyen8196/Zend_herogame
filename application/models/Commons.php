@@ -527,7 +527,7 @@ class Commons {
 			$bcolor = '#cc2600';
 		} 
 		if ($value ["status"] == 2) {
-			$titleText = 'Tạm hết hàng';
+			$titleText = 'Hết hàng';
 			$bcolor = '#000';
 		}
 		$product ["status"] = $value ["status"];
@@ -708,7 +708,7 @@ class Commons {
 				$txt = "Còn Hàng";
 				break;
 			case 2 :
-				$txt = "Tạm Hết Hàng";
+				$txt = "Hết Hàng";
 				break;
 			case -1 :
 				$txt = "Sản phẩm ngừng kinh doanh";

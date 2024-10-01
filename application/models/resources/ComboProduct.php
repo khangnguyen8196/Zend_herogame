@@ -164,4 +164,9 @@ class ComboProduct extends Zend_Db_Table_Abstract {
         return $result;
     }
     
+    public function deleteComboProductByComboId( $combo_id ) {
+        $where = $this->getAdapter()->quoteInto('id = ?', $combo_id);
+        return $this->delete($where);
+    }
+    
 }

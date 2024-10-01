@@ -53,7 +53,9 @@
                                                 <div class="item photo">
                                                     <?php
                                                     $photo = "";
-                                                    if (!empty($value["image"])) {
+                                                    if (!empty($value["variant_image"])) {
+                                                        $photo = PHOTO_PATH . $value["variant_image"];
+                                                    }else{
                                                         $photo = PHOTO_PATH . $value["image"];
                                                     }
                                                     echo $this->partial('/shared/_lazy_image.phtml', array(
@@ -149,7 +151,9 @@
                                                             <div class="item photo">
                                                                 <?php
                                                                 $photo = "";
-                                                                if (!empty($item["image"])) {
+                                                                if (!empty($item["variant_image"])) {
+                                                                    $photo = PHOTO_PATH . $item["variant_image"];
+                                                                }else{
                                                                     $photo = PHOTO_PATH . $item["image"];
                                                                 }
                                                                 echo $this->partial('/shared/_lazy_image.phtml', array(
@@ -256,7 +260,9 @@
                                     <td class="text-center">
                                         <?php
                                         $photo = "";
-                                        if (empty($value["image"]) == false) {
+                                        if (empty($value["variant_image"]) == false) {
+                                            $photo = PHOTO_PATH . $value["variant_image"];
+                                        }else{
                                             $photo = PHOTO_PATH . $value["image"];
                                         }
                                         echo $this->partial('/shared/_lazy_image.phtml', array(
@@ -350,7 +356,9 @@
                                             <td class="text-center" style="border-top:none !important">
                                                 <?php
                                                 $photo = "";
-                                                if (empty($item["image"]) == false) {
+                                                if (empty($item["variant_image"]) == false) {
+                                                    $photo = PHOTO_PATH . $item["variant_image"];
+                                                }else{
                                                     $photo = PHOTO_PATH . $item["image"];
                                                 }
                                                 echo $this->partial('/shared/_lazy_image.phtml', array(

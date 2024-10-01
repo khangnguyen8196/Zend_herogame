@@ -105,7 +105,8 @@ pages = $.extend(pages, {
                 var wards = $('.wards').val().trim();
                 var fee_cod = $('input[name="cod"]:checked').val().trim();
                 var payment_method = $('input[name="pm"].checked').val().trim();
-                me.checkAndGetDiscount(value, province, district, wards, fee_cod,payment_method);
+                var totalPrice = $('#totalPrice').text();
+                me.checkAndGetDiscount(value, province, district, wards, fee_cod,payment_method,totalPrice);
             });
             $("#discount").maskNumber({integer: true});
             $(".cancel-order").click(function(){
@@ -541,7 +542,7 @@ pages = $.extend(pages, {
                     }
                 });
         },
-        checkAndGetDiscount: function( percent, province, district, wards, fee_cod,payment_method ){
+        checkAndGetDiscount: function( percent, province, district, wards, fee_cod,payment_method,totalPrice){
             var me = this;
             if( percent != undefined && percent != ""){
                 var token = $.cookie("token");
@@ -568,8 +569,11 @@ pages = $.extend(pages, {
                             $("#priceDiscount").text(data.Data.discountText);
                             $("#checkdisCount").val(true);
                             $(".error-discount").removeClass('error').addClass('text-success');
-                            var totalPrice1 = data.Data.aTotalText+'đ'
-                            $("#totalPrice").text(totalPrice1);
+                            var totalPrice1 = data.Data.aTotalText
+                            $("#totalPrice").text(totalPrice1+'₫');
+                        }else{
+                            var totalPrice1 = totalPrice.replace(/₫/g, '');
+                            $("#totalPrice").text(totalPrice1 + '₫');
                         }
                     },
                     error: function () {
@@ -608,11 +612,11 @@ pages = $.extend(pages, {
                             $("#priceDiscount").text(data.Data.caclText);
                             $("#checkPromotion").val(true);
                             $(".error-promotion").removeClass('error').addClass('text-success');
-                            var totalPrice1 = data.Data.aTotalText +'đ'
-                            $("#totalPrice").text(totalPrice1);
+                            var totalPrice1 = data.Data.aTotalText
+                            $("#totalPrice").text(totalPrice1 + '₫');
                         }else{
-                            var totalPrice1 = totalPrice +'đ'
-                            $("#totalPrice").html(totalPrice1);
+                            var totalPrice1 = totalPrice.replace(/₫/g, '');
+                            $("#totalPrice").text(totalPrice1 + '₫');
                         }
                     },
                     error: function () {

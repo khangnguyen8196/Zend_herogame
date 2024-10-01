@@ -50,18 +50,22 @@ class FlashSaleProductVariant extends Zend_Db_Table_Abstract {
     // public function getFlashSaleProductVariantBy($flash_sale_id, $product_id) {
     //     $select = $this->getAdapter()->select()
     //         ->from($this->_name)
+    //         ->join(array('pv' => 'product_variant'), 'pv.id = fspv.variant_id', array('variant_name','status'))
     //         ->where('flash_sale_id = ?', $flash_sale_id)
     //         ->where('product_id = ?', $product_id);
     //     return $this->getAdapter()->fetchAll($select);
     // }
     public function getFlashSaleProductVariantBy($flash_sale_id, $product_id) {
         $select = $this->getAdapter()->select()
-            ->from(array('fspv' => $this->_name))
+            ->from(array('fspv' => 'flash_sale_product_variant'), array('*')) 
+            ->joinLeft(array('vi' => 'variant_image'), 'fspv.variant_id= vi.product_variant_id', array('url_image'))
             ->join(array('pv' => 'product_variant'), 'pv.id = fspv.variant_id', array('variant_name','status'))
-            ->where('fspv.flash_sale_id = ?', $flash_sale_id)
-            ->where('fspv.product_id = ?', $product_id);
-            
-        return $this->getAdapter()->fetchAll($select);
+            ->where('flash_sale_id = ?', $flash_sale_id)
+            ->where('fspv.product_id = ?', $product_id)
+            ->group('fspv.id')
+            ->order('fspv.id ASC');
+        $result = $this->getAdapter()->fetchAll($select);
+        return $result;
     }
 
     public function getAllFlashSaleProductVariantBy($product_id) {

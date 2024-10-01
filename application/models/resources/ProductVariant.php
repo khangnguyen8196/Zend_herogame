@@ -88,20 +88,32 @@ class ProductVariant extends Zend_Db_Table_Abstract {
     public function fetchAllCustomVariant() {
         $select = $this->getAdapter()->select();
         $select = $select->from($this->_name);
-        // $select = $select->where("status = ?",STATUS_ACTIVE);
+        // $select = $select->where("status != ?", -1);
         $select = $select->where("id <> ?", 1);
         $result = $this->getAdapter()->fetchAll($select);
         return $result;
     }
 
+    // public function getProductVariants($product_id) {
+    //     $select = $this->getAdapter()->select()
+    //         ->from(array('p' => 'product_variant'))
+    //         ->where('product_id= ?', $product_id)
+    //         // ->where("status != ?", -1)
+    //         ->order('id ASC');
+    //     return $this->getAdapter()->fetchAll($select);
+    // }
     public function getProductVariants($product_id) {
         $select = $this->getAdapter()->select()
-            ->from(array('p' => 'product_variant'))
-            ->where('product_id= ?', $product_id)
-            // ->where("status = ?",STATUS_ACTIVE)
-            ->order('id ASC');
-        return $this->getAdapter()->fetchAll($select);
+            ->from(array('pv' => 'product_variant'), array('*')) 
+            ->joinLeft(array('vi' => 'variant_image'), 'pv.id = vi.product_variant_id', array('url_image'))
+            ->where('pv.product_id = ?', $product_id)
+            // ->where("status != ?", -1)
+            ->group('pv.id')
+            ->order('pv.id ASC');
+        $result = $this->getAdapter()->fetchAll($select);
+        return $result;
     }
+    
 
     public function getLastInsertId() {
         $db = $this->getAdapter();
@@ -119,6 +131,5 @@ class ProductVariant extends Zend_Db_Table_Abstract {
         }
         return $ids;
     }
-    
-    
+
 }

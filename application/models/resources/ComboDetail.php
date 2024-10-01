@@ -175,4 +175,9 @@ class ComboDetail extends Zend_Db_Table_Abstract {
         }
         return false;
     }
+    
+    public function deleteComboDetailByCommboId($combo_id) {
+        $where = $this->getAdapter()->quoteInto('combo_id = ?', $combo_id);
+        return $this->delete($where);
+    }
 }

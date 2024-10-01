@@ -801,7 +801,7 @@ class Site_DonHangController extends FrontEndAction {
         } else {
             $dataOrder['score'] = '';
         }
-        $dataOrder['order_code'] = uniqid();
+        $dataOrder['order_code'] = substr(uniqid(), 0, 6);
         
         $order = new Order();
         $detailOfOrder = new OrderDetail();
@@ -1123,9 +1123,10 @@ class Site_DonHangController extends FrontEndAction {
 
             if (empty($productInfo)) {
                 $this->ajaxResponse(CODE_HAS_ERROR, "Thêm sản phẩm vào Giỏ Hàng không thành công! Không tìm thấy thông tin sản phẩm");
-            } else if ($productInfo["status"] == 2) {
-                $this->ajaxResponse(CODE_HAS_ERROR, "Thêm sản phẩm vào Giỏ Hàng không thành công! Sản phẩm đã hết hàng");
-            }
+            } 
+            // else if ($productInfo["status"] == 2) {
+            //     $this->ajaxResponse(CODE_HAS_ERROR, "Thêm sản phẩm vào Giỏ Hàng không thành công! Sản phẩm đã hết hàng");
+            // }
             if(empty($variant_id)) {
                 $list_variant = $mdlVariant->getProductVariants($pid);
                 if (!empty($list_variant[0]['id'])) {

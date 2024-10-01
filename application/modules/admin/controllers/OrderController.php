@@ -152,6 +152,7 @@ class Admin_OrderController extends FrontBaseAction {
                             'payment_method' => $data['payment_method'],
                             'reject_reason' => $data['reject_reason'],
                             'admin_discount'=> $data['admin_discount'],
+                            'updated_date' => date("Y-m-d H:i:s"),
                 	);
                     if( $data['status'] != 4 ){
                         $dataIn['status_score'] = 0;
@@ -324,7 +325,7 @@ class Admin_OrderController extends FrontBaseAction {
         	2 => "is_pay",
             3 => "address",
             4 => "phone",
-        	5 => "email",
+        	5 => "name_province",
         	6 => "created_date",
         	7 => "updated_date",
         	8 => "updated_by",

@@ -115,181 +115,346 @@ pages = $.extend(pages, {
                 }
             });
 
-            $(document).ready(function() {
-                var currentIndex = $('.no-variant a.active').index();
-                var totalImages = $('.no-variant a').length;
-            
-                function handleRightClick() {
-                    currentIndex = (currentIndex + 1) % totalImages;
-                    $('.no-variant a:eq(' + currentIndex + ')').trigger('click');
-                }
-            
-                function handleLeftClick() {
-                    currentIndex = (currentIndex - 1 + totalImages) % totalImages;
-                    $('.no-variant a:eq(' + currentIndex + ')').trigger('click');
-                }
-                $('#click-right').click(function(e) {
-                    handleRightClick();
-                });
-            
-                $('#click-left').click(function(e) {
-                    handleLeftClick();
-                });
-            });
-
-            $(document).ready(function() {
-                var variantId = $('.variant-wrapper a.active').attr('data-variantid');
-                var currentIndex = $('.variant-'+variantId+' a.active').index();
-                var totalImages = $('.variant-'+variantId+' a').length;
-            
-                function handleRightClick() {
-                    currentIndex = (currentIndex + 1) % totalImages;
-                    $('.variant-'+variantId+' a:eq(' + currentIndex + ')').trigger('click');
-                }
-            
-                function handleLeftClick() {
-                    currentIndex = (currentIndex - 1 + totalImages) % totalImages;
-                    $('.variant-'+variantId+' a:eq(' + currentIndex + ')').trigger('click');
-                }
-                $('#click-right').click(function(e) {
-                    handleRightClick();
-                });
-            
-                $('#click-left').click(function(e) {
-                    handleLeftClick();
-                });
-            });
-
-            var currentVariantId;
-            $(document).on("click", ".variant-items", {}, function (e) {
-                var variant_id = $(this).attr("data-id");
-                if (variant_id !== currentVariantId) {
-                    $('#click-right').off('click');
-                    $('#click-left').off('click');
-                    currentVariantId = variant_id;
-                    var currentIndex = $('.variant-' + currentVariantId + ' a.active').index();
-                    var totalImages = $('.variant-' + currentVariantId + ' a').length;
-
-                    function handleRightClick() {
-                        $('.variant-' + currentVariantId + ' a:eq(' + currentIndex + ')').trigger('click');
-                        currentIndex = (currentIndex + 1) % totalImages;
-                    }
-
-                    function handleLeftClick() {
-                        $('.variant-' + currentVariantId + ' a:eq(' + currentIndex + ')').trigger('click');
-                        currentIndex = (currentIndex - 1 + totalImages) % totalImages;
-                    }
-
-                    // Gán lại sự kiện click
-                    $('#click-right').click(function (e) {
-                        handleRightClick();
-                    });
-
-                    $('#click-left').click(function (e) {
-                        handleLeftClick();
-                    });
-                }
-            });
             $(document).ready(function(){
                 if ($('li[data-status="-1"]').length > 0) {
                     window.location.href = '/';
                 }
-                if ($('li[data-index="0"]').not('[data-status="1"]').length > 0) {
+                let liStatusMinus1 = $('li[data-status="-1"]').length > 0;
+                let liIndex0 = $('li[data-index="0"]');
+                let liIndex0NotStatus1 = liIndex0.not('[data-status="1"]').length > 0;
+                let liIndex0Status1Price0 = $('li[data-index="0"][data-status="1"][data-price-sales="0"]').length > 0;
+                let liIndex0Status1NotVariant1 = $('li[data-index="0"][data-status="1"][data-status-variant!="1"]').length > 0;
+                let liStatus1BestSell1Variant1 = $('li[data-index="0"][data-status="1"][data-best-sell="1"][data-status-variant="1"]').length > 0;
+                let liStatus1BestSell1VariantPrice0 = $('li[data-index="0"][data-status="1"][data-best-sell="1"][data-status-variant="1"][data-price-sales="0"]').length > 0;
+                if (liStatusMinus1) {
+                    window.location.href = '/';
+                }else if (liStatus1BestSell1VariantPrice0) {
                     $(".purchase").css("display", "none");
-                    $('.status-a').text('TẠM HẾT HÀNG')
-                    $('.variant-items[data-index="0"] a').addClass('disabled');
-                }
-                if ($('li[data-index="0"][data-status="1"][data-price-sales="0"]').length > 0) {
+                    $('.status-a').text('PRE-ORDER');
+                    $('#add_to_cart span').text('ĐẶT TRƯỚC NGAY');
+                }else if (liIndex0NotStatus1 || liIndex0Status1NotVariant1) {
                     $(".purchase").css("display", "none");
-                    $('.status-a').text('CÒN HÀNG')
-                    $('.variant-items[data-index="0"] a').addClass('disabled');
+                    $('.status-a').text('HẾT HÀNG');
+                    liIndex0.find('a').addClass('disabled');
+                } else if (liIndex0Status1Price0) {
+                    $(".purchase").css("display", "none");
+                    $('.status-a').text('CÒN HÀNG');
+                    liIndex0.find('a').addClass('disabled');
+                } else if (liStatus1BestSell1Variant1) {
+                    $('.status-a').text('PRE-ORDER');
+                    $('#add_to_cart span').text('ĐẶT TRƯỚC NGAY');
                 }
-            }); 
-            // Phân loại sản phẩm
-            $(document).on("click", ".variant-items", {}, function (e) {
-                e.preventDefault();
-                var timeStart = $(this).attr('data-start-time');
-                var currentTime = Math.round(Date.now() / 1000); 
-                var saleStartTime = new Date(timeStart).getTime() / 1000; 
-                $(".variant-items a").removeClass("active");
-                var variant_id = $(this).attr("data-id");
-                var variant0Id = $("input[data-var0-id]").data("var0-id");
-                var status = $(this).attr("data-status");
-                var status_variant = $(this).attr("data-status-variant");
-                var vcId = $('.combo-product').data('vc-id');
-                if (isNaN(variant_id) == false) {
-                    $(this).children("a").addClass("active");
-                    $("#selected_variant").text($(this).text());
-                    $("#variant").val(variant_id);
-                    var variant_price = $(this).attr("data-price");
-                    var index = $(this).attr("data-index");
-                    var variant_price_sales = $(this).attr("data-price-sales");
-                    var variant_name = $(this).find("a").text();
-                    if(saleStartTime - currentTime <= 6 * 3600){
-                        var variant_price_flash_sales = $(this).attr("data-price-sales");
-                        var first_char = variant_price_flash_sales.substring(0, 1);
-                        $("#selected_price_sales").text(first_char+'?????' + '₫');
-                    }else{
-                        $("#selected_price_sales").text(formatNumber(variant_price_sales) + '₫');
-                    }
-                    $("#selected_price").text(formatNumber(variant_price) + '₫');
-                    $("#selected_variant").text(variant_name);
-                    $("#variant_price_sales").val(variant_price_sales);
-                    $("#variant_price").val(variant_price);
-                    $("#variant_name").val(variant_name);
-                    if( index == 0 && status != 1){
-                        $(".purchase").css("display", "none");
-                        $('.status-a').text('TẠM HẾT HÀNG')
-                    }else if(status_variant == 2){
-                        $(".purchase").css("display", "none");
-                        $('.status-a').text('TẠM HẾT HÀNG')
-                    }else if(index != 0 && variant_price == 0){
-                        $(".purchase").css("display", "none");
-                        $('.status-a').text('TẠM HẾT HÀNG')
-                    }else if(index == 0 && status == 1 && variant_price == 0){
-                        $(".purchase").css("display", "none");
-                        $('.status-a').text('CÒN HÀNG');
-                        $('#selected_price_sales').text('Liên hệ');
-                    }else{
-                        $(".purchase").css("display", "block");
-                        $('.status-a').text('CÒN HÀNG')
-                    }
-                    if(variant_price!=variant_price_sales){
-                        $('strong.price-b.hidden').css('opacity','1');
-                    }else {   
-                            $('.hidden').css('opacity','0');
-                    }
-                    if(variant_price==variant_price_sales){
-                        $('strong.price-b').addClass('hidden');
-                    }
-
-                    if(variant_id !=vcId){
-                        $('.combo-product').hide();
-                    }else {
-                        $('.combo-product').show();
-                    }
-
-            
-                    if ($("#productMobilePhotos.mobile").is(':visible') == true) {
-                        pages.sanpham.processGalleryMobile(variant_id);
-                    } else {
-
-                        $(".image_thumbs").removeClass("active");
-                        $(".image_thumbs").hide();
-                        if (variant0Id == variant_id) {
-                            $("a.variant_" + variant_id).first().trigger("click");
-                            $('.image_thumbs').hide();
-                            $('.variant_' + variant_id).show();
-                            $('.variant_0_id, .image_thumbs:not([class*=variant_])').show(); 
-                        } else {
-                            $('.variant_' + variant_id).show();
-                            var variantImage = $('.variant_' + variant_id).find('.imgh.r1x1.photo').eq(0);
-                            variantImage.trigger("click");
-                        }
-                        
-                    }
+                var best_sell = $('.best-sell').val();
+                if(best_sell == 1) {
+                    $('.status-a').text('PRE-ORDER');
+                    $('#add_to_cart span').text('ĐẶT TRƯỚC NGAY');
                 }
             });
+
+            $(document).ready(function() {
+                var $photos = $('.photos');
+                var $pivBot = $('.piv-bot');
+                var $anh = $('.image-left');
+                var photosOffsetTop, pivBotOffsetTop, photosHeight, anhOffsetTop, anhHeight;
+
+                function updateOffsets() {
+                    photosOffsetTop = $photos.offset().top;
+                    anhOffsetTop = $anh.offset().top;
+                }
+
+                function handleScroll() {
+                    var scrollTop = $(window).scrollTop();
+                    var photosHeight = $photos.outerHeight();
+                    var pivBotOffsetTop = $pivBot.offset().top; // Cập nhật vị trí mới của pivBot
+                    var maxScrollTop = pivBotOffsetTop - photosHeight - 20;
+
+                    if (scrollTop > photosOffsetTop && scrollTop < maxScrollTop) {
+                        // $photos.css({
+                        //     'position': 'fixed',
+                        //     'top': '37px',
+                        //     'left': $anh.offset().left + 'px',
+                        //     'width': $anh.width() + 'px'
+                        // });
+                        let topPosition = scrollTop > 100 ? '37px' : '0'; 
+                        $photos.css({
+                            'position': 'fixed',
+                            'top': topPosition,
+                            'left': $anh.offset().left + 'px',
+                            'width': $anh.width() + 'px'
+                        });
+                    } else if (scrollTop >= maxScrollTop) {
+                        $photos.css({
+                            'position': 'relative',
+                            'top': Math.max(0, maxScrollTop - anhOffsetTop - 20) + 'px',
+                            'left': '0'
+                        });
+                    } else {
+                        $photos.css({
+                            'position': 'relative',
+                            'top': '0',
+                            'left': '0',
+                            'width': '100%'
+                        });
+                    }
+                }
+                if ($(window).width() > 767) {
+                    updateOffsets();
+                    $(window).on('scroll', handleScroll);
+                }
+                
+                // Phân loại sản phẩm
+                var slidesToShow = 5;
+                var slidesToScroll = 5;
+                var currentSlide = 0; 
+                var noVariant = $('.no-variant');
+                noVariant.show().slick({
+                    slidesToShow: slidesToShow,
+                    slidesToScroll: slidesToScroll,
+                    focusOnSelect: false,
+                    infinite: false ,
+                    prevArrow: '<button class="slick-prev"><i class="fa-solid fa-angle-left"></i></button>',
+                    nextArrow: '<button class="slick-next"><i class="fa-solid fa-angle-right"></i></button>'
+                });
+
+                var firstVariant = $('.variant-wrapper').first();
+                if (firstVariant.hasClass('slick-initialized')) {
+                    firstVariant.slick('unslick');
+                }
+                                firstVariant.show().slick({
+                    slidesToShow: slidesToShow,
+                    slidesToScroll: slidesToScroll,
+                    focusOnSelect: false,
+                    infinite: false ,
+                    prevArrow: '<button class="slick-prev"><i class="fa-solid fa-angle-left"></i></button>',
+                    nextArrow: '<button class="slick-next"><i class="fa-solid fa-angle-right"></i></button>'
+                }); 
+                if (noVariant.find('.slick-slide').length > 0) {
+                    firstVariant = noVariant;
+                    updateLargeSlider(0);
+                    let image = $('.no-variant').find('.image_thumbs').eq(0);
+                    let img_url = image.data('image')
+                    if (image.length > 0) {
+                        image.addClass("active");
+                        $('.image_detail .photo').fadeOut(300, function() {
+                            $(this).attr('data-lazy', img_url)
+                                   .attr('data-zoom-image', img_url)
+                                   .css('background-image', `url(${img_url})`).fadeIn(300);
+                        });
+                    }
+                } else {
+                    //  console.log("NoVariant không có phần tử con nào có class slick-slide.");
+                } 
+                var totalSlides = firstVariant.slick('getSlick').slideCount;
+                var lastSlide =  totalSlides -1;
+                function updateLargeSlider(index) {
+                    // Lấy slide không có lớp `slick-cloned`
+                    var $currentSlide = firstVariant.find('.slick-slide[data-slick-index="' + index + '"]').not('.slick-cloned');
+                    var img = $currentSlide.data('image');
+        
+                    // Cập nhật slide lớn
+                    $('.zoomWindow').fadeOut(300, function() {
+                        $(this).css('background-image', `url(${img})`).fadeIn(300);  // Fade in sau khi đổi ảnh
+                    });
+                    
+                    $('.zoomLens img').fadeOut(300, function() {
+                        $(this).attr('src', img).fadeIn(300);
+                    });
+                    
+                    $('.zoomWrapper .photo').fadeOut(300, function() {
+                        $(this).attr('data-lazy', img)
+                               .attr('data-zoom-image', img)
+                               .css('background-image', `url(${img})`).fadeIn(300);
+                    });
+                    // Xóa class 'active-slide' khỏi tất cả slide và thêm vào slide hiện tại
+                    firstVariant.find('.slick-slide').removeClass('active');
+                    $currentSlide.addClass('active');
+        
+                    // Kiểm tra nếu slide hiện tại không nằm trong vùng hiển thị
+                    if (!$currentSlide.hasClass('slick-active')) {
+                        // Lấy chỉ số slide hiện tại trong vùng hiển thị đầu và cuối
+                        var firstVisibleSlideIndex = firstVariant.find('.slick-active').first().data('slick-index');
+                        var lastVisibleSlideIndex = firstVariant.find('.slick-active').last().data('slick-index');
+                        // Nếu slide hiện tại nằm trước vùng hiển thị thì prev, nếu nằm sau thì next
+                        if(index == 0) {
+                            firstVariant.show().slick('slickGoTo', 0);
+                        } 
+                        else if(index == lastSlide){
+                            firstVariant.show().slick('slickGoTo', lastSlide); 
+                        } 
+                        else if (index < firstVisibleSlideIndex) {
+                            firstVariant.slick('slickPrev');
+                        } else if (index > lastVisibleSlideIndex) {
+                            firstVariant.slick('slickNext'); 
+                        } 
+                    }
+                }
+                firstVariant.on('click', '.slick-slide', function() {
+                    var index = $(this).data('slick-index'); 
+                    currentSlide = index; 
+                    updateLargeSlider(index); 
+                });
+        
+                // Sự kiện click cho nút "Previous"
+                $('#click-left').on('click', function() {
+                    event.stopPropagation();
+                    if (currentSlide > 0) {
+                        currentSlide--;  // Lùi lại slide hiện tại
+                        updateLargeSlider(currentSlide);  // Cập nhật slider lớn
+                    } else {
+                        currentSlide = firstVariant.find('.slick-slide').length - 1;
+                        updateLargeSlider(currentSlide);
+                    }
+                });
+        
+                // Sự kiện click cho nút "Next"
+                $('#click-right').on('click', function() {
+                    event.stopPropagation();
+                    if (currentSlide < firstVariant.find('.slick-slide').length - 1) {
+                        currentSlide++; 
+                        updateLargeSlider(currentSlide);
+                    } else {
+                        currentSlide = 0; 
+                        updateLargeSlider(currentSlide); 
+                    }
+                });
+                updateLargeSlider(0);
+                
+                $(document).on("click", ".variant-items", {}, function (e) {
+                
+                    e.preventDefault();
+                    var timeStart = $(this).attr('data-start-time');
+                    var currentTime = Math.round(Date.now() / 1000); 
+                    var saleStartTime = new Date(timeStart).getTime() / 1000; 
+                    $(".variant-items a").removeClass("active");
+                    var variant_id = $(this).attr("data-id");
+                    var variant0Id = $("input[data-var0-id]").data("var0-id");
+                    var status = $(this).attr("data-status");
+                    var status_variant = $(this).attr("data-status-variant");
+                    var best_sell = $(this).attr("data-best-sell");
+                    var vcId = $('.combo-product').data('vc-id');
+                    if (isNaN(variant_id) == false) {
+                        $(this).children("a").addClass("active");
+                        $("#selected_variant").text($(this).text());
+                        $("#variant").val(variant_id);
+                        var variant_price = $(this).attr("data-price");
+                        var index = $(this).attr("data-index");
+                        var variant_price_sales = $(this).attr("data-price-sales");
+                        var variant_name = $(this).find("a").text();
+                        if(saleStartTime - currentTime <= 6 * 3600){
+                            var variant_price_flash_sales = $(this).attr("data-price-sales");
+                            var first_char = variant_price_flash_sales.substring(0, 1);
+                            $("#selected_price_sales").text(first_char+'?????' + '₫');
+                        }else{
+                            $("#selected_price_sales").text(formatNumber(variant_price_sales) + '₫');
+                        }
+                        $("#selected_price").text(formatNumber(variant_price) + '₫');
+                        $("#selected_variant").text(variant_name);
+                        $("#variant_price_sales").val(variant_price_sales);
+                        $("#variant_price").val(variant_price);
+                        $("#variant_name").val(variant_name);
+                        if( index == 0 && status != 1){
+                            $(".purchase").css("display", "none");
+                            $('.status-a').text('HẾT HÀNG')
+                        }else if(status_variant == 2){
+                            $(".purchase").css("display", "none");
+                            $('.status-a').text('HẾT HÀNG')
+                        }else if(index != 0 && variant_price == 0){
+                            $(".purchase").css("display", "none");
+                            $('.status-a').text('HẾT HÀNG')
+                        }else if(index == 0 && status == 1 && variant_price == 0){
+                            $(".purchase").css("display", "none");
+                            $('.status-a').text('CÒN HÀNG');
+                            $('#selected_price_sales').text('Liên hệ');
+                        }else{
+                            $(".purchase").css("display", "block");
+                            $('.status-a').text('CÒN HÀNG')
+                        }
+                        if(best_sell == 1 && status_variant == 1){
+                            $('.status-a').text('PRE-ORDER');
+                            $('#add_to_cart span').text('ĐẶT TRƯỚC NGAY');
+                        }
+                        if(variant_price!=variant_price_sales){
+                            $('strong.price-b.hidden').css('opacity','1');
+                        }else {   
+                                $('.hidden').css('opacity','0');
+                        }
+                        if(variant_price==variant_price_sales){
+                            $('strong.price-b').addClass('hidden');
+                        }
+    
+                        if(variant_id !=vcId){
+                            $('.combo-product').hide();
+                        }else {
+                            $('.combo-product').show();
+                        }
+    
+                
+                        if ($("#productMobilePhotos.mobile").is(':visible') == true) {
+                            pages.sanpham.processGalleryMobile(variant_id);
+                        } else {
+    
+                            $(".image_thumbs").removeClass("active");
+                            $(".image_thumbs").hide();
+                            if (variant0Id == variant_id) {
+                                $("a.variant_" + variant_id).first().trigger("click");
+                                $('.image_thumbs').hide();
+                                $('.variant_' + variant_id).show();
+                                $('.variant_0_id, .image_thumbs:not([class*=variant_])').show(); 
+                            } else {
+                                $('.variant_' + variant_id).show();
+                                var variantImage = $('.variant_' + variant_id).find('.imgh.r1x1.photo').eq(0);
+                                variantImage.trigger("click");
+                            }
+                            
+                        }
+                        if ($(window).width() > 767) {
+                            updateOffsets();
+                            handleScroll();
+                        }
+                        $('.variant-wrapper').each(function(){
+                            if ($(this).hasClass('slick-initialized')) {
+                                $(this).slick('unslick');
+                            }
+                            $(this).hide();
+                        });
+                    
+                        var selectedVariant = $('.variant-' + variant_id);
+                        selectedVariant.show().slick({
+                            focusOnSelect: false,
+                            infinite: false,
+                            slidesToShow: slidesToShow,
+                            slidesToScroll: slidesToScroll,
+                            prevArrow: '<button class="slick-prev"><i class="fa-solid fa-angle-left"></i></button>',
+                            nextArrow: '<button class="slick-next"><i class="fa-solid fa-angle-right"></i></button>'
+                        });
+                        firstVariant = selectedVariant;
+                        updateLargeSlider(0);
+                    }
+                    if ($('.no-variant a').length > 0) {
+                        firstVariant = noVariant;
+                        updateLargeSlider(0);
+                        let image = $('.no-variant').find('.image_thumbs').eq(0);
+                        let img_url = image.data('image')
+                        if (image.length > 0) {
+                            image.addClass("active");
+                            $('.image_detail .photo').fadeOut(300, function() {
+                                $(this).attr('data-lazy', img_url)
+                                       .attr('data-zoom-image', img_url)
+                                       .css('background-image', `url(${img_url})`).fadeIn(300);
+                            });
+                        } else {
+                            console.log('Không tìm thấy phần tử hình ảnh.');
+                        }
+                        if ($(window).width() > 767) {
+                            updateOffsets();
+                            handleScroll();
+                        }
+                    } else {
+                        console.log('Không tồn tại thẻ <a> bên trong .no-variant');
+                    }
+                });
+            });
+            
             $(document).ready(function() {
                 $('.variant-items[data-price-sales="0"] a').click(function(event) {
                     event.preventDefault();

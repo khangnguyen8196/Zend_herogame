@@ -18,8 +18,9 @@ class Order extends Zend_Db_Table_Abstract {
     	if( isset( $data['count_only'] ) == true && $data['count_only'] == 1 ) {
     		$select = $select->from( $this->_name, array( "cnt" => new Zend_Db_Expr("COUNT(1)") ) );
     	} else {
-    		  $select = $select->from($this->_name);
-    	}
+            $select = $select->from($this->_name)
+                             ->joinLeft('province', 'province.matp = ' . $this->_name . '.ma_province', array('name_province'));
+        }
         $commonObj = new My_Controller_Action_Helper_Common();
         //search by name
         if (empty($data['search-key']) == false) {
@@ -79,6 +80,16 @@ class Order extends Zend_Db_Table_Abstract {
     public function fetchOrderById( $id ) {
     	$db     = $this->getAdapter();
     	$where[] = $db->quoteInto( "id = ?", $id, Zend_Db::INT_TYPE );
+    	$result = $this->fetchRow( $where );
+    	if ( empty( $result ) == true ) {
+    		return array();
+    	}
+    	$result = $result->toArray();
+    	return $result;
+    }
+    public function fetchOrderByOrderCode($order_code) {
+    	$db     = $this->getAdapter();
+    	$where[] = $db->quoteInto( "order_code = ?", $order_code, Zend_Db::INT_TYPE );
     	$result = $this->fetchRow( $where );
     	if ( empty( $result ) == true ) {
     		return array();
@@ -197,6 +208,13 @@ class Order extends Zend_Db_Table_Abstract {
             return array();
         }
         return $result;
+    }
+    public function updateConfirmOrder($data=[], $order_code) {
+        if (!empty($order_code)) {
+            $where = $this->getAdapter()->quoteInto("order_code = ?", $order_code); // Sử dụng order_code trong điều kiện WHERE
+            return $this->update($data, $where);
+        }
+        return false;
     }
     
 }

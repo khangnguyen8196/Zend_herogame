@@ -74,6 +74,84 @@ class Product extends Zend_Db_Table_Abstract {
         return $result;
     }
 
+    public function getListAllProduct($data = array()) {
+        $select = $this->getAdapter()->select();
+        if (isset($data['count_only']) == true && $data['count_only'] == 1) {
+            $select = $select->from($this->_name, array("cnt" => new Zend_Db_Expr("COUNT(1)")));
+        } else {
+            $select = $select->from($this->_name)
+                    ->columns(array('product.created_date' => new Zend_Db_Expr("DATE_FORMAT(product.created_date,'%Y-%m-%d %H:%i:%s')")))
+                    ->columns(array('product.updated_date' => new Zend_Db_Expr("DATE_FORMAT(product.updated_date,'%Y-%m-%d %H:%i:%s')")));
+        }
+        $select = $select->joinLeft(array('c' => 'category'), 'c.id = product.id_category', array('category_name' => 'c.name'));
+        $commonObj = new My_Controller_Action_Helper_Common();
+        //search by name
+
+        // if (empty($data["title"]) == false) {
+        //     $data["title"] = $commonObj->quoteLike($data["title"]);
+        //     $select = $select->where("product.title like ?", "%" . $data["title"] . "%");
+        // }
+         if (!empty($data["title"])) {
+            $data["title"] = $commonObj->quoteLike($data["title"]);
+            $select = $select->where(new Zend_Db_Expr("upper(product.title) LIKE upper(?)"), '%' . $data["title"] . '%');
+        }
+        if (empty($data["created_date"]) == false) {
+            $data["created_date"] = $commonObj->quoteLike($data["created_date"]);
+            $select = $select->where("DATE(product.created_date) =?", $data["created_date"]);
+        }
+        if (empty($data["updated_date"]) == false) {
+            $data["updated_date"] = $commonObj->quoteLike($data["updated_date"]);
+            $select = $select->where("DATE(product.updated_date) =?", $data["updated_date"]);
+        }
+        // if (empty($data['search-key']) == false) {
+        //     $select->where("product.title like '%" . $data['search-key'] . "%' or c.name like '%" . $data['search-key'] . "%' 
+        // 			 or product.updated_by like '%" . $data['search-key'] . "%' or product.id like '%" . $data['search-key'] . "%' or product.sku like '%" . $data['search-key'] . "%' ");
+            
+        // }
+        // if (!empty($data['search-key'])) {
+        //     $select->where("product.title LIKE '%" . $data['search-key'] . "%' 
+        //     OR c.name LIKE '%" . $data['search-key'] . "%' 
+        //     OR product.updated_by LIKE '%" . $data['search-key'] . "%' 
+        //     OR product.id LIKE '%" . $data['search-key'] . "%' 
+        //     OR product.sku LIKE '%" . $data['search-key'] . "%'");
+        // }
+        if (empty($data['search-key']) == false) {
+            $key =str_replace(' ','%',(string)$data['search-key']);
+            // $select->where('upper( product.title ) LIKE upper(?) or upper( product.sku ) LIKE upper(?) or upper( product.description ) LIKE upper(?) or upper( product.content ) LIKE upper(?) or upper( c.name ) LIKE upper(?)', '%' . $key . '%');
+            $select->where('upper( product.title ) LIKE upper(?) or upper( product.sku ) LIKE upper(?) or upper( c.name ) LIKE upper(?)', '%' . $key . '%');
+            $case = new Zend_Db_Expr($this->getAdapter()->quoteInto('case when upper( product.title ) LIKE upper(?) then 1
+            when upper( product.description ) LIKE upper(?) then 2 
+            when upper( c.name ) LIKE upper(?) then 3 
+            else 4 end', '%' . $key . '%'));
+            $select = $select->order($case);
+        }
+        if (empty($data['name_category']) == false) {
+            $select->where('category.name =?', $data['name_category']);
+        }
+        if (empty($data['status']) == false) {
+            $select->where('product.status =?', $data['status']);
+        }
+        if (empty($data['id_category']) == false) {
+        	$select->where('id_category =?', $data['id_category']);
+        }
+        //check count only purpose
+        if (empty($data['count_only']) == true || $data['count_only'] != 1) {
+            if (empty($data["order"]) == false) {
+                $order = $data["order"]["column"] . " " . $data["order"]["dir"];
+                $select = $select->order($order);
+            }
+            $start = ( empty($data['start']) == false ) ? $data['start'] : 0;
+            $length = ( empty($data['length']) == false ) ? $data['length'] : 0;
+            $select = $select->limit($length, $start);
+        }
+        $result = $this->getAdapter()->fetchAll($select);
+        if (empty($data['count_only']) == false && $data['count_only'] == 1) {
+            return $result[0]['cnt'];
+        }
+        $result = $this->getAdapter()->fetchAll($select);
+        return $result;
+    }
+
     public function searchAllProduct($data) {
         $select = $this->getAdapter()->select();
         if (isset($data['count_only']) == true && $data['count_only'] == 1) {

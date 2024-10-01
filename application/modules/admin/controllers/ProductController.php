@@ -232,17 +232,19 @@ class Admin_ProductController extends FrontBaseAction {
                 if ($listCombo) {
                     if($data['status']==2 || $data['status']==-1){
                         foreach ($listCombo as $key => $combo) {
-                            $combo['total_price'] = $combo['total_price'] - $data['price_sales'];
-                            $combo['total_discount'] = $combo['total_price'] - $combo['price_discount'];
-                            $modelCombo->saveComboProduct(
-                                [
-                                    "total_price" => $combo['total_price'],
-                                    "total_discount" =>  $combo['total_discount'],
-                                ], 
-                                $combo['id']
-                            );
+                            $mdComboDetail->deleteComboDetailByCommboId($combo['id']);
+                            $modelCombo->deleteComboProductByComboId($combo['id']);
+                            // $combo['total_price'] = $combo['total_price'] - $data['price_sales'];
+                            // $combo['total_discount'] = $combo['total_price'] - $combo['price_discount'];
+                            // $modelCombo->saveComboProduct(
+                            //     [
+                            //         "total_price" => $combo['total_price'],
+                            //         "total_discount" =>  $combo['total_discount'],
+                            //     ], 
+                            //     $combo['id']
+                            // );
                         }
-                        $mdComboDetail->deleteComboDetailByProductId($id);
+                        // $mdComboDetail->deleteComboDetailByProductId($id);
                     }
                     
                 }
@@ -408,7 +410,7 @@ class Admin_ProductController extends FrontBaseAction {
                             }
                         }
                         if (isset($variantIdOlds)) {
-                            self::updateProductVariant0($model, $product_id, $_POST['variant_price'][0], $_POST['variant_price_sales'][0], $_POST['status_variant'][0]);
+                            self::updateProductVariant0($model, $product_id, $_POST['variant_price'][0], $_POST['variant_price_sales'][0]);
                         }
                         if (!empty($_POST['url_image_delete'])) {
                             self::deleteImages($_POST['url_image_delete'], $modelVariantImg, $public_path);
@@ -432,7 +434,7 @@ class Admin_ProductController extends FrontBaseAction {
                             self::deleteImages($_POST['url_image_delete'], $modelVariantImg, $public_path);
                         }
                         if (isset($variantIdOlds[0])) {
-                            self::updateProductVariant0($model, $product_id, $_POST['variant_price'][0], $_POST['variant_price_sales'][0], $_POST['status_variant'][0]);                      
+                            self::updateProductVariant0($model, $product_id, $_POST['variant_price'][0], $_POST['variant_price_sales'][0]);                      
                         }
                     }
                 }else{
@@ -547,18 +549,18 @@ class Admin_ProductController extends FrontBaseAction {
         }
     }
 
-    function updateProductVariant0($model, $product_id, $variantPrice, $variantPriceSales, $status) {
+    function updateProductVariant0($model, $product_id, $variantPrice, $variantPriceSales) {
         $modelCombo = new ComboProduct();
         $mdComboDetail = new ComboDetail();
         if (isset($product_id)) {
             $product = $model->getProductInfoById($product_id);
             $product['price'] = $variantPrice;
             $product['price_sales'] = $variantPriceSales;
-            $product['status'] = $status;
+            // $product['status'] = $status;
             $updateData = [
                 'price' => $product['price'],
                 'price_sales' => $product['price_sales'],
-                'status' => $product['status'],
+                // 'status' => $product['status'],
             ];
     
             $model->updateProduct($updateData, $product_id);
@@ -681,10 +683,10 @@ class Admin_ProductController extends FrontBaseAction {
         }
         //get total data
         $this->post_data['count_only'] = 1;
-        $count = $model->fetchAllProduct($this->post_data);
+        $count = $model->getListAllProduct($this->post_data);
         //get filtered data
         unset($this->post_data['count_only']);
-        $list = $model->fetchAllProduct($this->post_data);
+        $list = $model->getListAllProduct($this->post_data);
         $response["PostData"] = $this->post_data;
         $response["Response"]["Count"] = $count;
         $response["Response"]["List"] = $list;
@@ -714,15 +716,17 @@ class Admin_ProductController extends FrontBaseAction {
                 $listCombo = $modelCombo->getAllComboProduct($id);
                 if ($listCombo) {
                     foreach ($listCombo as $key => $combo) {
-                        $combo['total_price'] = $combo['total_price'] - $product['price_sales'];
-                        $combo['total_discount'] = $combo['total_price'] - $combo['price_discount'];
-                        $modelCombo->saveComboProduct(
-                            [
-                                "total_price" => $combo['total_price'],
-                                "total_discount" =>  $combo['total_discount'],
-                            ], 
-                            $combo['id']
-                        );
+                        // $combo['total_price'] = $combo['total_price'] - $product['price_sales'];
+                        // $combo['total_discount'] = $combo['total_price'] - $combo['price_discount'];
+                        // $modelCombo->saveComboProduct(
+                        //     [
+                        //         "total_price" => $combo['total_price'],
+                        //         "total_discount" =>  $combo['total_discount'],
+                        //     ], 
+                        //     $combo['id']
+                        // );
+                        $mdComboDetail->deleteComboDetailByCommboId($combo['id']);
+                        $modelCombo->deleteComboProductByComboId($combo['id']);
                     }
                 }
                 $reponse = $model->deleteProduct($id);

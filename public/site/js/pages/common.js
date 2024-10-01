@@ -61,6 +61,9 @@ pages = $.extend(pages, {
                     $(this).closest('form').submit();
                   }
             });
+            $(document).on('click', 'form .fa-search', {}, function (e) {
+                $(this).closest('form').submit();
+            });
             $(document).on('click', '#shopping-cart', {}, function (e) {
                 e.preventDefault();
                 window.location = "/don-hang/gio-hang";
@@ -195,6 +198,38 @@ pages = $.extend(pages, {
                     }
                 });
             });
+            // $(document).on('click', '#userInfoRank', {}, function (e) {
+            //     e.preventDefault();
+            //     $.ajax({
+            //         url: "/tai-khoan/thong-tin-rank",
+            //         type: 'POST',
+            //         data: {},
+            //         beforeSend: function () {
+            //              $(".loader").attr('data-text','Vui lòng đợi trong giây lát').addClass('is-active');
+            //         },
+            //         success: function (data) {
+            //             $(".loader").removeClass('is-active');
+            //             if (data.Code > 0) {
+            //                 $("#userInfoRankModal #userInfoRankContent").html(data.Data);
+                            
+            //                 load user day of birth
+            //                 var y = $("#uif_byear").val();
+            //                 var m = $("#uif_bmonth").val();
+            //                 if (y.length > 0 && m.length > 0) {
+            //                     var slt_day = $("#uif_bday").attr("slt_dy");
+            //                     pages.taikhoan.getNumberOfDay(y, m, slt_day);
+            //                 }
+                            
+            //                 $("#userInfoRankModal").modal("show");
+            //             } else {
+            //                 alert(data.Message);
+            //             }
+            //         },
+            //         error: function () {
+            //             $(".loader").removeClass('is-active');
+            //         }
+            //     });
+            // });
             pages.common.createElementCountDown();
           
             
@@ -268,10 +303,10 @@ pages = $.extend(pages, {
        				var enable = $(value).attr('attr-enable-promo');
        				if( enable == '1' && endtime != '' ){
        				    endtime = endtime.replace(/-/g,'/');
-       					var defaultStyle = 'color:#ffffff;background:#cc2600;font-size: 1.2em;';
+       					var defaultStyle = 'color:#ffffff;background:#cc2600;font-size: 14px;';
        					var style = $(value).find('.label-b').attr('style');
        					if( style != ''&& style != undefined ){
-       						defaultStyle = style+';'+'font-size: 1.2em;';
+       						defaultStyle = style+';'+'font-size: 14px;';
        					}
        					var display = '';
        					var text = $(value).find('.label-b').text();
@@ -362,10 +397,6 @@ pages = $.extend(pages, {
     	    }
     	    updateClockDetail();
     	    var timeinterval = setInterval(updateClockDetail, 1000);
-    	}
-        
-
-
-
+    	},   
     }
 });

@@ -6,17 +6,51 @@
         }
     }
 ?>
-<?php if($this->useImg) { ?>
-    <img class="<?php echo $this->css ?>" data-lazy="<?php echo $this->url ?>" <?php echo $attrs ?>
-         width="<?php echo $this->width ?>" height="<?php echo $this->height ?>" />
-<?php } else { ?>
-    <?php if(isset($this->ratio)) { ?>
-    <div class="imgh r<?php echo $this->ratio ?> <?php echo $this->css ?>" data-lazy="<?php echo $this->url ?>" <?php echo $attrs ?>></div>
-    <?php } else { ?>
-    <div class="imgh r0x0 <?php echo $this->css ?>" data-lazy="<?php echo $this->url ?>" <?php echo $attrs ?> >
-        <?php if(isset($this->width) && isset($this->height)) { ?>
-        <div style="padding-top:<?php echo ($this->height / $this->width) * 100 ?>%"></div>
-        <?php } ?>
-    </div>
-    <?php } ?>
-<?php } ?>
+<?php 
+    $user_agent = $_SERVER['HTTP_USER_AGENT'];
+    if (preg_match('/(iPhone|Android|Windows Phone)/', $user_agent)) {
+        if($this->useImg) { ?>
+            <img class="<?php echo $this->css ?>" src="<?php echo $this->url ?>" <?php echo $attrs ?>
+                 width="<?php echo $this->width ?>" height="<?php echo $this->height ?>" />
+        <?php } else { ?>
+            <?php if(isset($this->ratio)) { ?>
+            <div class="imgh r<?php echo $this->ratio ?> <?php echo $this->css ?>" style="background-image: url('<?php echo $this->url ?>')" <?php echo $attrs ?>></div>
+            <?php } else { ?>
+                <div class="imgh r0x0 <?php echo $this->css ?>" style="background-image: url('<?php echo $this->url ?>')" <?php echo $attrs ?> >
+                <?php if(isset($this->width) && isset($this->height)) { ?>
+                <div style="padding-top:<?php echo ($this->height / $this->width) * 100 ?>%"></div>
+                <?php } ?>
+            </div>
+            <?php } ?>
+        <?php }
+    } else {
+        if($this->useImg) { ?>
+            <img class="<?php echo $this->css ?>" data-lazy="<?php echo $this->url ?>" <?php echo $attrs ?>
+                 width="<?php echo $this->width ?>" height="<?php echo $this->height ?>" />
+        <?php } else { ?>
+            <?php if(isset($this->ratio)) { ?>
+            <div class="imgh r<?php echo $this->ratio ?> <?php echo $this->css ?>" data-lazy="<?php echo $this->url ?>" <?php echo $attrs ?>></div>
+            <?php } else { ?>
+            <div class="imgh r0x0 <?php echo $this->css ?>" data-lazy="<?php echo $this->url ?>" <?php echo $attrs ?> >
+                <?php if(isset($this->width) && isset($this->height)) { ?>
+                <div style="padding-top:<?php echo ($this->height / $this->width) * 100 ?>%"></div>
+                <?php } ?>
+            </div>
+            <?php } ?>
+        <?php }
+    }
+?>
+
+<style>
+    .imgh {
+        position: relative;
+        background-size: cover;
+        background-position: center;
+    }
+    .imgh div {
+        width: 100%;
+    }
+    .imgh[data-lazy] {
+        display: block;
+    }
+</style>

@@ -410,14 +410,7 @@ pages = $.extend(pages, {
 				},
 				{
 				    "render": function (data, type, row) {
-                                        var t = row['name_province'];
-                                        if( t.length > 50 ){
-                                            t = t.substring(0,50)+'...';
-                                            return '<span title="'+row['name_province']+'">'+t+'</span>';
-                                        } else {
-                                            return row['name_province'];
-                                        }
-				        
+                        return row['name_province'];
 				    },
 				    "className": "text-center",
 				    "targets": 4,

@@ -72,12 +72,19 @@
                                                 <strong><?php echo $item['c_combo_name'] ?></strong>
                                             </a>
                                         </td>
-                                    <?php } else {?>
+                                    <?php } else {?>      
+                                        <?php 
+                                            $photo = "";
+                                            if($item['p_variant_image']){
+                                                $photo = $item['p_variant_image'];
+                                            }else{
+                                                $photo = $item['p_img'];
+                                        }?>
                                         <td class="text-center">
                                             <?php echo $this->partial('/shared/_lazy_image.phtml', array(
                                                 'ratio' => '1x1',
                                                 'css' => 'photo',
-                                                'url' => '/upload/images/'. $item['p_img']
+                                                'url' => '/upload/images/'. $photo
                                             )) ?>
                                         </td>
                                         <td class="text-left" style="width: 22%">
@@ -282,6 +289,13 @@
                     <a class="btn btn-danger btn-delete cancel-order" data-code="<?php echo $this->order['order_code'];?>">Hủy đơn hàng</a>
                 <?php } ?>
                 <a class="btn btn-primary btn-back" href="/">Tiếp tục mua hàng</a>
+                <!-- <?php if($this->order['status'] == 4){ ?>
+                    <button id="confirm" 
+                            data-status-confirm="<?php echo $this->order['status_confirm']; ?>" 
+                            data-code="<?php echo $this->order['order_code']; ?>" 
+                            <?php echo ($this->order['status_confirm'] == 0) ? '' : 'disabled'; ?> 
+                            class="btn btn-primary btn-back">Đã nhận</button>
+                <?php } ?> -->
             </div>
         </div>
     </div>
@@ -291,4 +305,13 @@
         border-top: 1px solid #d7d7d7 !important;
         border-bottom: 0 none !important; 
     }
+    /* #confirm{
+        margin-right: 20px;
+    } */
 </style>
+
+<!-- <script>
+    document.getElementById('confirm').addEventListener('click', function() {
+        this.disabled = true;
+    });
+</script> -->

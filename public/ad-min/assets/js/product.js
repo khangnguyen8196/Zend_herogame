@@ -229,6 +229,7 @@ pages = $.extend(pages, {
 				html +=						'<select class = "form-control" name="status_variant[]">';
 				html +=							'<option value="2"> Hết hàng </option>';
 				html +=							'<option value="1" selected> Còn hàng </option>';
+				html +=							'<option value="-1"> Vô hiệu </option>';
 				html +=						'</select>';
 				html +=					'</div>';
 				html += 			'<div class="input-group-append">';
@@ -269,22 +270,6 @@ pages = $.extend(pages, {
 				);
 			});
 
-			
-			$(document).on('change', 'input[name="status_variant[]"]', function() {
-                $(this).val($(this).is(':checked') ? '1' : '0');
-            });
-
-            $('input[name="status_variant[]"]').each(function() {
-                $(this).val($(this).is(':checked') ? '1' : '0');
-            });
-
-			$(document).on('click', '.status_variant', function() {
-                $(this).toggleClass('checked');
-                const checkbox = $(this).find('input[type="checkbox"]');
-                const isChecked = $(this).hasClass('checked');
-                checkbox.prop('checked', isChecked);
-                checkbox.val(isChecked ? '1' : '0');
-            });
 
 			// delete img variant
 			$(document).on('click', '.remove-item-variant-img', function() {
@@ -319,7 +304,7 @@ pages = $.extend(pages, {
 		
 			function checkFileSizes(input) {
 				const files = input.files;
-				const maxSize = 524288;
+				const maxSize = 307200;
 				let invalidFiles = [];
 		
 				for (let i = 0; i < files.length; i++) {
@@ -330,23 +315,19 @@ pages = $.extend(pages, {
 				}
 		
 				if (invalidFiles.length > 0) {
-					alert("Các tệp tin sau có kích thước vượt quá 500kb:\n" + invalidFiles.join("\n"));
+					alert("Các tệp tin sau có kích thước vượt quá 300kb:\n" + invalidFiles.join("\n"));
 					$(input).val(''); 
 				}
 			}
 			
-			
-			// function checkVariantStatus() {
-			// 	$('.inputFormRowVariant').each(function() {
-			// 		var status = $(this).find('input[name^="variant_status"]').val();
-			// 		if (status == 1) {
-			// 			$(this).show();
-			// 		} else {
-			// 			$(this).hide();
-			// 		}
-			// 	});
-			// }
-			// checkVariantStatus();
+			$(document).ready(function() {
+				// $('.removeVariant').first().addClass('hidden-select');
+				// $('select[name="status_variant[]"]').first().addClass('hidden-select');
+				$('#status').change(function() {
+					var selectedValue = $(this).val();
+					$('select[name="status_variant[]"]').val(selectedValue);
+				});
+			});
 
         	$(document).on('click', '#saveproduct', {}, function ( ) {
         		var data = {id: $('#idProduct').val(), type: $('#typeProduct').val() };

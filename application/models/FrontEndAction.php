@@ -536,6 +536,9 @@ class FrontEndAction extends Zend_Controller_Action {
     }
     
     public function _setMeta($data) {
+        $serverName = $_SERVER['SERVER_NAME'];
+        $baseUrlHttp = "http://$serverName";
+        $baseUrlHttps = "https://$serverName";
     	if (empty($data['description_meta']) == false) {
             $this->view->headMeta()->appendName('description', $data['description_meta']);
         } else if( empty($data['meta_description']) == false ){
@@ -554,19 +557,31 @@ class FrontEndAction extends Zend_Controller_Action {
     		$this->view->headMeta()->appendName('keywords', 'Máy chơi game nintendo, nintendo switch, nitendo 3DS');
     	}
     	if (empty($data['og_title']) == false) {
-    		$this->view->headMeta()->appendName('og:title', $data['og_title']);
+    		$this->view->headMeta()->appendProperty('og:title', $data['og_title']);
     	}
     	if (empty($data['og_site_name']) == false) {
-    		$this->view->headMeta()->appendName('og:site_name', $data['og_site_name']);
+    		$this->view->headMeta()->appendProperty('og:site_name', $data['og_site_name']);
     	}
     	if (empty($data['og_url']) == false) {
-    		$this->view->headMeta()->appendName('og:url', $data['og_url']);
+            if (strpos($data['og:url'], $baseUrlHttps) !== 0) {
+                if (strpos($data['og:url'], $baseUrlHttp) === 0) {
+                    $data['og:url'] = str_replace($baseUrlHttp, $baseUrlHttps, $data['og:url']);
+                }
+            }
+    		$this->view->headMeta()->appendProperty('og:url', $data['og_url']);
     	}
-    	if (empty($data['og_image']) == false) {
-    		$this->view->headMeta()->appendName('og:image', $data['og_image']);
-    	}
+        if (empty($data['og_image']) == false) {
+            if (strpos($data['og_image'], $baseUrlHttps) !== 0) {
+                if (strpos($data['og_image'], $baseUrlHttp) === 0) {
+                    $data['og_image'] = str_replace($baseUrlHttp, $baseUrlHttps, $data['og_image']);
+                } else {
+                    $data['og_image'] = $baseUrlHttps . $data['og_image'];
+                }
+            }
+            $this->view->headMeta()->appendProperty('og:image', $data['og_image']);
+        }
     	if (empty($data['og_description']) == false) {
-    		$this->view->headMeta()->appendName('og:description', $data['og_description']);
+    		$this->view->headMeta()->appendProperty('og:description', $data['og_description']);
     	}
     	if( empty( $data['title'] ) == false ){
     	    if (empty($data['title_page']) == true) {
@@ -680,6 +695,7 @@ class FrontEndAction extends Zend_Controller_Action {
                                         $p_full_info["variant_price_flash_sale"] = $variant["variant_price_flash_sale"];
                                         $p_full_info["variant_price_sales"] = $variant["variant_price_sales"];
                                         $p_full_info["variant_name"] = $variant['variant_name'];
+                                        $p_full_info["variant_image"] = $variant['url_image'];
                                         $p_full_info["variant_id"] = $variant['variant_id'];
                                         $p_full_info["count_time_start"] = $flash_sale['count_time_start'];
                                         $p_full_info["count_time_end"] = $flash_sale['count_time_end'];
@@ -701,6 +717,7 @@ class FrontEndAction extends Zend_Controller_Action {
                                             $p_full_info["qty"] = $var['qty'];
                                             $p_full_info["variant_price_sales"] = $variant["variant_price_sales"];
                                             $p_full_info["variant_name"] = $variant['variant_name'];
+                                            $p_full_info["variant_image"] = $variant['url_image'];
                                             $p_full_info["variant_id"] = $variant['id'];
                                             $p_full_info["total_money"] = $var['qty'] * $variant["variant_price_sales"];
                                             $totalMoney += $p_full_info["total_money"];

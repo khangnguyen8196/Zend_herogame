@@ -70,7 +70,8 @@ class OrderDetail extends Zend_Db_Table_Abstract {
                 'p_price' => 'p.price',
                 'p_sale' => 'p.price_sales',
                 'p_img' => 'p.image',
-                'p_url' => 'p.url_product'
+                'p_url' => 'p.url_product',
+                'p_sku' => 'p.sku'
             ))
             ->joinLeft(array('cb' => 'combo_product'), 'order_detail.combo_id = cb.id', array(
                 'c_combo_name' => 'cb.title',
@@ -83,8 +84,13 @@ class OrderDetail extends Zend_Db_Table_Abstract {
                 'p_variant_price' => 'pv.variant_price',
                 'p_variant_price_sales' => 'pv.variant_price_sales',
             ))
+            ->joinLeft(array('vi' => 'variant_image'), 'order_detail.product_variant = vi.product_variant_id', array(
+                'p_variant_image'=>'url_image'
+            ))
             ->where("order_detail.id_order =?", $orderId)
-            ->where("order_detail.id_product != 0 OR order_detail.combo_id != 0");
+            ->where("order_detail.id_product != 0 OR order_detail.combo_id != 0")
+            ->group('order_detail.id')
+            ->order('order_detail.id ASC');
 
         $result = $this->getAdapter()->fetchAll($select);
 

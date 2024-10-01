@@ -10,9 +10,11 @@
 	            }
             }else {
                 $photo = "";
-	            if (empty($value["image"]) == false) {
-	                $photo = PHOTO_PATH . $value["image"];
-	            }
+	            if (empty($value["variant_image"]) == false) {
+	                $photo = PHOTO_PATH . $value["variant_image"];
+	            }else{
+                    $photo = PHOTO_PATH . $value["image"];
+                }
             }
 	        ?>
 	        <div class="product-item">
@@ -22,7 +24,7 @@
 	                'url' => $photo
 	            )) ?>
 	            <div class="qty"><?php echo $value['qty'] ?></div>
-	            <div class="name"><?php echo $value['title'] ?><?php if(empty($value['variant_name']) == false){?></br>Màu: <?php echo isset($value['variant_name']) ?$value['variant_name'] :'Mặc Định' ?> <?php }?></div>
+	            <div class="name"><?php echo $value['title'] ?><?php if(empty($value['variant_name']) == false){?></br>Loại: <?php echo isset($value['variant_name']) ?$value['variant_name'] :'Mặc Định' ?> <?php }?></div>
                 <div class="price">
                     <?php 
                     $now = date('Y-m-d H:i:s');
