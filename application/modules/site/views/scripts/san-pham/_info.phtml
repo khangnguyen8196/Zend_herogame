@@ -88,6 +88,21 @@
                 ?>
                 <strong class="status-a" <?php if($isOutOfOrder == true ){?> style="color:#000"  <?php }?>><?php echo Commons::getProductStatus($this->info["status"]); ?></strong>
             </li>
+            <?php 
+                if (!empty($this->info['best_sell']) && $this->info['best_sell'] == 1) {
+                    if (isset($this->info["release_date"]) && !empty($this->info["release_date"])) {
+                        $releaseDate = date("d/m/Y", strtotime($this->info["release_date"]));
+            ?>
+                <li class="release_date">
+                    <label style="width:7.5rem">Ngày ra mắt:</label>
+                    <strong><?php echo $releaseDate; ?></strong>
+                </li>
+            <?php 
+                    }
+                } 
+            ?>
+
+
             <?php if (empty($this->info["product_note"]) == false) { ?>
                 <li>
                     <!-- <label>Tình trạng:</label> -->

@@ -1,5 +1,5 @@
 <?php
-    $css = isset($this->css) ? $this->css : 'mobile-menu';
+$css = isset($this->css) ? $this->css : 'mobile-menu';
 ?>
 <aside class="<?php echo $css ?>">
     <nav>
@@ -16,24 +16,20 @@
             }
         ?>
         <ul>
-            <?php
-            foreach ($this->menu as $key => $value) {
-                if (empty($value['child']) == true) {
-                    ?>
+            <?php foreach ($this->menu as $key => $value) {
+                if (empty($value['child'])) { ?>
                     <li>
                         <?php
-                            $flash = '/';
-                            $url = parse_url($value['url']);
-                            if ($url['scheme'] == 'http' || $url['scheme'] == 'https') {
-                                $flash = '';
-                            }
+                        $flash = '/';
+                        $url = parse_url($value['url']);
+                        if ($url['scheme'] == 'http' || $url['scheme'] == 'https') {
+                            $flash = '';
+                        }
                         ?>
                         <a href="<?php echo $flash . $value['url'] ?>"><?php echo $value['name'] ?></a>
                     </li>
-                    <?php
-                } 
-            }
-            ?>
+                <?php }
+            } ?>
         </ul>
     </nav>
     <div class="overlay"></div>
@@ -43,13 +39,17 @@
     .mobile-menu nav {
         width: 85vw;
         height: 100%;
-        overflow: auto;
+        overflow: hidden;
         background: #e4e4e4;
         display: block;
         z-index: 2;
         position: absolute;
         top: 0;
         left: -85vw;
+        transition: left 0.3s ease; 
+    }
+    .mobile-menu nav.active {
+        left: 0; 
     }
     .mobile-menu nav>ul li a {
         display: block;
@@ -64,4 +64,70 @@
         margin-top: 0;
         border-top: 0;
     }
+    .overlay {
+        display: none; /* Ẩn overlay mặc định */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1;
+    }
+    .category-sub-menu-mobile-1{
+        position: absolute; 
+        top: 0;
+        left: 100%; 
+        width: 85vw; 
+        height: 100%; 
+        overflow: auto; 
+        background: #e4e4e4;
+        display: none; 
+        z-index: 3; 
+    }
+    .back-button {
+        color: #fff;
+        background: #ff5722!important;
+        border: none;
+        cursor: pointer;
+        display: block;
+        text-align: center;
+    }
+    .back-button:hover {
+        background-color: #e4e4e4;
+    }
+    .category-sub-menu-mobile-2 li {
+        background: white;
+    }
+
+    .back-button {
+        position: relative; 
+        font-size: 1.2rem; 
+        font-weight: bold;
+        cursor: pointer;
+    }
+    .back-button i {
+        cursor: pointer;
+        font-size: 1.5rem; 
+        margin-right: 5px;
+        vertical-align: middle;
+    }
+    .category-menu-mobile i.fa.fa-caret-left {
+        position: absolute;
+        left: 0px;
+        font-size: 1.5rem;
+        top: 0px;
+        color: white;
+        width: 20px;
+        padding: 12px 60px 10px 24px;
+    }
+    .link {
+        text-decoration: none; 
+        border-bottom: none !important;
+        color: white!important;
+    }
+    .category-sub-menu-mobile-2 { 
+        height: 100%; 
+    }
 </style>
+

@@ -1,47 +1,51 @@
-
-    <ul class="category-menu-mobile">    
-        <?php if (empty($this->data[0]) == false && is_array($this->data[0])) { ?>
-            <?php foreach ($this->data[0] as $key0 => $value0) { ?>
-                <li class="item-<?php echo $key0+1?>">
-                    <a href="/danh-muc/<?php echo $value0['url_slug'] ?>">
-                    	<span class="icon">
-                    		<?php if( empty($value0['icon']) == false && empty($value0['icon_hover']) == false ) { ?>
-			                    <img class="state-1" src="<?php echo PHOTO_PATH.$value0['icon'];?>" width="24" height="24" loading="lazy"/>
-			                    <!-- <img class="state-2" src="<?php echo PHOTO_PATH.$value0['icon_hover'];?>" width="24" height="24" /> -->
-		                    <?php }?>
-		                </span>
-                        <span> <?php echo $value0['name'] ?></span>
-                        <i class="fa fa-caret-down"></i>
-                    </a>
-                    <ul class="category-menu-mobile">
-                        <?php if (empty($this->data[1]) == false && is_array($this->data[1])) { ?>
-                            <?php foreach ($this->data[1] as $key1 => $value1) { ?>
-                                <?php if ($value1['parent_category'] == $value0['id']) { ?>
-                                    <li class="item-<?php echo $key0+1?>" style="position: relative">
-                                        <a href="/danh-muc/<?php echo $value1['url_slug'] ?>">
-                                            <span> <?php echo $value1['name'] ?></span>
-                                            <i class="fa fa-caret-down"></i>
-                                        </a>
-                                        <ul class="category-menu-mobile">
-                                            <?php if (empty($this->data[2]) == false && is_array($this->data[2])) { ?>
-                                                <?php foreach ($this->data[2] as $key2 => $value2) { ?>
-                                                    <?php if ($value2['parent_category'] == $value1['id']) { ?>
-                                                        <li class="item-<?php echo $key0+1?>">
-                                                            <a href="/danh-muc/<?php echo $value2['url_slug'] ?>">
-                                                               <span> <?php echo $value2['name'] ?></span>
-                                                            </a>
-                                                        </li>
-                                                    <?php } ?>
+<ul class="category-menu-mobile">    
+    <?php if (!empty($this->data[0]) && is_array($this->data[0])) { ?>
+        <?php foreach ($this->data[0] as $key0 => $value0) { ?>
+            <li class="item-<?php echo $key0 + 1 ?>">
+                <a href="/danh-muc/<?php echo $value0['url_slug'] ?>" class="has-submenu" data-submenu="submenu-<?php echo $key0 + 1 ?>">
+                    <span class="icon">
+                        <?php if (!empty($value0['icon'])) { ?>
+                            <img class="state-1" src="<?php echo PHOTO_PATH . $value0['icon']; ?>" width="24" height="24" loading="lazy"/>
+                        <?php } ?>
+                    </span>
+                    <span><?php echo $value0['name'] ?></span>
+                    <i class="fa fa-caret-right"></i>
+                </a>
+                <ul class="category-sub-menu-mobile-1" id="submenu-<?php echo $key0 + 1 ?>" style="display: none;">
+                    <?php if (!empty($this->data[1]) && is_array($this->data[1])) { ?>
+                        <?php foreach ($this->data[1] as $key1 => $value1) { ?>
+                            <?php if ($value1['parent_category'] == $value0['id']) { ?>
+                                <li class="item-<?php echo $key0 + 1 ?>" style="position: relative">
+                                    <a href="/danh-muc/<?php echo $value1['url_slug'] ?>" class="has-submenu-1">
+                                        <span><?php echo $value1['name'] ?></span>
+                                        <?php 
+                                        $hasChild = !empty(array_filter($this->data[2], function($value2) use ($value1) {
+                                            return $value2['parent_category'] == $value1['id'];
+                                        }));
+                                        if ($hasChild) {
+                                            echo '<i class="fa fa-caret-down"></i>';
+                                        }
+                                        ?>
+                                    </a>
+                                    <?php if ($hasChild) { ?>
+                                        <ul class="category-sub-menu-mobile-2" style="display: none;">
+                                            <?php foreach ($this->data[2] as $key2 => $value2) { ?>
+                                                <?php if ($value2['parent_category'] == $value1['id']) { ?>
+                                                    <li class="item-<?php echo $key0 + 1 ?>">
+                                                        <a href="/danh-muc/<?php echo $value2['url_slug'] ?>">
+                                                            <span><?php echo $value2['name'] ?></span>
+                                                        </a>
+                                                    </li>
                                                 <?php } ?>
                                             <?php } ?>
                                         </ul>
-                                    </li>
-                                <?php } ?>
+                                    <?php } ?>
+                                </li>
                             <?php } ?>
                         <?php } ?>
-                    </ul>
-                </li>
-            <?php } ?>
+                    <?php } ?>
+                </ul>
+            </li>
         <?php } ?>
-    </ul>
-
+    <?php } ?>
+</ul>

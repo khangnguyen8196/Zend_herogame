@@ -349,6 +349,9 @@ class Product extends Zend_Db_Table_Abstract {
         if (isset($data['sku']) == true) {
                 $datain['sku'] = $data['sku'];
         }
+        if (isset($data['release_date']) == true) {
+            $datain['release_date'] = $data['release_date'];
+    }
         if (isset($data['created_at']) == true) {
             $datain['created_date'] = $data['created_at'];
         }
