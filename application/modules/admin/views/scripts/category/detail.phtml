@@ -158,6 +158,59 @@
                             </div>
                         <?php } ?>
                     </div>
+                    <!-- start image 2 top -->
+                    <?php 
+                        if (!empty($this->info) && !empty($this->info['image_2_top'])) { ?>
+                        <div class="form-group">
+                            <label class="control-label col-lg-2">2 banner nhỏ trên danh mục</label>
+                        </div>
+                        <div class="form-group">
+                            <?php 
+                            $listImage2TDm = explode(',', $this->info['image_2_top']);
+                            $listUrl2TDm = explode(',', $this->info['url_image_2_top']);
+                            foreach($listImage2TDm as $key => $item) {
+                                ?>
+                                <div class="list_image_2_top_<?php echo $key ?>" id="count_image_2_top_<?php echo $key ?>">
+                                    <div class="col-lg-2 col-sm-4 parent image_2_top">
+                                        <div class="form-group ">
+                                            <input type="file" id="image_2_top_<?php echo $key ?>" class="file-styled form-control image_2_top_dm" name="image_2_top[<?php echo $key ?>]" accept="image/*"/>
+                                        </div>
+                                        <div class="thumbnail">
+                                            <div class="thumb">
+                                                <img class="img-media img-thumbnail-item" style="height: 100px" src="<?php echo '/upload' . $item; ?>" alt="">
+                                                <div class="caption-overflow">
+                                                    <span>
+                                                        <a class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5 container-image" href="<?php echo '/upload' . $item; ?>" data-popup="lightbox">
+                                                            <i class="icon-plus3"></i>
+                                                        </a>
+                                                        <a class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5">
+                                                            <i class="icon-cross2 remove_image_2_top" data-id="<?php echo $this->info['id'] ?>" data-url ="<?php echo $listUrl2TDm[$key]?>" data-url-image="<?php echo $item ?>" data-remove-image-2-top="<?php echo $item ?>"></i>
+                                                        </a>
+                                                    </span>
+                                                </div>           
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" id="url_image_2_top_<?php echo $key ?>" class="file-styled form-control" value="<?php echo $listUrl2TDm[$key]?>" name="url_image_2_top[<?php echo $key ?>]"/>
+                                        </div >
+                                    </div>
+                                    
+                                    <div class="hidden list-delete-image-2-top" id ="delete_image_2_top<?php echo $key ?>" data-index="<?php echo $key ?>"></div>
+                                </div>
+                            <?php }?>
+                            <div class="col-lg-12">
+                                <button type="button" id="add_image_2_top" class="btn btn-primary" style="margin-right: 11px;position: relative;border-radius: 2px;margin-top: 10px;"><span class="glyphicon glyphicon-plus" attr-count="<?php echo $key+2 ?>" aria-hidden="true"></span> Thêm Banner</button>
+                            </div>
+                        </div>
+                        <div id="new_image_2_top"></div>
+                    <?php } else{?>
+                           <div class="form-group">
+                        <label class="control-label col-lg-2">2 banner nhỏ trên danh mục</label>
+                            <button type="button" id="add_image_2_top" class="btn btn-primary" style="margin-right: 11px;float: inline-end;"><span class="glyphicon glyphicon-plus" attr-count="0" aria-hidden="true"></span> Thêm Banner</button>
+                        </div>
+                        <div id="new_image_2_top"></div>
+                    <?php }?>
+                    <!-- end -->
                     <?php 
                         if (!empty($this->info) && !empty($this->info['image_2_botton'])) { ?>
                         <div class="form-group">

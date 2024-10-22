@@ -112,6 +112,28 @@
                 'sorted' => $this->sorted
             ))
             ?>
+            <?php if (!empty($this->categoryInfo) && !empty($this->categoryInfo['image_2_top'])) { ?>
+                <div class="banner-category2">
+                    <?php 
+                    $listImage2DmTop = explode(',', $this->categoryInfo['image_2_top']);
+                    $listUrl2DmTop = explode(',', $this->categoryInfo['url_image_2_top']);
+                    $imageCount = 0;
+                    foreach($listImage2DmTop as $key => $item) {
+                        if ($imageCount < 100) { 
+                            ?>
+                            <div class="banner-category2-item">
+                                <a href="<?php echo trim($listUrl2DmTop[$key]) ?>"> 
+                                <img src="<?php echo '/upload' . $item; ?>" alt="" width="100%" height="100%" loading="lazy">
+                                </a>
+                            </div>
+                            <?php 
+                            $imageCount++;
+                        } else {
+                            break; 
+                        }
+                    }?>
+                </div>
+            <?php } ?>
             <?php
             $res = Commons::_buildProductResponse($this->paginator);
 

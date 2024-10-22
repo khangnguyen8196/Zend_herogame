@@ -57,7 +57,7 @@ pages = $.extend(pages, {
                     $("#level_category_display").val(level);
                     $("#level_category").val(level);
                 });
-
+                // image 2 botton
                 $(document).on('click', '.remove_image_2_botton', function() {
                     var count_image_2_botton = $('.image_2_botton_dm').length;
                     if(count_image_2_botton <101){
@@ -76,6 +76,26 @@ pages = $.extend(pages, {
                         $("#add_image_2_botton").prop("disabled", false);
                     }
                     $(this).parents('.input_image_2_botton').remove();
+                });
+                // image 2 top
+                $(document).on('click', '.remove_image_2_top', function() {
+                    var count_image_2_top = $('.image_2_top_dm').length;
+                    if(count_image_2_top <101){
+                        $("#add_image_2_top").prop("disabled", false);
+                    }
+                    var index = $('.list-delete-image-2-top').attr('data-index');
+                    var val = $(this).attr('data-remove-image-2-top');
+                    var url = $(this).attr('data-url');
+                    $('#delete_image_2_top'+index).append('<input type="hidden" name="url_image_2_delete_top[]" value="'+val+'">'+'<input type="hidden" name="url_image_2_top_delete[]" value="'+url+'">');
+                    $(this).closest('.image_2_top').remove();
+                });
+
+                $(document).on('click', '.remove_input_image_2_top', function() {
+                    var count_image_2_top = $('.image_2_top_dm').length;
+                    if(count_image_2_top <101){
+                        $("#add_image_2_top").prop("disabled", false);
+                    }
+                    $(this).parents('.input_image_2_top').remove();
                 });
 
                 $(document).on('click', '.remove_image_3_botton', function() {
@@ -122,7 +142,33 @@ pages = $.extend(pages, {
                     checkFileSizes(this);
                 });
 
-           
+                $(document).on('change', '#image_2_top, #image_3_botton, #image_12_botton', function() {
+                    checkFileSizes(this);
+                });
+
+                var countValue2Top = $("#add_image_2_top").find("span").attr("attr-count");
+                var index2Top = countValue2Top;
+                $("#add_image_2_top").click(function () {
+                    var html = '';
+                    html += 	'<div class="input_image_2_top">';
+                    html += 	'<div class="form-group">';
+                    html += 	'<label class="control-label col-lg-2">Banner</label>';
+                    html += 	'<div class="col-lg-3">';
+                    html += 	    '<input type="file" class="file-styled form-control image_2_top_dm " name="image_2_top['+index2Top+']" accept="image/*"/>';
+                    html += 	'</div>';
+                    html += 	'<label class="control-label col-lg-1">URL</label>';
+                    html += 	'<div class="col-lg-3">';
+                    html += 	    '<input type="text" class="file-styled form-control url_image_2_top " name="url_image_2_top['+index2Top+']"/>';
+                    html += 	'</div>';
+                    html += 	'<div class="col-lg-2">';
+                    html += 		'<button type="button"  class="btn btn-alert remove_input_image_2_top" style="margin-right: 11px;">x</button>';
+                    html += 	'</div>';
+                    html += 	'</div>';
+                    html += 	'</div>';
+                    $('#new_image_2_top').append(html);
+                    index2Top++;
+                });
+
                 var countValue2 = $("#add_image_2_botton").find("span").attr("attr-count");
                 var index2 = countValue2;
                 $("#add_image_2_botton").click(function () {
@@ -191,6 +237,18 @@ pages = $.extend(pages, {
                     index12++;
                 });
                 $(document).ready(function() {
+                    // image_2_top
+                    var count_image_2_top = $('.image_2_top_dm').length;
+                    if(count_image_2_top == 100){
+                        $("#add_image_2_topn").prop("disabled", true);
+                    }
+                    $("#add_image_2_top").click(function() {
+                        var count_image_2_top = $('.image_2_top_dm').length;
+                        if(count_image_2_top == 100){
+                            $("#add_image_2_top").prop("disabled", true);
+                        }
+                    });
+
                     // image_2_botton
                     var count_image_2_botton = $('.image_2_botton_dm').length;
                     if(count_image_2_botton == 100){
