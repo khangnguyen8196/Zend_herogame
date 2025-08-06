@@ -15,6 +15,14 @@ class Site_DonHangController extends FrontEndAction {
     protected $_exchange_rate_score_to_money = 1000;
     protected $_min_price_discount = 1000000;
     protected $_min_percent_discount_over_price = 50;
+    protected $_flashSaleProductVariantMdl = "";
+    protected $_flashSaleProduct = "";
+    protected $_flashSaleMdl = "";
+    protected $_comboDetailMdl = "";
+    protected $_comboMdl = "";
+    protected $_mdlVariant = "";
+    protected $_mdlSetting = "";
+    protected $_mdlShippingRates = "";
 
     /**
      * (non-PHPdoc)
@@ -22,10 +30,17 @@ class Site_DonHangController extends FrontEndAction {
      */
     public function init() {
         parent::init();
-        $this->_categoryMdl = new Category();
         $this->_productMdl = new Product();
         $this->_categoryMdl = new Category();
         $this->_orderMdl = new Order();
+        $this->_flashSaleProductVariantMdl = new FlashSaleProductVariant();
+        $this->_flashSaleProduct = new FlashSaleProduct();
+        $this->_flashSaleMdl = new FlashSale();
+        $this->_comboDetailMdl = new ComboDetail();
+        $this->_comboMdl = new ComboProduct();
+        $this->_mdlVariant = new ProductVariant();
+        $this->_mdlSetting = new Setting;
+        $this->_mdlShippingRates = new ShippingRates;
         
         $exr = Commons::getSettingByKey($this->setting, 'EXCHANGE_RATE');
         if( empty($exr) == false ){
@@ -108,8 +123,7 @@ class Site_DonHangController extends FrontEndAction {
         
         $cart_list_full_info = self::getProductsFullInfo($cart_list, $totalMoney);
         $listProvince =  $mdlProvince->getAllProvince();
-        $mdlSetting = new Setting;
-        $checked =$mdlSetting->fetchSettingByKey('checked');
+        $checked =$this->_mdlSetting->fetchSettingByKey('checked');
         if($checked){
             $checkedValue = $checked['value'];
         }else{
@@ -137,13 +151,11 @@ class Site_DonHangController extends FrontEndAction {
                     $fee_cod = 0;
                 }else{
                     if($province){
-                        $mdlShippingRates = new ShippingRates;
-                        $fee_ships = $mdlShippingRates->getFeeShip($province, $district,$wards);
+                        $fee_ships = $this->_mdlShippingRates->getFeeShip($province, $district,$wards);
                         if($fee_ships){
                             $fee_ship =  $fee_ships['fee_ship'];
                         }else{
-                            $mdlSetting = new Setting;
-                            $fee_ship_default =$mdlSetting->fetchSettingByKey('fee_ship_default');
+                            $fee_ship_default =$this->_mdlSetting->fetchSettingByKey('fee_ship_default');
                             if($fee_ship_default){
                                 $fee_ship = $fee_ship_default['value'];
                             }else{
@@ -154,8 +166,7 @@ class Site_DonHangController extends FrontEndAction {
                         $fee_ship = 0;
                     }
                     if($fee_cod_pro == 2){
-                        $mdlSetting = new Setting;
-                        $fee_cods =$mdlSetting->fetchSettingByKey('fee_cod');
+                        $fee_cods =$this->_mdlSetting->fetchSettingByKey('fee_cod');
                         $fee_cod = $fee_cods['value'];
                     }else{
                         $fee_cod = 0;
@@ -172,6 +183,8 @@ class Site_DonHangController extends FrontEndAction {
                 if( empty($promoInfo) == false ){
                     $totalMoney = 0;
                     $check = false;
+                    $now = date('Y-m-d H:i:s');
+                    $flash_sale = $this->_flashSaleMdl->getFlashSale();
                     if (empty($cart_list) == false && is_array($cart_list)) {
                         if(isset($cart_list['products']) ) {
                             // echo '<pre>';print_r($cart_list['products']);echo '</pre>';exit;
@@ -187,62 +200,156 @@ class Site_DonHangController extends FrontEndAction {
                                     }
                                 }
                                 if (!empty($value['variant']) && is_array($value['variant'])) {
-                                    $mdlProductVariant= new ProductVariant();
-                                    $variant_list = $mdlProductVariant->getProductVariants($key);
-                                    foreach ($value['variant'] as $i=>$var) {
-                                        foreach ($variant_list as $variant) {
-                                            if ($variant['id'] == $i) {
-
-                                                $p_full_info["qty"] = $var['qty'];
-                                                $p_full_info["variant_price_sales"] = $variant["variant_price_sales"];
-                                                $p_full_info["total_money"] = $var['qty'] * $variant["variant_price_sales"];
-                                                $totalMoney += $p_full_info["total_money"];
-                                               
+                                    $variant_list = $this->_mdlVariant->getProductVariants($key);
+                                    if($flash_sale){
+                                        $list_variant_flash_sale = $this->_flashSaleProductVariantMdl->getFlashSaleProductVariantBy($flash_sale['flash_sale_id'],$key);
+                                    }
+                                    if($flash_sale && $now <= $flash_sale['count_time_end'] && $now >= $flash_sale['count_time_start']  && $flash_sale['status'] ==1 && $list_variant_flash_sale) {
+                                        foreach ($value['variant'] as $i=>$var) {
+                                            foreach ($list_variant_flash_sale as $variant) {
+                                                if ($variant['variant_id'] == $i) {
+                                                    $p_full_info["qty"] = $var['qty'];
+                                                    $p_full_info["variant_price_sales"] = $variant["variant_price_flash_sale"];
+                                                    $p_full_info["total_money"] = $var['qty'] * $variant["variant_price_flash_sale"];
+                                                    $totalMoney += $p_full_info["total_money"];
+                                                   
+                                                }
+                                            }
+                                        }
+                                    }else {
+                                        foreach ($value['variant'] as $i=>$var) {
+                                            foreach ($variant_list as $variant) {
+                                                if ($variant['id'] == $i) {
+    
+                                                    $p_full_info["qty"] = $var['qty'];
+                                                    $p_full_info["variant_price_sales"] = $variant["variant_price_sales"];
+                                                    $p_full_info["total_money"] = $var['qty'] * $variant["variant_price_sales"];
+                                                    $totalMoney += $p_full_info["total_money"];
+                                                }
                                             }
                                         }
                                     }
                                 }else{
-                                    if( is_array($value['qty']) == true ){
-                                        $p_full_info["qty"] = 0;
-                                        foreach ($value['qty'] as $qkey => $qitem) {
-                                            $p_full_info["qty"] += $qitem;
-                                        }
-        
-                                    } else {
-                                            $p_full_info["qty"] = $value['qty'];
+                                    if($flash_sale){
+                                        $flash_sale_product = $this->_flashSaleProduct->getFlashSaleProductBy($flash_sale['flash_sale_id'],$key);
                                     }
-                                    $p_full_info["total_money"] = $p_full_info["qty"] * $p_full_info["price_sales"];
-                                    $totalMoney += $p_full_info["total_money"];
+                                    if($flash_sale && $now <= $flash_sale['count_time_end'] && $now >= $flash_sale['count_time_start'] && $flash_sale['status'] ==1 &&  $flash_sale_product) {
+                                        if( is_array($value['qty']) == true ){
+                                            $p_full_info["qty"] = 0;
+                                            foreach ($value['qty'] as $qkey => $qitem) {
+                                                $p_full_info["qty"] += $qitem;
+                                            }
+                                        } else {
+                                            $p_full_info["qty"] = $value['qty'];
+                                        }
+                                        $p_full_info["total_money"] = $value['qty'] *  $flash_sale_product["price_flash_sale"];
+                                        $totalMoney += $p_full_info["total_money"];
+                                    } {
+                                        if( is_array($value['qty']) == true ){
+                                            $p_full_info["qty"] = 0;
+                                            foreach ($value['qty'] as $qkey => $qitem) {
+                                                $p_full_info["qty"] += $qitem;
+                                            }
+            
+                                        } else {
+                                                $p_full_info["qty"] = $value['qty'];
+                                        }
+                                        $p_full_info["total_money"] = $p_full_info["qty"] * $p_full_info["price_sales"];
+                                        $totalMoney += $p_full_info["total_money"];
+                                    }
                                 }
                             }
                         }
                         if(!empty($cart_list['combos'])) {
-                            foreach($cart_list['combos'] as $key => $value) {
-                                $mdlCombo= new ComboProduct();
-                                $combo_info = $mdlCombo->fetchComboProductById($key);
+                            foreach($cart_list['combos'] as $c_id => $value) {             
+                                $combo_info = $this->_comboMdl->fetchComboProductById($c_id);
                                 $combo_detail_list = $value['products'];
                                 if(empty($combo_info)) {
                                     continue;
                                 }
                                 
                                 $combo_product = array();
-                                $combo_product['qty'] = $value['qty'];
-                                $combo_product["price_sales"]= $combo_info["total_discount"];
-                                $combo_product["total_money"] = $value['qty'] * $combo_product["price_sales"];
-                                $totalMoney += $combo_product["total_money"];
                                 $combo_product['products'] = array();
-                                foreach($combo_detail_list as $key => $product) {
-                                    $combo_detail = $this->_productMdl->getProductInfoById($key);
-                                    if( $promoInfo['category'] != 0 ){
-                                        if( $combo_detail['id_category'] != $promoInfo['category']){
-                                            $check = true;
-                                        }
+                                $total_price_combo = 0;
+                                foreach($combo_detail_list as $p_id => $product) {
+                                    if($flash_sale){
+                                        $flash_sale_product = $this->_flashSaleProduct->getFlashSaleProductBy($flash_sale['flash_sale_id'],$p_id);
                                     }
-                                    $combo_detail["qty"] = $value['qty'];
-                                    $combo_detail["price_sales"] = $combo_detail["price_sales"];
+                                    if($flash_sale && $now <= $flash_sale['count_time_end'] && $now >= $flash_sale['count_time_start'] && $flash_sale['status'] ==1) {
+                                        $combo_detail = $this->_productMdl->getProductInfoById($p_id);
+                                        if( $promoInfo['category'] != 0 ){
+                                            if( $combo_detail['id_category'] != $promoInfo['category']){
+                                                $check = true;
+                                            }
+                                        }
+                                        $combo_detail["qty"] = $value['qty'];
+                                        if($flash_sale_product['product_id'] != $p_id ){
+                                            $combo_detail["price_sales"] = $combo_detail["price_sales"];
+                                        }else{   
+                                            $combo_detail["price_sales"] = $flash_sale_product["price_flash_sale"];
+                                        }             
+                                        $total_price_combo +=$combo_detail["price_sales"]; 
+                                        $combo_detail["title"] = $combo_detail['title'];
+                                        $combo_detail["combo_id"] = $combo_detail["combo_id"];
+                                        $combo_detail["total_money"] = $value['qty'] * $combo_detail["price_sales"];
+                                        $combo_product['id_combo'] = $combo_info['id']; 
+                                        $combo_product['combo_code'] = $combo_info['combo_code']; 
+                                        $combo_product['title'] = $combo_info['title'];
+                                        $combo_product['qty'] = $value['qty'];
+                                        $combo_product['image_cb'] = $combo_info['image_cb'];
+                                        $combo_product["price_discount"]= $combo_info["price_discount"];
+                                        $combo_product["price_sales"]= $total_price_combo - $combo_product["price_discount"];
+                                        $combo_product["total_money"] = $value['qty'] * $combo_product["price_sales"];
+                                    }
+                                    else{
+                                        $combo_detail = $this->_productMdl->getProductInfoById($p_id);
+                                        if( $promoInfo['category'] != 0 ){
+                                            if( $combo_detail['id_category'] != $promoInfo['category']){
+                                                $check = true;
+                                            }
+                                        }
+                                        $combo_detail["qty"] = $value['qty'];
+                                        $combo_detail["price_sales"] = $combo_detail["price_sales"];
+                                        $combo_detail["title"] = $combo_detail['title'];
+                                        $combo_detail["combo_id"] = $combo_detail["combo_id"];
+                                        $combo_detail["total_money"] = $value['qty'] * $combo_detail["price_sales"];
+                                        $combo_product['id_combo'] = $combo_info['id']; 
+                                        $combo_product['combo_code'] = $combo_info['combo_code']; 
+                                        $combo_product['title'] = $combo_info['title'];
+                                        $combo_product['qty'] = $value['qty'];
+                                        $combo_product['image_cb'] = $combo_info['image_cb'];
+                                        $combo_product["price_sales"]= $combo_info["total_discount"];
+                                        $combo_product["total_money"] = $value['qty'] * $combo_product["price_sales"];
+                                    }
                                     $combo_product['products'][] = $combo_detail;
                                 }
+                                $totalMoney += $combo_product["total_money"];
                             }
+                            // foreach($cart_list['combos'] as $key => $value) {
+                            //     $combo_info = $this->_comboMdl->fetchComboProductById($key);
+                            //     $combo_detail_list = $value['products'];
+                            //     if(empty($combo_info)) {
+                            //         continue;
+                            //     }
+                                
+                            //     $combo_product = array();
+                            //     $combo_product['qty'] = $value['qty'];
+                            //     $combo_product["price_sales"]= $combo_info["total_discount"];
+                            //     $combo_product["total_money"] = $value['qty'] * $combo_product["price_sales"];
+                            //     $totalMoney += $combo_product["total_money"];
+                            //     $combo_product['products'] = array();
+                            //     foreach($combo_detail_list as $key => $product) {
+                            //         $combo_detail = $this->_productMdl->getProductInfoById($key);
+                            //         if( $promoInfo['category'] != 0 ){
+                            //             if( $combo_detail['id_category'] != $promoInfo['category']){
+                            //                 $check = true;
+                            //             }
+                            //         }
+                            //         $combo_detail["qty"] = $value['qty'];
+                            //         $combo_detail["price_sales"] = $combo_detail["price_sales"];
+                            //         $combo_product['products'][] = $combo_detail;
+                            //     }
+                            // }
                         }
                     }
                     if( $check == true ){
@@ -293,13 +400,11 @@ class Site_DonHangController extends FrontEndAction {
                     $fee_cod = 0;
                 }else{
                     if($province){
-                        $mdlShippingRates = new ShippingRates;
-                        $fee_ships = $mdlShippingRates->getFeeShip($province, $district,$wards);
+                        $fee_ships = $this->_mdlShippingRates->getFeeShip($province, $district,$wards);
                         if($fee_ships){
                             $fee_ship =  $fee_ships['fee_ship'];
                         }else{
-                            $mdlSetting = new Setting;
-                            $fee_ship_default =$mdlSetting->fetchSettingByKey('fee_ship_default');
+                            $fee_ship_default =$this->_mdlSetting->fetchSettingByKey('fee_ship_default');
                             if($fee_ship_default){
                                 $fee_ship = $fee_ship_default['value'];
                             }else{
@@ -310,8 +415,7 @@ class Site_DonHangController extends FrontEndAction {
                         $fee_ship = 0;
                     }
                     if($fee_cod_dis == 2){
-                        $mdlSetting = new Setting;
-                        $fee_cods =$mdlSetting->fetchSettingByKey('fee_cod');
+                        $fee_cods =$this->_mdlSetting->fetchSettingByKey('fee_cod');
                         $fee_cod = $fee_cods['value'];
                     }else{
                         $fee_cod = 0;
@@ -333,6 +437,8 @@ class Site_DonHangController extends FrontEndAction {
                         $this->ajaxResponse(CODE_HAS_ERROR, 'Chiết khấu phải nhỏ hơn hoặc bằng điểm bạn hiện có');
                     }
                     $totalMoney = 0;
+                    $now = date('Y-m-d H:i:s');
+                    $flash_sale = $this->_flashSaleMdl->getFlashSale();
                     if (empty($cart_list) == false && is_array($cart_list)) {
                         if(isset($cart_list['products']) ) {
                             //get product info from product id saved in cookie
@@ -343,52 +449,136 @@ class Site_DonHangController extends FrontEndAction {
                                     continue;
                                 }
                                 if (!empty($value['variant']) && is_array($value['variant'])) {
-                                    $mdlProductVariant= new ProductVariant();
-                                    $variant_list = $mdlProductVariant->getProductVariants($key);
-                                    foreach ($value['variant'] as $i=>$var) {
-                                        foreach ($variant_list as $variant) {
-                                            if ($variant['id'] == $i) {
-
-                                                $p_full_info["qty"] = $var['qty'];
-                                                $p_full_info["variant_price_sales"] = $variant["variant_price_sales"];
-                                                $p_full_info["total_money"] = $var['qty'] * $variant["variant_price_sales"];
-                                                $totalMoney += $p_full_info["total_money"];
-                                               
+                                    $variant_list = $this->_mdlVariant->getProductVariants($key);
+                                    if($flash_sale){
+                                        $list_variant_flash_sale = $this->_flashSaleProductVariantMdl->getFlashSaleProductVariantBy($flash_sale['flash_sale_id'],$key);
+                                    }
+                                    if($flash_sale && $now <= $flash_sale['count_time_end'] && $now >= $flash_sale['count_time_start']  && $flash_sale['status'] ==1 && $list_variant_flash_sale) {
+                                        foreach ($value['variant'] as $i=>$var) {
+                                            foreach ($list_variant_flash_sale as $variant) {
+                                                if ($variant['variant_id'] == $i) {
+                                                    $p_full_info["qty"] = $var['qty'];
+                                                    $p_full_info["variant_price_sales"] = $variant["variant_price_flash_sale"];
+                                                    $p_full_info["total_money"] = $var['qty'] * $variant["variant_price_flash_sale"];
+                                                    $totalMoney += $p_full_info["total_money"];
+                                                   
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        foreach ($value['variant'] as $i=>$var) {
+                                            foreach ($variant_list as $variant) {
+                                                if ($variant['id'] == $i) {
+                                                    $p_full_info["qty"] = $var['qty'];
+                                                    $p_full_info["variant_price_sales"] = $variant["variant_price_sales"];
+                                                    $p_full_info["total_money"] = $var['qty'] * $variant["variant_price_sales"];
+                                                    $totalMoney += $p_full_info["total_money"];
+                                                   
+                                                }
                                             }
                                         }
                                     }
                                 } else {
-                                    if( is_array($value['qty']) == true ){
-                                        $p_full_info["qty"] = 0;
-                                        foreach ($value['qty'] as $qkey => $qitem) {
-                                            $p_full_info["qty"] += $qitem;
-                                        }
-                                    } else {
-                                        $p_full_info["qty"] = $value['qty'];
+                                    if($flash_sale){
+                                        $flash_sale_product = $this->_flashSaleProduct->getFlashSaleProductBy($flash_sale['flash_sale_id'],$key);
                                     }
-                                    $p_full_info["total_money"] = $value['qty'] * $p_full_info["price_sales"];
-                                    $totalMoney += $p_full_info["total_money"];
+                                    if($flash_sale && $now <= $flash_sale['count_time_end'] && $now >= $flash_sale['count_time_start'] && $flash_sale['status'] ==1 &&  $flash_sale_product) {
+                                        if( is_array($value['qty']) == true ){
+                                            $p_full_info["qty"] = 0;
+                                            foreach ($value['qty'] as $qkey => $qitem) {
+                                                $p_full_info["qty"] += $qitem;
+                                            }
+                                        } else {
+                                            $p_full_info["qty"] = $value['qty'];
+                                        }
+                                        $p_full_info["total_money"] = $value['qty'] *  $flash_sale_product["price_flash_sale"];
+                                        $totalMoney += $p_full_info["total_money"];
+                                    } else {
+                                        if( is_array($value['qty']) == true ){
+                                            $p_full_info["qty"] = 0;
+                                            foreach ($value['qty'] as $qkey => $qitem) {
+                                                $p_full_info["qty"] += $qitem;
+                                            }
+                                        } else {
+                                            $p_full_info["qty"] = $value['qty'];
+                                        }
+                                        $p_full_info["total_money"] = $value['qty'] * $p_full_info["price_sales"];
+                                        $totalMoney += $p_full_info["total_money"];
+                                    }
                                 }
                             }
                         }
                         if(isset($cart_list['combos']) ) {
                             //get product info from product id saved in cookie
-                            foreach ($cart_list['combos'] as $key => $qty) {
-                                $mdlCombo = new ComboProduct();
-                                $combo_info = $mdlCombo->fetchComboProductById($key);
-                                if( empty($combo_info) == true ){
+                            // foreach ($cart_list['combos'] as $key => $qty) {
+                            //     $combo_info = $this->_comboMdl->fetchComboProductById($key);
+                            //     if( empty($combo_info) == true ){
+                            //         continue;
+                            //     }
+                            //     if( is_array($qty['qty']) == true ){
+                            //         $combo_info["qty"] = 0;
+                            //         foreach ($qty['qty'] as $qkey => $qitem) {
+                            //             $combo_info["qty"] += $qitem;
+                            //         }
+                            //     } else {
+                            //         $p_full_info["qty"] = $qty['qty'];
+                            //     }
+                            //     $combo_info["total_money"] = $qty['qty'] * $combo_info["total_discount"];
+                            //     $totalMoney += $combo_info["total_money"];
+                            // }
+                            foreach($cart_list['combos'] as $c_id => $value) {             
+                                $combo_info = $this->_comboMdl->fetchComboProductById($c_id);
+                                $combo_detail_list = $value['products'];
+                                if(empty($combo_info)) {
                                     continue;
                                 }
-                                if( is_array($qty['qty']) == true ){
-                                    $combo_info["qty"] = 0;
-                                    foreach ($qty['qty'] as $qkey => $qitem) {
-                                        $combo_info["qty"] += $qitem;
+                                
+                                $combo_product = array();
+                                $combo_product['products'] = array();
+                                $total_price_combo = 0;
+                                foreach($combo_detail_list as $p_id => $product) {
+                                    if($flash_sale){
+                                        $flash_sale_product = $this->_flashSaleProduct->getFlashSaleProductBy($flash_sale['flash_sale_id'],$p_id);
                                     }
-                                } else {
-                                    $p_full_info["qty"] = $qty['qty'];
+                                    if($flash_sale && $now <= $flash_sale['count_time_end'] && $now >= $flash_sale['count_time_start'] && $flash_sale['status'] ==1) {
+                                        $combo_detail = $this->_productMdl->getProductInfoById($p_id);
+                                        $combo_detail["qty"] = $value['qty'];
+                                        if($flash_sale_product['product_id'] != $p_id ){
+                                            $combo_detail["price_sales"] = $combo_detail["price_sales"];
+                                        }else{   
+                                            $combo_detail["price_sales"] = $flash_sale_product["price_flash_sale"];
+                                        }             
+                                        $total_price_combo +=$combo_detail["price_sales"]; 
+                                        $combo_detail["title"] = $combo_detail['title'];
+                                        $combo_detail["combo_id"] = $combo_detail["combo_id"];
+                                        $combo_detail["total_money"] = $value['qty'] * $combo_detail["price_sales"];
+                                        $combo_product['id_combo'] = $combo_info['id']; 
+                                        $combo_product['combo_code'] = $combo_info['combo_code']; 
+                                        $combo_product['title'] = $combo_info['title'];
+                                        $combo_product['qty'] = $value['qty'];
+                                        $combo_product['image_cb'] = $combo_info['image_cb'];
+                                        $combo_product["price_discount"]= $combo_info["price_discount"];
+                                        $combo_product["price_sales"]= $total_price_combo - $combo_product["price_discount"];
+                                        $combo_product["total_money"] = $value['qty'] * $combo_product["price_sales"];
+                                    }
+                                    else{
+                                        $combo_detail = $this->_productMdl->getProductInfoById($p_id);
+                                        $combo_detail["qty"] = $value['qty'];
+                                        $combo_detail["price_sales"] = $combo_detail["price_sales"];
+                                        $combo_detail["title"] = $combo_detail['title'];
+                                        $combo_detail["combo_id"] = $combo_detail["combo_id"];
+                                        $combo_detail["total_money"] = $value['qty'] * $combo_detail["price_sales"];
+                                        $combo_product['id_combo'] = $combo_info['id']; 
+                                        $combo_product['combo_code'] = $combo_info['combo_code']; 
+                                        $combo_product['title'] = $combo_info['title'];
+                                        $combo_product['qty'] = $value['qty'];
+                                        $combo_product['image_cb'] = $combo_info['image_cb'];
+                                        $combo_product["price_sales"]= $combo_info["total_discount"];
+                                        $combo_product["total_money"] = $value['qty'] * $combo_product["price_sales"];
+                                    }
+                                    $combo_product['products'][] = $combo_detail;
                                 }
-                                $combo_info["total_money"] = $qty['qty'] * $combo_info["total_discount"];
-                                $totalMoney += $combo_info["total_money"];
+                                $totalMoney += $combo_product["total_money"];
                             }
                         }
 
@@ -525,27 +715,20 @@ class Site_DonHangController extends FrontEndAction {
             $userInfo = $user->getUserById($this->customer_info['user_id']);
             $score = $userInfo['score'];
         }
-        $mdlVariant = new ProductVariant();
-        $productMdl = new Product();
-        $mdlCombo = new ComboProduct();
-        $mdlComboDetail= new ComboDetail();
-        $flashSaleProductVariantMdl = new FlashSaleProductVariant();
-        $flashSaleProduct = new FlashSaleProduct();
-        $flashSaleMdl = new FlashSale();
         if (empty($cart_list) == false && is_array($cart_list)) {
                 if(empty($cart_list['products'])==false){
                     foreach ($cart_list['products'] as $p_id => $value) {
                        
-                        $p_full_info = $productMdl->getProductInfoById($p_id);
-                        $variant_list = $mdlVariant->getProductVariants($p_id);
+                        $p_full_info = $this->_productMdl->getProductInfoById($p_id);
+                        $variant_list = $this->_mdlVariant->getProductVariants($p_id);
                         $now = date('Y-m-d H:i:s');
-                        $flash_sale = $flashSaleMdl->getFlashSale();
+                        $flash_sale = $this->_flashSaleMdl->getFlashSale();
                         if (empty($p_full_info)) {
                             continue;
                         }
                         if (!empty($value['variant']) && is_array($value['variant'])) {
                             if($flash_sale){
-                                $list_variant_flash_sale = $flashSaleProductVariantMdl->getFlashSaleProductVariantBy($flash_sale['flash_sale_id'],$p_id);
+                                $list_variant_flash_sale = $this->_flashSaleProductVariantMdl->getFlashSaleProductVariantBy($flash_sale['flash_sale_id'],$p_id);
                             }
                             if($flash_sale && $now <= $flash_sale['count_time_end'] && $now >= $flash_sale['count_time_start']  && $flash_sale['status'] ==1 && $list_variant_flash_sale) {
                                 foreach ($value['variant'] as $i=>$var) {
@@ -579,7 +762,7 @@ class Site_DonHangController extends FrontEndAction {
                             }
                         }else{
                             if($flash_sale){
-                                $flash_sale_product = $flashSaleProduct->getFlashSaleProductBy($flash_sale['flash_sale_id'],$p_id);
+                                $flash_sale_product = $this->_flashSaleProduct->getFlashSaleProductBy($flash_sale['flash_sale_id'],$p_id);
                             }
                             if($flash_sale && $now <= $flash_sale['count_time_end'] && $now >= $flash_sale['count_time_start'] && $flash_sale['status'] ==1 &&  $flash_sale_product) {
                                 $detailItem = array('id_order' =>'','id_product' => $p_id, 'price' => $flash_sale_product["price_flash_sale"], 'number' => $value['qty'], 'product_color' => 1);
@@ -607,28 +790,26 @@ class Site_DonHangController extends FrontEndAction {
                 }
                 if(!empty($cart_list['combos'])) {
                     foreach($cart_list['combos'] as $c_id => $value) {
-                        $combo_info = $mdlCombo->fetchComboProductById($c_id);
+                        $combo_info = $this->_comboMdl->fetchComboProductById($c_id);
                         $combo_detail_list = $value['products'];
                         $now = date('Y-m-d H:i:s');
-                        $flash_sale = $flashSaleMdl->getFlashSale();
+                        $flash_sale = $this->_flashSaleMdl->getFlashSale();
                         if(empty($combo_info)) {
                             continue;
                         }
                         $combo_product = array();
-                        // if($flash_sale && $now <= $flash_sale['count_time_end'] && $now >= $flash_sale['count_time_start'] && $flash_sale['status'] == 1) {
-                            $list_product_by_combo_id =$mdlComboDetail->getProductByComboId($c_id);
+                            $list_product_by_combo_id =$this->_comboDetailMdl->getProductByComboId($c_id);
                             $flash_sale_products = array();
                             if($list_product_by_combo_id){
                                 $detailItems = array();
                                 foreach ($list_product_by_combo_id as $product){
                                     $flash_sale_product = null;
                                     if($flash_sale){
-                                        $flash_sale_product = $flashSaleProduct->getFlashSaleProductBy($flash_sale['flash_sale_id'],$product['product_id']);
+                                        $flash_sale_product = $this->_flashSaleProduct->getFlashSaleProductBy($flash_sale['flash_sale_id'],$product['product_id']);
                                         if($flash_sale_product){
                                             $flash_sale_products[] = $flash_sale_product;
                                         }         
                                     }
-                                    // $product['price_sales'] = $product['price_sales'];
                                     if($flash_sale_product['product_id'] == $product['product_id']){
                                         $product['price_sales'] = $flash_sale_product['price_flash_sale'];
                                     }else{
@@ -652,8 +833,8 @@ class Site_DonHangController extends FrontEndAction {
                                 $combo_product['products'] = array();
                                 $total_price_combo = 0;
                                 foreach($combo_detail_list as $p_id => $product) {
-                                    $flash_sale_product = $flashSaleProduct->getFlashSaleProductBy($flash_sale['flash_sale_id'],$p_id);
-                                    $combo_detail = $productMdl->getProductInfoById($p_id);
+                                    $flash_sale_product = $this->_flashSaleProduct->getFlashSaleProductBy($flash_sale['flash_sale_id'],$p_id);
+                                    $combo_detail = $this->_productMdl->getProductInfoById($p_id);
                                     $combo_product['id'] = $combo_info['id']; 
                                     $combo_detail["qty"] = $value['qty'];
                                     if($flash_sale_product['product_id'] != $p_id ){
@@ -691,7 +872,7 @@ class Site_DonHangController extends FrontEndAction {
                                 $combo_product["total_money"] = $value['qty'] * $combo_product["price_sales"];
                                 $combo_product['products'] = array();
                                 foreach($combo_detail_list as $p_id => $product) {
-                                    $combo_detail = $productMdl->getProductInfoById($p_id);
+                                    $combo_detail = $this->_productMdl->getProductInfoById($p_id);
                                     $combo_detail["qty"] = $value['qty'];
                                     $combo_detail["price_sales"] = $combo_detail["price_sales"];
                                     $combo_detail["title"] = $combo_detail['title'];
@@ -930,7 +1111,7 @@ class Site_DonHangController extends FrontEndAction {
      * DISCOUNT 100k
      */
 
-     public function themVaoGioHangComboAction() {
+    public function themVaoGioHangComboAction() {
         $this->isAjax();
     
         if (empty($this->post_data["t"]) || empty($this->post_data["cid"]) || empty($this->post_data["qty"])) {
@@ -942,14 +1123,38 @@ class Site_DonHangController extends FrontEndAction {
         $qty = intval($this->post_data["qty"]);
         $cart_list = UtilSession::get($t . "_CART_LIST");
 
-        
-        // add combo to cart
-        $mdlCombo = new ComboProduct();
-        $mdlComboDetail = new ComboDetail();
-        $comboInfo = $mdlCombo->fetchComboProductById($cid);
-        $combo_products = $mdlComboDetail->getProductByComboId($cid);
+        $comboInfo = $this->_comboMdl->fetchComboProductById($cid);
+        $combo_products = $this->_comboDetailMdl->getProductByComboId($cid);
         $combo = array();
-    
+        $result = [];
+
+        if (isset($cart_list['products'])) {
+            foreach ($cart_list['products'] as $id => $product) {
+                $result[$id] = (isset($result[$id]) ? $result[$id] : 0) + $product['qty'];
+            }
+        }
+
+        if (isset($cart_list['combos'])) {
+            foreach ($cart_list['combos'] as $combo) {
+                if (isset($combo['products'])) {
+                    foreach ($combo['products'] as $id => $product) {
+                        $result[$id] = (isset($result[$id]) ? $result[$id] : 0) + $product['qty'];
+                    }
+                }
+            }
+        }
+       
+        foreach ($result as $id => $total_qty) {
+            $productInfo = $this->_productMdl->getProductInfoById($id);
+            $quanti_limit = !empty($productInfo) ? $productInfo['quanti_limit'] : 0;
+            if ($quanti_limit > 0 && ($total_qty + $qty) > $quanti_limit) {
+                $this->ajaxResponse(
+                    CODE_HAS_ERROR,
+                    "Sản phẩm " . $productInfo['title'] . " được thêm cộng với sản phẩm có trong giỏ hàng số lượng vượt quá giới hạn: " . $quanti_limit
+                );
+            }
+        }
+
         if (!empty($cart_list["combos"]) && !empty($cart_list["combos"][$cid])) {
             $combo = $cart_list["combos"][$cid];
             $combo["qty"] += $qty;
@@ -960,22 +1165,28 @@ class Site_DonHangController extends FrontEndAction {
                 if (isset($this->post_data["variant"][$pid])) {
                     $variant_id = $this->post_data["variant"][$pid];
                 }
-        
-                if (isset($combo["products"][$pid][$variant_id])) {
-                    $combo["products"][$pid][$variant_id]["qty"] += $qty;
+                $productInfo =  $this->_productMdl->getProductInfoById($pid);
+                if (empty($variant_id)) {
+                    $list_variant = $this->_mdlVariant->getProductVariants($productInfo['id']);
+                    if (!empty($list_variant[0]['id'])) {
+                        $variant_id = $list_variant[0]['id'];
+                    }
+                }
+                if (isset($combo["products"][$pid]["variant"]) && !empty($combo["products"][$pid]["variant"])) {
+                    $combo["products"][$pid]["variant"]["qty"] += $qty;
+                    $combo["products"][$pid]["qty"] += $qty; 
                 } else {
-                    $combo["products"][$pid][$variant_id] = array(
+                    $combo["products"][$pid]["variant"] = array(
                         "id"=>$variant_id,
                         "qty" => $qty
                     );
+                    $combo["products"][$pid]["qty"] += $qty;
                 }
             }
         }else {
             $combo["combo_id"] = $cid;
             $combo["qty"] = $qty;
-            $combo["products"] = array(
-               
-            );
+            $combo["products"] = array();
         
             foreach ($combo_products as $combo_product) {
                 $pid = $combo_product['product_id'];
@@ -986,18 +1197,15 @@ class Site_DonHangController extends FrontEndAction {
                 }
         
                 // get product detail
-                $mdlProduct = new Product();
-                $productInfo = $mdlProduct->getProductInfoById($pid);
+                $productInfo =  $this->_productMdl->getProductInfoById($pid);
         
                 if (empty($productInfo)) {
                     $this->ajaxResponse(CODE_HAS_ERROR, "Thêm sản phẩm vào Giỏ Hàng không thành công! Không tìm thấy thông tin sản phẩm");
                 } else if ($productInfo["status"] == 2) {
                     $this->ajaxResponse(CODE_HAS_ERROR, "Thêm sản phẩm vào Giỏ Hàng không thành công! Sản phẩm đã hết hàng");
                 }
-        
-                $mdlVariant = new ProductVariant();
                 if (empty($variant_id)) {
-                        $list_variant = $mdlVariant->getProductVariants($productInfo['id']);
+                        $list_variant = $this->_mdlVariant->getProductVariants($productInfo['id']);
                         if (!empty($list_variant[0]['id'])) {
                             $variant_id = $list_variant[0]['id'];
                         }
@@ -1020,26 +1228,11 @@ class Site_DonHangController extends FrontEndAction {
                         ] 
                     );
                 }
-                $combo["products"][$pid] =  $product;
-                // if (empty($variant_id)) {
-                //     $combo["products"][$pid] = array(
-                //         "id" => $pid,
-                //         "qty" => $qty
-                //     );
-                // } else {
-                //     // add product with variant to combo
-                //     if (isset($combo["products"][$pid][$variant_id])) {
-                //         $combo["products"][$pid][$variant_id]["qty"] += $qty;
-                //     } else {
-                //         $combo["products"][$pid][$variant_id] = array(
-                //             "id" => $variant_id,
-                //             "qty" => $qty
-                //         );
-                //     }
-                // }
+                if (!empty($product)) {
+                    $combo["products"][$pid] = $product;
+                }
             }
         }
-    
         $cart_list["combos"][$cid] = $combo;
         
     
@@ -1067,15 +1260,51 @@ class Site_DonHangController extends FrontEndAction {
         $variant_id = isset($this->post_data["variant"]) ? intval($this->post_data["variant"]) : null;
         $qty = intval($this->post_data["qty"]);
         $pid = intval($this->post_data["pid"]);
+        $quanti_limit = intval($this->post_data["quanti_limit"]);
         $cart_list = UtilSession::get($t . "_CART_LIST");
         $product = array();
-        $mdlProduct = new Product();
-        $mdlVariant = new ProductVariant();
+
+        $result = [];
+        if (isset($cart_list['products'])) {
+            foreach ($cart_list['products'] as $id => $product) {
+                $result[$id] = (isset($result[$id]) ? $result[$id] : 0) + $product['qty'];
+            }
+        }
+        if (isset($cart_list['combos'])) {
+            foreach ($cart_list['combos'] as $combo) {
+                if (isset($combo['products'])) {
+                    foreach ($combo['products'] as $id => $product) {
+                        $result[$id] = (isset($result[$id]) ? $result[$id] : 0) + $product['qty'];
+                    }
+                }
+            }
+        }
+       
+        foreach ($result as $id => $total_qty) {
+            if($id == $pid){
+                $productInfo = $this->_productMdl->getProductInfoById($id);
+                $quanti_limit = !empty($productInfo) ? $productInfo['quanti_limit'] : 0;
+    
+                if ($quanti_limit > 0 && ($total_qty + $qty) > $quanti_limit) {
+                    $this->ajaxResponse(
+                        CODE_HAS_ERROR,
+                        "Sản phẩm " . $productInfo['title'] . " được thêm cộng với sản phẩm có trong giỏ hàng số lượng vượt quá giới hạn: " . $quanti_limit
+                    );
+                }
+            }
+        }
+        
         if (!empty($cart_list["products"]) && !empty($cart_list["products"][$pid])) {
             $product = $cart_list["products"][$pid];
+            if(isset($quanti_limit) && !empty($quanti_limit)) {
+                $total_pro = intval($qty + $cart_list["products"][$pid]['qty']);
+                if($total_pro > $quanti_limit) {
+                   $this->ajaxResponse(CODE_HAS_ERROR, "Thêm sản phẩm vào Giỏ Hàng không thành công! Tổng số lượng sản phẩm tính cả trong giỏ hàng đã vượt qua " . $quanti_limit);
+                }
+            };
             $variant_name = "";
             if(empty($variant_id)){
-                $list_variant = $mdlVariant->getProductVariants($pid);
+                $list_variant = $this->_mdlVariant->getProductVariants($pid);
                 if (!empty($list_variant[0]['id'])) {
                     $variant_id = $list_variant[0]['id'];
                     $variant_name=  $list_variant[0]['variant_name'];
@@ -1094,15 +1323,14 @@ class Site_DonHangController extends FrontEndAction {
             }
             if ($variant_id && isset($product["variant"][$variant_id])) {
                 $product["variant"][$variant_id]["qty"] += $qty;
-                $variant_info = $mdlVariant->fetchVariantById($variant_id);
+                $variant_info = $this->_mdlVariant->fetchVariantById($variant_id);
                 if (!empty($variant_info)) {
                     $variant_name = $variant_info['variant_name'];
                 }
             
             }else if ($variant_id && !isset($product["variant"][$variant_id])){
                 if (isset($variant_id)) {
-                    $mdlVariant = new ProductVariant();
-                    $variant_info = $mdlVariant->fetchVariantById($variant_id);
+                    $variant_info = $this->_mdlVariant->fetchVariantById($variant_id);
                     if (!empty($variant_info)) {
                         $variant_name = $variant_info['variant_name'];
                     }
@@ -1116,10 +1344,10 @@ class Site_DonHangController extends FrontEndAction {
             }
 
             $product["qty"] += $qty;
-            $productInfo = $mdlProduct->getProductInfoById($pid);
+            $productInfo = $this->_productMdl->getProductInfoById($pid);
         } else {
             // get product detail
-            $productInfo = $mdlProduct->getProductInfoById($pid);
+            $productInfo = $this->_productMdl->getProductInfoById($pid);
 
             if (empty($productInfo)) {
                 $this->ajaxResponse(CODE_HAS_ERROR, "Thêm sản phẩm vào Giỏ Hàng không thành công! Không tìm thấy thông tin sản phẩm");
@@ -1128,7 +1356,7 @@ class Site_DonHangController extends FrontEndAction {
             //     $this->ajaxResponse(CODE_HAS_ERROR, "Thêm sản phẩm vào Giỏ Hàng không thành công! Sản phẩm đã hết hàng");
             // }
             if(empty($variant_id)) {
-                $list_variant = $mdlVariant->getProductVariants($pid);
+                $list_variant = $this->_mdlVariant->getProductVariants($pid);
                 if (!empty($list_variant[0]['id'])) {
                     $variant_id = $list_variant[0]['id'];
                     $variant_name=  $list_variant[0]['variant_name'];
@@ -1148,7 +1376,7 @@ class Site_DonHangController extends FrontEndAction {
             
             $variant_name = "";
             if ($variant_id) {
-                $variant_info = $mdlVariant->fetchVariantById($variant_id);
+                $variant_info = $this->_mdlVariant->fetchVariantById($variant_id);
                 if (!empty($variant_info)) {
                     $variant_name = $variant_info['variant_name'];
                 }
@@ -1181,14 +1409,8 @@ class Site_DonHangController extends FrontEndAction {
                             "variant_name" => isset($variant_name)?$variant_name:'Mặc định',
             )
         );
-    
     }
 
-    
-            
-    
-    
-    
     public function danhSachSanPhamAction() {
         $this->isAjax();
         if (empty($this->post_data["t"]) == true) {
@@ -1258,12 +1480,12 @@ class Site_DonHangController extends FrontEndAction {
         }
     
         $t = $this->post_data["t"];
-        $cart_list = UtilSession::get($t . "_CART_LIST"); 
+        $cart_list = UtilSession::get($t . "_CART_LIST");
         if (empty($cart_list) || !is_array($cart_list)) {
             $this->ajaxResponse(CODE_HAS_ERROR, "Danh sách sản phẩm trong giỏ hàng không hợp lệ!");
         }
         if(!empty($this->post_data["data"]) && is_array($this->post_data["data"])){
-            if(empty($cart_list['products'])==false){
+            if(empty($cart_list['products'])==false && empty($cart_list['combos'])==false){
                 foreach ($this->post_data["data"] as $key => $qty) {
                     $exploded_data = explode('|', $key);
                     $product_id = $exploded_data[0];
@@ -1278,9 +1500,65 @@ class Site_DonHangController extends FrontEndAction {
                                 }
                             }
                         }
-                        $cart_list['products'][$product_id]['qty'] =$total_qty;
+                        $cart_list['products'][$product_id]['qty'] = $total_qty;
                     } else {
                         $cart_list['products'][$product_id]['qty'] = $qty;
+                    }
+                    
+                    $result = [];
+                    if (isset($cart_list['products'])) {
+                        foreach ($cart_list['products'] as $id => $product) {
+                            $result[$id] = (isset($result[$id]) ? $result[$id] : 0) + $product['qty'];
+                        }
+                    }
+                    if (isset($cart_list['combos'])) {
+                        foreach ($cart_list['combos'] as $combo) {
+                            if (isset($combo['products'])) {
+                                foreach ($combo['products'] as $id => $product) {
+                                    $result[$id] = (isset($result[$id]) ? $result[$id] : 0) + $product['qty'];
+                                }
+                            }
+                        }
+                    }
+                    foreach ($result as $id => $total_qty) {
+                        if($id == $product_id) {
+                            $productInfo = $this->_productMdl->getProductInfoById($id);
+                            $quanti_limit = !empty($productInfo) ? $productInfo['quanti_limit'] : 0;
+                            if ($quanti_limit > 0 && $total_qty  > $quanti_limit) {
+                                $this->ajaxResponse(
+                                    CODE_HAS_ERROR,
+                                    "Sản phẩm " . $productInfo['title'] . " số lượng vượt quá giới hạn: " . $quanti_limit
+                                );
+                            }
+                        }
+                    }
+                }
+            } elseif(empty($cart_list['products']) == false){
+                foreach ($this->post_data["data"] as $key => $qty) {
+                    $exploded_data = explode('|', $key);
+                    $product_id = $exploded_data[0];
+                    $variant_id = $exploded_data[1];
+                    if (!empty($variant_id)) {
+                        $cart_list['products'][$product_id]['variant'][$variant_id]['qty'] = $qty;
+                        $total_qty = 0;
+                        if (isset($cart_list['products'][$product_id]['variant'])) {
+                            foreach ($cart_list['products'][$product_id]['variant'] as $variant) {
+                                if (isset($variant['qty'])) {
+                                $total_qty += intval($variant['qty']);
+                                }
+                            }
+                        }
+                        $cart_list['products'][$product_id]['qty'] = $total_qty;
+                    } else {
+                        $cart_list['products'][$product_id]['qty'] = $qty;
+                    }
+                    $productInfo = $this->_productMdl->getProductInfoById($product_id);
+                    $quanti_limit = !empty($productInfo) ? $productInfo['quanti_limit'] : 0;
+                    if ($quanti_limit > 0 && ($cart_list['products'][$product_id]['qty']) > $quanti_limit) {
+                        $this->ajaxResponse(
+                            CODE_HAS_ERROR,
+                            "Sản phẩm " . $productInfo['title'] . " số lượng vượt quá giới hạn: " . $quanti_limit
+                        );
                     }
                 }
             }
@@ -1289,6 +1567,7 @@ class Site_DonHangController extends FrontEndAction {
     
         $this->ajaxResponse(CODE_SUCCESS);
     }
+	
     public function capNhatDonHangComboAction() {
         $this->isAjax();
     
@@ -1304,18 +1583,69 @@ class Site_DonHangController extends FrontEndAction {
             $this->ajaxResponse(CODE_HAS_ERROR, "Danh sách sản phẩm trong giỏ hàng không hợp lệ!");
         }
         if(!empty($this->post_data["data"]) && is_array($this->post_data["data"])){
-            if (!empty($cart_list['combos'])) {
-                    foreach ($this->post_data["data"] as $key => $qty) {
-                        $exploded_data = explode('|', $key);
-                        $combo_id = $exploded_data[0];
-                        if(!empty($cart_list['combos'][$combo_id])){
-                            $cart_list['combos'][$combo_id]['qty'] =$qty;
-                            foreach($cart_list['combos'][$combo_id]['products'] as $product_id =>$product){
-                                $cart_list['combos'][$combo_id]['products'][$product_id]['qty'] =$qty;
-                                $cart_list['combos'][$combo_id]['products'][$product_id]['variant']['qty'] =$qty;
-                            }
+            if (!empty($cart_list['combos']) && !empty($cart_list['products'] )){
+                foreach ($this->post_data["data"] as $key => $qty) {
+                    $exploded_data = explode('|', $key);
+                    $combo_id = $exploded_data[0];
+                    if(!empty($cart_list['combos'][$combo_id])){
+                        $cart_list['combos'][$combo_id]['qty'] = $qty;
+                        foreach($cart_list['combos'][$combo_id]['products'] as $product_id => $product){
+                            $cart_list['combos'][$combo_id]['products'][$product_id]['qty'] = $qty;
+                            $cart_list['combos'][$combo_id]['products'][$product_id]['variant']['qty'] = $qty;
                         }
                     }
+                }
+                $result = [];
+                if (isset($cart_list['products'])) {
+                    foreach ($cart_list['products'] as $id => $product) {
+                        $result[$id] = (isset($result[$id]) ? $result[$id] : 0) + $product['qty'];
+                    }
+                }
+                foreach ($cart_list['combos'] as $combo_id => $combo) {
+                    foreach ($combo['products'] as $product_id => $product) {
+                        $result[$product_id] = (isset($result[$product_id]) ? $result[$product_id] : 0) + $product['qty'];
+                    }
+                }
+                foreach ($result as $id => $total_qty) {
+                    $productInfo = $this->_productMdl->getProductInfoById($id);
+                    $quanti_limit = !empty($productInfo) ? $productInfo['quanti_limit'] : 0;
+                
+                    if ($quanti_limit > 0 && $total_qty > $quanti_limit) {
+                        $this->ajaxResponse(
+                            CODE_HAS_ERROR,
+                            "Sản phẩm " . $productInfo['title'] . " có tổng số lượng vượt quá giới hạn: " . $quanti_limit
+                        );
+                    }
+                }
+            } elseif (!empty($cart_list['combos'])){
+                foreach ($this->post_data["data"] as $key => $qty) {
+                    $exploded_data = explode('|', $key);
+                    $combo_id = $exploded_data[0];
+                    if(!empty($cart_list['combos'][$combo_id])){
+                        $cart_list['combos'][$combo_id]['qty'] = $qty;
+                        foreach($cart_list['combos'][$combo_id]['products'] as $product_id => $product){
+                            $cart_list['combos'][$combo_id]['products'][$product_id]['qty'] = $qty;
+                            $cart_list['combos'][$combo_id]['products'][$product_id]['variant']['qty'] = $qty;
+                        }
+                    }
+                }
+                $result = [];
+                foreach ($cart_list['combos'] as $combo_id => $combo) {
+                    foreach ($combo['products'] as $product_id => $product) {
+                        $result[$product_id] = (isset($result[$product_id]) ? $result[$product_id] : 0) + $product['qty'];
+                    }
+                }
+                foreach ($result as $id => $total_qty) {
+                    $productInfo = $this->_productMdl->getProductInfoById($id);
+                    $quanti_limit = !empty($productInfo) ? $productInfo['quanti_limit'] : 0;
+                
+                    if ($quanti_limit > 0 && $total_qty > $quanti_limit) {
+                        $this->ajaxResponse(
+                            CODE_HAS_ERROR,
+                            "Sản phẩm " . $productInfo['title'] . " có tổng số lượng vượt quá giới hạn: " . $quanti_limit
+                        );
+                    }
+                }
             }
         }       
         
@@ -1380,9 +1710,7 @@ class Site_DonHangController extends FrontEndAction {
         if (!$province) {
             return;
         }
-
-        $mdlShippingRates = new ShippingRates;
-        $fee_ships = $mdlShippingRates->getFeeShip($province, $district, $wards);
+        $fee_ships = $this->_mdlShippingRates->getFeeShip($province, $district, $wards);
 
         if ($fee_cod && ($province == 1 || $province == 79)) {
             $result = [0];
@@ -1391,14 +1719,11 @@ class Site_DonHangController extends FrontEndAction {
                 $sessionHelper = new My_Controller_Action_Helper_Session();
                 $sessionHelper->unsetSession('fee_ship');
                 $sessionHelper->setSession('fee_ship', $fee_ships['fee_ship']);
-
-                $mdlSetting = new Setting;
-                $fee_cod = $mdlSetting->fetchSettingByKey('fee_cod');
+                $fee_cod = $this->_mdlSetting->fetchSettingByKey('fee_cod');
                 $result = [$fee_ships['fee_ship'], $fee_cod['value']];
             } else {
-                $mdlSetting = new Setting;
-                $fee_ship_default = $mdlSetting->fetchSettingByKey('fee_ship_default');
-                $fee_cod = $mdlSetting->fetchSettingByKey('fee_cod');
+                $fee_ship_default = $this->_mdlSetting->fetchSettingByKey('fee_ship_default');
+                $fee_cod = $this->_mdlSetting->fetchSettingByKey('fee_cod');
 
                 $fee_ship_default = ($fee_ship_default && isset($fee_ship_default['value'])) ? $fee_ship_default['value'] : 40000;
 
@@ -1412,11 +1737,9 @@ class Site_DonHangController extends FrontEndAction {
                 $sessionHelper = new My_Controller_Action_Helper_Session();
                 $sessionHelper->unsetSession('fee_ship');
                 $sessionHelper->setSession('fee_ship', $fee_ships['fee_ship']);
-                $mdlSetting = new Setting;
                 $result = [$fee_ships['fee_ship']];
             } else {
-                $mdlSetting = new Setting;
-                $fee_ship_default = $mdlSetting->fetchSettingByKey('fee_ship_default');
+                $fee_ship_default = $this->_mdlSetting->fetchSettingByKey('fee_ship_default');
                 $fee_ship_default = ($fee_ship_default && isset($fee_ship_default['value'])) ? $fee_ship_default['value'] : 40000;
 
                 $result = [$fee_ship_default];
@@ -1444,12 +1767,10 @@ class Site_DonHangController extends FrontEndAction {
             $province = $data['province'];
             $result = [];
             if (($fee_cod && $province == 1) || ($fee_cod && $province == 79)) {
-                $mdlSetting = new Setting;
-                $fee_cod =$mdlSetting->fetchSettingByKey('fee_cod');
+                $fee_cod =$this->_mdlSetting->fetchSettingByKey('fee_cod');
                 $result = [0];
             }else{
-                $mdlSetting = new Setting;
-                $fee_cod =$mdlSetting->fetchSettingByKey('fee_cod');
+                $fee_cod =$this->_mdlSetting->fetchSettingByKey('fee_cod');
                 $result = [$fee_cod['value']];
             }
             $this ->getResponse()

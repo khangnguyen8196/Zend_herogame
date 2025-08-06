@@ -4,9 +4,17 @@
             <li>
                 <a id="minus" style="cursor: pointer"><i class="fa fa-minus"></i></a>
             </li>
-            <li>
-                <input type="tel" readonly min="1" max="100" value="1" id="number"/>
-            </li>
+            <?php
+                if(isset($this->info["quanti_limit"]) && !empty($this->info["quanti_limit"])){?>
+                    <li>
+                        <input type="tel" readonly min="1" max="<?php echo $this->info["quanti_limit"] ?>" value="1" id="number"/>
+                    </li>
+                <?php } else { ?>
+                    <li>
+                        <input type="tel" readonly min="1" max="100" value="1" id="number"/>
+                    </li>
+                <?php }
+            ?>
             <li>
                 <a id="plus" style="cursor: pointer"><i class="fa fa-plus"></i></a>
             </li>
@@ -15,6 +23,7 @@
             <i class="fa fa-cart-plus"></i>
             <span>Thêm vào giỏ</span>
         </button>
+        <input type="hidden" id="quanti_limit" value="<?php echo $this->info["quanti_limit"]?>" name="quanti_limit"/>
         <input type="hidden" id="pid" name="pid" value="<?php echo $this->info["id"]?>"/>
         <input type="hidden" id="qty" name="qty"/>
         <input type="hidden" id="t" name="t"/>

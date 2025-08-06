@@ -342,6 +342,17 @@
         </div>
     </div>
     <div class="form-group">
+        <label class="control-label col-lg-2">Số lượng giới hạn</label>
+        <div class="col-lg-4">
+            <div class="form-group">
+                    <input type="text" name="quanti_limit"
+                           id="quanti_limit"
+                           class="form-control"
+                           placeholder="Số lượng giới hạn" value="<?php echo @$this->info['quanti_limit'] ?>" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
         <label class="control-label col-lg-2">Ngày ra mắt</label>
         <div class="col-lg-4">
             <div class="form-group">

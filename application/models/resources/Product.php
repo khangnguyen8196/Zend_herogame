@@ -349,9 +349,12 @@ class Product extends Zend_Db_Table_Abstract {
         if (isset($data['sku']) == true) {
                 $datain['sku'] = $data['sku'];
         }
-        if (isset($data['release_date']) == true) {
+        if (!empty($data['release_date'])) {
             $datain['release_date'] = $data['release_date'];
-    }
+        } else {
+            $datain['release_date'] = null; 
+        }
+
         if (isset($data['created_at']) == true) {
             $datain['created_date'] = $data['created_at'];
         }
@@ -396,6 +399,9 @@ class Product extends Zend_Db_Table_Abstract {
         }
         if (isset($data['relative_product']) == true) {
             $datain['relative_product'] = $data['relative_product'];
+        }
+        if (isset($data['quanti_limit']) == true) {
+            $datain['quanti_limit'] = $data['quanti_limit'];
         }
         if (isset($data['order_with_product']) == true) {
             $datain['order_with_product'] = $data['order_with_product'];

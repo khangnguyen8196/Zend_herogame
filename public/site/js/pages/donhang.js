@@ -51,6 +51,14 @@ pages = $.extend(pages, {
             });
 
             $(document).on('click', '#submit-btn-pay', function (e) {
+                var $button = $(this);
+                if ($button.data('submitting')) {
+                    e.preventDefault();
+                    return;
+                }
+                $button.data('submitting', true).css('opacity', '0.5');
+            
+                var isValid = true;
                 var validationFields = [
                     { field: '#cfa_email', errorField: '#errorEmail', message: 'Vui lòng nhập email' },
                     { field: '#cfa_name', errorField: '#errorFullName', message: 'Vui lòng nhập họ tên' },
@@ -60,26 +68,29 @@ pages = $.extend(pages, {
                     { field: '#district', errorField: '#districtError', message: 'Vui lòng chọn quận huyện' },
                     { field: '#wards', errorField: '#wardsError', message: 'Vui lòng chọn xã phường' }
                 ];
-            
                 validationFields.forEach(function (item) {
                     var value = $(item.field).val();
                     if (value === '' || (item.field === '#district' && value === 'Chọn quận huyện') || (item.field === '#wards' && value === 'Chọn phường xã')) {
-                        e.preventDefault();
                         $(item.errorField).text(item.message);
+                        isValid = false;
                     } else {
                         $(item.errorField).text('');
                     }
                 });
-                $phone = $('#cfa_phone').val();
+                var $phone = $('#cfa_phone').val();
                 if ($phone.length < 10) {
-                    e.preventDefault();
-                    $('#errorPhone').text('Số điện thoại không hợp lệ, phải đủ 10 số.')
+                    $('#errorPhone').text('Số điện thoại không hợp lệ, phải đủ 10 số.');
+                    isValid = false;
                 }
                 var isChecked = $('input[name="cod"]:checked').length > 0;
                 if (!isChecked) {
                     $('#popup').show();
-                    e.preventDefault();
+                    isValid = false;
                 }
+                if (!isValid) {
+                    e.preventDefault();
+                    $button.data('submitting', false).css('opacity', '1');
+                } 
             });            
 
             $('#closePopup').click(function(e) {
@@ -707,6 +718,9 @@ pages = $.extend(pages, {
                         $(".remove_pr").prop("disabled", false);
                         if (data.Code > 0) {
                             window.location = "/don-hang/gio-hang";
+                        } else {
+                            window.location = "/don-hang/gio-hang";
+                            alert( data.Message );
                         }
                     },
                     error: function () {
@@ -749,6 +763,9 @@ pages = $.extend(pages, {
                         $(".remove_pr").prop("disabled", false);
                         if (data.Code > 0) {
                             window.location = "/don-hang/gio-hang";
+                        } else {
+                            window.location = "/don-hang/gio-hang";
+                            alert( data.Message );
                         }
                     },
                     error: function () {
