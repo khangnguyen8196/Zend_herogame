@@ -81,7 +81,15 @@ class Site_AuthController extends FrontEndAction {
                 $loginInfo = (array) $authResult['data_auth'];
                 UtilAuth::setCustommerLoginInfo($loginInfo);
                 setcookie('LOGIN', '', time() - 3600, '/');
+                // $loginToken = md5($loginInfo['user_id']);
+                // setcookie('LOGIN', $loginToken, time() + 86400, '/', '', true, true);
                 $arr['failed_login_attempt'] = 0;
+                $token = md5(uniqid(mt_rand(), true)) . md5(time());
+                $expireTime = date('Y-m-d H:i:s', strtotime('+30 days'));
+                $arr['remember_token'] = $token;
+                $arr['remember_token_expire'] = $expireTime;
+                // Lưu cookie remember_token
+                setcookie('remember_token', $token, time() + (30 * 24 * 60 * 60), '/', '', true, true);
                 $mdlUser->updateUser($arr, $loginInfo['user_id']);
                 
                 if (empty($this->post_data['act']) == false && $this->post_data['act'] == 'giohang') {
@@ -229,6 +237,7 @@ class Site_AuthController extends FrontEndAction {
     	// Clear all session of browser
     	Zend_Session::destroy();
         setcookie('token', null, -1, '/');
+        setcookie('remember_token', '', time() - 3600, '/', '', true, true);
     	$this->_redirect( '/' );
     }
     

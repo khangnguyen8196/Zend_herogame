@@ -484,6 +484,7 @@ class Admin_ProductController extends FrontBaseAction {
                 $arrColor[$color['id']] = $color['color_name'];
             }
         }
+		$priorityMax = $model->getLatestId();
         if( empty( $info ) == false ){
             $listVariant = $modelVariant->getProductVariants($info['id']);
             $this->view->variants = $listVariant;
@@ -493,7 +494,8 @@ class Admin_ProductController extends FrontBaseAction {
             $listCombo = $modelCombo->getAllComboProduct($info['id']);
             $this->view->listCombo = $listCombo;
         }
-
+		
+		$this->view->priorityMax = $priorityMax;
         $this->view->listColor = $arrColor;
         $this->view->listCategory = $listCategory;
         $this->view->info = $info;
@@ -857,8 +859,11 @@ class Admin_ProductController extends FrontBaseAction {
             $data['price'] = $this->post_data['price'];
         } elseif( $this->post_data['type'] == 3 ){
             $data['price_sales'] = $this->post_data['price_sales'];
+        } elseif( $this->post_data['type'] == 4 ){
+            $data['status'] = $this->post_data['status'];
         }
         $model->updateProduct($data, $this->post_data['id']);
+        self::updateStatusProductVariant($this->post_data['id'], $this->post_data['status']);
         $this->ajaxResponse( CODE_SUCCESS );
     }
 
@@ -884,5 +889,17 @@ class Admin_ProductController extends FrontBaseAction {
         $this->view->arrCombo = $arrCombo;
         $html = $this->view->render("/combo-product/_relative-combo.phtml");
         $this->ajaxResponse(CODE_SUCCESS, '', $html);
+    }
+
+    function updateStatusProductVariant($product_id, $status){
+        $modelVariant = new ProductVariant();
+        $listProductVariant = $modelVariant->getAllVariantIdsByProductId($product_id);
+        $data = [];
+        if($listProductVariant){
+            foreach ($listProductVariant as $index => $value) {
+                $data['status'] = $status;
+                $modelVariant->updateVariant($data, $value);
+            }
+        }
     }
 }

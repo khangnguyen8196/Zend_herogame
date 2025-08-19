@@ -138,159 +138,68 @@ pages = $.extend(pages, {
                     $(this).parents('.input_image_12_botton').remove();
                 });
 
-                $(document).on('change', '#image_2_botton, #image_3_botton, #image_12_botton', function() {
-                    checkFileSizes(this);
-                });
-
-                $(document).on('change', '#image_2_top, #image_3_botton, #image_12_botton', function() {
-                    checkFileSizes(this);
-                });
-
-                var countValue2Top = $("#add_image_2_top").find("span").attr("attr-count");
-                var index2Top = countValue2Top;
-                $("#add_image_2_top").click(function () {
-                    var html = '';
-                    html += 	'<div class="input_image_2_top">';
-                    html += 	'<div class="form-group">';
-                    html += 	'<label class="control-label col-lg-2">Banner</label>';
-                    html += 	'<div class="col-lg-3">';
-                    html += 	    '<input type="file" class="file-styled form-control image_2_top_dm " name="image_2_top['+index2Top+']" accept="image/*"/>';
-                    html += 	'</div>';
-                    html += 	'<label class="control-label col-lg-1">URL</label>';
-                    html += 	'<div class="col-lg-3">';
-                    html += 	    '<input type="text" class="file-styled form-control url_image_2_top " name="url_image_2_top['+index2Top+']"/>';
-                    html += 	'</div>';
-                    html += 	'<div class="col-lg-2">';
-                    html += 		'<button type="button"  class="btn btn-alert remove_input_image_2_top" style="margin-right: 11px;">x</button>';
-                    html += 	'</div>';
-                    html += 	'</div>';
-                    html += 	'</div>';
-                    $('#new_image_2_top').append(html);
-                    index2Top++;
-                });
-
-                var countValue2 = $("#add_image_2_botton").find("span").attr("attr-count");
-                var index2 = countValue2;
-                $("#add_image_2_botton").click(function () {
-                    var html = '';
-                    html += 	'<div class="input_image_2_botton">';
-                    html += 	'<div class="form-group">';
-                    html += 	'<label class="control-label col-lg-2">Banner</label>';
-                    html += 	'<div class="col-lg-3">';
-                    html += 	    '<input type="file" class="file-styled form-control image_2_botton_dm " name="image_2_botton['+index2+']" accept="image/*"/>';
-                    html += 	'</div>';
-                    html += 	'<label class="control-label col-lg-1">URL</label>';
-                    html += 	'<div class="col-lg-3">';
-                    html += 	    '<input type="text" class="file-styled form-control url_image_2_botton " name="url_image_2_botton['+index2+']"/>';
-                    html += 	'</div>';
-                    html += 	'<div class="col-lg-2">';
-                    html += 		'<button type="button"  class="btn btn-alert remove_input_image_2_botton" style="margin-right: 11px;">x</button>';
-                    html += 	'</div>';
-                    html += 	'</div>';
-                    html += 	'</div>';
-                    $('#new_image_2_botton').append(html);
-                    index2++;
-                });
-            
-                var countValue3 = $("#add_image_3_botton").find("span").attr("attr-count");
-                var index3 = countValue3;
-                $("#add_image_3_botton").click(function () {
-                    var html = '';
-                    html += 	'<div class="input_image_3_botton">';
-                    html += 	'<div class="form-group">';
-                    html += 	'<label class="control-label col-lg-2">Banner</label>';
-                    html += 	'<div class="col-lg-3">';
-                    html += 	    '<input type="file" class="file-styled form-control image_3_botton_dm " name="image_3_botton['+index3+']" accept="image/*"/>';
-                    html += 	'</div>';
-                    html += 	'<label class="control-label col-lg-1">URL</label>';
-                    html += 	'<div class="col-lg-3">';
-                    html += 	    '<input type="text" class="file-styled form-control url_image_3_botton " name="url_image_3_botton['+index3+']"/>';
-                    html += 	'</div>';
-                    html += 	'<div class="col-lg-2">';
-                    html += 		'<button type="button"  class="btn btn-alert remove_input_image_3_botton" style="margin-right: 11px;">x</button>';
-                    html += 	'</div>';
-                    html += 	'</div>';
-                    html += 	'</div>';
-                    $('#new_image_3_botton').append(html);
-                    index3++;
-                });
-                var countValue12 = $("#add_image_12_botton").find("span").attr("attr-count");
-                var index12 = countValue12;
-                $("#add_image_12_botton").click(function () {
-                    var html = '';
-                    html += 	'<div class="input_image_12_botton" >';
-                    html += 	'<div class="form-group">';
-                    html += 	'<label class="control-label col-lg-2">Banner</label>';
-                    html += 	'<div class="col-lg-3">';
-                    html += 	    '<input type="file" class="file-styled form-control image_12_botton_dm " name="image_12_botton['+index12+']" accept="image/*"/>';
-                    html += 	'</div>';
-                    html += 	'<label class="control-label col-lg-1">URL</label>';
-                    html += 	'<div class="col-lg-3">';
-                    html += 	    '<input type="text" class="file-styled form-control url_image_12_botton " name="url_image_12_botton['+index12+']"/>';
-                    html += 	'</div>';
-                    html += 	'<div class="col-lg-2">';
-                    html += 		'<button type="button"  class="btn btn-alert remove_input_image_12_botton" style="margin-right: 11px;">x</button>';
-                    html += 	'</div>';
-                    html += 	'</div>';
-                    html += 	'</div>';
-                    $('#new_image_12_botton').append(html);
-                    index12++;
-                });
-                $(document).ready(function() {
-                    // image_2_top
-                    var count_image_2_top = $('.image_2_top_dm').length;
-                    if(count_image_2_top == 100){
-                        $("#add_image_2_topn").prop("disabled", true);
+                $(document).on('click', '.remove_image_slide_category', function() {
+                    var count_image_slide_category = $('.image_slide_category_dm').length;
+                    if(count_image_slide_category <101){
+                        $("#add_image_slide_category").prop("disabled", false);
                     }
-                    $("#add_image_2_top").click(function() {
-                        var count_image_2_top = $('.image_2_top_dm').length;
-                        if(count_image_2_top == 100){
-                            $("#add_image_2_top").prop("disabled", true);
-                        }
-                    });
+                    var index = $('.list-delete-image-slide-category').attr('data-index');
+                    var val = $(this).attr('data-remove-image-slide-category');
+                    var url = $(this).attr('data-url');
+                    $('#delete_image_slide_category_'+index).append('<input type="hidden" name="url_image_slide_category_delete[]" value="'+val+'">'+'<input type="hidden" name="url_image_slide_category_botton_delete[]" value="'+url+'">');
+                    $(this).closest('.image_slide_category').remove();
+                });
 
-                    // image_2_botton
-                    var count_image_2_botton = $('.image_2_botton_dm').length;
-                    if(count_image_2_botton == 100){
-                        $("#add_image_2_botton").prop("disabled", true);
+                $(document).on('click', '.remove_input_image_slide_category', function() {
+                    var count_image_slide_category = $('.image_slide_category_dm').length;
+                    if(count_image_slide_category <101){
+                        $("#add_image_slide_category").prop("disabled", false);
                     }
-                    $("#add_image_2_botton").click(function() {
-                        var count_image_2_botton = $('.image_2_botton_dm').length;
-                        if(count_image_2_botton == 100){
-                            $("#add_image_2_botton").prop("disabled", true);
-                        }
-                    });
-                    //image_3_botton
-                    var count_image_3_botton = $('.image_3_botton_dm').length;
-                    if(count_image_3_botton == 100){
-                        $("#add_image_3_botton").prop("disabled", true);
-                    }
-                    $("#add_image_3_botton").click(function() {
-                        var count_image_3_botton = $('.image_3_botton_dm').length;
-                        if(count_image_3_botton == 100){
-                            $("#add_image_3_botton").prop("disabled", true);
-                        }
-                    });
+                    $(this).parents('.input_image_slide_category').remove();
+                });
 
-                    //image_12_botton
-                    var count_image_12_botton = $('.image_12_botton_dm').length;
-                    if(count_image_12_botton == 100){
-                        $("#add_image_12_botton").prop("disabled", true);
-                    }
-                    $("#add_image_12_botton").click(function() {
-                        var count_image_12_botton = $('.image_12_botton_dm').length;
-                        if(count_image_12_botton == 100){
-                            $("#add_image_12_botton").prop("disabled", true);
-                        }
-                    });
-                });
-                $(document).on('change', '.image_2_botton_dm', function() {
-                    checkFileSizes(this);
-                });
-                $(document).on('change', '.image_3_botton_dm', function() {
-                    checkFileSizes(this);
-                });
-                $(document).on('change', '.image_12_botton_dm', function() {
+                me.handleRemoveImage('.remove_image_banner_ytb', 'data-remove-image-banner-ytb', '.delete-image-banner-ytb', 'url_image_banner_ytb_delete', '.banner-youtube');
+                me.handleRemoveImage('.remove_image_banner_ytb_left', 'data-remove-image-banner-ytb-left', '.delete-image-banner-ytb-left', 'url_image_banner_ytb_delete_left', '.banner-youtube-left');
+                me.handleRemoveImage('.remove_image_banner_ytb_mid', 'data-remove-image-banner-ytb-mid', '.delete-image-banner-ytb-mid', 'url_image_banner_ytb_delete_mid', '.banner-youtube-mid');
+                me.handleRemoveImage('.remove_image_banner_ytb_right', 'data-remove-image-banner-ytb-right', '.delete-image-banner-ytb-right', 'url_image_banner_ytb_delete_right', '.banner-youtube-right');
+                
+                me.handleRemoveImage('.remove_image_banner_ytb_2', 'data-remove-image-banner-ytb-2', '.delete-image-banner-ytb-2', 'url_image_banner_ytb_delete_2', '.banner-youtube-2');
+                me.handleRemoveImage('.remove_image_banner_ytb_left_2', 'data-remove-image-banner-ytb-left-2', '.delete-image-banner-ytb-left-2', 'url_image_banner_ytb_delete_left_2', '.banner-youtube-left-2');
+                me.handleRemoveImage('.remove_image_banner_ytb_mid_2', 'data-remove-image-banner-ytb-mid-2', '.delete-image-banner-ytb-mid-2', 'url_image_banner_ytb_delete_mid_2', '.banner-youtube-mid-2');
+                me.handleRemoveImage('.remove_image_banner_ytb_right_2', 'data-remove-image-banner-ytb-right-2', '.delete-image-banner-ytb-right-2', 'url_image_banner_ytb_delete_right_2', '.banner-youtube-right-2');
+
+                me.setupAddImageButton("#add_image_2_top", "#new_image_2_top", "image_2_top", "image_2_top");
+                me.setupAddImageButton("#add_image_2_botton", "#new_image_2_botton", "image_2_botton", "image_2_botton");
+                me.setupAddImageButton("#add_image_3_botton", "#new_image_3_botton", "image_3_botton", "image_3_botton");
+                me.setupAddImageButton("#add_image_12_botton", "#new_image_12_botton", "image_12_botton", "image_12_botton");
+
+                me.setupAddImageButton("#add_image_slide_category", "#new_image_slide_category", "image_slide_category", "image_slide_category");
+
+                me.setupImageLimit("#add_image_2_top", ".image_2_top_dm");
+                me.setupImageLimit("#add_image_2_botton", ".image_2_botton_dm");
+                me.setupImageLimit("#add_image_3_botton", ".image_3_botton_dm");
+                me.setupImageLimit("#add_image_12_botton", ".image_12_botton_dm");
+
+                me.setupImageLimit("#add_image_slide_category", ".image_slide_category_dm");
+
+                // $(document).on('change', '.image_2_botton_dm, .image_2_top_dm, .image_3_botton_dm, .image_12_botton_dm, .image_slide_category_dm', function() {
+                //     checkFileSizes(this);
+                // });
+                $(document).on('change', [
+                    '.image_2_botton_dm',
+                    '.image_2_top_dm',
+                    '.image_3_botton_dm',
+                    '.image_12_botton_dm',
+                    '.image_slide_category_dm',
+                    '#banner_ytb',
+                    '#banner_ytb_L',
+                    '#banner_ytb_M',
+                    '#banner_ytb_R',
+                    '#banner_ytb_2',
+                    '#banner_ytb_L_2',
+                    '#banner_ytb_M_2',
+                    '#banner_ytb_R_2'
+                ].join(', '), function() {
                     checkFileSizes(this);
                 });
 
@@ -311,9 +220,6 @@ pages = $.extend(pages, {
                         $(input).val(''); 
                     }
                 }          
-                // $(document).on('click', '.remove_image_2_botton', function() {
-                //     $(this).parents('.image_2_botton').remove();
-                // });
             }
             if( currController == 'category' && currAction == 'media'){
         		pages.common.setupMasonry();
@@ -492,7 +398,54 @@ pages = $.extend(pages, {
                     });
                 }
             });
-        }
+        },
+        setupAddImageButton:function(btnId, wrapperId, namePrefix, classPrefix) {
+            let count = $(btnId).find("span").attr("attr-count");
+            let index = count;
         
+            $(btnId).click(function () {
+                const html = `
+                <div class="input_${namePrefix}">
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Banner</label>
+                        <div class="col-lg-3">
+                            <input type="file" class="file-styled form-control ${classPrefix}_dm" name="${namePrefix}[${index}]" accept="image/*"/>
+                        </div>
+                        <label class="control-label col-lg-1">URL</label>
+                        <div class="col-lg-3">
+                            <input type="text" class="file-styled form-control url_${classPrefix}" name="url_${namePrefix}[${index}]"/>
+                        </div>
+                        <div class="col-lg-2">
+                            <button type="button" class="btn btn-alert remove_input_${namePrefix}" style="margin-right: 11px;">x</button>
+                        </div>
+                    </div>
+                </div>`;
+                $(wrapperId).append(html);
+                index++;
+            });
+        },
+        setupImageLimit:function (buttonSelector, imageClass, maxCount = 100) {
+            function checkLimit() {
+                var count = $(imageClass).length;
+                if (count >= maxCount) {
+                    $(buttonSelector).prop("disabled", true);
+                }
+            }
+        
+            $(document).ready(function () {
+                checkLimit();
+                $(buttonSelector).click(function () {
+                    checkLimit();
+                });
+            });
+        },
+        handleRemoveImage:function (selector, dataAttr, targetContainer, inputName, wrapperClass) {
+            $(document).on('click', selector, function(e) {
+                e.preventDefault();
+                var val = $(this).attr(dataAttr);
+                $(targetContainer).append('<input type="hidden" name="'+inputName+'" value="'+val+'">');
+                $(this).closest(wrapperClass).remove();
+            });
+        }
     }
 });

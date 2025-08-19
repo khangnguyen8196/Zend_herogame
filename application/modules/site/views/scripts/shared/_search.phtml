@@ -5,14 +5,88 @@
 <form class ="form-search" action="<?php echo $this->url(array('module' => 'site', 'controller' => 'tim-kiem', 'action' => 'search'), 'default', true) ?>" method="get">
     <i class="fa fa-search"></i>
     <i class="fa fa-times"></i>
+    <!--<select class="select-option" name="option">-->
+    <!--    <option value="sanpham">Sản phẩm</option>-->
+    <!--    <option value="baiviet">Bài viết</option>-->
+    <!--</select>-->
     <select class="select-option" name="option">
-        <option value="sanpham">Sản phẩm</option>
-        <option value="baiviet">Bài viết</option>
+        <option value="sanpham" <?php echo (isset($_GET['option']) && $_GET['option'] == 'sanpham') ? 'selected' : ''; ?>>Sản phẩm</option>
+        <option value="baiviet" <?php echo (isset($_GET['option']) && $_GET['option'] == 'baiviet') ? 'selected' : ''; ?>>Bài viết</option>
     </select>
     <input name="keyword" type="search" class="searchV" value="<?php echo htmlspecialchars(isset($_GET['keyword']) ? $_GET['keyword'] : ''); ?>" placeholder="Nhập từ khóa cần tìm..." />
 </form>
+<div class="search-results-pc"></div>
 </div>
 <style>
+	/* start list search */
+    .search-results-pc {
+        position: absolute;
+        background: white;
+        width: 100%;
+        border: 1px solid #ddd;
+        max-height: 300px;
+        overflow-y: auto;
+        display: none;
+        z-index: 10001;
+    }
+
+    .search-results-list-pc {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .search-item {
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .show-more-btn {
+        display: block;
+        width: 100%;
+        padding: 5px;
+        color: black;
+        text-align: center;
+        border: none;
+        cursor: pointer;
+    }
+
+    .show-more-btn:hover {
+        color: #0056b3;
+    }
+
+    .search-results-list-pc li {
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .search-results-list-pc li a {
+        text-decoration: none;
+        color: #333;
+        display: block;
+    }
+
+    .search-results-list-pc li:hover {
+        background:#f1f1f1;
+    }
+
+    .no-results {
+        padding: 10px;
+        color: red;
+        text-align: center;
+    }
+    .price-a, .price-c  {
+        font-weight: bold;
+        font-size: 1rem;
+        color: #dc2535;
+    }
+    .price-b {
+        color: black !important;
+        font-size: .8rem;
+        margin-left: .2rem;
+        text-decoration: line-through;
+    }
+    /* end test list search */
     form.form-search {
         display: flex;
     }
@@ -80,6 +154,16 @@
     }
    }
    @media screen and (max-width: 767px) {
+   .search-results-pc {
+        position: absolute;
+        background: white;
+        width: 93%;
+        border: 1px solid #ddd;
+        max-height: 300px;
+        overflow-y: auto;
+        display: none;
+        z-index: 10001;
+    }
     .search .fa.fa-times {
         line-height: 1;
         font-size: 1.3rem;

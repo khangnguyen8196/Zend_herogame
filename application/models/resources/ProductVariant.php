@@ -102,19 +102,48 @@ class ProductVariant extends Zend_Db_Table_Abstract {
     //         ->order('id ASC');
     //     return $this->getAdapter()->fetchAll($select);
     // }
+    // public function getProductVariants($product_id) {
+    //     $select = $this->getAdapter()->select()
+    //         ->from(array('pv' => 'product_variant'), array('*')) 
+    //         ->joinLeft(array('vi' => 'variant_image'), 'pv.id = vi.product_variant_id', array('url_image'))
+    //         ->where('pv.product_id = ?', $product_id)
+    //         // ->where("status != ?", -1)
+    //         ->order('vi.id ASC')
+    //         ->group('pv.id')
+    //         ->order('pv.id ASC');
+    //     $result = $this->getAdapter()->fetchAll($select);
+    //     return $result;
+    // }
+    // public function getProductVariants($product_id) {
+    //     $subQuery = $this->getAdapter()->select()
+    //         ->from('variant_image', ['product_variant_id', 'url_image' => 'MIN(url_image)'])
+    //         ->group('product_variant_id');
+    
+    //     $select = $this->getAdapter()->select()
+    //         ->from(['pv' => 'product_variant'], '*')
+    //         ->joinLeft(['vi' => new Zend_Db_Expr('(' . $subQuery . ')')], 'pv.id = vi.product_variant_id', ['url_image'])
+    //         ->where('pv.product_id = ?', $product_id)
+    //         ->order('pv.id ASC');
+    
+    //     $result = $this->getAdapter()->fetchAll($select);
+    //     return $result;
+    // }
     public function getProductVariants($product_id) {
+        $subQuery = $this->getAdapter()->select()
+            ->from('variant_image', ['product_variant_id', 'min_id' => 'MIN(id)'])
+            ->group('product_variant_id');
+    
         $select = $this->getAdapter()->select()
-            ->from(array('pv' => 'product_variant'), array('*')) 
-            ->joinLeft(array('vi' => 'variant_image'), 'pv.id = vi.product_variant_id', array('url_image'))
+            ->from(['pv' => 'product_variant'], '*')
+            ->joinLeft(['vi_min' => new Zend_Db_Expr('(' . $subQuery . ')')], 'pv.id = vi_min.product_variant_id', [])
+            ->joinLeft(['vi' => 'variant_image'], 'vi.id = vi_min.min_id', ['url_image'])
             ->where('pv.product_id = ?', $product_id)
-            // ->where("status != ?", -1)
-            ->group('pv.id')
             ->order('pv.id ASC');
+    
         $result = $this->getAdapter()->fetchAll($select);
         return $result;
     }
     
-
     public function getLastInsertId() {
         $db = $this->getAdapter();
         return $db->lastInsertId();

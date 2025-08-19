@@ -48,34 +48,76 @@
                     <div class="info-right">
                         <?php echo $this->render('/san-pham/_info.phtml') ?>
                     </div>
+                    <script type="application/ld+json">
+                        <?php
+                            $Stock = '';
+                            $availability_date = '';
+                            if ($this->info['best_sell'] == 1 && $this->info["status"] == 1) {
+                                $Stock = 'https://schema.org/PreOrder';
+                                // $availability_date = date('Y-m-d\TH:iO', strtotime('2024-12-01 00:00:00'));
+                                $availability_date = date('Y-m-d\TH:i\Z', strtotime('2024-12-01 00:00:00'));
+                            } else if ($this->info["status"] == 1) {
+                                $Stock = 'https://schema.org/InStock';
+                            } elseif ($this->info["status"] == 2) {
+                                $Stock = 'https://schema.org/OutOfStock';
+                            } 
                     
+                             $json_ld_data = [
+                                "@context" => "http://schema.org",
+                                "@type" => "product",
+                                "sku" => $this->info["sku"],
+                                "name" => $this->info["title"],
+                                "description" => $this->info["description"],
+                                "image" => empty($this->info['image']) == false ? "https://herogame.vn/".PHOTO_PATH . $this->info['image']: "",
+                                "url" => "https://herogame.vn/".$this->info["url_product"],
+                                "offers" => [
+                                    "@context" => "http://schema.org",
+                                    "@type" => "offer",
+                                     "url" => "https://herogame.vn/".$this->info["url_product"],
+                                    "price" => $this->info["price_sales"] > 0? $this->info["price_sales"]: $this->info["price"],
+                                    "priceCurrency" => "VND",
+                                    // "availability" => 'https://schema.org/InStock',//"https://schema.org/OutOfStock"
+                                    "availability" => $Stock,
+                                    "availabilityStarts" => $availability_date
+                                ],
+                                "brand" => [
+                                    "@context" => "http://schema.org",
+                                    "@type" => "Corporation", //Corporation, Thing, Brand
+                                    "name" => ""
+                                ]
+                            ];
+                            echo json_encode($json_ld_data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+                        ?>
+                    </script>
                     
                 </div>
                 <div class="piv-bot">
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" href="#tbdtl" data-toggle="tab" role="tab">Mô tả - Thông số kỹ thuật</a>
+                            <a class="nav-link active" href="#tbdtl" data-toggle="tab" role="tab">Thông tin chi tiết sản phẩm</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#tbcmt" data-toggle="tab" role="tab">Đánh giá</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#tbbnf" data-toggle="tab" role="tab">Quyền lợi</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#tbpay" data-toggle="tab" role="tab">Thanh toán</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#tbwarr" data-toggle="tab" role="tab">Bảo hành</a>
-                        </li>
+                        <!--<li class="nav-item">-->
+                        <!--    <a class="nav-link" href="#tbcmt" data-toggle="tab" role="tab">Đánh giá</a>-->
+                        <!--</li>-->
+                        <!--<li class="nav-item">-->
+                        <!--    <a class="nav-link" href="#tbbnf" data-toggle="tab" role="tab">Quyền lợi</a>-->
+                        <!--</li>-->
+                        <!--<li class="nav-item">-->
+                        <!--    <a class="nav-link" href="#tbpay" data-toggle="tab" role="tab">Thanh toán</a>-->
+                        <!--</li>-->
+                        <!--<li class="nav-item">-->
+                        <!--    <a class="nav-link" href="#tbwarr" data-toggle="tab" role="tab">Bảo hành</a>-->
+                        <!--</li>-->
                     </ul>
                     <div class="tab-content">
                         <div id="tbdtl" class="tab-pane fade active show" role="tabpanel">
                             <?php echo $this->render('/san-pham/_detail.phtml') ?>
                         </div>
-                        <div id="tbcmt" class="tab-pane fade" role="tabpanel">
-                            <?php echo $this->render('/shared/_data_comment.phtml') ?>
-                        </div>
+                        <!--<div id="tbcmt" class="tab-pane fade" role="tabpanel">-->
+                        <!--    <?php 
+                        // echo $this->render('/shared/_data_comment.phtml') 
+                        ?>-->
+                        <!--</div>-->
                         <div id="tbbnf" class="tab-pane fade" role="tabpanel">
                             <?php echo $this->render('/san-pham/_benefit.phtml') ?>
                         </div>
@@ -122,10 +164,106 @@
             }
             ?>
             </div>
+            <div class="comment-fb">
+                <?php 
+                    // echo $this->render('/shared/_data_comment.phtml') 
+                ?>
+            </div>
         </section>
     </div>
 </div>
 <style>
+    .slick-slide {
+        margin: 0 5px;
+        box-sizing: border-box;
+        border: 2px solid transparent;
+    }
+    .variant-wrapper .active, .no-variant .active, .variant-wrapper-smp .active, .no-variant .active , .image_thumbs_small.slick-current  {
+        border-radius: 17px!important;
+        border: 2px solid #cc6600;
+    }
+    .slick-disabled {
+        opacity: 0.1;
+    }
+    .variant-wrapper .imgh.r1x1.photo, .no-variant .imgh.r1x1.photo, .variant-wrapper-smp .imgh.r1x1.photo, .no-variant .imgh.r1x1.photo, .imgh.r6x4.photo {
+        border-radius: 15px!important;
+    }
+    .zoomWindowContainer {
+        display: none;
+    }
+    .zoomContainer {
+        display: none;
+    }
+    .slick-prev, .slick-next {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: #5a5a5b;
+        border: none;
+        height: 96%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        text-indent: -9999px;
+        z-index: 999;
+        overflow: hidden; 
+    }
+    .slick-prev {
+        left: 3px;
+        border-top-left-radius: 14px;
+        border-bottom-left-radius: 14px;
+    }
+
+    .slick-next {
+        right: 3px;
+        border-top-right-radius: 14px;
+        border-bottom-right-radius: 14px;
+    }
+
+    .slick-prev::before, .slick-next::before {
+        content: '';
+        display: inline-block;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        position: relative;
+    }
+
+    .slick-prev::before {
+        border-width: 8px 12px 8px 0;
+        border-color: transparent #adae9f transparent transparent;
+    }
+    .slick-next::before {
+        border-width: 8px 0 8px 12px;
+        border-color: transparent transparent transparent #adae9f;
+    }
+    
+    .slick-prev::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 60%;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 7px 10px 7px 0;
+        border-color: transparent #5a5a5b transparent transparent;
+        transform: translate(-50%, -50%);
+    }
+
+    .slick-next::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 40%;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 7px 0 7px 10px;
+        border-color: transparent transparent transparent #5a5a5b;
+        transform: translate(-50%, -50%);
+    }
     @media screen and (min-width: 768px){
         .hidden-mobile{
             display: block;
@@ -149,107 +287,39 @@
             float: none;
             width: 100%;
         }
-        .slick-slide {
-            margin: 0 5px;
-            box-sizing: border-box;
-            border: 2px solid transparent;
-        }
-        .variant-wrapper .active, .no-variant .active {
-            border-radius: 17px!important;
-            border: 2px solid #cc6600;
-        }
-        .slick-disabled {
-            opacity: 0.1;
-        }
-        .slick-prev, .slick-next {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: #5a5a5b;
-            border: none;
-            height: 96%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            text-indent: -9999px;
-            z-index: 9999;
-            overflow: hidden; 
-        }
-
-        
-
-        .slick-prev {
-            left: 3px;
-            border-top-left-radius: 14px;
-            border-bottom-left-radius: 14px;
-        }
-
-        .slick-next {
-            right: 3px;
-            border-top-right-radius: 14px;
-            border-bottom-right-radius: 14px;
-        }
-
-        .slick-prev::before, .slick-next::before {
-            content: '';
-            display: inline-block;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            position: relative;
-        }
-
-        .slick-prev::before {
-            border-width: 8px 12px 8px 0;
-            border-color: transparent #adae9f transparent transparent;
-        }
-        .slick-next::before {
-            border-width: 8px 0 8px 12px;
-            border-color: transparent transparent transparent #adae9f;
-        }
-        .variant-wrapper .imgh.r1x1.photo, .no-variant .imgh.r1x1.photo {
-            border-radius: 15px!important;
-        }
-        .slick-prev::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 60%;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 7px 10px 7px 0;
-            border-color: transparent #5a5a5b transparent transparent;
-            transform: translate(-50%, -50%);
-        }
-
-        .slick-next::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 40%;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 7px 0 7px 10px;
-            border-color: transparent transparent transparent #5a5a5b;
-            transform: translate(-50%, -50%);
-        }
-        .zoomWindowContainer {
-            display: none;
-        }
-        .zoomContainer {
-            display: none;
-        }
     }
     @media screen and (max-width: 767px){
         .hidden-mobile{
             display: none;
         }
+
     }
     .sp-lien-quan ul.nav.nav-tabs {
         display: block!important;
         text-align: center!important;
+    }
+    .variant-items[data-status-variant="2"] {
+        position: relative;
+    }
+
+    .variant-items[data-status-variant="2"]::before,
+    .variant-items[data-status-variant="2"]::after {
+        content: "";
+        position: absolute;
+        top: 50%; 
+        left: 50%; 
+        width: 50%; 
+        height: 2px;
+        background-color: #ccc;
+        transform-origin: center;
+        opacity: 0.5;
+    }
+
+    .variant-items[data-status-variant="2"]::before {
+        transform: translate(-50%, -50%) rotate(12deg); 
+    }
+
+    .variant-items[data-status-variant="2"]::after {
+        transform: translate(-50%, -50%) rotate(-12deg);
     }
 </style>

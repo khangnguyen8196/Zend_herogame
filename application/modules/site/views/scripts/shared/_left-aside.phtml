@@ -25,24 +25,24 @@ if (isset($this->listCategoryPost) && empty($this->listCategoryPost) == false) {
     ?>
 
     <?php
-    if (empty($this->newProducts) == false) {
-        echo $this->partial('/shared/_product_menu.phtml', array(
-            'title' => 'Mới cập nhật',
-            'data' => $this->newProducts
-        ));
-    }
+    // if (empty($this->newProducts) == false) {
+    //     echo $this->partial('/shared/_product_menu.phtml', array(
+    //         'title' => 'Mới cập nhật',
+    //         'data' => $this->newProducts
+    //     ));
+    // }
     ?>
 
     <?php
-    if (empty($this->newestPostMenu) == false) {
-        $top = $this->newestPostMenu[0];
-        unset($this->newestPostMenu[0]);
-        echo $this->partial('/shared/_post_menu.phtml', array(
-            'title' => 'Tin tức mới',
-            'top' => $top,
-            'data' => $this->newestPostMenu
-        ));
-    }
+    // if (empty($this->newestPostMenu) == false) {
+    //     $top = $this->newestPostMenu[0];
+    //     unset($this->newestPostMenu[0]);
+    //     echo $this->partial('/shared/_post_menu.phtml', array(
+    //         'title' => 'Tin tức mới',
+    //         'top' => $top,
+    //         'data' => $this->newestPostMenu
+    //     ));
+    // }
     ?>
 </div>
 <style>

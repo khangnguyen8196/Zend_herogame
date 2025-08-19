@@ -337,6 +337,8 @@ pages = $.extend(pages, {
         			data['price'] = $('#priceP').val();
         		} else if( $('#salePS').length > 0 ){
         			data['price_sales'] = $('#salePS').val();
+        		} else if( $('#statusP').length > 0 ){
+        			data['status'] = $('#statusP').val();
         		}
         		$.ajax({
                     url: '/admin/product/update-product',
@@ -550,8 +552,9 @@ pages = $.extend(pages, {
 	                                     '<ul class="dropdown-menu dropdown-menu-right">';
 	                             action += '<li> <a href="/admin/product/detail/id/'+row.id+'" > <i class="icon-pencil3"></i> '+ translate('edit')+'</a > </li>';
 	                             action += '<li> <a onclick="pages.product.updateProduct('+  row.id +', 1)" > <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Cập nhật tên</a > </li>';
-	                             action += '<li> <a onclick="pages.product.updateProduct('+  row.id +', 2)" > <i class="fa fa-money" aria-hidden="true"></i> Cập nhật giá</a > </li>';
-	                             action += '<li> <a onclick="pages.product.updateProduct('+  row.id +', 3)" > <i class="fa fa-money" aria-hidden="true"></i> Cập nhật giá KM</a > </li>';
+	                           //  action += '<li> <a onclick="pages.product.updateProduct('+  row.id +', 2)" > <i class="fa fa-money" aria-hidden="true"></i> Cập nhật giá</a > </li>';
+	                           //  action += '<li> <a onclick="pages.product.updateProduct('+  row.id +', 3)" > <i class="fa fa-money" aria-hidden="true"></i> Cập nhật giá KM</a > </li>';
+	                             action += '<li> <a onclick="pages.product.updateProduct('+  row.id +', 4)" > <i class="fa fa-cart-plus" aria-hidden="true"></i> Cập nhật trạng thái</a > </li>';
 	                             action += '<li> <a onclick="pages.product.deleteProduct('+  row.id +')" > <i class="icon-bin"></i> '+ translate('delete')+'</a > </li></ul></li></ul>';
 	                             return 	action;
 	                         },

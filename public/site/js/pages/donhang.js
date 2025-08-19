@@ -485,6 +485,30 @@ pages = $.extend(pages, {
                     $('#totalPrice').html(numberFormat(current_price)+ '&#8363')
                 }
             });
+			
+			$(document).ready(function() {
+                $('#status_score').on('click', function() {
+                    $('#status_score').prop('disabled', true);
+                    var orderCode = $(this).attr("data-code");
+                    var orderId = $(this).attr('data-order-id');
+                    var statusScore = $(this).attr("data-status-score");
+                    $.ajax({
+                        url: '/site/don-hang/confirm-order', 
+                        type: 'POST',
+                        data: { order_code: orderCode, order_id :orderId, status_score :statusScore},
+                        success: function(response) {
+                            if (response.Code == 1) {
+                                location.reload();
+                            } else {
+                                alert('Đã xảy ra lỗi. Vui lòng thử lại.');
+                            }
+                        },
+                        error: function() {
+                            alert('Không thể kết nối đến server. Vui lòng thử lại sau.');
+                        }
+                    });
+                });
+            });
  
             $(document).ready(function() {
                 checkWindowSize();

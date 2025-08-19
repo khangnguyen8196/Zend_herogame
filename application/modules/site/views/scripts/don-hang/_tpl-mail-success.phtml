@@ -1,0 +1,263 @@
+<table border="0" cellpadding="0" cellspacing="0" width="100%"
+	height="100%"
+	style="border-spacing: 0; border-collapse: collapse; font-size: 14px">
+	<tbody>
+		<tr>
+			<td align="center" valign="top" style="border-collapse: collapse">
+
+				<table  border="0"
+					cellpadding="0" cellspacing="0"
+					style="border-spacing: 0; border-collapse: collapse; font-size: 14px;">
+					<tbody>
+						<tr>
+							<td
+								style="border-collapse: collapse">
+								<table width="100%" border="0" cellpadding="0" cellspacing="0"
+									style="border-spacing: 0; border-collapse: collapse; font-size: 14px; border-bottom: 1px solid #dee2e3; width: 100% !important">
+									<tbody>
+										<tr>
+											<td width="50%" height="49" valign="middle"
+												style="border-collapse: collapse; width: 50%"><a
+												href="herogame.vn" target="_blank"><img
+													src="http://<?php echo $_SERVER['SERVER_NAME']?>/site/img/logo.png"
+													width="100"></a></td>
+										</tr>
+									</tbody>
+								</table>
+							</td>
+						</tr>
+
+						<tr>
+							<td style="border-collapse: collapse">
+
+								<table border="0"
+									cellpadding="0" cellspacing="0" align="left"
+									style="border-spacing: 0; border-collapse: collapse; font-size: 14px">
+									<tbody>
+										<tr>
+											<td valign="top" style="border-collapse: collapse">
+												<div
+													style="margin-top: 20px">
+													<strong class="user_name"
+														style="font-size: 20px">
+														Xin chào <?php echo $this->orderInfo['name']?>,
+													</strong>
+												</div>
+												<div style="margin-top: 10px; margin-bottom: 20px">
+                                                    <?php
+                                                        $now = date("d/m/Y");
+                                                    ?>
+													<strong class="order-code" style="color: #f36f21">Đơn hàng # <?php echo $this->orderInfo['order_code']?></strong> của
+													quý khách đã được giao thành công <strong><?php echo $now ?></strong>
+													với hình thức thanh toán là <strong class="payment_method"><?php 
+														if( $this->orderInfo['payment_method'] == 1 ) { 
+															echo 'Chuyển khoản';
+														} else if( $this->orderInfo['payment_method'] == 2 ){
+															echo 'COD';
+														} else if( $this->orderInfo['payment_method'] == 3 ){
+															echo 'Trả tiền mặt tại shop';
+														}
+													?></strong>.
+												</div>
+												<div style="margin-bottom: 10px">
+												    <p style="margin: 0 0 10px 0;">
+														Cảm ơn bạn đã tin tưởng và lựa chọn Herogame.
+													</p>
+													 <p style="margin: 0 0 10px 0;">
+														Bạn có thể xem lịch sử mua hàng hàng ở đây:
+													</p>
+													<p style="margin: 0 0 10px 0;">
+														<a href="http://<?php echo $_SERVER['SERVER_NAME']?>/don-hang/lich-su-mua-hang"
+														style="display: inline-block;
+																padding: 8px 20px;
+																background-color: #007bff;
+																color: white;
+																text-decoration: none;
+																border-radius: 5px;
+																font-size: 16px;">
+															Xem lịch sử mua hàng
+														</a>
+													</p>
+                                                    <p>🎁 Đừng quên ghé thăm cửa hàng để khám phá thêm nhiều sản phẩm hấp dẫn và ưu đãi mới nhất dành cho bạn!</p>
+                                                    <p>
+                                                        <a href="http://<?php echo $_SERVER['SERVER_NAME']; ?>"
+                                                        style="display: inline-block;
+                                                                padding: 10px 20px;
+                                                                background-color: #007bff;
+                                                                color: white;
+                                                                text-decoration: none;
+                                                                border-radius: 5px;
+                                                                font-weight: bold;">
+                                                            Tiếp tục mua sắm
+                                                        </a>
+                                                    </p>
+                                                    <p style="margin: 0 0 10px 0;">
+														Nếu sản phẩm có bất kỳ vấn đề gì, bạn có thể liên hệ với chúng tôi qua <a href="https://m.facebook.com/herogamestore/" target="_blank" rel="noopener noreferrer" style="color: blue; text-decoration: underline;">
+                                                        fanpage Facebook
+                                                      </a> để được hỗ trợ kịp thời.
+													</p>
+													<p style="margin: 0;">
+														<em>(Lưu ý: đăng ký thành viên mới xem được lịch sử đơn hàng và áp dụng tích lũy điểm thành viên)</em>
+													</p>
+											    </div>
+											</td>
+										</tr>
+										<tr>
+											<td align="left"
+												style="border-collapse: collapse; padding: 0">
+												<div
+													style="margin-top: 10px; margin-bottom: 10px; margin-right: 10px">
+													<strong>THÔNG TIN ĐƠN HÀNG - DÀNH CHO NGƯỜI MUA:</strong>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td
+												style="border-collapse: collapse; border: 1px dashed #e7ebed; border-bottom: none">
+												<table id="listProduct" class="table datatable-sorting" style="width: 100%;">
+													<tbody id="listproductbody">
+														<?php if( empty($this->orderInfo['order_detail']) == false ){
+															foreach ($this->orderInfo['order_detail'] as $key => $value ){
+																?>
+																<tr >
+																	<td style="text-align: center;"><?php echo $key + 1?></td>
+																<?php if( empty($value['combo_id']) == false ){?>
+																	<td ><img width="120px" height="120px" src="http://<?php echo $_SERVER['SERVER_NAME']?>/upload/images/<?php echo $value['c_img']?>" alt=" no-image" /></td>
+																<?php } elseif($value['p_variant_image']) {?>
+																	<td><img width="120px" height="120px" src="http://<?php echo $_SERVER['SERVER_NAME']?>/upload/images/<?php echo $value['p_variant_image']?>" alt=" no-image" /></td>
+																<?php }else {?>
+																	<td><img width="120px" height="120px" src="http://<?php echo $_SERVER['SERVER_NAME']?>/upload/images/<?php echo $value['p_img']?>" alt=" no-image" /></td>
+																<?php }?>
+													
+																	<td>
+																		<div style="margin-bottom: 5px">
+																			<?php
+																				if( empty($value['c_combo_name']) == false ){
+																					echo $value['c_combo_name'];
+																				} else {
+																					echo $value['p_name'];
+																				}
+																			?>
+																		</div>
+																		<div style="margin-bottom: 5px">
+																			<?php
+																				if( empty($value['p_variant_name']) == false ){
+																					echo $value['p_variant_name'];
+																				} else {
+																					echo 'Mặc Định';
+																				}
+																			?>
+																		</div>
+																		<div style="margin-bottom: 5px">
+																			Số lượng: <?php echo $value['number']; ?>
+																		</div>
+																	</td>
+																	<td style="text-align: right;">
+																		<?php
+																		if( empty($value['product_variant']) == false ){
+																			echo number_format($value['price']*$value['number']). ' VNĐ';
+																		} elseif(!empty($value['combo_id']) && $value['combo_id'] != 0){
+																			if(!empty($this->listCombo)){
+																				foreach($this->listCombo[$value['combo_id']] as $comboDetail){
+																					$price = $comboDetail['price'];			
+																			}
+																	
+																			echo number_format($value['price']*$value['number']). ' VNĐ';			
+																			}
+																		}else{
+																			echo number_format($value['price']*$value['number']). ' VNĐ';
+																		}
+																		?>
+																	</td>
+																</tr>
+																<?php
+															}
+														}?>
+													</tbody>
+												</table>
+											</td>
+										</tr>
+										<tr>
+											<td
+												style="border-collapse: collapse; border: 1px dashed #e7ebed">
+												<div>
+													<table border="0" width="100%" cellpadding="0"
+														cellspacing="0" align="left"
+														style="border-spacing: 0; border-collapse: collapse; font-size: 14px; width: 100% !important">
+														<tbody>
+															<tr>
+																<td
+																	valign="top" align="right"
+																	style="border-collapse: collapse; padding-top: 10px; padding-right: 10px; color: #646464; width: 80%">Tạm tính:
+																</td>
+																<td
+																	valign="top" align="right"
+																	style="border-collapse: collapse; padding-top: 10px; padding-right: 10px; color: #292929; min-width: 140px"><?php echo number_format($this->orderInfo['total_before_sale']) . ' VNĐ' ?></td>
+															</tr>
+															<tr>
+																<td
+																	valign="top" align="right"
+																	style="border-collapse: collapse; padding-top: 10px; padding-right: 10px; color: #646464; width: 80%">Phí vận chuyển:
+																</td>
+																<td
+																	valign="top" align="right"
+																	style="border-collapse: collapse; padding-top: 10px; padding-right: 10px; color: #292929; min-width: 140px"><?php echo number_format($this->orderInfo['fee_ship']) . ' VNĐ' ?></td>
+															</tr>
+															<tr>
+																<td
+																	valign="top" align="right"
+																	style="border-collapse: collapse; padding-top: 10px; padding-right: 10px; color: #646464; width: 80%">Phí COD:
+																</td>
+																<td
+																	valign="top" align="right"
+																	style="border-collapse: collapse; padding-top: 10px; padding-right: 10px; color: #292929; min-width: 140px"><?php echo number_format($this->orderInfo['fee_cod']) . ' VNĐ' ?></td>
+															</tr>
+															<tr>
+																<?php
+																$discount = !empty($this->orderInfo['promotion_price']) 
+																	? $this->orderInfo['promotion_price'] 
+																	: $this->orderInfo['discount'];
+																?>
+
+																<td valign="top" align="right"
+																	style="border-collapse: collapse; padding-top: 5px; padding-right: 10px; color: #646464; width: 80%">
+																	Giảm giá:
+																</td>
+																<td valign="top" align="right"
+																	style="border-collapse: collapse; padding-top: 5px; padding-right: 10px; color: #292929; min-width: 140px">
+																	-<?php echo number_format($discount) . ' VNĐ'; ?>
+																</td>
+															</tr>
+															<tr>
+																<td
+																	valign="top" align="right"
+																	style="border-collapse: collapse; padding-top: 10px; padding-right: 10px; font-size: 16px; width: 80%"><strong>Tổng
+																		cộng:</strong></td>
+																<td
+																	valign="top" align="right"
+																	style="border-collapse: collapse; padding-top: 10px; padding-right: 10px; font-size: 16px; color: #646464; min-width: 140px"><strong
+																	style="color: #f36f21"><?php echo number_format($this->orderInfo['total']) . ' ' . ' VNĐ' ?></strong></td>
+															</tr>
+															<tr>
+																<td valign="top"
+																	align="right"
+																	style="border-collapse: collapse; width: 80%"></td>
+																<td
+																	valign="top" align="right"
+																	style="border-collapse: collapse; padding-top: 5px; padding-right: 10px; padding-bottom: 10px; font-size: 13px; color: #646464; min-width: 140px"></td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</td>
+		</tr>
+	</tbody>
+</table>

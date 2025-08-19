@@ -166,7 +166,116 @@ class Admin_CategoryController extends FrontBaseAction {
                         }
                     }
                 }
+                // banner youtube
+                $this->handleBannerImage($data_in, $info, 'banner_ytb', 'url_image_banner_ytb_delete');
+                $this->handleBannerImage($data_in, $info, 'banner_ytb_L', 'url_image_banner_ytb_delete_left');
+                $this->handleBannerImage($data_in, $info, 'banner_ytb_M', 'url_image_banner_ytb_delete_mid');
+                $this->handleBannerImage($data_in, $info, 'banner_ytb_R', 'url_image_banner_ytb_delete_right');
 
+                $this->handleBannerImage($data_in, $info, 'banner_ytb_2', 'url_image_banner_ytb_delete_2');
+                $this->handleBannerImage($data_in, $info, 'banner_ytb_L_2', 'url_image_banner_ytb_delete_left_2');
+                $this->handleBannerImage($data_in, $info, 'banner_ytb_M_2', 'url_image_banner_ytb_delete_mid_2');
+                $this->handleBannerImage($data_in, $info, 'banner_ytb_R_2', 'url_image_banner_ytb_delete_right_2');
+                
+                $data_in['text_banner_ytb'] = $this->post_data['text_banner_ytb'];
+                $data_in['text_banner_ytb_2'] = $this->post_data['text_banner_ytb_2'];
+                $data_in['iframe_ytb'] = $this->post_data['iframe_ytb'];
+                $data_in['iframe_ytb_2'] = $this->post_data['iframe_ytb_2'];
+
+                //  banner slide category
+                if( empty($_POST['url_image_slide_category_delete']) == false && empty($info['image_slide_category']) == false ){
+                    $public_path = UPLOAD_PATH;
+                    $image_slide_category = explode(",",$info['image_slide_category']);
+                    foreach ($_POST['url_image_slide_category_delete'] as $keyd => $valued ){
+                        foreach ($image_slide_category as $k => $v ){
+                            if( $valued == $v){
+                                unset($image_slide_category[$k]);
+                                $full = $public_path  . $valued;
+                                if (file_exists($full)) {
+                                    unlink($full);
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    if( empty($image_slide_category) == false ){
+                        $info['image_slide_category'] = implode(",",$image_slide_category);
+                    } else {
+                        $info['image_slide_category'] = '';
+                    }
+                    $data_in['image_slide_category'] = $info['image_slide_category'];
+                }
+
+                if(empty($_POST['url_image_slide_category_botton_delete'])== false && empty($info['url_image_slide_category']) == false ){
+                    $url_image_slide_category = explode(",",$info['url_image_slide_category']);
+                    foreach ($_POST['url_image_slide_category_botton_delete'] as $keyd => $valued ){
+                        foreach ($url_image_slide_category as $k => $v ){
+                            if( $valued == $v){
+                                unset($url_image_slide_category[$k]);
+                                break;
+                            }
+                        }
+                    }
+                    if( empty($url_image_slide_category) == false ){
+                        $info['url_image_slide_category'] = implode(",",$url_image_slide_category);
+                    } else {
+                        $info['url_image_slide_category'] = '';
+                    }
+                    $data_in['url_image_slide_category'] = $info['url_image_slide_category'];
+                }
+
+                if (!empty($_FILES['image_slide_category'])) {
+                    $public_path = UPLOAD_PATH;
+                    $nowdir = 'img_' . date('d_m_Y');
+                    $listFile = array();
+                    foreach ($_FILES['image_slide_category']['name'] as $key => $value) {
+                        if (!empty($value)) {
+                            $ext = pathinfo($value, PATHINFO_EXTENSION);
+                            $fileName = pathinfo($value, PATHINFO_FILENAME);
+                            $fileName = str_replace(' ', '-', $fileName);
+                            $newname = $fileName . '_' . rand(0, 1000000) . '_' . uniqid('', true) . '.' . $ext;
+                            Commons::makedirs($public_path . '/images/' . $nowdir);
+                            if (move_uploaded_file($_FILES["image_slide_category"]["tmp_name"][$key], $public_path . '/images/' . $nowdir . '/' . $newname)) {
+                                $listFile[$key] = '/images/' . $nowdir . '/' . $newname;
+                            }
+                        }
+                    }
+                    
+                    if (!empty($listFile)) {
+                        if (!empty($info['image_slide_category'])) {
+                            $current_images = explode(",", $info['image_slide_category']);
+                            if (count($current_images) <= 100) {
+                                foreach ($listFile as $key => $file) {
+                                    if (isset($current_images[$key])) {
+                                        $full = $public_path  . $current_images[$key];
+                                        if (file_exists($full)) {
+                                            unlink($full);
+                                        }
+                                        $current_images[$key] = $file;
+                                    }elseif(count($current_images)<$key && $key<=100){
+                                        $current_images[] = $file;
+                                      
+                                    }
+                                }
+                                $data_in['image_slide_category'] = implode(",", $current_images);
+                            } else {
+                                $data_in['image_slide_category'] = $info['image_slide_category'] . ',' . implode(",", $listFile);
+                            }
+                        } else {
+                            $data_in['image_slide_category'] = implode(",", $listFile);
+                        }
+                    }
+                }
+                if (!empty($_POST['url_image_slide_category'])) {
+                    $allUrls = array();
+                    foreach ($_POST['url_image_slide_category'] as $url) {
+                        if (!empty($url)) {
+                            $allUrls[] = $url;
+                        }
+                    }
+                    $data_in['url_image_slide_category'] = implode(",", $allUrls);
+                }
+                // end banner slide category
                 //  banner 2
                 if( empty($_POST['url_image_2_delete']) == false && empty($info['image_2_botton']) == false ){
                     $public_path = UPLOAD_PATH;
@@ -645,5 +754,42 @@ class Admin_CategoryController extends FrontBaseAction {
 		$this->view->listMedia = $list;
 		$this->view->functionNum = $this->post_data["CKEditorFuncNum"];
 	}
+	
+	public function handleBannerImage(&$data_in, $info, $field, $field_post_delete) {
+        $public_path = UPLOAD_PATH;
+    
+        if (!empty($_POST[$field_post_delete])) {
+            $current = isset($info[$field]) ? $info[$field] : '';
+            $full = $public_path . '/images' . $current;
+    
+            if ($_POST[$field_post_delete] == $current && file_exists($full)) {
+                unlink($full);
+            }
+    
+            $data_in[$field] = '';
+        }
+    
+        if (!empty($_FILES[$field]) && $_FILES[$field]['tmp_name']) {
+            $upload_img = Commons::cwUpload(
+                $field,
+                $public_path . '/images/full/',
+                '',
+                false,
+                $public_path . '/images/thumnail/',
+                '1920',
+                '600'
+            );
+    
+            $data_in[$field] = '/full/' . $upload_img;
+    
+            // Xóa ảnh cũ nếu tồn tại
+            if (!empty($info[$field])) {
+                $old_img_path = $public_path . '/images' . $info[$field];
+                if (file_exists($old_img_path)) {
+                    unlink($old_img_path);
+                }
+            }
+        }
+    }
 
 }

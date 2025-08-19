@@ -177,43 +177,43 @@
     </div>
 <?php } ?>
 <?php if (empty($this->customer_info) == true) { ?>
-    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit&hl=vi" async defer></script>
-    <script>
-        var verifySigninCallback = function (response) {
-            if (response.length > 0) {
-                $("#signinForm #login-btn").prop('disabled', false);
-            }
-        };
+    <!--<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit&hl=vi" async defer></script>-->
+    <!--<script>-->
+    <!--    var verifySigninCallback = function (response) {-->
+    <!--        if (response.length > 0) {-->
+    <!--            $("#signinForm #login-btn").prop('disabled', false);-->
+    <!--        }-->
+    <!--    };-->
 
-        var verifyForgotCallback = function (response) {
-            if (response.length > 0) {
-                $("#forgotPwdForm #confirm_forgot").prop('disabled', false);
-            }
-        };
+    <!--    var verifyForgotCallback = function (response) {-->
+    <!--        if (response.length > 0) {-->
+    <!--            $("#forgotPwdForm #confirm_forgot").prop('disabled', false);-->
+    <!--        }-->
+    <!--    };-->
 
-        var verifySignupCallback = function (response) {
-            if (response.length > 0) {
-                $("#signupForm #signup_btn").prop('disabled', false);
-            }
-        };
+    <!--    var verifySignupCallback = function (response) {-->
+    <!--        if (response.length > 0) {-->
+    <!--            $("#signupForm #signup_btn").prop('disabled', false);-->
+    <!--        }-->
+    <!--    };-->
 
-        var onloadCallback = function () {
-            grecaptcha.render('recaptcha_signin', {
-                'sitekey': '6LdqWTEUAAAAAO230nKg4Rq8s53RqO10zQiF8-QH',
-                'callback': verifySigninCallback,
-            });
+    <!--    var onloadCallback = function () {-->
+    <!--        grecaptcha.render('recaptcha_signin', {-->
+    <!--            'sitekey': '6LdqWTEUAAAAAO230nKg4Rq8s53RqO10zQiF8-QH',-->
+    <!--            'callback': verifySigninCallback,-->
+    <!--        });-->
 
-            grecaptcha.render('recaptcha_forgot', {
-                'sitekey': '6LdqWTEUAAAAAO230nKg4Rq8s53RqO10zQiF8-QH',
-                'callback': verifyForgotCallback,
-            });
+    <!--        grecaptcha.render('recaptcha_forgot', {-->
+    <!--            'sitekey': '6LdqWTEUAAAAAO230nKg4Rq8s53RqO10zQiF8-QH',-->
+    <!--            'callback': verifyForgotCallback,-->
+    <!--        });-->
 
-            grecaptcha.render('recaptcha_signup', {
-                'sitekey': '6LdqWTEUAAAAAO230nKg4Rq8s53RqO10zQiF8-QH',
-                'callback': verifySignupCallback,
-            });
-        };
-    </script>
+    <!--        grecaptcha.render('recaptcha_signup', {-->
+    <!--            'sitekey': '6LdqWTEUAAAAAO230nKg4Rq8s53RqO10zQiF8-QH',-->
+    <!--            'callback': verifySignupCallback,-->
+    <!--        });-->
+    <!--    };-->
+    <!--</script>-->
 <?php } ?>
 <?php if (empty($this->customer_info) == true && $this->is_reset == 1) { ?>
 <div id="resetPwdModal" class="modal fade" data-backdrop="static">

@@ -524,6 +524,14 @@ class Product extends Zend_Db_Table_Abstract {
         if (!empty($params["maxRange"]) && is_numeric($params["maxRange"])) {
             $select->where("product.price_sales <= ?", $params["maxRange"]);
         }
+        if (isset($params["sort_status"]) && $params["sort_status"] !== '') {
+            if($params["sort_status"] == 'best_sell') {
+                $select->where("product.best_sell = ?", 1);
+                
+            }else {
+                $select->where("product.status = ?", $params["sort_status"]);
+            }
+        }
         if (!empty($params["sort"])) {
             $select->order($params["sort"]);
         } else {
@@ -705,6 +713,14 @@ class Product extends Zend_Db_Table_Abstract {
         if (empty($params["maxRange"]) == false && is_numeric($params["maxRange"]) == true) {
             $select = $select->where("price_sales <=?", $params["maxRange"]);
         }
+        if (isset($params["sort_status"]) && $params["sort_status"] !== '') {
+            if($params["sort_status"] == 'best_sell') {
+                $select = $select->where("product.best_sell = ?", 1);
+
+            }else {
+                $select = $select->where("product.status = ?", $params["sort_status"]);
+            }
+        }
         if (empty($params["sort"]) == false) {
             $select = $select->order($params["sort"]);
         } else {
@@ -764,6 +780,14 @@ class Product extends Zend_Db_Table_Abstract {
         }
         if (empty($params["maxRange"]) == false && is_numeric($params["maxRange"]) == true) {
             $select = $select->where("price_sales <=?", $params["maxRange"]);
+        }
+        if (isset($params["sort_status"]) && $params["sort_status"] !== '') {
+            if($params["sort_status"] == 'best_sell') {
+                $select = $select->where("product.best_sell = ?", 1);
+                
+            }else {
+                $select = $select->where("product.status = ?", $params["sort_status"]);
+            }
         }
         if (empty($params["sort"]) == false) {
             $select = $select->order($params["sort"]);
@@ -887,5 +911,13 @@ class Product extends Zend_Db_Table_Abstract {
         }
         $result = $this->getAdapter()->fetchAll($select);
         return $result;
+    }
+	
+	public function getLatestId() {
+        $select = $this->select()
+                       ->from($this->_name, ['id'])
+                       ->order('id DESC')
+                       ->limit(1);
+        return $this->getAdapter()->fetchOne($select);
     }
 }

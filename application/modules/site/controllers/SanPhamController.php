@@ -34,6 +34,7 @@ class Site_SanPhamController extends FrontEndAction {
         $this->_comboDetailMdl = new ComboDetail();
         $this->view->pageSize = Commons::pageSizeList();
         $this->view->sortList = Commons::sortList();
+        $this->view->sortStatus = Commons::sortStatus();
         $this->loadJs('pages/sangpham');
     }
 
@@ -77,6 +78,7 @@ class Site_SanPhamController extends FrontEndAction {
             }
         }
         
+        $sortStatus = isset($_GET['status']) ? $_GET['status'] : '';
         //search params
         $searchParams = array();
         //sort value in Db
@@ -87,7 +89,11 @@ class Site_SanPhamController extends FrontEndAction {
             $sortV = Commons::getSortRealValue($this->post_data["sorted"]);
             $sorted = $this->post_data["sorted"];
         }
+        $this->view->sort_status = $sortStatus;
         $this->view->sorted = $sorted;
+        if (!empty($sortStatus)) {
+            $searchParams["sort_status"] = $sortStatus;
+        }
         // add sort params
         $searchParams["sort"] = $sortV;
         //search by prices range

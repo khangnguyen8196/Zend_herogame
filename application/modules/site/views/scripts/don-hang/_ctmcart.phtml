@@ -82,7 +82,11 @@
                 <span class="loading_discount" style="margin-left: .5rem; margin-top:.5rem;display: none; "><i class="fa fa-circle-o-notch fa-spin" style="font-size:18px"></i></span>
                 <button id="btnDisCount" type="button" class="btn btn-primary">Áp dụng</button>
                 <em class="form-message error error-discount" style="display:none"></em>
-                <em class="form-message" style="font-style: italic;">Điểm hiện tại: <?php echo number_format($this->customer['score'])?></em>
+                <?php if($this->customer['user_id']  > 0) {?>
+                    <em class="form-message" style="font-style: italic;">Điểm hiện tại: <?php echo number_format($this->customer['score'])?></em>
+                <?php } else {?>
+                    <em class="form-message" style="font-style: italic;">Đăng nhập để xem điểm</em>
+                <?php } ?>
             </div>
         <?php } ?>
     </div>

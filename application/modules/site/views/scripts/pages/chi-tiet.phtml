@@ -46,22 +46,45 @@
                         </div>
                     </div>
                 </header>
-                <?php if( empty( $this->relative_post ) == false ){ ?>
-                    <h3>Bài viết liên quan</h3>
-                	<ul class="related">
-                		<?php foreach ( $this->relative_post as $relative ) { ?>
-		                    <li>
-		                        <i class="fa fa-caret-right"></i>
-		                        <a href="/bai-viet/<?php echo $relative['url_name']?>"><?php echo $relative['title'] ?></a>
-		                    </li>
-                		<?php } ?>
-                	</ul>
-                <?php } ?>
                 <div class="content">
                     <div class="news_if">
                         <?php echo $this->info['content'] ?>  
                     </div>
                 </div>
+                <?php if( empty( $this->relative_post ) == false ){ ?>
+                    <h3 style ="margin-top:20px; margin-bottom:20px;">Bài viết liên quan</h3>
+                	<ul class="related post-container">
+                		<?php 
+                        foreach ( $this->relative_post as $relative ) { ?>
+		                    <li class="post-item">
+                                <a href="/bai-viet/<?php echo $relative['url_name']?>"> 
+                                <div class="post-item-detail">
+                                    <div class="post-image-detail" style="width:100%;height: 120px;">
+                                        <img class="post-image-detail" src="<?php echo '/upload/images'.'/' . $relative['image_id']; ?>" alt="" width="100%" height="100%" loading="lazy">
+                                    </div>
+                                    <div class="post-detail" style="padding:0 5px">
+                                        <span class="title">
+                                            <?php echo $relative['title'] ?>
+                                        </span>
+                                        <div class="summary-post">
+                                            <span class="summary">
+                                                <?php echo $relative['summary'] ?>
+                                            </span>
+                                        </div>
+                                        <div class="date">
+                                            <?php 
+                                                $date = $relative['updated_at'] ? $relative['updated_at'] : $relative['created_at'];
+                                                echo 'Ngày:'. date("d/m/Y", strtotime($date));
+                                            ?>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                </a> 
+		                    </li>
+                		<?php } ?>
+                	</ul>
+                <?php } ?>
                 <div class="sp-lien-quan">
                 <?php
                 if (empty($this->relative_product) == false) {
@@ -80,7 +103,7 @@
                 ?>
                 </div>
                 <footer>
-                    <?php echo $this->partial('/shared/_data_comment.phtml') ?>
+                    <?php echo $this->partial('/shared/_data_post_comment.phtml') ?>
                 </footer>
             </div>
         </section>
@@ -91,9 +114,80 @@
         display: block!important;
         text-align: center!important;
     }
+    .post-container .slick-dots {
+ 		margin-top: 10px;
+		margin: auto;
+		display: flex;
+        justify-content: center;
+	}
+	.post-container .slick-dots li {
+		display: block;
+		width: 10px;
+		height: 10px;
+		background: gray;
+		border-radius: 50%;
+		margin: 3px;
+	}
+	.post-container .slick-dots li button {
+		display: none;
+	}
+	.post-container .slick-dots li.slick-active{
+		background-color: black;
+	}
+    .summary span {
+        font-size: 12px !important;
+        color: grey !important;
+        line-height:1.2 !important;
+    }
     @media screen and (min-width: 768px){
         .hidden-mobile{
             display: block;
+        }
+
+        .post-container.slick-center-left .slick-list .slick-track {
+            display: contents;
+        }
+
+        .post-detail .summary-post .summary{
+            font-size: 14px;
+            color: grey;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: normal;
+        }
+        .post-item {
+            position: relative;
+            text-decoration: none;
+            white-space: normal;
+            overflow-wrap: break-word;
+            height: 258px;
+            margin-right: 16px;
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+        }
+        .post-detail .date {
+            font-size: 14px;
+            color: grey;
+            position: absolute;
+            bottom: 0;
+        }
+        .post-detail .title {
+            font-size: 14px; 
+            font-weight: 600;
+            color: black;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: normal; 
+        }
+        .post-image-detail {
+            border-top-right-radius: 0.5rem;
+            border-top-left-radius: 0.5rem;
         }
     }
     @media (max-width: 767px) {
@@ -106,6 +200,53 @@
         .content .news_if div span span span {
             font-size: 24px !important;
         }
+
+        .post-container.slick-center-left .slick-list .slick-track {
+            display: contents;
+        }
+
+        .post-detail .summary-post .summary{
+            font-size: 12px;
+            color: grey;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: normal;
+            font-weight: 500;
+        }
+        .post-item {
+            position: relative;
+            text-decoration: none;
+            white-space: normal;
+            overflow-wrap: break-word;
+            min-height: 220px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+        }
+        .post-detail .date {
+            font-size: 14px;
+            color: grey;
+            position: absolute;
+            bottom: 0;
+        }
+        .post-detail .title {
+            font-size: 14px; 
+            font-weight: 600;
+            color: black;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: normal; 
+        }
+        .post-image-detail {
+            max-height: 80px!important;
+            border-top-right-radius: 0.5rem;
+            border-top-left-radius: 0.5rem;
+        }
     }
-    
 </style>

@@ -3,6 +3,7 @@
     <input type="hidden" name="page_size" id="page_size" value="<?php echo @$this->selected_page_size ?>"/>
     <input type="hidden" name="sorted" id="sorted" value="<?php echo @$this->sorted ?>"/>
     <input type="hidden" name="option" id="option" value="<?php echo @$this->selectedOption ?>"/>
+    <input type="hidden" name="status" id="status" value="<?php echo @$this->sort_status ?>"/>
     <?php 
     $page = $this->current_page;
     if( count($this->paginator) <= 1 ){

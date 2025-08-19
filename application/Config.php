@@ -64,6 +64,7 @@ define("BANNER_CHILD_MID_4", 18);
 define("BANNER_CHILD_RIGHT_4", 19);
 define("BANNER_CHILD_PRE_ORDER", 20);
 define("BANNER_MAIN_MOBILE", 21);
+define("YOUTUBE_FOOTER", 22);
 define("SCORE_EXCHANGE_RATE", 1000);
 define("TYPE_SETTING_VALUE", 1);
 define("TYPE_SETTING_SHOW_HIDE", 2);
@@ -86,3 +87,4 @@ define("MAX_DAY_APPROVE", '5');
 
 define('MAX_POST_OF_PAGE', '10');
 define('YEAR_RANGE', 50);
+define('INT_CATEGORY', 20);

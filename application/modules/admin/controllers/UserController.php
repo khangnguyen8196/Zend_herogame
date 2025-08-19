@@ -45,7 +45,8 @@ class Admin_UserController extends FrontBaseAction {
             3 => "email",
             4 => 'role_id',
             5 => 'status',
-            6 => 'created_at'
+            6 => 'created_at',
+            7 => 'score'
         );
         //order function
         if (empty($this->post_data["order"]) == false) {
@@ -220,6 +221,34 @@ class Admin_UserController extends FrontBaseAction {
         } else {
             $this->ajaxResponse(CODE_HAS_ERROR, UtilTranslator::translate('update-user-information-failed'));
         }
+    }
+    
+    public function infoHistoryUserAction(){
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+
+        $mdlOrder = new Order();
+        $userId = $this->post_data['user_id'];
+        $orders = $mdlOrder->fetchOrderByUserId($userId);
+        $data = [];
+        $finalScore = (int)$orders[0]['user_score'];
+        $accum = 0;
+        if (!empty($orders)) {
+            foreach ($orders as $order) {
+                $currentScore = $finalScore - $accum;
+                $data[] = [
+                    'order_code'   => $order['order_code'],
+                    'created_date' => $order['created_date'],
+                    'total'   => $order['total'],
+                    'order_score'        => $order['order_score'],
+                    'user_score'        => $currentScore,
+                ];
+                $accum += (int)$order['order_score'];
+            }
+        }
+
+        echo json_encode($data);
+        exit;
     }
 
 }

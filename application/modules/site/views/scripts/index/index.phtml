@@ -389,12 +389,12 @@
             </aside>
             <!-- Left menu -->
             <!-- Content -->
-            <section class="col-md-10 col-12 left-gutter">
+            <section class="col-md-10 col-12 left-gutter categor" style="margin-top:15px">
                 <!-- get list category -->
                 <div class="play-game-new">
                 <?php
                 if (empty($this->listCategory) == false) {
-                    echo $this->partial('/shared/_quick_view.phtml', array(
+                    echo $this->partial('/shared/_category_home.phtml', array(
                         'qtyp' => 'category',
                         'qcss' => 'list-game-mc',
                         'tabs' => array(
@@ -403,7 +403,7 @@
                                 'data' => $this->listCategory
                             )
                         ),
-                        'dcol' => 3,
+                        'dcol' => 5,
                         'headerCss' => 'hidden'	
                     ));
                 }
@@ -499,16 +499,34 @@
             $banner_f_bot = $this->banner['child_' . BANNER_CHILD_FOOTER_BOT];
         };
     ?>
-    <?php echo $this->partial('/shared/_video_view.phtml', array(
-        'burl' => $footer_background['value'],
-        'vurl' => $footer_video['value'],
-        'bcf1' => array(
-            'data' => $banner_f_top
-        ),
-        'bcf2' => array(
-            'data' => $banner_f_bot
-        ),
-    )) ?>
+    
+    <?php
+        $videoData = !empty($this->youtube_footer['child_' . YOUTUBE_FOOTER])
+            ? $this->youtube_footer['child_' . YOUTUBE_FOOTER]
+            : array(
+                'photo' => $footer_background['value'],
+                'video' => $footer_video['value']
+            );
+
+        echo $this->partial('/shared/_video_view.phtml', array(
+            'burl' => $videoData['photo'],
+            'vurl' => $videoData['video'],
+            'bcf1' => array('data' => $banner_f_top),
+            'bcf2' => array('data' => $banner_f_bot),
+        ));
+    ?>
+    <?php 
+    // echo $this->partial('/shared/_video_view.phtml', array(
+    //     'burl' => $footer_background['value'],
+    //     'vurl' => $footer_video['value'],
+    //     'bcf1' => array(
+    //         'data' => $banner_f_top
+    //     ),
+    //     'bcf2' => array(
+    //         'data' => $banner_f_bot
+    //     ),
+    // )) 
+    ?>
 
 
     <style>
@@ -532,6 +550,26 @@
             overflow: auto;
         }
         @media screen and (min-width: 768px){
+            .play-game-new {
+                overflow: hidden; 
+                border: 1px solid #ccc; 
+                border-radius: 5px;
+                background-image: url('/site/img/categories.jpg');
+                background-repeat: no-repeat;
+                background-size: 100% 100%;
+                background-position: center;
+                background-origin: content-box;
+                background-origin: border-box;
+                box-sizing: border-box;
+            }
+
+            .category-image {
+                padding-top: 65px;
+                padding-bottom: 25px;
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
             .hidden-mobile{
                 display: block;
             }
@@ -585,6 +623,26 @@
             }
         }
         @media screen and (max-width: 767px){
+            .play-game-new {
+                overflow: hidden; 
+                border: 1px solid #ccc; 
+                border-radius: 5px;
+                background-image: url('/site/img/categories.jpg');
+                background-repeat: no-repeat;
+                background-size: 100% 100%;
+                background-position: center;
+                background-origin: content-box;
+                background-origin: border-box;
+                box-sizing: border-box;
+            }
+
+            .category-image {
+                padding-top: 35px;
+                padding-bottom: 20px;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+            
             .hidden-mobile{
                 display: none;
             }
@@ -594,7 +652,7 @@
             .slide-mobile{
                 display: block;
             }
-            .play-game-new .grid.grid-2 li {
+            /* .play-game-new .grid.grid-2 li {
                 width: calc((100% - 9rem * 1) / 2);
             }
             .play-game-new .grid.grid-2 li:nth-of-type(2n) {
@@ -602,12 +660,21 @@
             }
             .play-game-new .grid.grid-2 li:nth-of-type(3n) {
             margin-right: 0;
-            }
+            } */
             .play-game-new ul.grid .category-item .detail .name a {
-                display: flex;
-                height: 2.4rem;
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;
                 overflow: hidden;
-                font-size: 9px;
+                font-size: 11px !important;
+                line-height: 1.2rem;
+                max-height: 3.6rem;
+            }
+
+            ul.grid .category-item .detail .name, ul.grid .product-item .detail .name {
+                display: flex;
+                height: 3.4rem;
+                overflow: hidden;
             }
 
             .qc {
@@ -700,7 +767,7 @@
         margin-top:-16px;
         outline:none !important;
         text-indent:-9999px;
-        z-index:9999;
+        z-index:999;
         border: none !important; 
         background-color: transparent !important;
         }
@@ -716,7 +783,7 @@
         margin-top:-16px;
         outline:none !important;
         text-indent:-9999px;
-        z-index:9999;
+        z-index:999;
         border: none !important; 
         background-color: transparent !important;
         }

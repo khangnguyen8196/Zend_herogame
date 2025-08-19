@@ -16,6 +16,7 @@ pages = $.extend(pages, {
                 {"data": "role_id"},
                 {"data": "status"},
                 {"data": "created_at"},
+                {"data": "score"},
                 {"data": "Action_Table"}
             ];
             var columnDefs = [
@@ -71,6 +72,19 @@ pages = $.extend(pages, {
                 },
                 {
                     "render": function (data, type, row) {
+                        var score = '';
+                        if(row.score) {
+                            score = row.score;
+                        } else {
+                            score = 0;
+                        }
+                        return score;
+                    },
+                    orderable: true,
+                    targets: 7
+                },
+                {
+                    "render": function (data, type, row) {
                         var action = '';
                         if( row['edit_permission'] == true || row['delete_permission'] == true){
                          action += '<ul class="icons-list" >' +
@@ -78,6 +92,8 @@ pages = $.extend(pages, {
                                 '<a href="#" class="dropdown-toggle" data-toggle="dropdown">' +
                                 '<i class="icon-menu9"> </i></a>' +
                                 '<ul class="dropdown-menu dropdown-menu-right">';
+                         action += '<li><a onclick="pages.user.viewUserHistoryInfo(' + row.user_id + ')">' +
+                                    '<i class="icon-info22"></i> ' + 'Xem lịch sử điểm' + '</a></li>';
                         }
                         if( row['edit_permission'] == true ){
                             if (row.status == 1) {
@@ -92,7 +108,7 @@ pages = $.extend(pages, {
                         return 	action;
                     },
                     "className": "text-center",
-                    "targets": 7,
+                    "targets": 8,
                     "orderable": false,
                     "data": "Action_Table"
                 }
@@ -233,6 +249,45 @@ pages = $.extend(pages, {
 
                 }
             });
-        }
+        },
+        viewUserHistoryInfo : function(user_id) {
+            $('#userHistoryInfoModal').modal('show');
+            if ($.fn.DataTable.isDataTable('#userHistoryInfoTable')) {
+                $('#userHistoryInfoTable').DataTable().destroy();
+            }
+            $('#userHistoryInfoTable tbody').html('<tr><td colspan="3" class="text-center">Đang tải...</td></tr>');
+
+            $.ajax({
+                url: '/admin/user/info-history-user',
+                method: 'POST',
+                data: { user_id: user_id },
+                dataType: 'json',
+                success: function(data) {
+                    if (data.length > 0) {
+                        $('#userHistoryInfoTable').DataTable({
+                            destroy: true,
+                            data: data,
+                            columns: [
+                                { data: 'order_code', title: 'Mã đơn hàng' },
+                                { data: 'created_date', title: 'Ngày đặt' },
+                                { data: 'total', title: 'Tổng tiền' },
+                                { data: 'order_score', title: 'Điểm cộng' },
+                                { data: 'user_score', title: 'Tổng điểm' },
+                            ],
+                            order: [[1, 'desc']],
+                            paging: true,
+                            pageLength: 10,
+                            searching: true,
+                            info: true
+                        });
+                    } else {
+                        $('#userHistoryInfoTable tbody').html('<tr><td colspan="5" class="text-center text-danger">Không có lịch sử cộng điểm.</td></tr>');
+                    }
+                },
+                error: function() {
+                    $('#userHistoryInfoTable tbody').html('<tr><td colspan="5" class="text-center text-danger">Lỗi khi tải dữ liệu.</td></tr>');
+                }
+            });
+        },
     }
 });

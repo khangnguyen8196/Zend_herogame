@@ -1,0 +1,131 @@
+<?php
+    $dcol = isset($this->dcol) ? $this->dcol : 5;
+    $mcol = isset($this->mcol) ? $this->mcol : 2;
+    $ucss = isset($this->qdsp) ? $this->qdsp : 'grid';
+    for ($x = 0; $x < count($this->tabs); $x++) {
+        $this->tabs[$x]['uuid'] = 'wg' . uniqid();
+    }
+    $headerCss = @$this->headerCss;
+?>
+<div class="category-home <?php echo $this->qcss ?>">
+    <ul class="nav nav-tabs <?php echo $headerCss;?>" role="tablist">
+      <?php foreach ($this->tabs as $key => $tab) {
+          $tcss = ($key == $this->tidx) ? 'active' : ''
+      ?>
+          <li class="nav-item">
+              <a class="nav-link <?php echo $tcss ?>" href="#<?php echo $tab['uuid'] ?>" data-toggle="tab" role="tab">
+                  <?php echo $tab['title'] ?>
+              </a>
+          </li>
+      <?php } ?>
+    </ul>
+    <div class="tab-content <?=@$this->custom_class?>">
+        <?php foreach ($this->tabs as $key => $tab) {
+            $tcss = ($key == $this->tidx) ? 'active show' : ''
+        ?>
+        <div id="<?php echo $tab['uuid'] ?>" class="tab-pane fade <?php echo $tcss ?>" role="tabpanel">
+            <?php
+                $customClass = $ucss;
+                $isMobile = preg_match('/(android|iphone|ipod|opera mini|blackberry|mobile|windows phone)/i', $_SERVER['HTTP_USER_AGENT']);
+                if(!$isMobile && count($tab['data']) < 5 ){
+                    $customClass = 'grid';
+                } 
+            ?>
+            <?php if($customClass == 'grid') { ?>
+            <ul class="grid grid-md-<?php echo $dcol ?> category-image">
+            <?php } else { ?>
+            <ul class="slider" data-dcol="<?php echo $dcol ?>" data-mcol="<?php echo $mcol ?>">
+            <?php } ?>
+                <?php
+                    $partialPath = '/shared/_product_item.phtml';
+                    if ($this->qtyp == 'category') {
+                        $partialPath = '/shared/_category_item.phtml';
+                    }
+                    foreach ($tab['data'] as $key => $data) {
+                        echo '<li>' . $this->partial($partialPath, $data) . '</li>';
+                    }
+                ?>
+            </ul>
+        </div>
+        <?php } ?>
+    </div>
+</div>
+<style>
+    .category-home .nav-tabs {
+        background: red;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 0px;
+        border-bottom-left-radius: 0px;
+    }
+    .category-home .nav-tabs .nav-link.active {
+        background: #aa052d;
+    }
+
+    @media screen and (min-width: 768px) {
+        .grid.grid-md-5 li {
+            width: calc((100% - 1rem* 4) / 5);
+            /* border :1px solid #ccc; */
+            margin-top:10px;
+            margin-bottom:10px;
+            margin-right:1rem;
+            border-radius:15px;
+            background: white; 
+        }
+        
+        .grid.grid-md-5 li .category-item {
+            width: 80%;
+            margin: auto;
+        }
+
+        .grid.grid-md-5 li:nth-of-type(5n) {
+            margin-right:0rem;
+        }
+
+        ul.grid .category-item .avatar .photo {
+            border-top-left-radius: 0px;
+            border-top-right-radius: 0px;
+        }
+    }
+
+    @media screen and (max-width: 767px){
+        .imgh:before, .imgh.r1x1:before {
+            padding-top: 85%;
+        }
+
+        ul.grid .category-item .detail {
+            padding: 0 5px;
+        }
+        .grid.grid-md-5 li {
+            width: calc((100% - 5px* 4) /5);
+            /* border :1px solid #ccc; */
+            margin-top:5px;
+            margin-right:5px; 
+            border-radius:5px;
+            background: white;
+        }
+        .grid.grid-md-5 li .category-item {
+            width: 100%;
+            margin: auto;
+        }
+        .grid.grid-md-5 li:nth-of-type(5n) {
+            margin-right:0rem;
+        }
+        .category-home .nav-tabs {
+            display: none;
+        }
+        .category-home .nav-tabs li {
+            border-right: 1px solid #fff;
+        }
+        .category-home .nav-tabs :last-child {
+            border-right: none;
+        }
+        .nav-tabs .nav-link {
+            border: 0 none;
+            font-size: 1.1rem;
+            color: #fff;
+            border-right: none;
+            border-radius: 0;
+        }
+    }
+</style>

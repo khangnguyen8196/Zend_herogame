@@ -14,16 +14,25 @@
 							echo "Tên Sản Phẩm";
 						} elseif ( $this->type == 2){ 
 							echo "Giá Sản Phẩm";
-						} else { 
+						} elseif($this->type == 3) { 
 							echo "Giá Khuyến Mãi"; 
+						} elseif($this->type == 4) { 
+							echo "Trạng thái SP"; 
 						} ?>
 						</label>
 						<?php if( $this->type == 1){ 
 							echo '<input type="text" class="form-control" id="nameP" value="'. $this->info['title'] .'">';
 						} elseif ( $this->type == 2){ 
 							echo '<input type="number" class="form-control" id="priceP" value="'. $this->info['price'] .'">';
-						} else { 
+						} elseif($this->type == 3) { 
 							echo '<input type="text" class="form-control" id="salePS" value="'. $this->info['price_sales'] .'">';
+						}elseif($this->type == 4) { 
+							$currentStatus = $this->info['status'];
+							echo '<select id="statusP" class="form-control" aria-invalid="false">';
+							echo '<option value="1"' . ($currentStatus == 1 ? ' selected' : '') . '>Kích hoạt</option>';
+							echo '<option value="-1"' . ($currentStatus == -1 ? ' selected' : '') . '>Vô hiệu</option>';
+							echo '<option value="2"' . ($currentStatus == 2 ? ' selected' : '') . '>Hết Hàng</option>';
+							echo '</select>';
 						} ?>
 				</div>
 			</div>

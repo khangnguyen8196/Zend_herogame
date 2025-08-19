@@ -1778,4 +1778,73 @@ class Site_DonHangController extends FrontEndAction {
                   ->setBody(json_encode(['data' => $result]));
         }
     }
+	
+	public function confirmOrderAction(){
+        $this->isAjax();
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+        $orderModel = new Order();
+        $orderDetailModel = new OrderDetail();
+        $modelUser = new Users();
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $data = $request->getPost();
+            $orderCode = $data['order_code'];
+            $orderId = $data['order_id'];
+            $statusScore = $data['status_score'];
+            if ($orderCode && $statusScore == 0) {
+                $order =$orderModel->fetchOrderById($orderId);
+                if($order){
+                    $userInfo = $modelUser->getUserById($order['user_id'] );
+                    $listOrderDetail = $orderDetailModel->getListOrderDetail($orderId);
+                    if (!empty($listOrderDetail)) {
+                        $order['order_detail'] = $listOrderDetail;
+                        $total = 0;
+                        foreach ( $listOrderDetail as $key => $value ){
+                            $total+= ($value['price']* $value['number']);
+                        }
+                        $order['total_before_sale'] = $total;
+                        if($order['user_id'] != -1 ){
+                            $order['user_name'] = $userInfo['user_name'];
+                        } else {
+                            $order['user_name'] = 'Khách Mới';
+                        }
+                        $listCombo = $this->getComboProductsList($orderDetailModel, $listOrderDetail, $orderId);
+                        $this->sendSuccessMailTemplate($order, $listCombo);
+                    }
+                    $currentScore = $userInfo['score'] + $order['score'];
+                    $modelUser->updateUser(array('score' => $currentScore), $order['user_id'] );
+                    $orderModel->updateConfirmOrder(['status_score' => 1, 'status'=> 4, 'updated_date' => date('Y-m-d H:i:s')], $orderCode);
+                    $this->ajaxResponse(CODE_SUCCESS);
+                    return;
+                }
+            }
+            $this->ajaxResponse(CODE_HAS_ERROR);
+        }
+    }
+
+    function getComboProductsList($orderDetailModel, $listOrderDetail, $orderId) {
+        $listCombo = array();
+        if (!empty($listOrderDetail)) {
+            foreach ($listOrderDetail as $value) {
+                if (!empty($value['combo_id']) && $value['combo_id'] != 0) {
+                    $listProducts = $orderDetailModel->getProductByComboIdproduct($orderId, $value['combo_id']);
+                    if (!empty($listProducts)) {
+                        foreach ($listProducts as $product) {
+                            $listCombo[$value['combo_id']][] = $product;
+                        }
+                    }
+                }
+            }
+        }
+        return $listCombo;
+    }
+    public function sendSuccessMailTemplate($orderInfo, $listCombo){
+        $this->view->orderInfo = $orderInfo;
+        $this->view->listCombo = $listCombo;
+        $tpl = $this->view->render('/don-hang/_tpl-mail-success.phtml');
+        if( empty($orderInfo['email']) == false ){
+            UtilEmail::sendMail(DEFAULT_EMAIL, $orderInfo['email'], 'Herogame có thông báo đến bạn', $tpl );
+        }
+    }
 }

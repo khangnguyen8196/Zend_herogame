@@ -21,6 +21,7 @@ class FrontEndAction extends Zend_Controller_Action {
      * @see Zend_Controller_Action::init()
      */
     public function init() {
+        $this->autoLoginFromCookie();
         $post = $this->_helper->Common->myTrim($this->_getAllParams());
         $this->post_data = $post;
         $this->request = $this->getRequest();
@@ -103,6 +104,24 @@ class FrontEndAction extends Zend_Controller_Action {
             'h2' => $h2
         );
     }
+    
+    public function autoLoginFromCookie() {
+        if (!empty($this->customer_info)) return;
+        if (!empty($_COOKIE['remember_token'])) {
+            $token = $_COOKIE['remember_token'];
+            $mdlUser = new Users();
+            $now = date('Y-m-d H:i:s');
+            $uData = $mdlUser->fetchUserByParamSafe([
+                'remember_token' => $token,
+                'remember_token_expire > ?' =>  $now
+            ]);
+            if (!empty($uData)) {
+                UtilAuth::setCustommerLoginInfo((array)$uData);
+            } else {
+                setcookie('remember_token', '', time() - 3600, '/');
+            }
+        }
+    }
     //
     public function getInfoPage($data){
     	if( empty($data['category']) == false && $data['category'] == true ){
@@ -131,6 +150,7 @@ class FrontEndAction extends Zend_Controller_Action {
     	}
         if( empty($data['banner']) == false && $data['banner'] == true ){
     		$this->view->banner_vertical = self::_getBannerVertical();
+    		$this->view->youtube_footer = self::_getYoutubeFooter();
     	}
     }
     /**
@@ -257,6 +277,24 @@ class FrontEndAction extends Zend_Controller_Action {
     		
     	}
     	return $list;
+    }
+    
+    private function _getYoutubeFooter() {
+        $banner = self::getBannerByType();
+        $type = YOUTUBE_FOOTER;
+        $item = array();
+
+        foreach ($banner as $value) {
+            if ($value['is_video'] == 1 && $value['type'] == $type) {
+                $item['child_' . $type] = array(
+                    'photo' => '/upload/images/full/' . $value['image'],
+                    'video' => $value['video_url']
+                );
+                break;
+            }
+        }
+
+        return $item;
     }
     //
     /**
@@ -536,6 +574,7 @@ class FrontEndAction extends Zend_Controller_Action {
     }
     
     public function _setMeta($data) {
+        $img_version    = substr(md5($itemImage['created_datetime']), 0, 20);
         $serverName = $_SERVER['SERVER_NAME'];
         $baseUrlHttp = "http://$serverName";
         $baseUrlHttps = "https://$serverName";
@@ -563,6 +602,7 @@ class FrontEndAction extends Zend_Controller_Action {
     		$this->view->headMeta()->appendProperty('og:site_name', $data['og_site_name']);
     	}
     	if (empty($data['og_url']) == false) {
+    // 		$this->view->headMeta()->appendProperty('og:url', $data['og_url']);
             if (strpos($data['og:url'], $baseUrlHttps) !== 0) {
                 if (strpos($data['og:url'], $baseUrlHttp) === 0) {
                     $data['og:url'] = str_replace($baseUrlHttp, $baseUrlHttps, $data['og:url']);
@@ -570,12 +610,15 @@ class FrontEndAction extends Zend_Controller_Action {
             }
     		$this->view->headMeta()->appendProperty('og:url', $data['og_url']);
     	}
+    // 	if (empty($data['og_image']) == false) {
+    // 		$this->view->headMeta()->appendName('og:image',$data['og_image']);
+    // 	}
         if (empty($data['og_image']) == false) {
             if (strpos($data['og_image'], $baseUrlHttps) !== 0) {
                 if (strpos($data['og_image'], $baseUrlHttp) === 0) {
-                    $data['og_image'] = str_replace($baseUrlHttp, $baseUrlHttps, $data['og_image']);
+                    $data['og_image'] = str_replace($baseUrlHttp, $baseUrlHttps, $data['og_image']. '?v=' . $img_version);
                 } else {
-                    $data['og_image'] = $baseUrlHttps . $data['og_image'];
+                    $data['og_image'] = $baseUrlHttps . $data['og_image']. '?v=' . $img_version;
                 }
             }
             $this->view->headMeta()->appendProperty('og:image', $data['og_image']);

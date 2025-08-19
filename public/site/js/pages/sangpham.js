@@ -20,13 +20,18 @@ pages = $.extend(pages, {
                 $("#filter_frm #page_size").val($("#item_limit").val());
                 $("#filter_frm #sorted").val($("#sort_type").val());
                 $("#filter_frm #page").val($(this).attr("page"));
+                $("#filter_frm #status").val($("#sort_status").val());
                 $("#filter_frm").submit();
             });
 
-            $(document).on('change', '#item_limit, #sort_type', {}, function (e) {
+            $(document).on('change', '#item_limit, #sort_type, #sort_status', {}, function (e) {
                 e.preventDefault();
-                $("#filter_frm #page_size").val($("#item_limit").val());
-                $("#filter_frm #sorted").val($("#sort_type").val());
+                var itemLimitValue = $("#item_limit").val();
+                var sortTypeValue = $("#sort_type").val();
+                var sortStatusValue = $("#sort_status").val();
+                $("#filter_frm #page_size").val(itemLimitValue);
+                $("#filter_frm #sorted").val(sortTypeValue);
+                $("#filter_frm #status").val(sortStatusValue);
                 $("#filter_frm").submit();
             });
 
@@ -525,16 +530,29 @@ pages = $.extend(pages, {
                 var saleStartTime = new Date(timeStart).getTime() / 1000; 
                 function checkCountdown() {
                     var currentTime = Math.round(Date.now() / 1000); 
-                    if (saleStartTime - currentTime <= 6 * 3600) { 
+                    // if (saleStartTime - currentTime <= 6 * 3600) { 
+                    //     $('.count_time_start').countdown(new Date(saleStartTime * 1000), function(event) {
+                    //         $(this).text(
+                    //           event.strftime('%H giờ %M phút %S giây')
+                    //         );
+                    //         if (event.elapsed){
+                    //           $('.product-info').hide();
+                    //         }  
+                    //     });
+                    //     clearInterval(interval); 
+                    // }
+                    if (saleStartTime - currentTime <= 6 * 3600) {
                         $('.count_time_start').countdown(new Date(saleStartTime * 1000), function(event) {
-                            $(this).text(
-                               event.strftime('%H giờ %M phút %S giây')
+                            $(this).html(
+                                '<span class="hour">' + event.strftime('%H') + '</span>' + ' '+
+                                '<span class="minute">' + event.strftime('%M') + '</span>' + ' ' +
+                                '<span class="second">' + event.strftime('%S') + '</span>'
                             );
-                            if (event.elapsed){
-                               $('.product-info').hide();
-                            }  
+                            if (event.elapsed) {
+                                $('.product-info').hide();
+                            }
                         });
-                        clearInterval(interval); 
+                        clearInterval(interval);
                     }
                 }
 
@@ -686,7 +704,8 @@ pages = $.extend(pages, {
                     var variant_image = JSON.parse(listImage);
                 }
                 if (typeof variant_image !== 'undefined' && typeof color_image !== 'undefined') {
-                    merged_images = variant_image.concat(color_image);
+                    // merged_images = variant_image.concat(color_image);
+                    merged_images = [...new Set(variant_image.concat(color_image))];
                 } else if (typeof variant_image !== 'undefined') {
                     merged_images = variant_image;
                 } else if ( typeof color_image !== 'undefined') {

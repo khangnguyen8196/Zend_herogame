@@ -476,6 +476,12 @@ class Commons {
 	 * @return type
 	 */
 	public static function _buildProductData($value) {
+		// $mdlRank = new MemberBenefits();
+		// $customer_info = UtilAuth::getCustommerLoginInfo(true);
+		// if ($customer_info) {
+		// 	print_r($mdlRank);
+		// 	exit;
+		// }
 		$titleText = '';
 		$bcolor = '';
 		$now = date('Y-m-d H:i:s');
@@ -602,6 +608,33 @@ class Commons {
 		$post["summary"] =  $value["summary"];
 		return $post;
 	}
+
+	/**
+	 *
+	 * @return array
+	 */
+	public static function sortStatus() {
+		$list = array (
+				array (
+					'value' => '',
+					'text' => 'Tất cả' 
+				),
+				array (
+						'value' => '1',
+						'text' => 'Còn hàng' 
+				),
+				array (
+						'value' => '2' ,
+						'text' => 'Hết hàng' 
+				),
+				array (
+					'value' => 'best_sell' ,
+					'text' => 'Preorder' 
+				),
+		);
+		return $list;
+	}
+	
 	/**
 	 *
 	 * @return array
@@ -688,7 +721,7 @@ class Commons {
 				$sortValue = "updated_date DESC";
 				break;
 			case "updated_date_asc" :
-				$sortValue = "updated_date DESC";
+				$sortValue = "updated_date ASC";
 				break;
 			default :
 				$sortValue = "priority DESC";

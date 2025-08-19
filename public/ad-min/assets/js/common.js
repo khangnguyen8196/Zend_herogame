@@ -119,8 +119,8 @@ pages = $.extend(pages, {
 			str = str.toLowerCase();
 		  
 			// remove accents, swap ñ for n, etc
-			var from = "ảãạẵẳặằắăậẫẩầấâàáäâẹẽẻệễểềếêèéëêìíïîỉĩịợỡởờớơộỗổồốôõỏọòóöôựữửừứưũủụùúüûñç·/_,:;";
-			var to = "aaaaaaaaaaaaaaaaaaaeeeeeeeeeeeeeiiiiiiioooooooooooooooooouuuuuuuuuuuuunc------";
+			var from = "ảãạẵẳặằắăậẫẩầấâàáäâẹẽẻệễểềếêèéëêìíïîỉĩịợỡởờớơộỗổồốôõỏọòóöôựữửừứưũủụùúüûñçýỳỷỹỵ·/_,:;";
+			var to = "aaaaaaaaaaaaaaaaaaaeeeeeeeeeeeeeiiiiiiioooooooooooooooooouuuuuuuuuuuuuncyyyyy------";
 			for (var i = 0, l = from.length; i < l; i++) {
 			  str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
 			}

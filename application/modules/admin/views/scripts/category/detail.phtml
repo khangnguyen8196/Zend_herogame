@@ -158,6 +158,317 @@
                             </div>
                         <?php } ?>
                     </div>
+                    <!--banner youtube -->
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Banner youtube (1920x600)</label>
+                        <div class="col-lg-2">
+                            <input type="file" class="file-styled form-control" name='banner_ytb' id="banner_ytb"/>
+                            <?php if (empty($this->info) == false && empty($this->info['banner_ytb']) == false) { ?>
+                                <div class="banner-youtube">
+                                    <div class="parent">
+                                        <div class="thumbnail">
+                                            <div class="thumbnail">
+                                                <div class="thumb">
+                                                    <img class="img-media img-thumbnail-item" style="height: 100px" src="<?php echo '/upload/images' . $this->info['banner_ytb']; ?>" alt="">
+                                                    <div class="caption-overflow">
+                                                        <span>
+                                                            <a class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5 container-image" href="<?php echo '/upload/images' . $this->info['banner_ytb'];?>" data-popup="lightbox">
+                                                                <i class="icon-plus3"></i>
+                                                            </a>
+                                                            <a class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5">
+                                                                <i class="icon-cross2 remove_image_banner_ytb" data-id="<?php echo $this->info['id'] ?>"   data-remove-image-banner-ytb="<?php echo $this->info['banner_ytb'] ?>"></i>
+                                                            </a>
+                                                        </span>
+                                                    </div>           
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="hidden delete-image-banner-ytb"></div>
+                            <?php } ?>
+                        </div>
+                        <label class="control-label col-lg-1">Iframe youtube</label>
+                        <div class="col-lg-7">
+                            <input type="text" id="iframe_ytb" class="file-styled form-control" value='<?php echo $this->info['iframe_ytb']?>' name="iframe_ytb"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Text banner YTB</label>
+                        <div class="col-lg-10">
+                            <textarea name="text_banner_ytb" class="rich-editor" data-height="300px" id="text_banner_ytb"  rows="3"><?php echo @$this->info['text_banner_ytb'] ?></textarea>
+                        </div>
+				    </div>
+                    <!--end -->
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Image viền Youtube L</label>
+                        <div class="col-lg-2">
+                            <input type="file" class="file-styled form-control" name='banner_ytb_L' id="banner_ytb_L"/> 
+                            <?php if (empty($this->info) == false && empty($this->info['banner_ytb_L']) == false) { ?>
+                                <div class="banner-youtube-left">
+                                    <div class="parent">
+                                        <div class="thumbnail">
+                                            <div class="thumbnail">
+                                                <div class="thumb">
+                                                    <img class="img-media img-thumbnail-item" style="height: 100px; width: 100%;" src="<?php echo '/upload/images' . $this->info['banner_ytb_L']; ?>">
+                                                    <div class="caption-overflow">
+                                                        <span>
+                                                            <a class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5 container-image" href="<?php echo '/upload/images' . $this->info['banner_ytb_L'];?>" data-popup="lightbox">
+                                                                <i class="icon-plus3"></i>
+                                                            </a>
+                                                            <a class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5">
+                                                                <i class="icon-cross2 remove_image_banner_ytb_left" data-id="<?php echo $this->info['id'] ?>"   data-remove-image-banner-ytb-left="<?php echo $this->info['banner_ytb_L'] ?>"></i>
+                                                            </a>
+                                                        </span>
+                                                    </div>           
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="hidden delete-image-banner-ytb-left"></div>
+                            <?php } ?>
+                        </div>
+                        <label class="control-label col-lg-2">Image viền Youtube Mid</label>
+                        <div class="col-lg-2">
+                            <input type="file" class="file-styled form-control" name='banner_ytb_M' id="banner_ytb_M"/> 
+                            <?php if (empty($this->info) == false && empty($this->info['banner_ytb_M']) == false) { ?>
+                                <div class="banner-youtube-mid">
+                                    <div class="parent">
+                                        <div class="thumbnail">
+                                            <div class="thumbnail">
+                                                <div class="thumb">
+                                                    <img class="img-media img-thumbnail-item" style="height: 100px; width: 100%;" src="<?php echo '/upload/images' . $this->info['banner_ytb_M']; ?>">
+                                                    <div class="caption-overflow">
+                                                        <span>
+                                                            <a class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5 container-image" href="<?php echo '/upload/images' . $this->info['banner_ytb_M'];?>" data-popup="lightbox">
+                                                                <i class="icon-plus3"></i>
+                                                            </a>
+                                                            <a class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5">
+                                                                <i class="icon-cross2 remove_image_banner_ytb_mid" data-id="<?php echo $this->info['id'] ?>"   data-remove-image-banner-ytb-mid="<?php echo $this->info['banner_ytb_M'] ?>"></i>
+                                                            </a>
+                                                        </span>
+                                                    </div>           
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="hidden delete-image-banner-ytb-mid"></div>
+                            <?php } ?>
+                        </div>
+                        <label class="control-label col-lg-2">Image viền Youtube R</label>
+                        <div class="col-lg-2">
+                            <input type="file" class="file-styled form-control" name='banner_ytb_R' id="banner_ytb_R"/> 
+                            <?php if (empty($this->info) == false && empty($this->info['banner_ytb_R']) == false) { ?>
+                                <div class="banner-youtube-right">
+                                    <div class="parent">
+                                        <div class="thumbnail">
+                                            <div class="thumbnail">
+                                                <div class="thumb">
+                                                    <img class="img-media img-thumbnail-item" style="height: 100px; width: 100%;" src="<?php echo '/upload/images' . $this->info['banner_ytb_R']; ?>">
+                                                    <div class="caption-overflow">
+                                                        <span>
+                                                            <a class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5 container-image" href="<?php echo '/upload/images' . $this->info['banner_ytb_R'];?>" data-popup="lightbox">
+                                                                <i class="icon-plus3"></i>
+                                                            </a>
+                                                            <a class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5">
+                                                                <i class="icon-cross2 remove_image_banner_ytb_right" data-id="<?php echo $this->info['id'] ?>"   data-remove-image-banner-ytb-right="<?php echo $this->info['banner_ytb_R'] ?>"></i>
+                                                            </a>
+                                                        </span>
+                                                    </div>           
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="hidden delete-image-banner-ytb-right"></div>
+                            <?php } ?>
+                        </div>
+                    </div>
+                    <!--end banner youtube -->
+                    <!-- banner youtube 2 -->
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Banner youtube 2 (1920x600)</label>
+                        <div class="col-lg-2">
+                            <input type="file" class="file-styled form-control" name='banner_ytb_2' id="banner_ytb_2"/>
+                            <?php if (empty($this->info) == false && empty($this->info['banner_ytb_2']) == false) { ?>
+                            <div class="banner-youtube_2">
+                                <div class="parent">
+                                    <div class="thumbnail">
+                                        <div class="thumbnail">
+                                            <div class="thumb">
+                                                <img class="img-media img-thumbnail-item" style="height: 100px" src="<?php echo '/upload/images' . $this->info['banner_ytb_2']; ?>" alt="">
+                                                <div class="caption-overflow">
+                                                    <span>
+                                                        <a class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5 container-image" href="<?php echo '/upload/images' . $this->info['banner_ytb_2'];?>" data-popup="lightbox">
+                                                            <i class="icon-plus3"></i>
+                                                        </a>
+                                                        <a class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5">
+                                                            <i class="icon-cross2 remove_image_banner_ytb_2" data-id="<?php echo $this->info['id'] ?>"   data-remove-image-banner-ytb-2="<?php echo $this->info['banner_ytb_2'] ?>"></i>
+                                                        </a>
+                                                    </span>
+                                                </div>           
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hidden delete-image-banner-ytb-2"></div>
+                        <?php } ?>
+                        </div>
+                        <label class="control-label col-lg-1">Iframe youtube 2</label>
+                        <div class="col-lg-7">
+                            <input type="text" id="iframe_ytb_2" class="file-styled form-control" value='<?php echo $this->info['iframe_ytb_2']?>' name="iframe_ytb_2"/>
+                        </div>
+                        
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Text banner YTB 2</label>
+                        <div class="col-lg-10">
+                            <textarea name="text_banner_ytb_2" class="rich-editor" data-height="300px" id="text_banner_ytb_2"  rows="3"><?php echo @$this->info['text_banner_ytb_2'] ?></textarea>
+                        </div>
+				    </div>
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Image viền Youtube L 2</label>
+                        <div class="col-lg-2">
+                            <input type="file" class="file-styled form-control" name='banner_ytb_L_2' id="banner_ytb_L_2"/> 
+                            <?php if (empty($this->info) == false && empty($this->info['banner_ytb_L_2']) == false) { ?>
+                                <div class="banner-youtube-left-2">
+                                    <div class="parent">
+                                        <div class="thumbnail">
+                                            <div class="thumbnail">
+                                                <div class="thumb">
+                                                    <img class="img-media img-thumbnail-item" style="height: 100px; width: 100%;" src="<?php echo '/upload/images' . $this->info['banner_ytb_L_2']; ?>">
+                                                    <div class="caption-overflow">
+                                                        <span>
+                                                            <a class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5 container-image" href="<?php echo '/upload/images' . $this->info['banner_ytb_L_2'];?>" data-popup="lightbox">
+                                                                <i class="icon-plus3"></i>
+                                                            </a>
+                                                            <a class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5">
+                                                                <i class="icon-cross2 remove_image_banner_ytb_left_2" data-id="<?php echo $this->info['id'] ?>"   data-remove-image-banner-ytb-left="<?php echo $this->info['banner_ytb_L_2'] ?>"></i>
+                                                            </a>
+                                                        </span>
+                                                    </div>           
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="hidden delete-image-banner-ytb-left-2"></div>
+                            <?php } ?>
+                        </div>
+                        <label class="control-label col-lg-2">Image viền Youtube Mid 2</label>
+                        <div class="col-lg-2">
+                            <input type="file" class="file-styled form-control" name='banner_ytb_M_2' id="banner_ytb_M_2"/> 
+                            <?php if (empty($this->info) == false && empty($this->info['banner_ytb_M_2']) == false) { ?>
+                                <div class="banner-youtube-mid-2">
+                                    <div class="parent">
+                                        <div class="thumbnail">
+                                            <div class="thumbnail">
+                                                <div class="thumb">
+                                                    <img class="img-media img-thumbnail-item" style="height: 100px; width: 100%;" src="<?php echo '/upload/images' . $this->info['banner_ytb_M_2']; ?>">
+                                                    <div class="caption-overflow">
+                                                        <span>
+                                                            <a class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5 container-image" href="<?php echo '/upload/images' . $this->info['banner_ytb_M_2'];?>" data-popup="lightbox">
+                                                                <i class="icon-plus3"></i>
+                                                            </a>
+                                                            <a class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5">
+                                                                <i class="icon-cross2 remove_image_banner_ytb_mid_2" data-id="<?php echo $this->info['id'] ?>"   data-remove-image-banner-ytb-mid-2="<?php echo $this->info['banner_ytb_M_2'] ?>"></i>
+                                                            </a>
+                                                        </span>
+                                                    </div>           
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="hidden delete-image-banner-ytb-mid-2"></div>
+                            <?php } ?>
+                        </div>
+                        <label class="control-label col-lg-2">Image viền Youtube R 2</label>
+                        <div class="col-lg-2">
+                            <input type="file" class="file-styled form-control" name='banner_ytb_R_2' id="banner_ytb_R_2"/> 
+                            <?php if (empty($this->info) == false && empty($this->info['banner_ytb_R_2']) == false) { ?>
+                                <div class="banner-youtube-right-2">
+                                    <div class="parent">
+                                        <div class="thumbnail">
+                                            <div class="thumbnail">
+                                                <div class="thumb">
+                                                    <img class="img-media img-thumbnail-item" style="height: 100px; width: 100%;" src="<?php echo '/upload/images' . $this->info['banner_ytb_R_2']; ?>">
+                                                    <div class="caption-overflow">
+                                                        <span>
+                                                            <a class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5 container-image" href="<?php echo '/upload/images' . $this->info['banner_ytb_R_2'];?>" data-popup="lightbox">
+                                                                <i class="icon-plus3"></i>
+                                                            </a>
+                                                            <a class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5">
+                                                                <i class="icon-cross2 remove_image_banner_ytb_right_2" data-id="<?php echo $this->info['id'] ?>"   data-remove-image-banner-ytb-right-2="<?php echo $this->info['banner_ytb_R_2'] ?>"></i>
+                                                            </a>
+                                                        </span>
+                                                    </div>           
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="hidden delete-image-banner-ytb-right-2"></div>
+                            <?php } ?>
+                        </div>
+                    </div>
+                    <!-- end banner youtube 2 -->
+                    <!-- slide category -->
+                    <?php 
+                        if (!empty($this->info) && !empty($this->info['image_slide_category'])) { ?>
+                        <div class="form-group">
+                            <label class="control-label col-lg-2">Slide danh mục (1920x600)</label>
+                        </div>
+                        <div class="form-group">
+                            <?php 
+                            $slideCategoryImage = explode(',', $this->info['image_slide_category']);
+                            $listUrlSlideCategory = explode(',', $this->info['url_image_slide_category']);
+                            foreach($slideCategoryImage as $key => $item) {
+                                ?>
+                                <div class="list_image_slide_category_<?php echo $key ?>" id="count_image_slide_category_<?php echo $key ?>">
+                                    <div class="col-lg-2 col-sm-4 parent image_slide_category">
+                                        <div class="form-group ">
+                                            <input type="file" id="image_slide_category_<?php echo $key ?>" class="file-styled form-control image_slide_category_dm" name="image_slide_category[<?php echo $key ?>]" accept="image/*"/>
+                                        </div>
+                                        <div class="thumbnail">
+                                            <div class="thumb">
+                                                <img class="img-media img-thumbnail-item" style="height: 100px" src="<?php echo '/upload' . $item; ?>" alt="">
+                                                <div class="caption-overflow">
+                                                    <span>
+                                                        <a class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5 container-image" href="<?php echo '/upload' . $item; ?>" data-popup="lightbox">
+                                                            <i class="icon-plus3"></i>
+                                                        </a>
+                                                        <a class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5">
+                                                            <i class="icon-cross2 remove_image_slide_category" data-id="<?php echo $this->info['id'] ?>" data-url ="<?php echo $listUrlSlideCategory[$key]?>" data-url-image="<?php echo $item ?>" data-remove-image-slide-category ="<?php echo $item ?>"></i>
+                                                        </a>
+                                                    </span>
+                                                </div>           
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" id="url_image_slide_category_<?php echo $key ?>" class="file-styled form-control" value="<?php echo $listUrlSlideCategory[$key]?>" name="url_image_slide_category[<?php echo $key ?>]"/>
+                                        </div >
+                                    </div>
+                                    
+                                    <div class="hidden list-delete-image-slide-category" id ="delete_image_slide_category_<?php echo $key ?>" data-index="<?php echo $key ?>"></div>
+                                </div>
+                            <?php }?>
+                            <div class="col-lg-12">
+                                <button type="button" id="add_image_slide_category" class="btn btn-primary" style="margin-right: 11px;position: relative;border-radius: 2px;margin-top: 10px;"><span class="glyphicon glyphicon-plus" attr-count="<?php echo $key+2 ?>" aria-hidden="true"></span> Thêm Slide</button>
+                            </div>
+                        </div>
+                        <div id="new_image_slide_category"></div>
+                    <?php } else{?>
+                           <div class="form-group">
+                        <label class="control-label col-lg-2">Slide Danh mục</label>
+                            <button type="button" id="add_image_slide_category" class="btn btn-primary" style="margin-right: 11px;float: inline-end;"><span class="glyphicon glyphicon-plus" attr-count="0" aria-hidden="true"></span> Thêm Slide</button>
+                        </div>
+                        <div id="new_image_slide_category"></div>
+                    <?php }?>
+                    <!-- end -->
                     <!-- start image 2 top -->
                     <?php 
                         if (!empty($this->info) && !empty($this->info['image_2_top'])) { ?>

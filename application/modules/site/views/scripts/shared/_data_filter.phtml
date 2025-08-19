@@ -32,9 +32,79 @@
                 <?php } ?>
             </select>
         </div>
+        <?php 
+            if(isset($this->sorted_status)){?>
+            <div class="sort-status">
+                <label>Tồn kho:</label>
+                <select id="sort_status" name="sort_status">
+                    <?php 
+                    $selected_status = isset($_GET['status']) ? $_GET['status'] : ''; 
+                    foreach ($this->sorted_status as $key => $item) { 
+                    ?>
+                        <option <?php echo ( (string)$item["value"] == (string)$selected_status ) ? "selected='selected'" : "" ?> value="<?php echo $item["value"] ?>">
+                            <?php echo $item["text"] ?>
+                        </option>
+                    <?php } ?>
+                </select>
+            </div>
+        <?php } ?>
     </div>
 </div>
 <style>
+    @media (min-width: 768px) {
+        .data-filter .sort-status {
+            float: right;
+        }
+        #sort_status {
+            padding: .2rem;background: #f1f1f1; 
+        }
+        .data-filter .sort {
+            margin-left: 1.5rem;
+        }
+    }
+    @media (max-width: 767px) {
+        .data-filter {
+            padding: 0.5rem!important;
+        }
+        .data-filter .container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .container {
+            flex-direction: row !important;
+            align-items: center !important;
+        }
+
+        .limit, .sort, .sort-status {
+            margin-bottom: 0 !important;
+            /* flex: 1 !important; */
+        }
+
+        .limit label, .sort label , .sort-status label{
+            margin-right: 5px !important;
+        }
+
+        .limit select, .sort select, .sort-status select {
+            width: 100% !important;
+            padding: .2rem!important;
+        }
+        .data-filter .sort-status select {
+            padding: .5rem;
+            background: #fff;
+            outline: 0 none;
+            font-weight: bold;
+            border: 1px solid #cbcbcb;
+        }
+        .sort-status label {
+            margin-bottom: 0;
+        }
+        .data-filter .limit {
+            width: 20%;
+        }
+    }
+</style>
+<!-- <style>
     @media (max-width: 768px) {
         .data-filter .container {
             display: flex;
@@ -58,4 +128,4 @@
             width: 100% !important;
         }
     }
-</style>
+</style> -->

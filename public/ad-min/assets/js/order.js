@@ -365,6 +365,7 @@ pages = $.extend(pages, {
         initDatatable: function () {
             var aoColumns = [
                 {"data": "order_code"},
+				{"data":"product_titles"},
                 {"data": "user_id"},
                 {"data": "phone"},
 				{"data": "address"},
@@ -373,9 +374,27 @@ pages = $.extend(pages, {
                 {"data": "is_pay"},
                 {"data": "status"},
                 {"data": "created_date"},
+				{"data": "updated_by"},
                 {"data": "Action_Table"}
             ];
             var columnDefs = [
+				{
+					"render": function (data, type, row) {
+                                        var t = String(row['product_titles'] || '');
+                                        if( t.length > 50 ){
+                                            t = t.substring(0,50)+'...';
+                                            return '<span data-toggle="tooltip" title="'+row['product_titles']+'">'+t+'</span>';
+                                        } else {
+                                            return row['product_titles'];
+                                        }
+				        
+				    },
+					
+				    "className": "text-center",
+				    "targets": 1,
+				    "orderable": false,
+				    "data": "product_titles"
+				},
 				{
 				    "render": function (data, type, row) {
                                         var t = row['name'];
@@ -388,7 +407,7 @@ pages = $.extend(pages, {
 				        
 				    },
 				    "className": "text-center",
-				    "targets": 1,
+				    "targets": 2,
 				    "orderable": false,
 				    "data": "user_id"
 				},
@@ -397,14 +416,14 @@ pages = $.extend(pages, {
                                         var t = row['address'];
                                         if( t.length > 50 ){
                                             t = t.substring(0,50)+'...';
-                                            return '<span title="'+row['address']+'">'+t+'</span>';
+                                            return '<span data-toggle title="'+row['address']+'">'+t+'</span>';
                                         } else {
                                             return row['address'];
                                         }
 				        
 				    },
 				    "className": "text-left",
-				    "targets": 3,
+				    "targets": 4,
 				    "orderable": false,
 				    "data": "address"
 				},
@@ -413,7 +432,7 @@ pages = $.extend(pages, {
                         return row['name_province'];
 				    },
 				    "className": "text-center",
-				    "targets": 4,
+				    "targets": 5,
 				    "orderable": false,
 				    "data": "name_province"
 				},
@@ -426,7 +445,7 @@ pages = $.extend(pages, {
 				        return 	Number(total).toLocaleString();
 				    },
 				    "className": "text-center",
-				    "targets": 5,
+				    "targets": 6,
 				    "orderable": false,
 				    "data": "total"
 				},
@@ -439,7 +458,7 @@ pages = $.extend(pages, {
 				        return 	pay;
 				    },
 				    "className": "text-center",
-				    "targets": 6,
+				    "targets": 7,
 				    "orderable": false,
 				    "data": "is_pay"
 				},
@@ -458,7 +477,7 @@ pages = $.extend(pages, {
 				    	return st;
 				    },
 				    "className": "text-center",
-				    "targets": 7,
+				    "targets": 8,
 				    "orderable": false,
 				    "data": "status"
 				},
@@ -467,9 +486,18 @@ pages = $.extend(pages, {
 						return pages.order.formatDate(row.created_date);
 				    },
 				    "className": "text-center",
-				    "targets": 8,
+				    "targets": 9,
 				    "orderable": true,
 				    "data": "created_date"
+				},
+				{
+				    "render": function (data, type, row) {
+                        return row['updated_by'];
+				    },
+				    "className": "text-center",
+				    "targets": 10,
+				    "orderable": false,
+				    "data": "updated_by"
 				},
                 {
                     "render": function (data, type, row) {
@@ -498,7 +526,7 @@ pages = $.extend(pages, {
                         return 	action;
                     },
                     "className": "text-center",
-                    "targets": 9,
+                    "targets": 11,
                     "orderable": false,
                     "data": "Action_Table"
                 }

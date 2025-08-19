@@ -159,5 +159,24 @@ class Users extends Zend_Db_Table_Abstract {
         $where = $this->getAdapter()->quoteInto('user_id = ?', $userId);
         return $this->delete($where);
     }
+    
+    public function fetchUserByParamSafe($params) {
+        $select = $this->getAdapter()->select()->from($this->_name);
+
+        if (!empty($params)) {
+            foreach ($params as $key => $value) {
+                if (strpos($key, ' ') !== false) {
+                    list($column, $operator) = explode(' ', $key, 2);
+                    $select->where("$column $operator", $value);
+                } else {
+                    $select->where("$key = ?", $value);
+                }
+            }
+        }
+
+        $select->where("status <> ?", STATUS_DELETE);
+
+        return $this->getAdapter()->fetchRow($select);
+    }
 
 }

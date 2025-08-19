@@ -13,6 +13,7 @@ class Site_TimKiemController extends FrontEndAction {
         parent::init();
         $this->view->pageSize = Commons::pageSizeList();
         $this->view->sortList = Commons::sortList();
+        $this->view->sortStatus = Commons::sortStatus();
         $this->loadJs('pages/sangpham');
     }
 
@@ -22,6 +23,7 @@ class Site_TimKiemController extends FrontEndAction {
         $this->getInfoPage(array('banner' => true, 'category' => true, 'new_post' => true, 'product_best_sell' => true,'new_products' => true));
         $key = trim($this->getRequest()->getParam('keyword'));
         $selectedOption = isset($this->post_data["option"]) ? $this->post_data["option"] : '';
+        $sortStatus = isset($_GET['status']) ? $_GET['status'] : '';
         $searchParams = array();
         $sortV = "priority desc";
         $sorted = "priority_desc";
@@ -31,7 +33,11 @@ class Site_TimKiemController extends FrontEndAction {
         }
         $this->view->sorted = $sorted;
         $this->view->selectedOption = $selectedOption;
+        $this->view->sort_status = $sortStatus;
         $searchParams["sort"] = $sortV;
+        if (!empty($sortStatus)) {
+            $searchParams["sort_status"] = $sortStatus;
+        }
         $this->view->maxRange = @$this->post_data["maxRange"];
         //limit item
         $limit = PAGINNATOR_LIMIT_ROW;
@@ -51,7 +57,7 @@ class Site_TimKiemController extends FrontEndAction {
         }
         $this->render('search');
     }
-        
+    
     private function _getProductBySearch($productBySearch) {
         $result = array();
         if (!empty($productBySearch)) {
@@ -75,6 +81,7 @@ class Site_TimKiemController extends FrontEndAction {
     public function flashAction() {
         $productMdl = new Product();
     	$this->getInfoPage(array('banner' => true, 'category' => true, 'new_post' => true, 'product_best_sell' => true,'new_products' => true));
+        $sortStatus = isset($_GET['status']) ? $_GET['status'] : '';
         $params = array();
         //sort value in Db
         $sortV = "priority desc";
@@ -84,8 +91,12 @@ class Site_TimKiemController extends FrontEndAction {
             $sortV = Commons::getSortRealValue($this->post_data["sorted"]);
             $sorted = $this->post_data["sorted"];
         }
+        $this->view->sort_status = $sortStatus;
         $this->view->sorted = $sorted;
         $params["sort"] = $sortV;
+        if (!empty($sortStatus)) {
+            $params["sort_status"] = $sortStatus;
+        }
         $limit = PAGINNATOR_LIMIT_ROW;
         if (empty($this->post_data["page_size"]) == false) {
             $limit = $this->post_data["page_size"];

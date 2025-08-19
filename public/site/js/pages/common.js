@@ -68,6 +68,171 @@ pages = $.extend(pages, {
                 e.preventDefault();
                 window.location = "/don-hang/gio-hang";
             });
+			$('.select-option').on('change', function () {
+                $('.searchV').val('');
+                $('.search-results-pc').hide();
+            });
+
+            let allItems = [];
+            let maxItems = 5;
+            
+            let selectedOption = $('.select-option').val();
+            $('.select-option').on('change', function () {
+                selectedOption = $(this).val();
+            });
+            
+            let latestTimestamp = 0;
+
+            $('.searchV').on('keyup', function () {
+                let keyword = $(this).val().trim();
+                if (keyword.length > 2) {
+                    let requestTimestamp = Date.now();
+                    latestTimestamp = requestTimestamp;
+            
+                    $.ajax({
+                        url: '/pages/search-show',
+                        type: 'POST',
+                        data: { keyword, option: selectedOption },
+                        dataType: 'json',
+                        success: function (response) {
+                            if (requestTimestamp < latestTimestamp) return;
+            
+                            console.log(response);
+                            let allItems = [];
+                            let totalItems = response.count || 0;
+                            let html = '<ul class="search-results-list">';
+            
+                            if ($.isEmptyObject(response.results)) {
+                                html = '<p class="no-results">Không tìm thấy kết quả nào.</p>';
+                            } else {
+                                $.each(response.results, function (title, items) {
+                                    allItems = allItems.concat(items);
+                                });
+            
+                                allItems.slice(0, maxItems).forEach(item => {
+                                    html += renderItem(item, selectedOption);
+                                });
+            
+                                html += '</ul>';
+            
+                                if (totalItems > maxItems) {
+                                    let countText = selectedOption === 'sanpham' ? 'sản phẩm' : 'bài viết';
+                                    html += `<span class="show-more-btn" data-loaded="${maxItems}" data-total="${totalItems}" data-keyword="${keyword}">
+                                                Xem thêm <strong style="color:red">${totalItems}</strong> ${countText}
+                                            </span>`;
+                                }
+                            }
+            
+                            $('.search-results-pc').html(html).show();
+                        },
+                        error: function () {
+                            console.error("Lỗi khi tải dữ liệu");
+                        }
+                    });
+                } else {
+                    $('.search-results-pc').hide();
+                }
+            });
+            
+            // $('.searchV').on('keyup', function () {
+            //     let keyword = $(this).val().trim();
+            //     if (keyword.length > 2) {
+            //         $.ajax({
+            //             url: '/pages/search-show',
+            //             type: 'POST',
+            //             data: { keyword, option: selectedOption },
+            //             dataType: 'json',
+            //             success: function (response) {
+            //                 console.log(response);
+            //                 allItems = [];
+            //                 let totalItems = 0;
+            //                 let html = '<ul class="search-results-list">';
+        
+            //                 if ($.isEmptyObject(response)) {
+            //                     html = '<p class="no-results">Không tìm thấy kết quả nào.</p>';
+            //                 } else {
+            //                     $.each(response.results, function (title, items) {
+            //                         allItems = allItems.concat(items);
+            //                     });
+        
+            //                     // totalItems = allItems.length;
+            //                     totalItems = response.count;
+            //                     console.log(totalItems);
+        
+            //                     allItems.slice(0, maxItems).forEach(item => {
+            //                         html += renderItem(item, selectedOption);
+            //                     });
+        
+            //                     html += '</ul>';
+        
+            //                     if (totalItems > maxItems) {
+            //                         if(selectedOption == 'sanpham'){
+            //                             html += `<span class="show-more-btn" data-loaded="${maxItems}" data-total="${totalItems}" data-keyword="${keyword}">Xem thêm <strong style="color:red">${response.count}</strong> sản phẩm</span>`;
+            //                         } else {
+            //                             html += `<span class="show-more-btn" data-loaded="${maxItems}" data-total="${totalItems}" data-keyword="${keyword}">Xem thêm <strong style="color:red">${response.count}</strong> bài viết</span>`;
+            //                         }
+            //                     }
+            //                 }
+        
+            //                 $('.search-results-pc').html(html).show();
+            //             },
+            //             error: function () {
+            //                 // $('.search-results-pc').html('<p class="error-message">Lỗi khi tải dữ liệu. Vui lòng thử lại.</p>').show();
+            //             }
+            //         });
+            //     } else {
+            //         $('.search-results-pc').hide();
+            //     }
+            // });
+            
+            $(document).on('click', '.show-more-btn', function (e) {
+                e.preventDefault();
+                
+                let keyword = $(this).data('keyword');
+                console.log("Keyword mới nhất:", keyword);
+            
+                if (keyword) {
+                    let url = `/tim-kiem/search?option=${encodeURIComponent(selectedOption)}&keyword=${encodeURIComponent(keyword)}`;
+                    window.location.href = url;
+                }
+            });
+            
+            function renderItem(item, option) {
+                if (option === 'sanpham') {
+                    let priceDisplay = (item.status === '1' && item.priceC !== "0&#8363") 
+                        ? `<span class="price-c">${item.priceC}</span>`
+                        : `<span class="price-a">${item.priceA}</span>`;
+        
+                    return `
+                        <li class="search-item">
+                            <a href="${item.url}">
+								<div class="item-search" style ="display:flex; gap:10px">
+									<img width="40px" height="40px" src="${item.photo}" class="search-img"/>
+									<div>
+										<div class="search-name">${item.name}</div>
+										${priceDisplay}
+									</div>
+								</div>
+                            </a>
+                        </li>`;
+                } else {
+                    return `
+                        <li class="search-item">
+                            <a href="${item.url}">
+                                <div class="item-search" style ="display:flex; gap:10px">
+                                    <img width="40px" height="40px" src="${item.photo}" class="search-img"/>
+                                    <div class="search-title">${item.title}</div>
+                                </div>
+                            </a>
+                        </li>`;
+                }
+            }                  
+        
+            $(document).on('click', function (e) {
+                if (!$(e.target).closest('.form-search, .search-results-pc').length) {
+                    $('.search-results-pc').hide();
+                }
+            }); 
             
             // Cart popover
             $('#shopping-cart').hoverIntent({

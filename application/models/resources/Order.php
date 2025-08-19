@@ -14,62 +14,78 @@ class Order extends Zend_Db_Table_Abstract {
      * @return Ambigous <multitype:, multitype:mixed Ambigous <string, boolean, mixed> >
      */
     public function fetchAllOrder($data = array()) {
-    	$select = $this->getAdapter()->select();
-    	if( isset( $data['count_only'] ) == true && $data['count_only'] == 1 ) {
-    		$select = $select->from( $this->_name, array( "cnt" => new Zend_Db_Expr("COUNT(1)") ) );
-    	} else {
-            $select = $select->from($this->_name)
-                             ->joinLeft('province', 'province.matp = ' . $this->_name . '.ma_province', array('name_province'));
+        $select = $this->getAdapter()->select();
+    
+        if (isset($data['count_only']) && $data['count_only'] == 1) {
+            $select = $select->from($this->_name, array("cnt" => new Zend_Db_Expr("COUNT(1)")));
+        } else {
+            $select = $select->from($this->_name, array('*'))
+                             ->joinLeft('province', 'province.matp = ' . $this->_name . '.ma_province', array('name_province'))
+                             ->joinLeft(
+                                 array('od' => 'order_detail'),
+                                 'od.id_order = ' . $this->_name . '.id',
+                                 array()
+                             )
+                             ->joinLeft(
+                                 array('p' => 'product'),
+                                 'p.id = CASE WHEN od.id_product = 0 THEN od.product_id_cb ELSE od.id_product END',
+                                 array('product_titles' => new Zend_Db_Expr("GROUP_CONCAT(DISTINCT p.title ORDER BY p.title SEPARATOR ', ')"))
+                             )
+                             ->group($this->_name . '.id');
         }
+    
         $commonObj = new My_Controller_Action_Helper_Common();
-        //search by name
-        if (empty($data['search-key']) == false) {
-        	$select->where("name like '%" . $data['search-key'] . "%' or order_code like '%" . $data['search-key'] . "%' or email like '%" . $data['search-key'] . "%'
-        			 or phone like '%" . $data['search-key'] . "%' or total like '%" . $data['search-key'] . "%'");
+    
+        if (!empty($data['search-key'])) {
+            $searchKey = str_replace("'", "", $data['search-key']);
+            $select->where("name LIKE '%$searchKey%' OR order_code LIKE '%$searchKey%' OR email LIKE '%$searchKey%' OR phone LIKE '%$searchKey%' OR total LIKE '%$searchKey%'");
+            $subQuery = $this->getAdapter()->select()
+                            ->from('order_detail', array('id_order'))
+                            ->joinLeft('product', 'product.id = CASE WHEN order_detail.id_product = 0 THEN order_detail.product_id_cb ELSE order_detail.id_product END', array())
+                            ->where('product.title LIKE ?', "%$searchKey%");
+    
+            $select->orWhere("{$this->_name}.id IN (?)", $subQuery);
         }
-        if (empty($data["created_date"]) == false) {
-        	$data["created_date"] = $commonObj->quoteLike($data["created_date"]);
-        	$select = $select->where("DATE(created_date) =?", $data["created_date"]);
+    
+        if (!empty($data["created_date"])) {
+            $select = $select->where("DATE(created_date) =?", $commonObj->quoteLike($data["created_date"]));
         }
-        if (empty($data["updated_date"]) == false) {
-        	$data["updated_date"] = $commonObj->quoteLike($data["updated_date"]);
-        	$select = $select->where("DATE(updated_date) =?", $data["updated_date"]);
+        if (!empty($data["updated_date"])) {
+            $select = $select->where("DATE(updated_date) =?", $commonObj->quoteLike($data["updated_date"]));
         }
-        //for statistic
-        if (empty($data["from_date"]) == false) {
-        	$data["from_date"] = $commonObj->quoteLike($data["from_date"]);
-        	$select = $select->where("DATE(created_date) >=?", $data["from_date"]);
+        if (!empty($data["from_date"])) {
+            $select = $select->where("DATE(created_date) >=?", $commonObj->quoteLike($data["from_date"]));
         }
-        if (empty($data["to_date"]) == false) {
-        	$data["to_date"] = $commonObj->quoteLike($data["to_date"]);
-        	$select = $select->where("DATE(created_date) <=?", $data["to_date"]);
+        if (!empty($data["to_date"])) {
+            $select = $select->where("DATE(created_date) <=?", $commonObj->quoteLike($data["to_date"]));
         }
-        //----------------
-        if (empty($data["name"]) == false) {
-            $data["name"] = $commonObj->quoteLike($data["name"]);
-            $select = $select->where("name like ?", "%" . $data["name"] . "%");
+        if (!empty($data["name"])) {
+            $select = $select->where("name LIKE ?", "%" . $commonObj->quoteLike($data["name"]) . "%");
         }
-        if (empty($data["status"]) == false) {
-        	$select = $select->where("status = ?", $data["status"]);
+        // if (!empty($data["status"])) {
+        //     $select = $select->where("status = ?", $data["status"]);
+        // }
+        if (!empty($data["status"])) {
+            $select = $select->where("{$this->_name}.status = ?", $data["status"]);
         }
-        if (isset($data["is_pay"]) == true) {
-        	$select = $select->where("is_pay = ?", $data["is_pay"]);
+        if (isset($data["is_pay"])) {
+            $select = $select->where("is_pay = ?", $data["is_pay"]);
         }
-        //check count only purpose
-        if( empty( $data['count_only'] ) == true || $data['count_only'] != 1 ) {
-        	if ( empty( $data["order"] ) == false ) {
-        		$order = $data["order"]["column"] . " " . $data["order"]["dir"];
-        		$select = $select->order( $order );
-        	}
-        	$start = ( empty( $data['start'] ) == false ) ? $data['start'] : 0;
-        	$length = ( empty( $data['length'] ) == false ) ? $data['length'] : 0;
-        	$select = $select->limit( $length, $start );
+    
+        if (empty($data['count_only']) || $data['count_only'] != 1) {
+            if (!empty($data["order"])) {
+                $order = $data["order"]["column"] . " " . $data["order"]["dir"];
+                $select = $select->order($order);
+            }
+            $start = (!empty($data['start'])) ? $data['start'] : 0;
+            $length = (!empty($data['length'])) ? $data['length'] : 0;
+            $select = $select->limit($length, $start);
         }
-        $result = $this->getAdapter()->fetchAll( $select );
-        if( empty( $data['count_only'] ) == false && $data['count_only'] == 1 ) {
-        	return $result[0]['cnt'];
-        }
+    
         $result = $this->getAdapter()->fetchAll($select);
+        if (!empty($data['count_only']) && $data['count_only'] == 1) {
+            return $result[0]['cnt'];
+        }
         return $result;
     }
     /**
@@ -215,6 +231,30 @@ class Order extends Zend_Db_Table_Abstract {
             return $this->update($data, $where);
         }
         return false;
+    }
+    
+    public function fetchOrderByUserId($userId){
+        $select = $this->getAdapter()->select()
+            ->from(array("o" => $this->_name), array(
+                'order_code'=> 'o.order_code',
+                'total'=> 'o.total',
+                'order_score' => 'o.score',
+                'created_date' => 'o.created_date',
+            ))
+            ->joinLeft(
+                array("u" => "user"),
+                "u.user_id = o.user_id",
+                array(
+                    'user_score' => 'u.score' 
+                )
+            )
+            ->where("o.user_id = ?", $userId)
+            ->where("o.status_score = ?", 1)
+            ->order("o.created_date DESC");
+
+        $result = $this->getAdapter()->fetchAll($select);
+
+        return empty($result) ? array() : $result;
     }
     
 }

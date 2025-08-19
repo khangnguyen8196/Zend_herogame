@@ -115,10 +115,6 @@
                     <strong><?php echo $this->info["guarantee"]; ?></strong>
                 </li>
             <?php } ?>
-            <li>
-                <label>Danh mục:</label>
-                <a target="_blank" href="/danh-muc/<?php echo $this->info["category_url"] ?>"><strong><?php echo $this->info["category_name"] ?></strong></a>
-            </li>
             <!--<li>-->
             <!--    <label>Chia sẻ:</label>-->
             <!--    <div class="share">-->
@@ -156,12 +152,15 @@
                         <?php 
                         foreach($this->list_variant_flash_sale as $key => $variant_flash_sale){?>
                             
-                            <?php 
+                            <?php
+                            if(!$variant_flash_sale['url_image']){
+                                $variant_flash_sale['url_image'] = $this->info["image"];
+                            }
                             $active = '';
                             if($key == 0 ){
                                 $active = 'active';
                             }?>
-                            <li class="variant-items" 
+                            <li class="variant-items <?php echo $active ?>" 
                                 data-id="<?php echo $variant_flash_sale['variant_id']?>" 
                                 data-index ="<?php echo $key ?>" 
                                 data-status = "<?php echo $this->info["status"] ?>"
@@ -169,6 +168,7 @@
                                 data-status-variant = "<?php echo $variant_flash_sale['status'] ?>" 
                                 data-price-sales="<?php echo $variant_flash_sale['variant_price_flash_sale'] ?>" 
                                 data-price="<?php echo $variant_flash_sale['variant_price'] ?>">
+                                <img class="image_variant" src="/upload/images/<?php echo $variant_flash_sale['url_image'] ;?> " alt="">
                                 <a class="<?php echo $active ?>" data-id="<?php echo $variant_flash_sale['variant_id']?>" 
                                     title="<?php echo $variant_flash_sale['variant_name']?>" 
                                     data-price-sales="<?php echo $variant_flash_sale['variant_price_flash_sale'] ?>" 
@@ -181,13 +181,16 @@
                         <?php 
                         foreach( $this->l_variant_flash_sale as $key => $variant_flash_sale ){?>
                             <?php 
+                                if(!$variant_flash_sale['url_image']){
+                                    $variant_flash_sale['url_image'] = $this->info["image"];
+                                }
                                 if($variant['status'] != -1) { 
                                     $active = '';
                                     if($key == 0 ){
                                         $active = 'active';
                                     }
                             ?>
-                                 <li class="variant-items" 
+                                 <li class="variant-items <?php echo $active ?>" 
                                     data-id="<?php echo $variant_flash_sale['variant_id']?>" 
                                     data-index ="<?php echo $key ?>" 
                                     data-status = "<?php echo $this->info["status"] ?>"
@@ -196,6 +199,7 @@
                                     data-start-time ="<?php echo $this->flash_sale['count_time_start'] ?>" 
                                     data-price-sales="<?php echo $variant_flash_sale['variant_price_flash_sale'] ?>" 
                                     data-price="<?php echo $variant_flash_sale['variant_price'] ?>">
+                                    <img class="image_variant"  src="/upload/images/<?php echo $variant_flash_sale['url_image'] ;?> " alt="">
                                     <a class="<?php echo $active ?>" data-id="<?php echo $variant_flash_sale['variant_id']?>" 
                                         title="<?php echo $variant_flash_sale['variant_name']?>" 
                                         data-price-sales="<?php echo $variant_flash_sale['variant_price_flash_sale'] ?>" 
@@ -209,13 +213,16 @@
                     <?php 
                         foreach( $this->list_variant as $key => $variant ){?>
                             <?php 
+                                if(!$variant['url_image']){
+                                    $variant['url_image'] = $this->info["image"];
+                                }
                                 if($variant['status'] != -1) { 
                                     $active = '';
                                     if($key == 0 ){
                                         $active = 'active';
                                     }
                             ?>
-                                <li class="variant-items" 
+                                <li class="variant-items <?php echo $active ?>" 
                                     data-id="<?php echo $variant['id']?>" 
                                     data-index ="<?php echo $key ?>" 
                                     data-status = "<?php echo $this->info["status"] ?>" 
@@ -223,6 +230,7 @@
                                     data-status-variant = "<?php echo $variant['status'] ?>" 
                                     data-price-sales="<?php echo $variants[$variant['id']]['variant_price_sales'] ?>" 
                                     data-price="<?php echo $variants[$variant['id']]['variant_price'] ?>">
+                                    <img class="image_variant" src="/upload/images/<?php echo $variant['url_image'] ;?> " alt="">
                                     <a class="<?php echo $active ?>" data-id="<?php echo $variant['id']?>" 
                                         title="<?php echo $variant['variant_name']?>" 
                                         data-price-sales="<?php echo $variants[$variant['id']]['variant_price_sales'] ?>" 
@@ -250,7 +258,7 @@
             <?php foreach($this->list_combo_product as $combo_product ) {?>
                  <!-- Chỉ hiển thị 2 combo ban đầu -->
                     <ul>
-                        <strong class="name" style="line-height: 1.5;font-size: 1.25rem;display: block;padding-top:10px;text-align: center;"><?php echo $combo_product['title']?><br/></strong>
+                        <strong class="name combo-name" style="line-height: 1.5;font-size: 1.25rem;display: block;padding-top:10px;text-align: center;"><?php echo $combo_product['title']?><br/></strong>
                         <div class="combo">
                             <?php 
                                 foreach ($this->list_combo_detail as $combo_id => $combo_detail) {?>
@@ -293,8 +301,8 @@
                                 </ul>
                             <?php }?>
                             <div class="combo-info">
-                                <strong class="price-total">Tổng giá tiền: <?php echo number_format($totalPrice) . '&#8363'  ?><br/></strong>
-                                <strong class="price-a">Giá Combo Sale: <?php echo number_format($totalPrice - $combo_product['price_discount']) . '&#8363'  ?><br/></strong> 
+                                <strong class="price-total">Tổng giá tiền: <span class="total-price"><?php echo number_format($totalPrice) . '&#8363'  ?></span><br/></strong>
+                                <strong class="price-a" style="color:white">Giá Combo Sale: <?php echo number_format($totalPrice - $combo_product['price_discount']) . '&#8363'  ?><br/></strong> 
                             </div>
                         </div>
                         <?php if ($combo_product['total_discount'] > 0 && $this->status != STATUS_IN_OUT_STOCK) { ?>
@@ -412,6 +420,12 @@
         }
         ?>
     </div>
+    <ul class="category_dm">
+        <li>
+            <label>Danh mục:</label>
+            <a target="_blank" href="/danh-muc/<?php echo $this->info["category_url"] ?>"><strong><?php echo $this->info["category_name"] ?></strong></a>
+        </li>
+    </ul>
     <ul class="tags">
     <?php if (empty($this->info["tag"]) == false) { ?>
         <?php
@@ -426,50 +440,20 @@
     <?php } ?>
     </ul>
 </div>
-<script type="application/ld+json">
-    <?php
-        $Stock = '';
-        $availability_date = '';
-        if ($this->info['best_sell'] == 1 && $this->info["status"] == 1) {
-            $Stock = 'https://schema.org/PreOrder';
-            // $availability_date = date('Y-m-d\TH:iO', strtotime('2024-12-01 00:00:00'));
-            $availability_date = date('Y-m-d\TH:i\Z', strtotime('2024-12-01 00:00:00'));
-        } else if ($this->info["status"] == 1) {
-            $Stock = 'https://schema.org/InStock';
-        } elseif ($this->info["status"] == 2) {
-            $Stock = 'https://schema.org/OutOfStock';
-        } 
-
-         $json_ld_data = [
-            "@context" => "http://schema.org",
-            "@type" => "product",
-            "sku" => $this->info["sku"],
-            "name" => $this->info["title"],
-            "description" => $this->info["description"],
-            "image" => empty($this->info['image']) == false ? "https://herogame.vn/".PHOTO_PATH . $this->info['image']: "",
-            "url" => "https://herogame.vn/".$this->info["url_product"],
-            "offers" => [
-                "@context" => "http://schema.org",
-                "@type" => "offer",
-                 "url" => "https://herogame.vn/".$this->info["url_product"],
-                "price" => $this->info["price_sales"] > 0? $this->info["price_sales"]: $this->info["price"],
-                "priceCurrency" => "VND",
-                // "availability" => 'https://schema.org/InStock',//"https://schema.org/OutOfStock"
-                "availability" => $Stock,
-                "availabilityStarts" => $availability_date
-            ],
-            "brand" => [
-                "@context" => "http://schema.org",
-                "@type" => "Corporation", //Corporation, Thing, Brand
-                "name" => ""
-            ]
-        ];
-        echo json_encode($json_ld_data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-    ?>
-</script>
-
 <style>
-    ul.tags {
+    .hour, .minute , .second {
+        background: black;
+        padding: 0px 2px;
+    }
+    .total-price {
+        text-decoration: line-through;
+    }
+    @media screen and (max-width: 768px) {
+        ul li .tag {
+            font-size: 11px;
+        }
+    }
+    ul.category_dm {
         margin-top: 1rem;
     }
     ul li .tag {
@@ -569,11 +553,33 @@
         display: none !important;
     }
     @media (max-width: 767px) {
+        .combo-name{
+            font-size: 1rem!important;
+        }
         .imgh.r6x4:before {
             padding-top: 100% !important;
         }
         .product-item-view .piv-top .info .title h1 {
             font-size: 1.2rem !important;
+        }
+        .variant-items {
+            flex: 1 1 calc(50% - 10px);
+            box-sizing: border-box;
+            border: 1px solid;
+            font-size: 11px;
+            display: flex!important;
+            /*justify-content: center;*/
+            align-items: center;
+            font-weight:bold;
+            text-align: left;
+            height: 40px;
+            padding-bottom: 0!important;
+            gap: 5px;
+            border-radius: 0.8rem;
+        }
+        .image_variant {
+            width: 36px;
+            height:36px
         }
     }
 
@@ -583,8 +589,72 @@
         margin: 5px;
     }
 
-    @media screen and (min-width: 768px) {
+    .variant-list {
+        display: flex!important;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin-bottom:10px!important;
     }
+
+    ul.variant-list li a {
+        border: none;
+        margin: 5px;
+        padding: 0;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        justify-content: center;
+        align-items: center;
+        text-align: left;
+        word-break: break-word; 
+        line-height: 1.3rem;
+    }
+
+    .variant-items:nth-child(odd):last-child {
+        flex: 1 1 calc(50% - 10px);
+        margin-right: calc(50% + 5px);
+    }
+
+    ul.variant-list li a.active {
+        background:none!important;
+        border:none!important;
+    }
+
+    ul.variant-list li.active {
+        background-color: #189eff!important; 
+    }
+
+    ul.variant-list li > a.active {
+        color: white;
+    }
+
+    ul.variant-list li img {
+        margin-left:10px;
+    }
+    @media screen and (min-width: 768px) {
+        .variant-items {
+            flex: 1 1 calc(50% - 10px);
+            box-sizing: border-box;
+            border: 1px solid;
+            font-size: 14px;
+            display: flex!important;
+            font-weight:bold;
+            /*justify-content: center;*/
+            align-items: center;
+            text-align: left;
+            height: 60px;
+            padding-bottom: 0!important;
+            gap: 5px;
+            border-radius: 0.8rem;
+        }
+        .image_variant {
+            width: 40px;
+            height:40px
+        }
+    }
+    
 </style>
 
 <!-- Messenger Plugin chat Code -->
@@ -601,18 +671,18 @@
 
 <!-- Your SDK code -->
 <script>
-  window.fbAsyncInit = function() {
-    FB.init({
-      xfbml            : true,
-      version          : 'v17.0'
-    });
-  };
+//   window.fbAsyncInit = function() {
+//     FB.init({
+//       xfbml            : true,
+//       version          : 'v17.0'
+//     });
+//   };
 
-  (function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id;
-    js.src = 'https://connect.facebook.net/vi_VN/sdk/xfbml.customerchat.js';
-    fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));
+//   (function(d, s, id) {
+//     var js, fjs = d.getElementsByTagName(s)[0];
+//     if (d.getElementById(id)) return;
+//     js = d.createElement(s); js.id = id;
+//     js.src = 'https://connect.facebook.net/vi_VN/sdk/xfbml.customerchat.js';
+//     fjs.parentNode.insertBefore(js, fjs);
+//   }(document, 'script', 'facebook-jssdk'));
 </script>

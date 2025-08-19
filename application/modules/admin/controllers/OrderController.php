@@ -153,6 +153,7 @@ class Admin_OrderController extends FrontBaseAction {
                             'reject_reason' => $data['reject_reason'],
                             'admin_discount'=> $data['admin_discount'],
                             'updated_date' => date("Y-m-d H:i:s"),
+                            'updated_by' => $this->getUpdated()['updated_by'],
                 	);
                     if( $data['status'] != 4 ){
                         $dataIn['status_score'] = 0;
@@ -165,6 +166,13 @@ class Admin_OrderController extends FrontBaseAction {
                 	if( $data['status'] == 5 ) {
                         $newInfo = $models->fetchOrderById($id);
                         $this->sendCancelMailTemplate($newInfo);
+                    }
+                    
+                    if (!empty($listOrderDetail)) {
+                        $listCombo = $this->getComboProductsList($orderDetailModel, $listOrderDetail, $id);
+                    }
+                    if ($data['status'] == 3  && $data['status'] != $info['status']) {
+                        $this->sendOrderMailTemplate($info, $listCombo);
                     } 
                     
                 	if( $rs >= 0 ){
@@ -322,16 +330,17 @@ class Admin_OrderController extends FrontBaseAction {
         $columns = array(// 
             0 => "id",
             1 => "total",
-        	2 => "is_pay",
+        	2 => "updated_by",
             3 => "address",
             4 => "phone",
         	5 => "name_province",
-        	6 => "created_date",
-        	7 => "updated_date",
-        	8 => "updated_by",
-        	9 => "first_name",
-        	10 => "last_name",
-        	11 => "user_id",
+        	6 => "updated_date",
+        	7 => "is_pay",
+        	8 => "status",
+        	9 => "created_date",
+        	10 => "first_name",
+        	11 => "last_name",
+        	12 => "user_id",
         );
 
         //order function
@@ -382,6 +391,7 @@ class Admin_OrderController extends FrontBaseAction {
         $this->isAjax();
         if( empty($this->post_data['id']) == false && empty($this->post_data['user_id']) == false ){
             $modal = new Order();
+            $orderDetailModel = new OrderDetail();
             $info = $modal->fetchOrderById($this->post_data['id']);
             if( empty($info) == false ){
                 $modelUser = new Users();
@@ -395,12 +405,36 @@ class Admin_OrderController extends FrontBaseAction {
                 } else {
                     $data['status_score'] = 1;
                 }
-                   
+                $data['updated_by'] = $this->getUpdated()['updated_by']; 
+                $data['updated_date'] = date('Y-m-d H:i:s');
                 $reponse = $modal->saveOrder($data,$this->post_data['id']);
                 
                 if( $data['status'] == 5 ) {
                     $newInfo = $modal->fetchOrderById($info['id']);
                     $this->sendCancelMailTemplate($newInfo);
+                }
+
+                $listOrderDetail = $orderDetailModel->getListOrderDetail($info['id']);
+                if(empty($listOrderDetail) == false ){
+                    $info['order_detail'] = $listOrderDetail;
+                    $total = 0;
+                    foreach ( $listOrderDetail as $key => $value ){
+                        $total+= ($value['price']* $value['number']);
+                    }
+                    $info['total_before_sale'] = $total;
+                    if( $info['user_id'] != -1 ){
+                        $userInfo = $modelUser->getUserById($info['user_id']);
+                        $info['user_name'] = $userInfo['user_name'];
+                    } else {
+                        $info['user_name'] = 'Khách Mới';
+                    }
+                }
+
+                if (!empty($listOrderDetail)) {
+                    $listCombo = $this->getComboProductsList($orderDetailModel, $listOrderDetail, $info['id']);
+                }
+                if ($data['status'] == 3 && $data['status'] != $info['status']) {
+                    $this->sendOrderMailTemplate($info, $listCombo);
                 }
                 
                 if ( $reponse >= 0 ) {
@@ -490,6 +524,15 @@ class Admin_OrderController extends FrontBaseAction {
         }
     }
 
+    public function sendOrderMailTemplate($orderInfo, $listCombo){
+        $this->view->orderInfo = $orderInfo;
+        $this->view->listCombo = $listCombo;
+        $tpl = $this->view->render('/order/_tpl-mail-delivery.phtml');
+        if( empty($orderInfo['email']) == false ){
+            UtilEmail::sendMail(DEFAULT_EMAIL, $orderInfo['email'], 'Herogame có thông báo đến bạn', $tpl );
+        }
+    }
+
     public function selectAction(){
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(); 
@@ -523,5 +566,21 @@ class Admin_OrderController extends FrontBaseAction {
                 ->setHeader('Content-Type', 'text/html')
                 ->setBody($output);
         }
+    }
+    function getComboProductsList($orderDetailModel, $listOrderDetail, $orderId) {
+        $listCombo = array();
+        if (!empty($listOrderDetail)) {
+            foreach ($listOrderDetail as $value) {
+                if (!empty($value['combo_id']) && $value['combo_id'] != 0) {
+                    $listProducts = $orderDetailModel->getProductByComboIdproduct($orderId, $value['combo_id']);
+                    if (!empty($listProducts)) {
+                        foreach ($listProducts as $product) {
+                            $listCombo[$value['combo_id']][] = $product;
+                        }
+                    }
+                }
+            }
+        }
+        return $listCombo;
     }
 }
